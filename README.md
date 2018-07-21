@@ -6,15 +6,15 @@ skilled little rodent that digs tunnels from your inbox to all your other system
 Gopher App allows you to easily create and install Gopher skills that accomplish things no gopher
 should ever be able to do. For example:
 
-- Parse emails and submit them to CRMs, project management systems and more
+- Parse emails and submit them to CRMs, project management systems, etc
 - Schedule email-based reminders
-- Create email-based internal tools
 - Track tasks via email
+- Create email-based internal tools
 - Coordinate group activities
 
 ## Quick Start
 
-First, create a Gopher Extension. You'll get a domain at gopher.email
+First, create a Gopher Extension at gopher.email. You'll get an email domain
 that looks something like this: `{command}@your-ext.gopher.email` (`{command}`
 can be anything), and a working install of this lib available at a publicly
 accessible URL.
@@ -22,22 +22,26 @@ accessible URL.
 Then, add a skill:
 
 ```javascript
+// require("dotenv").config(); // Alternatively, pass config to GopherApp()
 var GopherApp = require("gopher-app");
-var gopherApp = new GopherApp(); // If you went through install process, your env would be set up
+var gopherApp = new GopherApp();
 
-gopherApp.onCommand('hi', function(gopher) {
-    var subject = gopher.get("task.reference_email.subject");
-    gopher.webhook.setTriggerTime('3days');
-    gopher.webhook.addEmail({
-        to: gopher.get("source.from");
-        subject: "Hi back!",
-        body: [{
-            type: 'html',
-            text: "I see you sent me an email about " + subject
-        }]
-    })
-    gopher.webhook.respond()
+gopherApp.onCommand("hi", function(gopher) {
+  var subject = gopher.get("task.reference_email.subject");
+  gopher.webhook.setTriggerTime("3days");
+  gopher.webhook.addEmail({
+    to: gopher.get("source.from"),
+    subject: "Hi back!",
+    body: [
+      {
+        type: "html",
+        text: "I see you sent me an email about " + subject
+      }
+    ]
+  });
+  gopher.webhook.respond();
 });
+
 gopherApp.listen();
 ```
 
@@ -54,42 +58,61 @@ of which can be with specially tuned skills to handle specific email-related act
 
 ## Writing Custom Skills
 
-Gopher Skills can be created and stored for later use on the `gopher` object. For example,
-we can turn the above into a useful skill that can be used throughout our app or even shared with others!.
+Gopher Skills can be created and added to the `gopher` object.
+Let's turn our above handler into a useful skill that can be reused and shared
+with others.
 
 [Note: If you are familiar with [Express Middleware](https://expressjs.com/en/guide/writing-middleware.html), this will look familiar.]
 
+### Define Skill
+
+A new skill usually is defined in a separate file or npm module, but just as
+easily can live in the same file.
+
 ```javascript
-// This function can live in a different file, module or even published to npm
-function hiBackWithReminder(request, response, next) {
-    var gopher = response.locals.gopher;
-        gopher.skills.remember = function() {
-                gopher.webhook.hiBackWithReminder('3days');
-        gopher.webhook.addEmail({
-            to: gopher.get("source.from");
-            subject: "Hi back!",
-            body: [{
-                type: 'html',
-                text: "I see you sent me an email about " + subject
-            }]
-        })
-    }
-});
+gopherApp.use(function(request, response, next) {
+  var gopher = response.locals.gopher;
+  var subject = gopher.get("task.reference_email.subject");
 
-// Load the skill
-gopherApp.use(hiBackWithReminder);
-
-// In a separate file, anywyere else, you can use the skill as easy as this:
-gopherApp.onCommand('hi', function(gopher) {
-    gopher.skills.hiBackWithReminder(); // Does all of the above, now a nice elegant command
-    gopher.webhook.respond()
+  gopher.skills.hiBackWithReminder = function() {
+    // <-- New skill 🎓 👏
+    gopher.webhook.setTriggerTime("3days");
+    gopher.webhook.addEmail({
+      to: gopher.get("source.from"),
+      subject: "Hi back!",
+      body: [
+        {
+          type: "html",
+          text: "I see you sent me an email about " + subject
+        }
+      ]
+    });
+  };
+  next(); // <-- Don't forget this
 });
-gopherApp.listen();
 ```
 
-## Shared Skills
+### Use Skill
 
-Gopher Skills can be easily packaged and shared.
+Same outcome, now using Gopher Skills.
+
+```
+gopherApp.onCommand("hi", function(gopher) {
+  gopher.skills.hiBackWithReminder(); // Does all of the above, now a nice elegant command
+  gopher.webhook.respond();
+});
+```
+
+## Composing Skills
+
+Skills can make use of other skills. For example, an [Evercontact](https://www.evercontact.com/developers)
+skill (todo!) may only parse email signatures. A CRM skill could compose the Evercontact skill
+and any others to augment contact information before entering the data into a CRM.
+
+## Publishing Skills
+
+Gopher Skills can be easily packaged and shared on npm. If you create a skill please let us know
+so we can add it to our skills directory.
 
 ## Env
 
@@ -117,5 +140,4 @@ The code is well commented. Until more docs are written, look there.
 - [ ] Improve config handling
 - [ ] Test coverage
 - [ ] Extract Glitch helpers
-- [ ] Implement web / UI core skills
-- [ ] Implement extension settings
+- [ ] Extension settings

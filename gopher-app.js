@@ -12,11 +12,7 @@ class GopherApp {
    * @param {object} config
    */
   constructor(config) {
-    if (config.app) {
-      this.app = config.app;
-    } else {
-      const app = express();
-    }
+    this.app = (config && config.app) || express();
     this.config = config;
 
     // Array of webhook event listener functions
@@ -27,12 +23,31 @@ class GopherApp {
   }
 
   /**
-   * listn() must be called after listeners, middleware, etc are added.
+   * listen() must be called after listeners, middleware, etc are added.
    * We are only automatically binding to webhook events. Other routes must
    * be bound as usual with the native Express App object.
    * For example: gopherApp.app.get("/", (req, res) => {});
    */
   listen() {
+    this._lastSteps();
+    const listener = this.app.listen(process.env.PORT || 3011, function() {
+      console.log("Gopher is listening on port " + listener.address().port);
+    });
+  }
+
+  /**
+   * For testing, export app object instead of listening
+   */
+  exportApp() {
+    this._lastSteps();
+    return this.app;
+  }
+
+  /**
+   *  Internal:
+   *
+   */
+  _lastSteps() {
     this.app.post("/webhooks", this.handleEvent.bind(this));
     this.app.use(express.static("public"));
   }
