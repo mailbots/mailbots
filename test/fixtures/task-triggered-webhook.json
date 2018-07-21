@@ -1,0 +1,57 @@
+{
+  "trigger": {
+    "triggered_by": "gopher_reminder"
+  },
+  "event": "task.triggered",
+  "version": 1,
+  "extension": {
+    "id": 15,
+    "name": "memorize",
+    "subdomain": "gopher-memorize",
+    "developer_name": "",
+    "help_url": "",
+    "private_data": {
+      "gopher_token": "[redacted]"
+    }
+  },
+  "user": {
+    "name": "Reilly Sweetland",
+    "primary_email": "esweetland@gmail.com",
+    "emails": [
+      "reilly@isimple.net",
+      "ersweetland@icloud.com",
+      "esweetland@gmail.com"
+    ],
+    "is_validated": true,
+    "timezone": "GMT",
+    "preferred_date_format": "D, F jS Y g:ia T",
+    "preferred_date_format_js": "ddd, D MMMM YYYY h:mma",
+    "postpone_times": "1day,3days,5days,10days",
+    "flagged": 0,
+    "validate_sender_email": false,
+    "send_dev_errors": false
+  },
+  "task": {
+    "created": 1531867227,
+    "completed": false,
+    "completed_on": "",
+    "id": 190,
+    "trigger_time": 1532355982,
+    "trigger_timeformat": "",
+    "reference_email": {
+      "to": ["test@example.com"],
+      "cc": ["memorize@gopher-memorize.gopher.email"],
+      "bcc": [],
+      "from": "esweetland@gmail.com",
+      "reply_to": "",
+      "subject": "New memorize from CLI",
+      "html": "This is a body\n",
+      "text": "This is a body\n",
+      "attachments": []
+    },
+    "command": "memorize@gopher-memorize.gopher.email",
+    "private_data": {
+      "frequency_pref": "1.5"
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "event": "task.viewed",
+  "version": 1,
+  "extension": {
+    "id": 15,
+    "name": "memorize",
+    "subdomain": "gopher-memorize",
+    "developer_name": "",
+    "help_url": "",
+    "private_data": {
+      "gopher_token": "[redacted]"
+    }
+  },
+  "user": {
+    "name": "Reilly Sweetland",
+    "primary_email": "esweetland@gmail.com",
+    "emails": ["esweetland@gmail.com"],
+    "is_validated": true,
+    "timezone": "GMT",
+    "preferred_date_format": "D, F jS Y g:ia T",
+    "preferred_date_format_js": "ddd, D MMMM YYYY h:mma",
+    "postpone_times": "(none)",
+    "flagged": 0,
+    "validate_sender_email": false,
+    "send_dev_errors": false
+  },
+  "task": {
+    "created": 1531873003,
+    "completed": false,
+    "completed_on": "",
+    "id": 194,
+    "trigger_time": 1532689742,
+    "trigger_timeformat": "3days",
+    "reference_email": {
+      "to": ["test@example.com"],
+      "cc": ["memorize@gopher-memorize.gopher.email"],
+      "bcc": [],
+      "from": "esweetland@gmail.com",
+      "reply_to": "",
+      "subject": "Cc followup from CLI",
+      "html": "This is a body\n",
+      "text": "This is a body\n",
+      "attachments": []
+    },
+    "command": "memorize@gopher-memorize.gopher.email",
+    "private_data": {
+      "frequency_pref": "1.5"
+    }
+  }
+}

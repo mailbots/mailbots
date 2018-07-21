@@ -1,0 +1,74 @@
+{
+  "source": {
+    "type": "email",
+    "recipient": "memorize@gopher-memorize.gopher.email",
+    "from": "esweetland@gmail.com",
+    "method": "bcc",
+    "to": ["memorize@gopher-memorize.gopher.email"],
+    "cc": [],
+    "bcc": [],
+    "subject": "fdsafdsa",
+    "html": "",
+    "text": "",
+    "headers": {
+      "to": "memorize@gopher-memorize.gopher.email",
+      "cc": "",
+      "bcc": "",
+      "subject": "fdsafdsa",
+      "from": "esweetland@gmail.com"
+    }
+  },
+  "command": {
+    "format": "memorize@gopher-memorize.gopher.email",
+    "subdomain": "gopher-memorize",
+    "params": ["memorize"]
+  },
+  "event": "task.created",
+  "version": 1,
+  "extension": {
+    "id": 15,
+    "name": "memorize",
+    "subdomain": "gopher-memorize",
+    "developer_name": "",
+    "help_url": "",
+    "private_data": {
+      "gopher_token": "[redacted]"
+    }
+  },
+  "user": {
+    "name": "Reilly Sweetland",
+    "primary_email": "esweetland@gmail.com",
+    "emails": ["esweetland@gmail.com"],
+    "is_validated": true,
+    "timezone": "GMT",
+    "preferred_date_format": "D, F jS Y g:ia T",
+    "preferred_date_format_js": "ddd, D MMMM YYYY h:mma",
+    "postpone_times": "(none)",
+    "flagged": 0,
+    "validate_sender_email": false,
+    "send_dev_errors": false
+  },
+  "task": {
+    "created": 1531875456,
+    "completed": false,
+    "completed_on": "",
+    "id": 196,
+    "trigger_time": null,
+    "trigger_timeformat": "",
+    "reference_email": {
+      "to": ["memorize@gopher-memorize.gopher.email"],
+      "cc": [],
+      "bcc": [],
+      "from": "esweetland@gmail.com",
+      "reply_to": "",
+      "subject": "fdsafdsa",
+      "html": "",
+      "text": "",
+      "attachments": []
+    },
+    "command": "memorize@gopher-memorize.gopher.email",
+    "private_data": {
+      "frequency_pref": "1.5"
+    }
+  }
+}

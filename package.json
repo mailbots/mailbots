@@ -1,0 +1,29 @@
+{
+  "name": "gopher-app",
+  "version": "0.0.1-beta",
+  "description": "The core skill framework to add and install skills for Gopher.email",
+  "main": "gopher-app.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "npx mocha test"
+  },
+  "author": "Reilly Sweetland <esweetland@gmail.com> (https://reillysweetland.com/)",
+  "license": "Copyright 2018. Unpublished work.",
+  "devDependencies": {
+    "chai": "4.1.2",
+    "mocha": "5.2.0"
+  },
+  "dependencies": {
+    "assert": "1.4.1",
+    "body-parser": "1.18.3",
+    "cookie-parser": "1.4.3",
+    "express": "4.16.3",
+    "gopherhq": "0.0.18-beta",
+    "lodash": "4.17.10",
+    "request": "2.87.0",
+    "urljoin": "0.1.5"
+  }
+}
