@@ -2,64 +2,73 @@ const _ = require("lodash");
 const express = require("express");
 /**
  * A light weight wrapper around the Express App object to provide an authenticated
- * Gopher API Client, enable Gopher Skills, middlware, and better isolate custom
- * code to create new Gopher Skills.
+ * Gopher API Client, enable Gopher Skills, middlware, and provide better
+ * isolation / componentization around custom and shared Gopher Skills.
  */
 class GopherApp {
   /**
-   * Instantiate a new GopherApp with a config object. Pass any key shown in
-   * config.js. Note that config.js reads from the .env
+   * Optionally instantiate with config. Pass any key shown in config.js.
    * @param {object} config
    */
   constructor(config) {
     this.app = (config && config.app) || express();
+
+    // Config opts are ultimately available to user on gopher.config
     this.config = config;
 
-    // Array of webhook event listener functions
+    // Listens for anything posted to /webhooks, firing appropriate listener.
     this.listeners = [];
 
-    // Load core middleware
-    require("./lib/core-skills")(this);
+    // Set up base skills
+    this.loadFirstCoreSkills();
   }
 
   /**
-   * listen() must be called after listeners, middleware, etc are added.
-   * We are only automatically binding to webhook events. Other routes must
-   * be bound as usual with the native Express App object.
+   * Loads final skills and start http server
+   * Must be called after other skills and routes are added.
+   * Anything posted to /webhooks route is automatically handled.
+   * Other routes must be created as usual with the Express App object.
    * For example: gopherApp.app.get("/", (req, res) => {});
    */
   listen() {
-    this._lastSteps();
+    this.loadLastCoreSkills();
     const listener = this.app.listen(process.env.PORT || 3011, function() {
       console.log("Gopher is listening on port " + listener.address().port);
     });
   }
 
   /**
-   * For testing, export app object instead of listening
+   * For testing, export app object instead of starating server
    */
   exportApp() {
-    this._lastSteps();
+    this.loadLastCoreSkills();
     return this.app;
   }
 
   /**
-   *  Internal:
-   *
+   * Loads base gopher skills
+   * Skills are Express middleware and route handlers. Some must be called before
+   * any other middleware / skill is added. For example, auth, loading Gopher Helper, etc.
+   * Other skills must be called last, ex: a catch-all redirect for web request.
+   * Users can specify their own order of skills by adding skills line-by-line,
+   * or by loading skill directories (with gopherApp.loadSkills()) in order.
    */
-  _lastSteps() {
-    this.app.post("/webhooks", this.handleEvent.bind(this));
-    this.app.use(express.static("public"));
+  loadFirstCoreSkills() {
+    require("./lib/core-skills-first")(this);
   }
 
   /**
-   * This just proxies express middleware
-   * QUESTION: Should we use gopherApp.app.use to save the gopherApp.use namespace for
-   * more custom Gopher Middleware handler? For example, it would be nice to have this
-   * signature for Gopher Middlware (gopher, req, res, next) => {}
+   * Loads final skills
+   */
+  loadLastCoreSkills() {
+    this.app.post("/webhooks", this.handleEvent.bind(this));
+    require("./lib/core-skills-last")(this);
+  }
+
+  /**
+   * Just a proxy for the native Express use function. Middleware added here is preceeded
+   * by loadFirstCoreSkills middleware and succeeded by loadLastCoreSkills middleware.
    * @param {function} fn
-   * TODO: Allow for a match-pattern (similar to "on" + listeners). Allow multiple
-   * middleware functions to be applied as long as the match true.
    */
   use(...args) {
     this.app.use(...args);
@@ -67,6 +76,8 @@ class GopherApp {
 
   /**
    * Load Gopher skills from a directory
+   * This can be called more more than once if skills need to be loaded in order.
+   * Loaded skills are preceeded by loadFirstCoreSkills and succeeded by loadLastCoreSkills
    * @param {string} skillsDir path to skills directory
    */
   loadSkills(skillsDir) {
@@ -82,8 +93,8 @@ class GopherApp {
    * Adds a listener function to listeners array
    * Example: controller.on('task.created', (gopher, req, res) => { });
    * Example: controller.on((webhook) => webhook.event === 'task.created', cb)
-   * @param {string|function} event A webhook event string (ex: task.created) or
-   * function, that returns true / false. Passed the webhook as a param.
+   * @param {string|function} event A webhook event string (ex: task.created). Or
+   * a function receives the webhook as a param, which returns a boolean value.
    * @param {function} cb Callback function with signature cb(gopher, req, res)
    */
   on(triggerCondition, cb) {
@@ -133,7 +144,7 @@ class GopherApp {
   }
 
   /**
-   * Fire the appropriate listener function for the webhook received
+   * Fires the appropriate listener function for the webhook received
    * @param {object} request Express request object
    * @param {object} response Express response object
    */
@@ -151,9 +162,10 @@ class GopherApp {
   }
 
   /**
-   *
+   * Evaluates a trigger condition against a given webhook
    * @param {object} webhook Complete webhook request
    * @param {string|function} triggerCondition A string or function returning a boolean when passed webhook
+   * @return {boolean}
    */
   cbShouldTrigger(webhook, triggerCondition) {
     if (typeof triggerCondition === "function") {

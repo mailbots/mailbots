@@ -74,8 +74,8 @@ gopherApp.use(function(request, response, next) {
   var gopher = response.locals.gopher;
   var subject = gopher.get("task.reference_email.subject");
 
+  // New skill 🎓 👏
   gopher.skills.hiBackWithReminder = function() {
-    // <-- New skill 🎓 👏
     gopher.webhook.setTriggerTime("3days");
     gopher.webhook.addEmail({
       to: gopher.get("source.from"),
@@ -96,7 +96,7 @@ gopherApp.use(function(request, response, next) {
 
 Same outcome, now using Gopher Skills.
 
-```
+```javascript
 gopherApp.onCommand("hi", function(gopher) {
   gopher.skills.hiBackWithReminder(); // Does all of the above, now a nice elegant command
   gopher.webhook.respond();
@@ -127,7 +127,7 @@ CLIENT_SECRET=
 SCOPE=
 EXTENSION_URL=
 REDIRECT_URI=
-EXT_ID=15
+EXT_ID=
 ```
 
 ## Docs
