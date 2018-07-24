@@ -1,5 +1,7 @@
 const _ = require("lodash");
 const express = require("express");
+const configDefaults = require("./lib/config-defaults");
+
 /**
  * A light weight wrapper around the Express App object to provide an authenticated
  * Gopher API Client, enable Gopher Skills, middlware, and provide better
@@ -11,6 +13,14 @@ class GopherApp {
    * @param {object} config
    */
   constructor(config) {
+    config = Object.assign({}, configDefaults, config);
+    if (!config.clientId || !config.clientSecret) {
+      console.error(
+        "Register a new Gopher extension at https://app.gopher.email, then populate your client_id and client_secret. Read more: docs.gopher.email"
+      );
+      process.exit();
+    }
+
     this.app = (config && config.app) || express();
 
     // Config opts are ultimately available to user on gopher.config
