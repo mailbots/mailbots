@@ -15,10 +15,9 @@ class GopherApp {
   constructor(config) {
     config = Object.assign({}, configDefaults, config);
     if (!config.clientId || !config.clientSecret) {
-      console.error(
-        "Register a new Gopher extension at https://app.gopher.email, then populate your client_id and client_secret. Read more: docs.gopher.email"
+      throw new Error(
+        "GopherApp is not configured. Read more: https://github.com/gopherhq/gopher-app"
       );
-      process.exit();
     }
 
     this.app = (config && config.app) || express();
