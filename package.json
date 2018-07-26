@@ -1,6 +1,6 @@
 {
   "name": "gopher-app",
-  "version": "0.0.4-beta",
+  "version": "0.0.5-beta",
   "description": "The core skill framework to add and install skills for Gopher.email",
   "main": "gopher-app.js",
   "directories": {

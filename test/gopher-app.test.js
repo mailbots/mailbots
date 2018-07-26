@@ -130,4 +130,35 @@ describe("Gopher App", function() {
       fireWebhookRequest(taskCreatedWebhook);
     });
   });
+
+  describe("loading skills", function() {
+    it("loads skills from a directory", function(done) {
+      gopherApp.loadSkills(__dirname + "/test-skills-1");
+      gopherApp.onCommand("memorize", gopher => {
+        expect(gopher.skills.testing1).to.be.true;
+        done();
+      });
+      fireWebhookRequest(taskCreatedWebhook);
+    });
+
+    it("loads skills from multiple directories", function(done) {
+      gopherApp.loadSkills(__dirname + "/test-skills-1");
+      gopherApp.loadSkills(__dirname + "/test-skills-2/");
+      gopherApp.onCommand("memorize", gopher => {
+        expect(gopher.skills.testing1).to.be.true;
+        expect(gopher.skills.testing2).to.be.false;
+        done();
+      });
+      fireWebhookRequest(taskCreatedWebhook);
+    });
+
+    it("loads skill files in alpha order by filename", function(done) {
+      gopherApp.loadSkills(__dirname + "/test-skills-1");
+      gopherApp.onCommand("memorize", gopher => {
+        expect(gopher.skills.overwrite).to.equal("z-test-skill");
+        done();
+      });
+      fireWebhookRequest(taskCreatedWebhook);
+    });
+  });
 });
