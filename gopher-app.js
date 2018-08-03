@@ -124,7 +124,7 @@ class GopherApp {
       this.on(
         webhook =>
           webhook.event === "task.created" &&
-          _.get(webhook, "command.params[0]") === commandSearch,
+          _.get(webhook, "command.format") === commandSearch,
         cb
       );
     }
@@ -146,7 +146,7 @@ class GopherApp {
       this.on(
         webhook =>
           webhook.event === "task.action_received" &&
-          _.get(webhook, "action.action") === actionSearch,
+          _.get(webhook, "action.format") === actionSearch,
         cb
       );
     }
