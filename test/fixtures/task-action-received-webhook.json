@@ -22,8 +22,9 @@
     }
   },
   "action": {
-    "format": "a+frequency.0-2+t.194+gopher-memorize+79c5b8",
-    "action": "frequency.0-2",
+    "full_address":
+      "a+frequency.0-2+t.194+gopher-memorize+79c5b8@gopher-memorize.gopher.email",
+    "format": "frequency.0-2",
     "open": false
   },
   "event": "task.action_received",

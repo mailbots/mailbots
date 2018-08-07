@@ -19,9 +19,8 @@
     }
   },
   "command": {
-    "format": "memorize@gopher-memorize.gopher.email",
-    "subdomain": "gopher-memorize",
-    "params": ["memorize"]
+    "format": "memorize",
+    "full_address": "memorize@gopher-memorize.gopher.email"
   },
   "event": "task.created",
   "version": 1,

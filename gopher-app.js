@@ -137,7 +137,7 @@ class GopherApp {
   onAction(actionSearch, cb) {
     if (actionSearch instanceof RegExp) {
       this.on(webhook => {
-        const action = String(_.get(webhook, "action.action"));
+        const action = String(_.get(webhook, "action.format"));
         return (
           webhook.event === "task.action_received" && actionSearch.exec(action)
         );
