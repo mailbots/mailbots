@@ -84,9 +84,9 @@ class GopherApp {
   }
 
   /**
-   * Load Gopher skills from a directory
-   * This can be called more more than once if skills need to be loaded in order.
-   * Loaded skills are preceeded by loadFirstCoreSkills and succeeded by loadLastCoreSkills
+   * Load Gopher skills from a directory, non-recursively
+   * This can be called more than once to load skills in order. Skills loaded
+   * this method are preceeded by loadFirstCoreSkills, succeeded by loadLastCoreSkills
    * @param {string} skillsDir path to skills directory
    */
   loadSkills(skillsDir) {
@@ -94,8 +94,21 @@ class GopherApp {
     const path = require("path");
     const skillFiles = fs.readdirSync(skillsDir);
     skillFiles.sort().forEach(file => {
-      require(path.join(skillsDir, file))(this);
+      const fullPath = path.join(skillsDir, file);
+      if (!this._isDirectory(fullPath)) {
+        require(fullPath)(this);
+      }
     });
+  }
+
+  /**
+   * Is directory?
+   * @param {string} path full file path
+   */
+  _isDirectory(path) {
+    return require("fs")
+      .statSync(path)
+      .isDirectory();
   }
 
   /**

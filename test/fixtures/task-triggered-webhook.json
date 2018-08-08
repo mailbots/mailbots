@@ -17,11 +17,7 @@
   "user": {
     "name": "Reilly Sweetland",
     "primary_email": "esweetland@gmail.com",
-    "emails": [
-      "reilly@isimple.net",
-      "ersweetland@icloud.com",
-      "esweetland@gmail.com"
-    ],
+    "emails": ["esweetland@gmail.com"],
     "is_validated": true,
     "timezone": "GMT",
     "preferred_date_format": "D, F jS Y g:ia T",
