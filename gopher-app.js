@@ -22,7 +22,7 @@ class GopherApp {
 
     this.app = (config && config.app) || express();
 
-    // Config opts are ultimately available to user on gopher.config
+    // Config opts are also available to the user via gopher.config
     this.config = config;
 
     // Listens for anything posted to /webhooks, firing appropriate listener.
@@ -60,7 +60,7 @@ class GopherApp {
    * any other middleware / skill is added. For example, auth, loading Gopher Helper, etc.
    * Other skills must be called last, ex: a catch-all redirect for web request.
    * Users can specify their own order of skills by adding skills line-by-line,
-   * or by loading skill directories (with gopherApp.loadSkills()) in order.
+   * or by loading skill directories (with gopherApp.loadSkill()) in order.
    */
   loadFirstCoreSkills() {
     require("./lib/core-skills-first")(this);
@@ -70,7 +70,7 @@ class GopherApp {
    * Loads final skills
    */
   loadLastCoreSkills() {
-    this.app.post("/webhooks", this.handleEvent.bind(this));
+    this.app.post(this.config.webhookRoute, this.handleEvent.bind(this));
     require("./lib/core-skills-last")(this);
   }
 
@@ -86,26 +86,44 @@ class GopherApp {
   /**
    * Load Gopher skills from a directory, non-recursively
    * This can be called more than once to load skills in order. Skills loaded
-   * this method are preceeded by loadFirstCoreSkills, succeeded by loadLastCoreSkills
-   * @param {string} skillsDir path to skills directory
+   * this method are preceeded by loadFirstCoreSkills, succeeded by loadLastCoreSkills.
+   * This can also receive a path to a file.
+   * @param {string} skillPath path to skills directory
+   * @param {object} config optional skill configuration object
    */
-  loadSkills(skillsDir) {
+  loadSkill(skill, config) {
     const fs = require("fs");
     const path = require("path");
-    const skillFiles = fs.readdirSync(skillsDir);
-    skillFiles.sort().forEach(file => {
-      const fullPath = path.join(skillsDir, file);
-      if (!this._isDirectory(fullPath)) {
-        require(fullPath)(this);
-      }
-    });
+
+    // Loading npm modules and straight functions
+    if (typeof skill === "function") {
+      skill(this, config);
+
+      // Load an individual skill file
+    } else if (!this.isDirectory(skill)) {
+      require(skill)(this, config);
+
+      // Loading all skills in a directory
+    } else if (this.isDirectory(skill)) {
+      const skillFiles = fs.readdirSync(skill);
+      skillFiles.sort().forEach(file => {
+        const fullPath = path.join(skill, file);
+        if (!this.isDirectory(fullPath)) {
+          require(fullPath)(this, config);
+        }
+      });
+
+      // Unexpected
+    } else {
+      throw new Error("Skill type unrecognized by gopherApp.loadSkill()");
+    }
   }
 
   /**
    * Is directory?
    * @param {string} path full file path
    */
-  _isDirectory(path) {
+  isDirectory(path) {
     return require("fs")
       .statSync(path)
       .isDirectory();
