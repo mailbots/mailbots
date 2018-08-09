@@ -42,7 +42,7 @@ Now, if anyone emails `hi@your-ext.gopher.email` they will get a response! (Side
 
 Think of the `GopherApp` above like a container for numerous gophers, each having special skills to handle email-related actions.
 
-### Example 2: A Simple Response
+### Example 2: A Reminder
 
 Here is another example, this one having two parts:
 Scheduling a reminder and handling a reminder:
@@ -62,9 +62,36 @@ gopherApp.on("task.triggered", function(gopher) {
 });
 ```
 
+# Example 3: Installing Skills
+
+Skills can make use of other skills. For example, the `gopher-memorize` skill
+sets reminders for a task using spaced repetition, a memorization technique that increases
+the time between reminders as more reminders are sent. This skill can be used within
+any other skill. For example...
+
+Run `npm install --save gopher-memorize` in your CLI, then..
+
+```javascript
+// In main app.js file
+var gopherMemorize = require("gopher-memorize");
+gopherApp.loadSkill(gopherMemorize);
+
+gopherApp.onCommand("remember", function(gopher) {
+  gopher.skills.memorize.memorizeTask(); //        ⬅ Gopher can now memorize
+  gopher.webhook.quickResponse("Memorizing!");
+  gopher.webhook.respond();
+});
+
+gopherApp.on("task.triggered", function(gopher) {
+  gopher.skills.memorize.memorizeTask(); //        ⬅ Gopher continues to memorize
+  gopher.webhook.quickResponse("An email with decreasing frequency");
+  gopher.webhook.respond();
+});
+```
+
 ## Organizing Skills
 
-Because skills can have multiple handlers (like the last example),
+Because skills can have multiple handlers (like the reminder examples),
 it often makes sense to put skills into in their own file. GopherApp can then
 load your skill.
 
@@ -97,104 +124,6 @@ gopherApp.loadSkill(__dirname + "/skills");
 ```
 
 More details on this below.
-
-## Writing Custom Skills
-
-Gopher Skills can be created and added to the `gopher` object.
-Let's turn our above handler into a useful skill that can be reused and shared
-with others.
-
-[Note: If you are familiar with [Express Middleware](https://expressjs.com/en/guide/writing-middleware.html), this will look familiar.]
-
-### Define Skill
-
-A new skill usually is defined in a separate file or npm module, but just as
-easily can live in the same file.
-
-```javascript
-gopherApp.use(function(request, response, next) {
-  var gopher = response.locals.gopher;
-  var subject = gopher.get("task.reference_email.subject");
-
-  // New skill 🎓 👏
-  gopher.skills.hiBackWithReminder = function() {
-    gopher.webhook.setTriggerTime("3days");
-    gopher.webhook.addEmail({
-      to: gopher.get("source.from"),
-      subject: "Hi back!",
-      body: [
-        {
-          type: "html",
-          text: "I see you sent me an email about " + subject
-        }
-      ]
-    });
-  };
-  next(); // <-- Don't forget this
-});
-```
-
-### Use Skill
-
-Same outcome, now using Gopher Skills.
-
-```javascript
-gopherApp.onCommand("hi", function(gopher) {
-  gopher.skills.hiBackWithReminder(); // Does all of the above, now a nice elegant command
-  gopher.webhook.respond();
-});
-```
-
-## Composing Skills
-
-Skills can make use of other skills. For example, an [Evercontact](https://www.evercontact.com/developers)
-skill (todo!) may only parse email signatures. A CRM skill could compose the Evercontact skill
-and any others to augment contact information before entering the data into a CRM.
-
-## Publishing Skills
-
-Gopher Skills can be easily packaged and shared on npm. If you create a skill please let us know so we can add it to our skills directory.
-
-## Env
-
-If you went through the setup process on gopher.email, GopherApp has already been configured.
-If you are setting it up elsewhere, you can set up your own environment. You can also pass configuration
-options in `gopherApp = new GopherApp(options)` or you can set the following environment variables.
-You can use [dotenv](https://www.npmjs.com/package/dotenv) or some similar tool load your environment.
-
-```
-CLIENT_ID=
-CLIENT_SECRET=
-SCOPE=
-EXTENSION_URL=
-REDIRECT_URI=
-EXT_ID=
-```
-
-## Docs
-
-The code is well commented. Until more docs are written, look there.
-
-# Installing Skills
-
-A Gopher Skill is any ability you'd like to give to your metaphorical,
-email-handling gopher – setting reminders, parsing emails,
-adding data to APIs, pulling data from APIs and more.
-
-Loading skills is easy. Here is an example using npm.
-First, run `npm install --save gopher-memorize` in your CLI, then..
-
-```javascript
-// In main app.js file
-var gopherMemorize = require("gopher-memorize");
-gopherApp.loadSkill(gopherMemorize);
-
-gopherApp.onCommand("remember", function(gopher) {
-  gopher.skills.memorize.memorizeTask(); //        ⬅ Gopher can now memorize
-  gopher.webhook.quickResponse("Memorizing!");
-  gopher.webhook.respond();
-});
-```
 
 Skills can have:
 
@@ -244,9 +173,21 @@ const memorizeSkill = require("memorize");
  });
 ```
 
-You can also write your own skills which can, make use of
-skills written by others. You can also publish your skills for
-use by others.
+## Setting up outside Glitch
+
+If you went through the setup process on gopher.email, GopherApp has already been configured.
+If you are setting it up elsewhere, you can set up your own environment. You can also pass configuration
+options in `gopherApp = new GopherApp(options)` or you can set the following environment variables.
+You can use [dotenv](https://www.npmjs.com/package/dotenv) or some similar tool load your environment.
+
+```
+CLIENT_ID=
+CLIENT_SECRET=
+SCOPE=
+EXTENSION_URL=
+REDIRECT_URI=
+EXT_ID=
+```
 
 # Skill Authoring
 
