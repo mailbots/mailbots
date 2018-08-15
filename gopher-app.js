@@ -84,6 +84,19 @@ class GopherApp {
   }
 
   /**
+   * Add skills to the gopher.skills object via middleware function
+   * @param {function} middlewareFn Function that accepts a mutable gopher object by reference
+   * TODO: Async + error handling
+   */
+  teach(middlewareFn) {
+    this.app.use(function(req, res, next) {
+      const gopher = res.locals.gopher || {};
+      middlewareFn(gopher);
+      next();
+    });
+  }
+
+  /**
    * Load Gopher skills from a directory, non-recursively
    * This can be called more than once to load skills in order. Skills loaded
    * this method are preceeded by loadFirstCoreSkills, succeeded by loadLastCoreSkills.
