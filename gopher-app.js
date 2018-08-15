@@ -175,6 +175,28 @@ class GopherApp {
   }
 
   /**
+   * Captures only 'extension.event_broadcast' events
+   * @param {string} commandSearch
+   */
+  onEventBroadcast(eventSearch, cb) {
+    if (eventSearch instanceof RegExp) {
+      this.on(webhook => {
+        const eventType = String(_.get(webhook, "source.type"));
+        return (
+          webhook.event === "extension.event_broadcast" &&
+          eventSearch.exec(eventType)
+        );
+      }, cb);
+    } else {
+      this.on(
+        webhook =>
+          webhook.event === "extension.event_broadcast" &&
+          _.get(webhook, "source.type") === eventSearch,
+        cb
+      );
+    }
+  }
+  /**
    * Captures only 'task.action_received' events where the action string matches
    * @param {string|RegExp} actionSearch
    */
