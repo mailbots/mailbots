@@ -1,26 +1,12 @@
 # Gopher App
 
-Gopher.email helps you get things done without leaving your email, like an exceptionally skilled little rodent that digs tunnels from your inbox to all your other systems.
-
 GopherApp is the open-source counterpart to Gopher.email. It provides an easy-to-use framework to create, add and an install 3rd party Gopher "skills" that get things done with email.
-
-Skills can include:
-
-- Parsing emails and submitting them to CRMs, project management systems, etc
-- Scheduling email-based reminders
-- Tracking tasks and todos via email
-- Creating email-based internal tool
-- Coordinate team projects and actions
-
-The Gopher.email core API provides core email APIs for handling email, storing data and setting reminders. GopherApp provides the framework for an ecosystem of skills that can be created, installed and shared with others.
 
 ## Quick Start
 
 Go through the extension setup process at gopher.email. This will provide a working, authenticated instance of GopherApp in under a minute. (See below for local install instructions).
 
 Then, add a skill.
-
-## Example 1: A Simple Response
 
 Let's tell what Gopher what do to when it receives the [email command](https://docs.gopher.email/reference#section-email-commands) "hi":
 
@@ -37,7 +23,27 @@ gopherApp.onCommand("hi", function(gopher) {
 gopherApp.listen();
 ```
 
-Anyone on any email platform, anywhere in the world can use this email command. There is nothing new to install – it's just email.
+Anyone on any email platform, anywhere in the world can use this email command. There is nothing new to install – it's just email!
+
+### Overview
+
+Gopher.email helps you get things done without leaving your email, like an exceptionally skilled lovable rodent that digs tunnels from your inbox to all your other systems.
+
+Skills can include:
+
+- Parsing emails and submitting them to CRMs, project management systems, etc
+- Scheduling email-based reminders
+- Tracking tasks and todos via email
+- Creating email-based internal tools
+- Coordinate team projects and actions
+
+GopherApp consists of the following parts:
+
+- Handlers.
+- Tunnels.
+- Skills.
+
+The Gopher.email core API provides core email APIs for handling email, storing data and setting reminders. GopherApp provides the framework for an ecosystem of skills that can be created, installed and shared with others.
 
 ## Example 2: A Reminder
 
@@ -132,15 +138,14 @@ skill has a UI element that changes the memorizaiton frequency.
 ```javascript
   // the memorize skill has already been loaded
   gopherApp.onCommand("remember", function(gopher) {
-    gopher.skills.memorize.memorizeTask();
     gopher.webhook.addEmail({
-      to: gopher.get('source.from')
-      from: "Memory Maker",
-      subject: gopher.get('source.subject'),
+      to: "you@email.com"
+      from: "Gopher",
+      subject: "Email Subject"
       body: [
         {
           type: 'title',
-          text: 'memorizing' + gopher.get('source.subject')
+          text: 'A Title'
         },
 
         // UI Components in a Gopher skill
@@ -154,6 +159,8 @@ skill has a UI element that changes the memorizaiton frequency.
 
 Skills can handle the UI events they create. Here an example of handling
 an [Action Email](https://docs.gopher.email/reference#email-based-actions):
+
+This email command renders a UI with a button to turn off the reminder.
 
 ```javascript
   gopherApp.onCommand("remember", function(gopher) {
@@ -212,12 +219,12 @@ gopherApp.loadSkill(__dirname + "/hello-world.js");
 
 #### 2. Latent Skills
 
-Latent skills do nothign until they are invoked. Latent skills are added to `gopher.skills` for use within other handlers. For example:
+Latent skills do nothing until they are invoked. Latent skills are added to `gopher.skills` for use within other handlers. For example:
 
 ```javascript
 gopherApp.loadSkill(require("gopher-memorize"));
 gopherApp.onCommand("hi", function(gopher) {
-  gopher.skills.memorize.memorizeTask(); // Only starts memorizing when called
+  gopher.skills.memorize.memorizeTask(); // This only starts memorizing after it's called
   gopher.webhook.addQuickReply("Hello world!");
   gopher.webhook.respond();
 });
@@ -390,6 +397,18 @@ gopher.skills.memorize.memorizeTask({ frequencyPref: 0.1 });
 ```
 
 This method signatures the makes for a simple, consistent developer experience and keeps the metaphor of our (literal) gopher being ordered around.
+
+## Accessing Express.js
+
+GopherApp's underlying Express is available on `gopherApp.app` and can be used and modified at any time in the request lifecycle. For example:
+
+```javascript
+gopherApp.app.get("/", (req, res) {
+  res.send("A Gopher App http route!");
+});
+```
+
+This is great for Authenticating 3rd party APIs, receiving webhooks and exposing webhook endpoints.
 
 ## Design Philosophy
 
