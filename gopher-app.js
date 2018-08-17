@@ -1,6 +1,7 @@
 const _ = require("lodash");
 const express = require("express");
 const configDefaults = require("./lib/config-defaults");
+const debug = require("debug")("gopher-app");
 
 /**
  * A light weight wrapper around the Express App object to provide an authenticated
@@ -14,6 +15,7 @@ class GopherApp {
    */
   constructor(config) {
     config = Object.assign({}, configDefaults, config);
+    debug("instantiating GopherApp instance with config:", config);
     if (!config.clientId || !config.clientSecret) {
       throw new Error(
         "GopherApp is not configured. Read more: https://github.com/gopherhq/gopher-app"
@@ -50,6 +52,7 @@ class GopherApp {
    * For testing, export app object instead of starating server
    */
   exportApp() {
+    debug("exporting gopherApp");
     this.loadLastCoreSkills();
     return this.app;
   }
@@ -75,25 +78,10 @@ class GopherApp {
   }
 
   /**
-   * Just a proxy for the native Express use function. Middleware added here is preceeded
-   * by loadFirstCoreSkills middleware and succeeded by loadLastCoreSkills middleware.
-   * @param {function} fn
+   * See commit 9afba5d6 for simplified gopher middlware (possibly)
    */
-  use(...args) {
-    this.app.use(...args);
-  }
-
-  /**
-   * Add skills to the gopher.skills object via middleware function
-   * @param {function} middlewareFn Function that accepts a mutable gopher object by reference
-   * TODO: Async + error handling
-   */
-  teach(middlewareFn) {
-    this.app.use(function(req, res, next) {
-      const gopher = res.locals.gopher || {};
-      middlewareFn(gopher);
-      next();
-    });
+  use() {
+    throw new Error("Call gopherApp.app.use to add Express middleware");
   }
 
   /**
@@ -105,6 +93,7 @@ class GopherApp {
    * @param {object} config optional skill configuration object
    */
   loadSkill(skill, config) {
+    debug("loading skill");
     const fs = require("fs");
     const path = require("path");
 
@@ -151,6 +140,7 @@ class GopherApp {
    * @param {function} cb Callback function with signature cb(gopher, req, res)
    */
   on(triggerCondition, cb) {
+    debug("adding listener function");
     this.listeners.push({ triggerCondition, cb });
   }
 
