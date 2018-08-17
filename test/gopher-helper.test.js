@@ -182,6 +182,19 @@ describe("Gopher Helper", function() {
       done();
     });
 
+    // Depends on above test
+    it("adds outbound email to response", done => {
+      gopherHelper.webhook.addQuickReply("quick reply");
+      expect(gopherHelper.responseJson).to.haveOwnProperty("send_messages");
+      expect(gopherHelper.responseJson.send_messages[1].body[0].text).to.equal(
+        "quick reply"
+      );
+      expect(gopherHelper.responseJson.send_messages[1].subject).to.equal(
+        "quick reply"
+      );
+      done();
+    });
+
     it("returns a mutable reference to the new email", done => {
       const email = gopherHelper.webhook.addEmail({
         to: "fdas@fdsa.com",

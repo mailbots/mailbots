@@ -27,31 +27,36 @@ Anyone on any email platform, anywhere in the world can use this email command. 
 
 ### Overview
 
-Gopher.email helps you get things done without leaving your email, like an exceptionally skilled lovable rodent that digs tunnels from your inbox to all your other systems.
+Gopher.email helps you get things done without leaving your email, like an exceptionally skilled lovable rodent that digs tunnels from your inbox to your other systems.
 
-Skills can include:
+**Core API**
+The Gopher.email core API provides core email APIs for sending email, receiving and parsing email, storing data, and setting reminders.
 
-- Parsing emails and submitting them to CRMs, project management systems, etc
-- Scheduling email-based reminders
-- Tracking tasks and todos via email
-- Creating email-based internal tools
-- Coordinate team projects and actions
+**Extensions**
+Creating a Gopher Extension grants developer access to Gopher's Core APIs, allowing someone to create an email-only utility (like followupthen.com). Extensions, are set up to be publishable, but they can also be kept private.
 
-GopherApp consists of the following parts:
+**Skills**
+Extensions are composed of one or more "skills". GopherApp (this project) provides a framework to create and install skills that accomplish specific email-based tasks. For example:
 
-- Handlers.
-- Tunnels.
-- Skills.
+- Telling Gopher how to respond to an email address to your extension
+- Rendering a set of email UI elements
+- Parsing email
+- Submitting data to CRMs, project management systems, etc
+- Scheduling team email reminders
+- Tracking a team todo item
 
-The Gopher.email core API provides core email APIs for handling email, storing data and setting reminders. GopherApp provides the framework for an ecosystem of skills that can be created, installed and shared with others.
+Skills can register "handlers" (ie, functions that tell Gopher what to do when certain events occur), respond to emails or just provide components to other other skills.
 
-## Example 2: A Reminder
+## Handlers, Reminder Example
 
 The first handler creates the reminder. The second one handles the reminder when it becomes due.
 
 ```javascript
 // Inside app.js
 // Schedule "task.triggered to fire in 1 minute
+var GopherApp = require("gopher-app");
+var gopherApp = new GopherApp();
+
 gopherApp.onCommand("hi", function(gopher) {
   gopher.webhook.setTriggerTime("1min");
   gopher.webhook.respond();
@@ -62,81 +67,162 @@ gopherApp.on("task.triggered", function(gopher) {
   gopher.webhook.addQuickReply("Hi 1 minute later!");
   gopher.webhook.respond();
 });
+
+gopherApp.listen();
 ```
 
-Think of the `gopherApp` variable like a container for numerous gophers, each having special skills to handle email-related actions.
+## Handlers: An Action Email Example
 
-## Example 3: Installing Skills
+Here an example of handling
+an [Action Email](https://docs.gopher.email/reference#email-based-actions).
+
+The interaction would start with emailing `hi-example@your-ext.gopher.email`. This email would render a button to `Say Hi` which, when clicked, would trigger an action email.
+
+```javascript
+var GopherApp = require("gopher-app");
+var gopherApp = new GopherApp();
+
+ gopherApp.onCommand("hi-example", function(gopher) {
+    gopher.webhook.addEmail({
+      to: gopher.get('source.from')
+      from: "Hi Gopher",
+      subject: gopher.get('source.subject'),
+      body: [
+        {
+          type: 'title',
+          text: 'Click button to say hi'
+        },
+
+        // An email based action
+        {
+          type: "button",
+          text: "Say Hi",
+          action: 'say.hi',
+          subject: "Hit Send to Say hi"
+        }
+      ]
+    })
+  };
+
+  // Handle the event created by our UI above
+  gopherApp.onAction('say.hi', function(gopher) {
+    gopher.webhook.quickReply('hi');
+    gopher.webhook.respond();
+  });
+
+  gopherApp.listen();
+```
+
+## Organizing Skills
+
+Skills can have multiple handlers (like in the last examples). To keep things organized, we can group a collection of skill handlers into their own files, and group multiple files for a skill into a directory. For example:
+
+```javascript
+// In my-new-reminder-skill.js, wrap your code like this:
+module.exports = function(gopherApp) {
+  // Same code as previous example
+  // gopherApp.onCommand("hi", function(gopher) {}
+  // gopherApp.on("task.triggered", function(gopher) {}
+};
+```
+
+Then load your skill file like this:
+
+```javascript
+require("./my-new-skill")(gopherApp);
+```
+
+There is also a helper method that makes it easy to load groups of skills:
+
+```javascript
+// Install all skills in a directory (but not its directories)
+gopherApp.loadSkill(__dirname + "/my/skills/");
+```
+
+Note that this does not load skills in subdirectories. This lets you use the subdirectories for libs, tests and sub-skills that only are needed in certain places.
+
+## Composing Skills
+
+Gopher Skills are easier to write when they are organized into self-contained components containing everything needed to accomplish a function: UI elements, events handlers, settings, even authenticating with 3rd party APIs.
+
+Here is our previous example, encapsulated a simple, isolated skill:
+
+```javascript
+// hi-skill.js (Self-contained)
+module.exports = function(gopherApp) {
+  // Handle UI events
+  gopherApp.onAction("say.hi", function(gopher) {
+    gopher.webhook.quickReply("hi");
+    gopher.webhook.respond();
+  });
+
+  return {
+    // Return UI elements
+    renderHiButton: function() {
+      return {
+        type: "button",
+        text: "Say Hi",
+        action: "say.hi",
+        subject: "Hit Send to Say hi"
+      };
+    }
+  };
+};
+```
+
+Use our isolated skill in any other component like this:
+
+```javascript
+// This gets the UI buttons and also activates its handler
+const { hiButton } = require('./hi-skill')(gopherApp);
+
+gopherApp.onCommand("remember", function(gopher) {
+  gopher.webhook.addEmail({
+    // to, cc, etc
+    body: [
+      hiButton() // <-- A self-contained UI component
+    ]
+  })
+};
+```
+
+Isolating skills as components has the side-benefit of making them easily sharable with others.
+
+## Installing and Using 3rd Party Skills
 
 Skills can make use of other skills. Let's install one from npm.
 
-Run `npm install --save gopher-memorize` in your CLI, then..
+You would furst run `npm install --save gopher-memorize` in your CLI.
 
 The `gopher-memorize` skill sets reminders for any task using [spaced repetition](https://www.wikiwand.com/en/Spaced_repetition), a memorization technique that increases the time between reminders as more reminders are sent.
 We are going to use that to create a custom "remember" command for our Gopher App.
 
 ```javascript
 // In main app.js file
-var gopherMemorize = require("gopher-memorize");
-gopherApp.loadSkill(gopherMemorize);
+var memorizeSkill = require("gopher-memorize")(gopherApp);
 
 gopherApp.onCommand("remember", function(gopher) {
-  gopher.skills.memorize.memorizeTask(); //        ⬅ Gopher has memorization skills
+  memorizeSkill.memorizeTask(gopher); //  ⬅ Tells Gopher to memorize your task
   gopher.webhook.quickResponse("Memorizing!");
   gopher.webhook.respond();
 });
 
 // Called each time the reminder is triggered
 gopherApp.on("task.triggered", function(gopher) {
-  gopher.skills.memorize.memorizeTask(); //        ⬅ Gopher continues to memorize
+  memorizeSkill.memorizeTask(gopher); // ⬅ Gopher continues to memorize
   gopher.webhook.quickResponse("An email with decreasing frequency");
   gopher.webhook.respond();
 });
 ```
 
-## Loading Skills
+### Rendering UI Components
 
-Skills can have multiple handlers (like in the last two examples). To keep things organized, we can group a collection of skill handlers into a skill module.
+Skills can render UI elements by returning [JSON UI elements](https://docs.gopher.email/docs/email-ui-reference). For example, our memorizaiton skill has a UI element that changes the memorizaiton frequency.
 
-```javascript
-// In my-reminder-skill.js
-module.exports = function(gopherApp) {
-  gopherApp.onCommand("hi", function(gopher) {
-    gopher.webhook.setTriggerTime("1min");
-    gopher.webhook.respond();
-  });
-
-  gopherApp.on("task.triggered", function(gopher) {
-    gopher.webhook.addQuickReply("Hi 1 minute later!");
-    gopher.webhook.respond();
-  });
-};
-```
-
-Load skills using `gopherApp.loadSkill()`
+By convention, methods that render UI elements start with `render`. For example, `renderMemorizationControls`.
 
 ```javascript
-// In main app.js, we can load our skill.
-gopherApp.loadSkill(__dirname + "/skills/customMemorySkill.js");
-```
-
-You can also load all skills in a directory (a skillset):
-
-```javascript
-// Install all skills in a directory (but not its directories)
-gopherApp.loadSkill(__dirname + "/my/skills/");
-gopherApp.onCommand("hi", function(gopher) {
-  // gopher has all skills in the skills directory
-});
-```
-
-### Rendering UI
-
-Skills can render UI elements. For example, our memorizaiton
-skill has a UI element that changes the memorizaiton frequency.
-
-```javascript
-  // the memorize skill has already been loaded
+  var memorizeSkill = require("gopher-memorize")(gopherApp);
   gopherApp.onCommand("remember", function(gopher) {
     gopher.webhook.addEmail({
       to: "you@email.com"
@@ -149,167 +235,75 @@ skill has a UI element that changes the memorizaiton frequency.
         },
 
         // UI Components in a Gopher skill
-        ...gopher.skills.memorize.renderMemorizationControls()
+        memorizeSkill.renderMemorizationControls()
       ]
     })
   }
 ```
 
-### Handling UI Events
+### Activating Skills
 
-Skills can handle the UI events they create. Here an example of handling
-an [Action Email](https://docs.gopher.email/reference#email-based-actions):
-
-This email command renders a UI with a button to turn off the reminder.
+When a skill is required as shown it is "activated".
 
 ```javascript
-  gopherApp.onCommand("remember", function(gopher) {
-    gopher.webhook.memorize.memorizeTask();
-    gopher.webhook.addEmail({
-      to: gopher.get('source.from')
-      from: "Memory Maker",
-      subject: gopher.get('source.subject'),
-      body: [
-        {
-          type: 'title',
-          text: 'memorizing' + gopher.get('source.subject')
-        },
-
-        // An email based action
-        {
-          type: "button",
-          text: "Cancel Reminder",
-          action: 'memorize.off',
-          subject: "Hit Send to Cancel this reminder"
-        }
-      ]
-    })
-  };
-
-  // Handle our "Cancel Reminder" event created by our UI above
-  gopherApp.onAction('memorize.off', function(gopher) {
-    gopher.webhook.completeTask();
-    gopher.webhook.respond();
-  });
+var memorizeSkill = require("gopher-memorize")(gopherApp);
 ```
 
-### Latent vs. Active Skills
+Its handlers and middleware (more on this below) become active from this point forward in the request.
 
-The above examples show two types of Gopher Skills.
-
-#### 1. Active Skills
-
-Active skills takes action the moment they are loaded. For example:
+If a skill requires configuration, a second, config object can be passed:
 
 ```javascript
-// hello-world.js
-module.exports = function(gopherApp) {
-  gopherApp.onCommand("hi", function(gopher) {
-    gopher.webhook.addQuickReply("Hello world!");
-    gopher.webhook.respond();
-  });
-};
+var memorizeSkill = require("gopher-memorize")(gopherApp, config);
 ```
 
-As soon as the above skill is loaded, it starts responding to webhooks.
+## Using Express.js Middlware and Routes
+
+GopherApp wraps an instance of Express.js. The Express.js `app` object is available for use at `gopherApp.app`, which allows your sharable skill to do anything that can be done with Express: Authentiate with APIs, respond to webhooks and render web pages.
+
+### Adding to gopher.skills with middlware
+
+The `gopher` object passed into your handlers can be modified with middlware. Internally, GopherApp actually uses middlware to pre-load this object with with useful various functions. You can take this further. For example:
 
 ```javascript
-gopherApp.loadSkill(__dirname + "/hello-world.js");
-```
+// Configure logging object
+gopherApp.app.use(function(req, res, next) {
+  var gopher = res.locals.gopher; // the gopher object is available here
+  var logger = require("./logger");
+  logger.setup({ key: "123" });
 
-#### 2. Latent Skills
+  // add our custom logger skill to the Gopher object
+  gopher.skills.myCustomSkill.logger = logger;
+  next(); // Don't forget this!
+});
 
-Latent skills do nothing until they are invoked. Latent skills are added to `gopher.skills` for use within other handlers. For example:
-
-```javascript
-gopherApp.loadSkill(require("gopher-memorize"));
+// Anywhere afterwards..
 gopherApp.onCommand("hi", function(gopher) {
-  gopher.skills.memorize.memorizeTask(); // This only starts memorizing after it's called
-  gopher.webhook.addQuickReply("Hello world!");
-  gopher.webhook.respond();
+  gopher.skills.myCustomSkill.logger.log("Log with my pre-configured logger");
 });
 ```
 
-Reusable UI Elements are typically created as latent skills, as shown a few examples ago when when we called `...gopher.skills.memorize.renderMemorizationControls()`
+Explicitly `require` your skills to make your code more self-documenting. For some cases (loggers, configuraed object) passing a skill via via gopher.skills can come in handy.
 
-## Composing Skills
-
-You can create complex skills by loading and organizing simpler skills, each of which may, themselves also load their own skills.
-
-A Gopher Skill can be written as an isolated component that contains everything it needs to accomplish a task – UI elements, events handlers, settings, even authenticating with 3rd party APIs.
-
-Let's take our example from the "Handling UI Events" section and make a self-contained "Cancel Reminder" button skill, with all logic built-in.
-
-```javascript
-// In a separate file just for this component: Ex: cancel-button.js
-// Add the UI element:
-var cancelButton = {
-  type: "button",
-  text: "Cancel Reminder",
-  action: "memorize.off",
-  subject: "Hit Send to Cancel this reminder"
-};
-
-// Add button to the Gopher object (This is Express Middleware syntax..more on this below)
-gopherApp.use(function(request, response, next) {
-  var gopher = response.locals.gopher;
-  gopher.skills.mySkillName.cancelButton; // This a "Latent Skill" (See above)
-  next();
-});
-
-// Handle our "Cancel Reminder" event created by our UI above
-// This is an "Active Skill". Once the skill is loaded, the "memorize.off"
-// always goes to this handler
-gopherApp.onAction("memorize.off", function(gopher) {
-  gopher.webhook.completeTask();
-  gopher.webhook.respond();
-});
-```
-
-Now we can drop in our isolated "cancel button skill" within any handler that has our skill and it will Just Work.
-
-```javascript
-  // Load and use the "Cancel Button" skill anywhere
-  gopherApp.load(__dirname + "/skills");  // cancel-button.js is in this dir
-  gopherApp.onCommand("remember", function(gopher) {
-    gopher.webhook.memorize.memorizeTask();
-    gopher.webhook.addEmail({
-      to: gopher.get('source.from')
-      from: "Memory Maker",
-      subject: gopher.get('source.subject'),
-      body: [
-        {
-          type: 'title',
-          text: 'memorizing' + gopher.get('source.subject')
-        },
-
-        // The same UI button. All logic self-contained
-        gopher.skills.mySkill.cancelButton
-      ]
-    })
-  };
-```
-
-Isolating skills as components has the side-benefit of making them easily sharable with others.
-
-## Skill Order Matters
-
-When a skill depends on an another skill having been previously loaded, you should explicitly load the dependent skill (even if it was loaded previously). This makes your skill more portable, durable and self-documenting.
-
-```javascript
-// Be explicit about dependent skills, even if you seem repetative
-gopherApp.loadSkill(__dirname + "./dependentSkill.js");
-```
-
-Side-note: under the hood, Gopher uses a pattern called "Middleware". To quote the Express.js documentation (the framework with which GopherApp is created):
+Finally, an important note from Express.js:
 
 > Middleware is like a plumbing pipe: requests start at the first middleware function defined and work their way “down” the middleware stack processing for each path they match.
 
 > They [middleware handlers] are invoked sequentially, thus the order defines middleware precedence. For example, usually a logger is the very first middleware you would use, so that every request gets logged.
 
-### Loading Skill Directory Does Not Load Subdirectory's Skills
+In short, make sure you load your middlware before using it in a handler.
 
-Load all skills in a directory using `gopherApp.loadSkill()`. This does NOT load skills from subdirectories. Subdirectories can be used for libs, tests or sub-skills that need to be loaded in a specific order.
+### Handling routes
+
+Easily handle http routes just as with [Express.js routes](https://expressjs.com/en/guide/routing.html):
+
+```javascript
+gopherApp.app.get("/hi", function(req, res) {
+  res.send("<h1>Hi http request!</h1>");
+});
+```
+
+Http route handling lets your extension contain its own authentication / login workflows even serve its own publicly accessible pages.
 
 ## Testing
 
@@ -327,7 +321,7 @@ If you are setting it up elsewhere (for example, for local development, or when 
 - `npm install gopher-app`
 - `touch app.js`
 
-### 2. Minimal code
+### 2. Add minimal code
 
 ```javascript
 var GopherApp = require("GopherApp");
@@ -365,24 +359,23 @@ Authenticate your extension with Gopher by visiting http://your-extension-url/au
 
 ## Naming Conventions
 
-If you are planning to share your skill with others, there are a few naming convnetions that can improve your skill's usability:
-
-First Register an extension dedicated your published skill.
+If you are planning to share your skill with others, there are a few naming conventions that can improve your skill's usability:
 
 Try to use the same unique string (ex: "skill-name") for:
 
-- Your skill / extension's subdomain. (skill-name.gopher.email)
-- The name of the skill on the gopher object, camelCased. For example `gopher.skills.skillName`
 - If you publish your skill to npm, name the module "gopher-skill-name"
+- The name of the skill on the gopher object, camelCased. For example `gopher.skills.skillName`
 - Preface your event names, commands and actions with your skill name, or an
   abbreviation if it is long (due to character limitations in the part of
   of email addresses before the @ sign)
 - When storing data against the task or extension, put your skill data
   in an object with a key of this same name.
 
-This way, someone can use and track your skill's activity by name.
+Using these conventions improves usability and trackability of your extension.
 
-### Skill Method Conventions
+### Skill naming conventions.
+
+This applies only to skills that are added to the `gopher.skills` object via middleware.
 
 By convention, skills should be invokable with sensible defaults by calling them with no parameters.
 
@@ -398,18 +391,6 @@ gopher.skills.memorize.memorizeTask({ frequencyPref: 0.1 });
 
 This method signatures the makes for a simple, consistent developer experience and keeps the metaphor of our (literal) gopher being ordered around.
 
-## Accessing Express.js
-
-GopherApp's underlying Express is available on `gopherApp.app` and can be used and modified at any time in the request lifecycle. For example:
-
-```javascript
-gopherApp.app.get("/", (req, res) {
-  res.send("A Gopher App http route!");
-});
-```
-
-This is great for Authenticating 3rd party APIs, receiving webhooks and exposing webhook endpoints.
-
 ## Design Philosophy
 
 Gopher App was created with two types of developers in mind:
@@ -417,6 +398,10 @@ Gopher App was created with two types of developers in mind:
 1.  "Low-Code" developers that want to throw together an extension as quickly as possible.
 2.  More experineced skill developers that wish to encapsulate some complex task as an easy-to-use Gopher Skill.
 
-For category 1, we employ the metaphorical gopher to cancapsulate skills that "just work" with a single, intuitive command. Code is deliberately hidden from this type of user. Sensible defaults are used for skills so the user's first-time-use is a positive experience. The conceptual model for this user is a lovable rodent that digs tunnels and gets things done for you. What's not to like?
+For category 1, we employ the metaphorical gopher to invoke skills that "just work" with a single, intuitive command. Code is deliberately hidden from this type of user. Sensible defaults are used for skills so the user's first-time-use is a positive experience. The conceptual model for this user is a lovable rodent that digs tunnels and gets things done for you. What's not to like?
 
 For category 2, the more experience user, we don't try to hide Gopher App's internals. Gopher App is, essentially, an Express middleware stack along with some conventions to load and share this middlware. This familiar environment makes skill authoring a breeze for more experienced developers.
+
+## Contributions
+
+Contributions are welcome in the form of PRs and / or Github tickets for issues, bugs, ideas and feature requests.
