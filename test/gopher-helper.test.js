@@ -24,8 +24,16 @@ describe("Gopher Helper", function() {
       done();
     });
 
-    it("sets task data", done => {
+    it("sets task data with an object", done => {
       gopherHelper.webhook.setTaskData({ frequency_pref: "5" });
+      done();
+    });
+
+    it("sets task data using object path and string", done => {
+      gopherHelper.webhook.setTaskData("frequency_pref", "8");
+      expect(
+        gopherHelper.webhook.responseJson.task.private_data.frequency_pref
+      ).to.equal("8");
       done();
     });
 
@@ -37,7 +45,7 @@ describe("Gopher Helper", function() {
 
     it("prioritizes newly set responseJson data", done => {
       const fq = gopherHelper.webhook.getTaskData("frequency_pref");
-      expect(fq).to.equal("5");
+      expect(fq).to.equal("8");
       done();
     });
 
@@ -107,7 +115,7 @@ describe("Gopher Helper", function() {
         foo: { nine: "ten" }
       });
       expect(JSON.stringify(responseJson.task.private_data)).to.equal(
-        '{"frequency_pref":"5","foo":{"bar":"baz","nine":"ten"}}'
+        '{"frequency_pref":"8","foo":{"bar":"baz","nine":"ten"}}'
       );
       done();
     });
@@ -150,6 +158,19 @@ describe("Gopher Helper", function() {
         key: "23432",
         name: "bob",
         another: "key"
+      });
+      done();
+    });
+
+    it("sets extension data using lodash _.set string", done => {
+      gopherHelper.webhook.setExtensionData("crm", {
+        key: "9876",
+        name: "joe"
+      });
+      expect(responseJson.extension.private_data.crm).to.deep.equal({
+        another: "key",
+        key: "9876",
+        name: "joe"
       });
       done();
     });
