@@ -146,7 +146,7 @@ class GopherApp {
 
   /**
    * Captures only 'task.created' events where the command string matches
-   * @param {string} commandSearch
+   * @param {string|RexExp} commandSearch
    */
   onCommand(commandSearch, cb) {
     if (commandSearch instanceof RegExp) {
@@ -165,23 +165,25 @@ class GopherApp {
   }
 
   /**
-   * Captures only 'extension.event_broadcast' events
-   * @param {string} commandSearch
+   * Captures only 'extension.event_received' events
+   * Note: This "Event" refers to the 3rd party webhooks
+   * that are posted to the Gopher Extension.
+   * @param {string|RexExp} eventSearch
    */
-  onEventBroadcast(eventSearch, cb) {
+  onEvent(eventSearch, cb) {
     if (eventSearch instanceof RegExp) {
       this.on(webhook => {
-        const eventType = String(_.get(webhook, "source.type"));
+        const eventType = String(_.get(webhook, "payload.type"));
         return (
-          webhook.event === "extension.event_broadcast" &&
+          webhook.event === "extension.event_received" &&
           eventSearch.exec(eventType)
         );
       }, cb);
     } else {
       this.on(
         webhook =>
-          webhook.event === "extension.event_broadcast" &&
-          _.get(webhook, "source.type") === eventSearch,
+          webhook.event === "extension.event_received" &&
+          _.get(webhook, "payload.type") === eventSearch,
         cb
       );
     }
