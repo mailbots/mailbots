@@ -161,4 +161,15 @@ describe("Gopher App", function() {
       fireWebhookRequest(taskCreatedWebhook);
     });
   });
+
+  describe("Gopher API", function() {
+    it("loads authenticated gopher api client on gopher.api", function(done) {
+      gopherApp.onCommand("memorize", gopher => {
+        expect(gopher.api._accessToken).to.be.not.null;
+        gopher.webhook.respond();
+        done();
+      });
+      fireWebhookRequest(taskCreatedWebhook);
+    });
+  });
 });
