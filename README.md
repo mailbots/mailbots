@@ -16,7 +16,7 @@ var gopherApp = new GopherApp();
 
 // When someone emails: hi@your-extension.gopher.email, respond "Hello world!"
 gopherApp.onCommand("hi", function(gopher) {
-  gopher.webhook.addQuickReply("Hello world!");
+  gopher.webhook.quickReply("Hello world!");
   gopher.webhook.respond();
 });
 
@@ -69,7 +69,7 @@ gopherApp.onCommand("hi", function(gopher) {
 
 // Handle task.triggered event when it happens
 gopherApp.on("task.triggered", function(gopher) {
-  gopher.webhook.addQuickReply("Hi 1 minute later!");
+  gopher.webhook.quickReply("Hi 1 minute later!");
   gopher.webhook.respond();
 });
 

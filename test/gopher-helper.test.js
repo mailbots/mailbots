@@ -205,7 +205,7 @@ describe("Gopher Helper", function() {
 
     // Depends on above test
     it("adds outbound email to response", done => {
-      gopherHelper.webhook.addQuickReply("quick reply");
+      gopherHelper.webhook.quickReply("quick reply");
       expect(gopherHelper.responseJson).to.haveOwnProperty("send_messages");
       expect(gopherHelper.responseJson.send_messages[1].body[0].text).to.equal(
         "quick reply"
