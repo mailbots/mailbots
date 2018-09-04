@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <style type="text/css">
+        body {
+            font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            text-rendering: optimizeLegibility;
+        }
+
+        .login-container {
+            display: flex;
+            align-items: top;
+            padding-top: 20px;
+            justify-content: center;
+        }
+
+        .login {
+            max-width: 50%;
+            text-align: center;
+        }
+
+        .settings-form {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            margin-left: 6px;
+            max-width: 500px;
+        }
+
+        .btn-primary {
+            background: #0099cc;
+            color: #ffffff;
+            outline: 0 none;
+            padding: 14px 24px;
+            border: 0 none;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus,
+        .btn-primary:active,
+        .btn-primary:active:focus,
+        .btn-primary:active:hover {
+            background: hsl(195, 100%, 24%);
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container-fluid" id="content">
+
+        <!-- Dialogs -->
+        <div class="alert alert-dismissible alert-warning hide" id="error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+
+        <div class="alert alert-dismissible alert-success hide" id="success">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+
+        <!-- Login -->
+        <div class="login-container hide">
+            <div class="login">
+                <h1>Reconnect Gopher</h1>
+                <h2 class="lead">Re-authorize Gopher to connect with this extension</h2>
+                <button type="submit" class="btn-primary" id="login">Connect</button>
+                <span class="help-block text-muted" style="margin-top: 150px">
+                    This is sometimes required after switching browsers, clearing your cookies, or logging on with a new browser.
+                </span>
+            </div>
+        </div>
+
+        <!-- Welcome -->
+        <div class="row welcome hide">
+            <div class="jumbotron">
+                <h1>Welcome</h1>
+                <p class="lead">Gopher Memorize is here to help</p>
+            </div>
+        </div>
+
+        <!--  
+          User Settings Form
+          Add extension settings by  copying / pasting field types below.
+          Inputs with class `gopher-setting` are automatically saved to 
+          the extension's data.
+          -->
+        <section class="row gopher-settings hide">
+            <div class="col-sm-12">
+                <h1>Settings</h1>
+                <form class="form-horizontal settings-form">
+
+                    <!-- Plain Text Input -->
+                    <div class="form-group">
+                        <label for="phone" class="control-label">Phone Number</label>
+                        <input type="text" class="gopher-setting form-control" id="phone" placeholder="Ex: 1-408-555-1212">
+                        <span class="help-block">Enter your phone number, country code first, without leading "+" sign</span>
+                    </div>
+
+                    <!-- Text Area -->
+                    <div class="form-group">
+                        <label for="followup_message">Followup Message:</label>
+                        <textarea class="gopher-setting form-control" rows="5" id="followup_message" placeholder="Hi, here is your reminder"></textarea>
+                    </div>
+
+                    <!-- Checkbox -->
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" id="setting_1" class="gopher-setting" value="1">Include Followup Links</label>
+                        </div>
+                    </div>
+
+                    <!-- Dropdown Select  -->
+                    <div class="form-group">
+                        <label for="select" class="control-label">Salutation</label>
+                        <select class="gopher-setting form-control" id="salutation">
+                            <option>Hello!</option>
+                            <option>Hi there,</option>
+                            <option>Hi</option>
+                            <option>Yo</option>
+                            <option>Yo!</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" id="save_settings">Submit</button>
+                    </div>
+                </form>
+                <!-- End Settings -->
+
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Resources -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.4/js.cookie.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+    <script src="https://unpkg.com/gopherhq@0.0.19-beta/dist/gopherhq-browser.js"></script>
+    <script type="text/javascript">
+        var gopherBaseUrl = "http://local-gopher.ngrok.io/";
+        var Cookies = window.Cookies;
+        var _ = window._;
+        var NProgress = window.NProgress;
+
+        // Set up authenticated API Client
+        var gopherClient = new Gopher({ clientId: "" });
+        gopherClient.setAccessToken(Cookies.get("gopher_token"));
+
+
+        $(function () {
+            //populate settings
+            NProgress.start();
+            gopherClient
+                .getExtensionData()
+                .then(function (settings) {
+                    NProgress.done();
+                    populateSettingsForm(".settings-form", ".gopher-setting", settings.data);
+                    $(".gopher-settings").removeClass("hide");
+                    handleNewUser();
+                })
+                .catch(function (err) {
+                    NProgress.done();
+                    console.log("Error fetching Gopher settings", err || settings);
+                    Cookies.remove("gopherToken");
+                    $('.login').removeClass('hide');
+                });
+
+            // handle form submission
+            $(".settings-form").submit(function (e) {
+                e.preventDefault();
+                NProgress.start();
+                submitSettingsForm(this, ".gopher-setting")
+                    .then(function (res) {
+                        displaySuccess("Settings saved!");
+                        NProgress.done();
+                    })
+                    .catch(function (err) {
+                        NProgress.done();
+                        displayError("There was an error saving your settings");
+                        console.log("Error", err);
+                    });
+                return false;
+            });
+
+            // login
+            $("#login").click(function () {
+                login();
+            });
+
+            // logout
+            $("#logout").click(function () {
+                Cookies.remove("gopherToken");
+                window.location.reload();
+            });
+        });
+
+
+        /** 
+            ====================
+              Helper Functions
+            ====================
+         */
+
+        /**
+         * Renders error message
+         */
+        function login() {
+            window.open("/auth/login?popUpAuth=1", "_blank", "toolbar=yes,scrollbars=no,resizable=yes,top=500,left=500,width=550,height=700");
+        }
+
+
+        /**
+         * Welcome new users
+         * If ?installed=1 is in querystring, this user just installed. 
+         */
+        function handleNewUser() {
+            var justInstalled = getUrlParameter('installed');
+            if (justInstalled) {
+                $('.welcome').removeClass('hide');
+            }
+        }
+
+
+        /**
+         * Renders error message
+         */
+        function displayError(err) {
+            $("#error")
+                .text("")
+                .append("<p>Error: " + err + "</p>")
+                .removeClass("hide");
+            window.scrollTo(0, 0);
+        }
+
+        /**
+         * Renders success message
+         */
+        function displaySuccess(message) {
+            $("#success")
+                .text("")
+                .append(message)
+                .removeClass("hide");
+            window.scrollTo(0, 0);
+        }
+
+        /**
+         * Runs on page load to fetch extension data and populate the form
+         */
+        function populateSettingsForm(formElement, formItemSelector, settings) {
+            var form = $(formElement);
+
+            if (!settings) return;
+
+            _.forEach(form.find(formItemSelector), function (settingsField) {
+                switch (settingsField.type) {
+                    case "checkbox":
+                        settingsField.checked = settings[settingsField.id] == true;
+                        break;
+                    case "radio":
+                        if (settingsField.value === settings[settingsField.name]) {
+                            settingsField.checked = true;
+                        }
+                        break;
+                    default:
+                        settingsField.value = settings[settingsField.id] || "";
+                }
+            });
+        }
+
+        /**
+         * Send settings data to extension private_data
+         */
+        function submitSettingsForm(formElement, formItemSelector) {
+            var formData = {};
+            _.forEach($(formElement).find(formItemSelector), function (settingsField) {
+                switch (settingsField.type) {
+                    case "checkbox":
+                        formData[settingsField.id] = settingsField.checked ? 1 : 0;
+                        break;
+                    case "radio":
+                        if (settingsField.checked)
+                            formData[settingsField.name] = settingsField.value;
+                        break;
+                    default:
+                        formData[settingsField.id] = settingsField.value;
+                }
+            });
+
+            return gopherClient.saveExtensionData(formData);
+        }
+
+        /**
+         * Get window URL param.
+         */
+        function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split("&"),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split("=");
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
