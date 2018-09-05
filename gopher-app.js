@@ -165,6 +165,28 @@ class GopherApp {
   }
 
   /**
+   * Captures only 'task.triggered' events where the command string matches
+   * @param {string|RexExp} commandSearch
+   */
+  onTrigger(commandSearch, cb) {
+    if (commandSearch instanceof RegExp) {
+      this.on(webhook => {
+        const command = String(_.get(webhook, "task.command"));
+        return (
+          webhook.event === "task.triggered" && commandSearch.exec(command)
+        );
+      }, cb);
+    } else {
+      this.on(
+        webhook =>
+          webhook.event === "task.triggered" &&
+          _.get(webhook, "task.command") === commandSearch,
+        cb
+      );
+    }
+  }
+
+  /**
    * Captures only 'extension.event_received' events
    * Note: This "Event" refers to the 3rd party webhooks
    * that are posted to the Gopher Extension.

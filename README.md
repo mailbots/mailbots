@@ -1,3 +1,34 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Gopher App](#gopher-app)
+  - [Quick Start](#quick-start)
+  - [Overview](#overview)
+  - [Example: Hello World](#example-hello-world)
+  - [Example: A Reminder](#example-a-reminder)
+  - [Example: Handle Email Actions](#example-handle-email-actions)
+  - [Organizing Skills](#organizing-skills)
+    - [Make Skills Stand-Alone](#make-skills-stand-alone)
+  - [Installing 3rd Party Skills](#installing-3rd-party-skills)
+    - [Publishing Skills](#publishing-skills)
+      - [Naming Conventions](#naming-conventions)
+    - [Sharing UI Elements](#sharing-ui-elements)
+    - [Activating Skills](#activating-skills)
+  - [Using Express.js Middlware and Routes](#using-expressjs-middlware-and-routes)
+    - [Adding to gopher.skills with middlware](#adding-to-gopherskills-with-middlware)
+    - [Handling routes](#handling-routes)
+  - [User / Extension Settings](#user--extension-settings)
+    - [Adding User Settings](#adding-user-settings)
+    - [Connect to 3rd Party Services](#connect-to-3rd-party-services)
+    - [Install Flow](#install-flow)
+  - [Testing](#testing)
+  - [Installing](#installing)
+  - [Design Philosophy](#design-philosophy)
+  - [Contributions](#contributions)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Gopher App
 
 GopherApp is the open-source counterpart to Gopher.email. It provides an easy-to-use framework to create, add and an install 3rd party Gopher "skills" that get help people things done without leaving email.
@@ -31,15 +62,15 @@ Now when anyone\* emails `hi@your-extension.gopher.email` they will get this ema
 
 Gopher.email helps you get things done without leaving your email, like an exceptionally skilled lovable rodent that digs tunnels from your inbox to your other systems.
 
-### Core API
+**Core API**
 
 The Gopher.email core API provides core email APIs for sending email, receiving and parsing email, storing data, and setting reminders.
 
-### Extensions
+**Extensions**
 
 Creating a Gopher Extension grants developer access to Gopher's Core APIs, allowing someone to create an email-only utility (like followupthen.com). Extensions, are set up to be publishable, but they can also be kept private.
 
-### Skills
+**Skills**
 
 Extensions are composed of one or more "skills". GopherApp (this project) provides a framework to create and install skills that accomplish specific email-based tasks. For example:
 
@@ -52,13 +83,30 @@ Extensions are composed of one or more "skills". GopherApp (this project) provid
 
 Skills can register "handlers" – functions that tell Gopher what to do when certain events occur. Skills can respond to emails and / or provide components to other skills.
 
+## Example: Hello World
+
+Create an [email command](https://docs.gopher.email/reference#email-commands) that says hi
+
+```javascript
+// Inside app.js
+var GopherApp = require("gopher-app");
+var gopherApp = new GopherApp();
+
+gopherApp.onCommand("hi", function(gopher) {
+  gopher.webhook.quickReply("Hi back!");
+  gopher.webhook.respond();
+});
+
+gopherApp.listen();
+```
+
 ## Example: A Reminder
 
 The first handler creates the reminder. The second one handles the reminder when it becomes due.
 
 ```javascript
 // Inside app.js
-// Schedule "task.triggered to fire in 1 minute
+// Schedule the task to trigger in 1 minute
 var GopherApp = require("gopher-app");
 var gopherApp = new GopherApp();
 
@@ -67,8 +115,8 @@ gopherApp.onCommand("hi", function(gopher) {
   gopher.webhook.respond();
 });
 
-// Handle task.triggered event when it happens
-gopherApp.on("task.triggered", function(gopher) {
+// When a task with "hi" command triggers, run this function
+gopherApp.onTrigger("hi", function(gopher) {
   gopher.webhook.quickReply("Hi 1 minute later!");
   gopher.webhook.respond();
 });
@@ -76,7 +124,7 @@ gopherApp.on("task.triggered", function(gopher) {
 gopherApp.listen();
 ```
 
-## Example: Action Email
+## Example: Handle Email Actions
 
 Here an example of handling
 an [Action Email](https://docs.gopher.email/reference#email-based-actions).
@@ -127,7 +175,7 @@ Skills can have multiple handlers (like in the last examples). To keep things or
 module.exports = function(gopherApp) {
   // Same code as previous example
   // gopherApp.onCommand("hi", function(gopher) {}
-  // gopherApp.on("task.triggered", function(gopher) {}
+  // gopherApp.onTrigger("hi", function(gopher) {}
 };
 ```
 
@@ -146,11 +194,18 @@ gopherApp.loadSkill(__dirname + "/my/skills/");
 
 The `loadSkill` helper does not load skills in subdirectories, making them available for libs, tests and sub-skills that only are needed in certain places.
 
-## Composing Skills
+Pass an optional config object to each loaded skill
 
-Gopher Skills are easier to write when they are organized into self-contained components containing everything needed to accomplish a particular function: UI elements, events handlers, settings, even authenticating with 3rd party APIs.
+```javascript
+// Pass optional config object
+gopherApp.loadSkill(__dirname + "/my/skills/", config);
+```
 
-Here is our previous example, encapsulated a simple, isolated skill:
+### Make Skills Stand-Alone
+
+Gopher Skills can be organized into self-contained components that contain everything needed for a particular function: UI elements, events handlers and settings.
+
+Here is our previous example, packaged into a stand-alone skill:
 
 ```javascript
 // hi-skill.js (As an isolated component)
@@ -175,7 +230,7 @@ module.exports = function(gopherApp) {
 };
 ```
 
-Use our isolated skill in any other component like this:
+Use our packaged skill in another skill like this:
 
 ```javascript
 // This gets the UI buttons and also activates its handler
@@ -191,17 +246,19 @@ gopherApp.onCommand("remember", function(gopher) {
 };
 ```
 
-This structure makes skills easily sharable.
+Once packaged, your skill can be easily used throughout your project, or published on npm for others to use.
 
-## Installing and Using 3rd Party Skills
+## Installing 3rd Party Skills
 
-Skills can make use of other skills. Let's install one from npm.
+Skills can be installed from npm. Let'
 
-First, in your CLI:
+Here we will use `gopher-memorize`, a skill that creates reminders for any [task](https://docs.gopher.email/reference) using [spaced repetition](https://www.wikiwand.com/en/Spaced_repetition), a memorization technique that increases the time between reminders as more reminders are sent.
+
+In your cli, run:
+
 `npm install --save gopher-memorize`
 
-The `gopher-memorize` skill sets reminders for any task using [spaced repetition](https://www.wikiwand.com/en/Spaced_repetition), a memorization technique that increases the time between reminders as more reminders are sent.
-Let's create a custom "remember" command for our Gopher App.
+In our app.js file we will create a handler that uses our newly installed skill.
 
 ```javascript
 // In main app.js file
@@ -214,14 +271,47 @@ gopherApp.onCommand("remember", function(gopher) {
 });
 
 // Called each time the reminder is triggered
-gopherApp.on("task.triggered", function(gopher) {
+gopherApp.onTrigger("remember", function(gopher) {
   memorizeSkill.memorizeTask(gopher); // ⬅ Invoke skill to continue memorizing
   gopher.webhook.quickResponse("An email with decreasing frequency");
   gopher.webhook.respond();
 });
 ```
 
-### Rendering UI Components
+### Publishing Skills
+
+Stand-alone skills (as shown above) can be published to npm and shared with others.
+
+#### Naming Conventions
+
+Try to use the same unique string (ex: "skill-name") for:
+
+- The module "gopher-skill-name"
+- Preface your event names, commands and actions with your skill name, or an
+  abbreviation if it is long (due to character limitations in the part of
+  of email addresses before the @ sign)
+- When storing data against the task or extension, put your skill data
+  in an object with a key of the skill name.
+
+These conventions improve usability and trackability of your extension.
+
+**Skill naming conventions**
+
+Skills added to the `gopher.skills` object via middleware should be camelCased version of their skill name (ie, `gopher.skills.skillName`). They should also be invokable with no parameters.
+
+```javascript
+gopher.skills.memorize.memorizeTask();
+```
+
+Add additional options by passing a configuration object:
+
+```javascript
+gopher.skills.memorize.memorizeTask({ frequencyPref: 0.1 });
+```
+
+This method signatures the makes for a simple, consistent developer experience and maintains the metaphor of our gopher being ordered around.
+
+### Sharing UI Elements
 
 Skills can render UI elements by returning [JSON UI elements](https://docs.gopher.email/docs/email-ui-reference). For example, our memorizaiton skill has a UI element that changes the memorizaiton frequency.
 
@@ -339,7 +429,7 @@ Your settings page can also initiate connections with other services.
 
 Note: Login state and other information will not be shared across the iframe, so re-authentication may be occasionally be needed.
 
-## Install Flow
+### Install Flow
 
 When the extension has just been installed, the user will be directed to your settings URL with `installed=1` in the URL. Use this param to welcome the new user. See the example settings page.
 
@@ -349,19 +439,19 @@ Note: When your extension is in `dev_mode` the extension owner is automatically 
 
 Export your gopher app by calling `gopherApp.exportApp()` instead of calling `gopherApp.listen()`. This gives you a testable instance of the Express App that Gopher builds, which can be used with any number of existing testing frameworks, for example, [Supertest](https://www.npmjs.com/package/supertest).
 
-## Setup on Other Hosts
+## Installing
 
-If you went through the setup process on gopher.email, GopherApp comes pre-configured using Glitch. This is a great way to get started.
+The setup process from gopher.email creates a pre-installed instance of Gopher App using [Glitch](https://glitch.com/) to get started quickly.
 
-If you are setting it up elsewhere (for example, for local development, or when you'd like to make your extension live), here are instructions for setting up Gopher App from scratch:
+Here are install instructions for local development or production deployments:
 
-### 1. Install
+**1. Install**
 
 - `mkdir my-skill`
 - `npm install gopher-app`
 - `touch app.js`
 
-### 2. Add handlers
+**2. Add handlers**
 
 ```javascript
 var GopherApp = require("GopherApp");
@@ -372,7 +462,7 @@ var gopherApp = newGopherApp();
 gopherApp.listen();
 ```
 
-### 3. Configure
+**3. Configure**
 
 Create an .env file with these options (which you can find in your extension details page). Use something like [dotenv](https://www.npmjs.com/package/dotenv') to load them:
 
@@ -387,50 +477,15 @@ EXT_ID=
 
 You can also pass a config object to GopherApp to override any settings within `lib/config-defaults.js`.
 
-### 4. Connect Gopher + Your Code
+**4. Connect Gopher + Your Code**
 
 Gopher needs to send HTTP POSTs to your extension, which means it will need a public URL. For local development, you can use use something like [ngrok](https://ngrok.com/).
 
 Once you have your public URL, go back go app.gopher.email and adjust your settings to point to your install.
 
-### 5. Install and Start
+**5. Install and Start**
 
 Authenticate your extension with Gopher by visiting http://your-extension-url/auth/login. If your extension is still in "dev mode", you'll end up on the Sandbox, which should look familiar.
-
-## Naming Conventions
-
-If you are planning to share your skill with others, there are a few naming conventions that can improve your skill's usability:
-
-Try to use the same unique string (ex: "skill-name") for:
-
-- The module "gopher-skill-name" (if you are publishing to npm)
-- Preface your event names, commands and actions with your skill name, or an
-  abbreviation if it is long (due to character limitations in the part of
-  of email addresses before the @ sign)
-- When storing data against the task or extension, put your skill data
-  in an object with a key of the skill name.
-
-Using these conventions improves usability and trackability of your extension.
-
-### Skill naming conventions.
-
-This applies only to skills that are added to the `gopher.skills` object via middleware.
-
-By convention, skills should be invokable with sensible defaults by calling them with no parameters.
-
-```javascript
-gopher.skills.memorize.memorizeTask();
-```
-
-Call a skill with additional options by passing a configuration object:
-
-```javascript
-gopher.skills.memorize.memorizeTask({ frequencyPref: 0.1 });
-```
-
-This method signatures the makes for a simple, consistent developer experience and keeps the metaphor of our (literal) gopher being ordered around.
-
-Also, give your skill a camelCased name on the `gopher.skills` object. Using the earlier example, it would be: `gopher.skills.skillName`
 
 ## Design Philosophy
 

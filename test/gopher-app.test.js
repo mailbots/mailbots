@@ -70,6 +70,18 @@ describe("Gopher App", function() {
       fireWebhookRequest(actionReceivedWebhook);
     });
 
+    const taskTriggeredWebhook = require("./fixtures/task-triggered-webhook.json");
+    it("onTrigger handler matches task command by regex", function(done) {
+      gopherApp.onTrigger(/^mem.*/, gopher => {
+        expect(gopher.get("task.command")).to.equal(
+          "memorize@gopher-memorize.gopher.email"
+        );
+        gopher.webhook.respond();
+        done();
+      });
+      fireWebhookRequest(taskTriggeredWebhook);
+    });
+
     it("gopherApp.on method matches webhook types", function(done) {
       gopherApp.on("task.created", gopher => {
         expect(gopher.command).to.equal("memorize");
