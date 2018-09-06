@@ -70,10 +70,10 @@
         <div class="login-container hide">
             <div class="login">
                 <h1>Reconnect Gopher</h1>
-                <h2 class="lead">Re-authorize Gopher to connect with this extension</h2>
+                <h2 class="lead">Please re-authorize this extension</h2>
                 <button type="submit" class="btn-primary" id="login">Connect</button>
                 <span class="help-block text-muted" style="margin-top: 150px">
-                    This is sometimes required after switching browsers, clearing your cookies, or logging on with a new browser.
+                    This is sometimes required after switching browsers, devices or clearing your cookies.
                 </span>
             </div>
         </div>
@@ -175,7 +175,11 @@
                     NProgress.done();
                     console.log("Error fetching Gopher settings", err || settings);
                     Cookies.remove("gopherToken");
-                    $('.login').removeClass('hide');
+                    if (Cookies.get("gopher_token")) {
+                        displayError("Something went wrong while fetching your settings. Please try again. Contact us (the extenion developer) if this keeps happening.");
+                    }
+                    Cookies.remove("gopher_token");
+                    $('.login-container').removeClass('hide');
                 });
 
             // handle form submission

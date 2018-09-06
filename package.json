@@ -1,6 +1,6 @@
 {
   "name": "gopher-app",
-  "version": "0.0.13-beta",
+  "version": "0.0.14-beta",
   "description": "The core skill framework to add and install skills for Gopher.email",
   "main": "gopher-app.js",
   "directories": {
@@ -23,7 +23,7 @@
     "body-parser": "1.18.3",
     "cookie-parser": "1.4.3",
     "express": "4.16.3",
-    "gopherhq": "0.0.18-beta",
+    "gopherhq": "0.0.20-beta",
     "lodash": "4.17.10",
     "object-assign-deep": "0.4.0",
     "request": "2.87.0",
