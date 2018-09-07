@@ -1,7 +1,6 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Gopher App](#gopher-app)
   - [Quick Start](#quick-start)
   - [Overview](#overview)
@@ -10,6 +9,7 @@
   - [Example: Handle Email Actions](#example-handle-email-actions)
   - [Organizing Skills](#organizing-skills)
     - [Make Skills Stand-Alone](#make-skills-stand-alone)
+  - [Gopher API](#gopher-api)
   - [Installing 3rd Party Skills](#installing-3rd-party-skills)
     - [Publishing Skills](#publishing-skills)
       - [Naming Conventions](#naming-conventions)
@@ -247,6 +247,19 @@ gopherApp.onCommand("remember", function(gopher) {
 ```
 
 Once packaged, your skill can be easily used throughout your project, or published on npm for others to use.
+
+## Gopher API
+
+A pre-authenticated [Gopher API client](https://github.com/gopherhq/gopherhq-js) is available within every handler at `gopher.api`.
+
+```javascript
+gopherApp.onCommand("remember", function(gopher) {
+  // An authenticated API Client is available on gopher.api
+  gopher.api.getExtensionData(); // this just works!
+};
+
+// See https://github.com/gopherhq/gopherhq-js for api
+```
 
 ## Installing 3rd Party Skills
 
