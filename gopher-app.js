@@ -78,7 +78,7 @@ class GopherApp {
   }
 
   /**
-   * See commit 9afba5d6 for simplified gopher middlware (possibly)
+   * See commit 9afba5d6 for simplified gopher middlware idea
    */
   use() {
     throw new Error("Call gopherApp.app.use to add Express middleware");
@@ -151,14 +151,16 @@ class GopherApp {
   onCommand(commandSearch, cb) {
     if (commandSearch instanceof RegExp) {
       this.on(webhook => {
-        const command = String(_.get(webhook, "command.format"));
-        return webhook.event === "task.created" && commandSearch.exec(command);
+        return (
+          webhook.event === "task.created" &&
+          commandSearch.exec(this.getTaskCommand(webhook))
+        );
       }, cb);
     } else {
       this.on(
         webhook =>
           webhook.event === "task.created" &&
-          _.get(webhook, "command.format") === commandSearch,
+          this.getTaskCommand(webhook) === commandSearch,
         cb
       );
     }
@@ -171,16 +173,16 @@ class GopherApp {
   onTrigger(commandSearch, cb) {
     if (commandSearch instanceof RegExp) {
       this.on(webhook => {
-        const command = String(_.get(webhook, "task.command"));
         return (
-          webhook.event === "task.triggered" && commandSearch.exec(command)
+          webhook.event === "task.triggered" &&
+          commandSearch.exec(this.getTaskCommand(webhook))
         );
       }, cb);
     } else {
       this.on(
         webhook =>
           webhook.event === "task.triggered" &&
-          _.get(webhook, "task.command") === commandSearch,
+          this.getTaskCommand(webhook) === commandSearch,
         cb
       );
     }
@@ -210,6 +212,7 @@ class GopherApp {
       );
     }
   }
+
   /**
    * Captures only 'task.action_received' events where the action string matches
    * @param {string|RegExp} actionSearch
@@ -229,6 +232,28 @@ class GopherApp {
           _.get(webhook, "action.format") === actionSearch,
         cb
       );
+    }
+  }
+
+  /**
+   * Captures only 'task.viewed' events where the command string matches
+   * @param {string|RexExp} commandSearch
+   */
+  onTaskViewed(commandSearch, cb) {
+    if (commandSearch instanceof RegExp) {
+      this.on(webhook => {
+        return (
+          webhook.event === "task.viewed" &&
+          commandSearch.exec(this.getTaskCommand(webhook))
+        );
+      }, cb);
+    } else {
+      this.on(webhook => {
+        return (
+          webhook.event === "task.viewed" &&
+          commandSearch === this.getTaskCommand(webhook)
+        );
+      }, cb);
     }
   }
 
@@ -268,6 +293,17 @@ class GopherApp {
         `Unrecognized trigger condition: ` + typeof triggerCondition
       );
     }
+  }
+
+  /**
+   * Extract command string from webhook, if present.
+   * @param {object} webhook
+   */
+  getTaskCommand(webhook) {
+    return (
+      _.get(webhook, "task.command") &&
+      _.get(webhook, "task.command").split("@")[0]
+    );
   }
 }
 

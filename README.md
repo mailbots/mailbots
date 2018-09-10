@@ -1,14 +1,23 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+
 - [Gopher App](#gopher-app)
   - [Quick Start](#quick-start)
   - [Overview](#overview)
   - [Example: Hello World](#example-hello-world)
   - [Example: A Reminder](#example-a-reminder)
   - [Example: Handle Email Actions](#example-handle-email-actions)
+  - [Handlers](#handlers)
+    - [onCommand](#oncommand)
+    - [onTrigger](#ontrigger)
+    - [onAction](#onaction)
+    - [onTaskViewed](#ontaskviewed)
+    - [onEvent](#onevent)
+    - [on](#on)
+    - [onSettingsViewed](#onsettingsviewed)
   - [Organizing Skills](#organizing-skills)
-    - [Make Skills Stand-Alone](#make-skills-stand-alone)
+    - [Making Reusable Skills](#making-reusable-skills)
   - [Gopher API](#gopher-api)
   - [Installing 3rd Party Skills](#installing-3rd-party-skills)
     - [Publishing Skills](#publishing-skills)
@@ -166,6 +175,104 @@ var gopherApp = new GopherApp();
   gopherApp.listen();
 ```
 
+## Handlers
+
+The Gopher Core API sends a webhook webhooks to your Gopher App extension when certain events occur (for example, an email is received). These events are handled by the following handlers.
+
+Note: The first matchine event handler ends the request, even if subsequent handlers also match.
+
+### onCommand
+
+Handle when a new task is created either via an [email command](https://docs.gopher.email/reference#email-commands) or via the API. For example, add an item to a todo list.
+
+Note that a task always has a command.
+
+```javascript
+gopherApp.onCommand("todo", function(gopher) {
+  //handle when a task is created with this command string
+});
+```
+
+Match a command on regular expressions as well.
+
+```javascript
+gopherApp.onCommand(/todo.*/, function(gopher) {
+  //Handle todo.me@my-ext.gopher.email, todo.you@my-ext.gopher.email, todo.everyone@my-ext.gopher.email
+});
+```
+
+### onTrigger
+
+When a task "[triggers](https://docs.gopher.email/reference#perfect-timing)", it becomes relevant to the user and should be sent to their email inbox. The most common trigger (currently) is a when a scheduled task becomes due.
+
+Tasks with different commands may trigger differently. For example:
+
+```javascript
+gopherApp.onTrigger("todo.me", function(gopher) {
+  // Assigned to myself, so only remind me
+});
+```
+
+```javascript
+gopherApp.onTrigger("todo.assign", function(gopher) {
+  // Assigned to the person in the 'to' field, so remind them
+});
+```
+
+### onAction
+
+When a user clicks a mailto link within a Gopher email to accomplish an action ([Email Based Actions](https://docs.gopher.email/reference#email-based-actions)) the onAction handler is received. For example, postponing a reminder or completing a todo item.
+
+```javascript
+gopherApp.onAction("complete", function(gopher) {
+  // Complete the related todo
+});
+```
+
+### onTaskViewed
+
+Handle when a task is viewed in the Gopher Web UI, allowing a user to view and interact with a future Gopher email.
+
+```javascript
+gopherApp.onTaskViewed("todo.me", function(gopher) {
+  // Show a preview of the future email
+});
+```
+
+Different task commands may render differently. For example, When a task is viewed that has the command `todo.crm`, it may query CRM-related data before rendering the future email.
+
+### onEvent
+
+Handle when a webhok is received about an external event. For example,A support ticket is created or a lead is added to a CRM.
+
+Note: This action does not automatically create a Gopher Task. One can be created with the API.
+
+```javascript
+gopherApp.onAction("complete", function(gopher) {
+  // Handle event, for example, create a Gopher Task.
+  // gopher.api.createTask();  // Pre-authenticated API client
+});
+```
+
+### on
+
+This is a generic, low-level handler that can handle any webhook. The first paramater can be:
+
+- a string that matches the webhook `type`. (ie. [`extension.installed`](https://docs.gopher.email/reference#extensioninstalled))
+- A regular expression that also matches on webhook `type`
+- A function that takes the incoming webhook as the only parameter and returns a boolean value indicating whether or not that webhook should be handled by that function handler.
+
+```javascript
+gopherApp.on("extension.installed", function(gopher) {
+  // Handle when an extension is installed
+  // gopher.api.createTask();  // Pre-authenticated API client
+});
+```
+
+### onSettingsViewed
+
+Handle when a user is received about an external event. For example,A support ticket is created or a lead is added to a CRM.
+
 ## Organizing Skills
 
 Skills can have multiple handlers (like in the last examples). To keep things organized, we can group a collection of skill handlers into their own files, and group multiple files for a skill into a directory. For example:
@@ -192,20 +299,20 @@ There is a helper method that makes it easy to load multiple skills at once:
 gopherApp.loadSkill(__dirname + "/my/skills/");
 ```
 
-The `loadSkill` helper does not load skills in subdirectories, making them available for libs, tests and sub-skills that only are needed in certain places.
+The `loadSkill` helper does not load skills in subdirectories. Subdirectories are reserved for libs, tests and sub-skills that can themesleves be explicitly loaded.
 
-Pass an optional config object to each loaded skill
+Pass an optional config object to each loaded skill.
 
 ```javascript
 // Pass optional config object
 gopherApp.loadSkill(__dirname + "/my/skills/", config);
 ```
 
-### Make Skills Stand-Alone
+### Making Reusable Skills
 
-Gopher Skills can be organized into self-contained components that contain everything needed for a particular function: UI elements, events handlers and settings.
+Gopher Skills can be organized into reusable components that have everything they need for a particular function: UI elements, events handlers and settings.
 
-Here is our previous example, packaged into a stand-alone skill:
+Here is our previous example, packaged into a stand-alone, reusable skill:
 
 ```javascript
 // hi-skill.js (As an isolated component)
@@ -230,7 +337,7 @@ module.exports = function(gopherApp) {
 };
 ```
 
-Use our packaged skill in another skill like this:
+Use our stand-alone skill in a different file like this:
 
 ```javascript
 // This gets the UI buttons and also activates its handler
@@ -246,7 +353,23 @@ gopherApp.onCommand("remember", function(gopher) {
 };
 ```
 
-Once packaged, your skill can be easily used throughout your project, or published on npm for others to use.
+Continue to share the same element and logic across different handlers and files. GopherApp doesn't mind the handlers being re-activated.
+
+```javascript
+// different file
+const { hiButton } = require('./hi-skill')(gopherApp);
+
+gopherApp.onAction("say.hi", function(gopher) {
+  gopher.webhook.addEmail({
+    // to, cc, etc
+    body: [
+      hiButton() // <-- Same button, DRY
+    ]
+  })
+};
+```
+
+Organizing skills as above makes them portable. Use them across different components, projects or publish them to npm.
 
 ## Gopher API
 
@@ -376,19 +499,19 @@ GopherApp is a wrapper for an instance of Express.js. The Express.js `app` objec
 The `gopher` object passed into your handlers can be modified with middlware. Internally, GopherApp uses middlware to pre-load the `gopher` object with with various functions. You can take this further. For example:
 
 ```javascript
-// Configure logging object
+// Configure a logging object
 gopherApp.app.use(function(req, res, next) {
-  var gopher = res.locals.gopher; // where the gopher object lives
+  var gopher = res.locals.gopher; // gopher object lives here
   var logger = require("./logger");
   logger.setup({ key: "123" });
 
-  // add our custom logger skill to the Gopher object
-  gopher.skills.myCustomSkill.logger = logger;
+  // configure and add our custom logger skill
+  gopher.skills.myCustomSkill.logger = logger.config({ key: "123" });
   next(); // Don't forget this!
 });
 
 gopherApp.onCommand("hi", function(gopher) {
-  // Use the skill in any future handler
+  // The configured skill is available in subsequent handlers
   gopher.skills.myCustomSkill.logger.log("Log with my pre-configured logger");
 });
 ```

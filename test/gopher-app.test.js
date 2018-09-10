@@ -82,6 +82,18 @@ describe("Gopher App", function() {
       fireWebhookRequest(taskTriggeredWebhook);
     });
 
+    const taskViewedWebhook = require("./fixtures/task-viewed-webhook.json");
+    it("onTaskViewed handler matches task command by regex", function(done) {
+      gopherApp.onTaskViewed(/^memorize.*/, gopher => {
+        expect(gopher.get("task.command")).to.equal(
+          "memorize@gopher-memorize.gopher.email"
+        );
+        gopher.webhook.respond();
+        done();
+      });
+      fireWebhookRequest(taskViewedWebhook);
+    });
+
     it("gopherApp.on method matches webhook types", function(done) {
       gopherApp.on("task.created", gopher => {
         expect(gopher.command).to.equal("memorize");
