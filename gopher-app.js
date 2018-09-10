@@ -30,6 +30,12 @@ class GopherApp {
     // Listens for anything posted to /webhooks, firing appropriate listener.
     this.listeners = [];
 
+    // Listener functions that build this.aggregateSettingsResponse
+    this.settingsHandlers = [];
+
+    // As settings handlers are executed,
+    this.aggregateSettingsResponse = {};
+
     // Set up base skills
     this.loadFirstCoreSkills();
   }
@@ -258,12 +264,43 @@ class GopherApp {
   }
 
   /**
+   * Handle webhook that fires when user is viewing extension.
+   * This is the only handler that fires ALL handler functions.
+   * @param {function} injectSettingsFn - A function that accepts
+   * the user's current settings as the first param and returns a
+   * JSON Form Schema definition.
+   * TODO: Validate JSON Form Schema
+   */
+  onSettingsViewed(namespace, injectSettingsFn) {
+    this.settingsHandlers.push({ namespace, injectSettingsFn });
+  }
+
+  /**
    * Fires the appropriate listener function for the webhook received
    * @param {object} request Express request object
    * @param {object} response Express response object
    */
   handleEvent(request, response) {
     const gopher = response.locals.gopher;
+    if (request.body.event === "extension.settings_viewed") {
+      debug("settings viewed");
+      const webhook = request.body;
+      this.settingsHandlers.map(settingsHandler => {
+        const namespaceSettings =
+          webhook.extension.private_data[settingsHandler.namespace];
+        const settingsJson = settingsHandler.injectSettingsFn(
+          gopher,
+          namespaceSettings,
+          webhook
+        );
+        debug("SettingsJSON form", settingsJson);
+        const namespace = settingsHandler.namespace;
+        this.aggregateSettingsResponse[namespace] = settingsJson;
+      });
+
+      debug("Aggregate settings response", this.aggregateSettingsResponse);
+      return response.send({ settings: this.aggregateSettingsResponse });
+    }
 
     // Trigger only the first matching listener for the event
     this.listeners.some(listener => {

@@ -27,9 +27,6 @@
   - [Using Express.js Middlware and Routes](#using-expressjs-middlware-and-routes)
     - [Adding to gopher.skills with middlware](#adding-to-gopherskills-with-middlware)
     - [Handling routes](#handling-routes)
-  - [User / Extension Settings](#user--extension-settings)
-    - [Adding User Settings](#adding-user-settings)
-    - [Connect to 3rd Party Services](#connect-to-3rd-party-services)
     - [Install Flow](#install-flow)
   - [Testing](#testing)
   - [Installing](#installing)
@@ -271,7 +268,39 @@ gopherApp.on("extension.installed", function(gopher) {
 
 ### onSettingsViewed
 
-Handle when a user is received about an external event. For example,A support ticket is created or a lead is added to a CRM.
+When a user loads the extension settings page, this handler responds with a [JSON form schema](https://mozilla-services.github.io/react-jsonschema-form/) to render a settings form and pre-populate with values.
+
+Each instance of this handler renders its own settings form. Unlike the other handlers, every instances is called and every settings form is rendered.
+
+The first parameter is the `namespace` for that setting within `extension.private_data`.
+
+The second param is a function that is passed 3 arguments:
+
+- The `gopher` helper object
+- The settings for that data namespace
+- The complete webhook (with extension and user data)
+  This function should return a [JSON schema](https://mozilla-services.github.io/react-jsonschema-form/) to render a settings form. See the settings example in Gopher Skills Kit. (Note all JSON Form Schema UI options are supported)
+
+```javascript
+// Builds a custom settings form for this skill
+// See https://github.com/mozilla-services/react-jsonschema-form
+gopherApp.onSettingsViewed("todo", function(gopher, settings) {
+  return {
+    JSONSchema: {
+      title: "Logger",
+      type: "object",
+      properties: {
+        log: {
+          type: "boolean",
+          title: "Log everything"
+        }
+      }
+    },
+    // uiSchema: {},
+    formData: settings
+  };
+});
+```
 
 ## Organizing Skills
 
@@ -537,33 +566,6 @@ gopherApp.app.get("/hi", function(req, res) {
   res.send("<h1>Hi http request!</h1>");
 });
 ```
-
-## User / Extension Settings
-
-A boilerplate settings page is included in `examples/settings-iframe.html`. Modify this, make it available at a route on your app like like this:
-
-```javascript
-// Copy examples/settings-iframe.html and modify as needed
-// Edit your extension's "Settings URL" to point to this path
-gopherApp.app.get("/settings-url", function(req, res) {
-  res.sendFile("path/to/my-settings.html");
-});
-```
-
-Add it to your extension's settings page to iframe this page into the settings tab of your extension's directory page.
-
-Extension settings arrive in the `extension.private_data` key of every webhook request. Data in this field can be managed directly with the [extension data endpoints](https://gopher.postman.co/collections/113668-74bb4ea1-f0cc-bf5a-ab93-1978fcbcce45?workspace=4d742517-576d-424d-8918-b54b31164c30#7f9bfa6c-a673-4104-9be9-1ada487c300e).
-
-### Adding User Settings
-
-Add and remove settings by duplicating the example form
-fields and changing the `id`s . Fields with the `gopher-settings` class are saved to extension's private data which will arrive with with every webhook request.
-
-### Connect to 3rd Party Services
-
-Your settings page can also initiate connections with other services.
-
-Note: Login state and other information will not be shared across the iframe, so re-authentication may be occasionally be needed.
 
 ### Install Flow
 

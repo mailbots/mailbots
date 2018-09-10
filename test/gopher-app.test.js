@@ -94,6 +94,23 @@ describe("Gopher App", function() {
       fireWebhookRequest(taskViewedWebhook);
     });
 
+    const extensionSettingsViewed = require("./fixtures/extension-settings-viewed-webhook.json");
+    it("onSettingsViewed loads data by namespace", function(done) {
+      gopherApp.onSettingsViewed("memorize", (gopher, settings) => {
+        expect(settings.firstName).to.equal("Karl");
+        done();
+      });
+      fireWebhookRequest(extensionSettingsViewed);
+    });
+
+    it("onSettingsViewed loads data by namespace", function(done) {
+      gopherApp.onSettingsViewed("github", (gopher, settings) => {
+        expect(settings.firstName).to.equal("Joe");
+        done();
+      });
+      fireWebhookRequest(extensionSettingsViewed);
+    });
+
     it("gopherApp.on method matches webhook types", function(done) {
       gopherApp.on("task.created", gopher => {
         expect(gopher.command).to.equal("memorize");
