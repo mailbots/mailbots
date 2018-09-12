@@ -1,7 +1,6 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Gopher App](#gopher-app)
   - [Quick Start](#quick-start)
   - [Overview](#overview)
@@ -176,7 +175,7 @@ var gopherApp = new GopherApp();
 
 The Gopher Core API sends a webhook webhooks to your Gopher App extension when certain events occur (for example, an email is received). These events are handled by the following handlers.
 
-Note: The first matchine event handler ends the request, even if subsequent handlers also match.
+Note: The first matching event handler ends the request, even if subsequent handlers also match, except where otherwise noted.
 
 ### onCommand
 
@@ -190,7 +189,7 @@ gopherApp.onCommand("todo", function(gopher) {
 });
 ```
 
-Match a command on regular expressions as well.
+Regular expressions work, too. RegEx expressions work other handlers as well.
 
 ```javascript
 gopherApp.onCommand(/todo.*/, function(gopher) {
@@ -216,6 +215,12 @@ gopherApp.onTrigger("todo.assign", function(gopher) {
 });
 ```
 
+```javascript
+gopherApp.onTrigger("todo.crm", function(gopher) {
+  // Query CRM API, populate email followup with contact data
+});
+```
+
 ### onAction
 
 When a user clicks a mailto link within a Gopher email to accomplish an action ([Email Based Actions](https://docs.gopher.email/reference#email-based-actions)) the onAction handler is received. For example, postponing a reminder or completing a todo item.
@@ -236,54 +241,40 @@ gopherApp.onTaskViewed("todo.me", function(gopher) {
 });
 ```
 
-Different task commands may render differently. For example, When a task is viewed that has the command `todo.crm`, it may query CRM-related data before rendering the future email.
+Different task commands may render differently. For example a task with command `todo.crm` may query and render current CRM data within the preview.
 
 ### onEvent
 
-Handle when a webhok is received about an external event. For example,A support ticket is created or a lead is added to a CRM.
+Handle when the extension receives an inbound webhok about about an external occurrence. For example, a support ticket is created or a lead is added to a CRM.
 
-Note: This action does not automatically create a Gopher Task. One can be created with the API.
+Note: This action does not automatically create a Gopher Task. One can be created with the pre-authenticated API client, `gopher.api`, as shown below.
 
 ```javascript
-gopherApp.onAction("complete", function(gopher) {
+gopherApp.onEvent("issue.created", function(gopher) {
   // Handle event, for example, create a Gopher Task.
-  // gopher.api.createTask();  // Pre-authenticated API client
-});
-```
-
-### on
-
-This is a generic, low-level handler that can handle any webhook. The first paramater can be:
-
-- a string that matches the webhook `type`. (ie. [`extension.installed`](https://docs.gopher.email/reference#extensioninstalled))
-- A regular expression that also matches on webhook `type`
-- A function that takes the incoming webhook as the only parameter and returns a boolean value indicating whether or not that webhook should be handled by that function handler.
-
-```javascript
-gopherApp.on("extension.installed", function(gopher) {
-  // Handle when an extension is installed
   // gopher.api.createTask();  // Pre-authenticated API client
 });
 ```
 
 ### onSettingsViewed
 
-When a user loads the extension settings page, this handler responds with a [JSON form schema](https://mozilla-services.github.io/react-jsonschema-form/) to render a settings form and pre-populate with values.
+When a user loads the extension settings page on gopher.email, this handler responds with a [JSON form schema](https://mozilla-services.github.io/react-jsonschema-form/) to render a settings form and pre-populate it with values.
 
-Each instance of this handler renders its own settings form. Unlike the other handlers, every instances is called and every settings form is rendered.
+Each instance of this handler renders its own settings form. Unlike the other handlers, every instances is called. Every instance of this handler can render its own settings form.
 
-The first parameter is the `namespace` for that setting within `extension.private_data`.
+The first parameter is the `namespace` for the data stored in `extension.private_data`.
 
 The second param is a function that is passed 3 arguments:
 
 - The `gopher` helper object
 - The settings for that data namespace
 - The complete webhook (with extension and user data)
+
   This function should return a [JSON schema](https://mozilla-services.github.io/react-jsonschema-form/) to render a settings form. See the settings example in Gopher Skills Kit. (Note all JSON Form Schema UI options are supported)
 
 ```javascript
-// Builds a custom settings form for this skill
-// See https://github.com/mozilla-services/react-jsonschema-form
+// Allow a user to manage logging settings
+// See https://mozilla-services.github.io/react-jsonschema-form/
 gopherApp.onSettingsViewed("todo", function(gopher, settings) {
   return {
     JSONSchema: {
@@ -299,6 +290,25 @@ gopherApp.onSettingsViewed("todo", function(gopher, settings) {
     // uiSchema: {},
     formData: settings
   };
+});
+```
+
+### on
+
+This is a generic, low-level handler that can handle any webhook.
+
+The first paramater can be:
+
+- a string that matches the webhook `type`. (ie. [`extension.installed`](https://docs.gopher.email/reference#extensioninstalled))
+- A regular expression that matches on webhook `type`
+- A function that takes the incoming webhook as the only parameter and returns a boolean value indicating whether or not that webhook should be handled by that function handler.
+
+THe second parameter is the function handler that runs based on the matching condition of the first parameter.
+
+```javascript
+gopherApp.on("extension.installed", function(gopher) {
+  // Handle when an extension is installed
+  // gopher.api.createTask();  // Pre-authenticated API client
 });
 ```
 
@@ -341,7 +351,7 @@ gopherApp.loadSkill(__dirname + "/my/skills/", config);
 
 Gopher Skills can be organized into reusable components that have everything they need for a particular function: UI elements, events handlers and settings.
 
-Here is our previous example, packaged into a stand-alone, reusable skill:
+Here is our [previous example](https://github.com/gopherhq/gopher-app#example-handle-email-actions), this time in its own stand-alone, reusable skill:
 
 ```javascript
 // hi-skill.js (As an isolated component)
@@ -366,10 +376,12 @@ module.exports = function(gopherApp) {
 };
 ```
 
-Use our stand-alone skill in a different file like this:
+Any [handler](https://github.com/gopherhq/gopher-app#handlers) can be included in our skill – settings, actions, email commands, etc.
+
+Use our stand-alone skill like this:
 
 ```javascript
-// This gets the UI buttons and also activates its handler
+// Get UI elements and activate all handlers
 const { hiButton } = require('./hi-skill')(gopherApp);
 
 gopherApp.onCommand("remember", function(gopher) {
@@ -415,7 +427,7 @@ gopherApp.onCommand("remember", function(gopher) {
 
 ## Installing 3rd Party Skills
 
-Skills can be installed from npm. Let'
+Skills can be installed from npm.
 
 Here we will use `gopher-memorize`, a skill that creates reminders for any [task](https://docs.gopher.email/reference) using [spaced repetition](https://www.wikiwand.com/en/Spaced_repetition), a memorization technique that increases the time between reminders as more reminders are sent.
 
