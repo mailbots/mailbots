@@ -145,9 +145,19 @@ class GopherApp {
    * a function receives the webhook as a param, which returns a boolean value.
    * @param {function} cb Callback function with signature cb(gopher, req, res)
    */
-  on(triggerCondition, cb) {
-    debug("adding listener function");
-    this.listeners.push({ triggerCondition, cb });
+  on(triggerCondition, cb, opts) {
+    if (opts && opts.listenerType === "settingsListener") {
+      if (!opts.namespace)
+        throw new Error("A namespace wasn't given to a settings listener");
+      this.settingsHandlers.push({
+        triggerCondition,
+        cb,
+        namespace: opts.namespace
+      });
+    } else {
+      debug("adding listener function");
+      this.listeners.push({ triggerCondition, cb });
+    }
   }
 
   /**
@@ -271,8 +281,11 @@ class GopherApp {
    * JSON Form Schema definition.
    * TODO: Validate JSON Form Schema
    */
-  onSettingsViewed(namespace, injectSettingsFn) {
-    this.settingsHandlers.push({ namespace, injectSettingsFn });
+  addSettingsForm(namespace, getSettingsFn) {
+    this.on("extension.settings_viewed", getSettingsFn, {
+      namespace,
+      listenerType: "settingsListener"
+    });
   }
 
   /**
@@ -280,31 +293,42 @@ class GopherApp {
    * @param {object} request Express request object
    * @param {object} response Express response object
    */
-  handleEvent(request, response) {
+  async handleEvent(request, response) {
     const gopher = response.locals.gopher;
-    if (request.body.event === "extension.settings_viewed") {
-      debug("settings viewed");
-      const webhook = request.body;
-      this.settingsHandlers.map(settingsHandler => {
+    const webhook = request.body;
+
+    // Trigger all multi-fire settings listeners first.
+    // If these triggered, stop execution
+    const settingsHandlerPromises = await this.settingsHandlers.map(
+      async listener => {
+        if (!this.cbShouldTrigger(webhook, listener.triggerCondition)) return;
         const namespaceSettings =
-          webhook.extension.private_data[settingsHandler.namespace];
-        const settingsJson = settingsHandler.injectSettingsFn(
+          webhook.extension.private_data[listener.namespace];
+        const settingsJson = await listener.cb(
           gopher,
           namespaceSettings,
           webhook
         );
         debug("SettingsJSON form", settingsJson);
-        const namespace = settingsHandler.namespace;
+        const namespace = listener.namespace;
         this.aggregateSettingsResponse[namespace] = settingsJson;
+      }
+    );
+    try {
+      await Promise.all(settingsHandlerPromises);
+    } catch (e) {
+      return response.send({
+        webhook: { status: "failed", message: e.message }
       });
+    }
 
-      debug("Aggregate settings response", this.aggregateSettingsResponse);
+    // Return if we have an aggregate settings response
+    if (!_.isEmpty(this.aggregateSettingsResponse)) {
       return response.send({ settings: this.aggregateSettingsResponse });
     }
 
     // Trigger only the first matching listener for the event
     this.listeners.some(listener => {
-      const webhook = request.body;
       if (this.cbShouldTrigger(webhook, listener.triggerCondition)) {
         listener.cb(gopher, request, response);
         return true;

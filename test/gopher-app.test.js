@@ -15,21 +15,25 @@ describe("Gopher App", function() {
     });
   });
 
-  function fireWebhookRequest(webhook) {
+  function fireWebhookRequest(webhook, { errOnFallthrough = true } = {}) {
     // Throw an error if a request fails to match
-    gopherApp.on(/.*/, gopher => {
-      throw new Error("Gopher handler did not run");
-    });
-    const app = gopherApp.exportApp();
-    request(app)
-      .post("/webhooks")
-      .set("Accept", "application/json")
-      .send(webhook)
-      .then(res => {})
-      .catch(err => {
-        console.log(err);
-        debugger;
+    if (errOnFallthrough) {
+      gopherApp.on(/.*/, gopher => {
+        throw new Error("Gopher handler did not run");
       });
+    }
+    const app = gopherApp.exportApp();
+    return (
+      request(app)
+        .post("/webhooks")
+        .set("Accept", "application/json")
+        .send(webhook)
+        // .then(res => {})
+        .catch(err => {
+          console.log(err);
+          debugger;
+        })
+    );
   }
   describe("configuration", function() {
     it("should throw if instaniated without config", function(done) {
@@ -96,19 +100,94 @@ describe("Gopher App", function() {
 
     const extensionSettingsViewed = require("./fixtures/extension-settings-viewed-webhook.json");
     it("onSettingsViewed loads data by namespace", function(done) {
-      gopherApp.onSettingsViewed("memorize", (gopher, settings) => {
+      gopherApp.addSettingsForm("memorize", (gopher, settings) => {
         expect(settings.firstName).to.equal("Karl");
         done();
       });
-      fireWebhookRequest(extensionSettingsViewed);
+      fireWebhookRequest(extensionSettingsViewed, {
+        errOnFallthrough: false
+      });
     });
 
-    it("onSettingsViewed loads data by namespace", function(done) {
-      gopherApp.onSettingsViewed("github", (gopher, settings) => {
+    it("addSettingsForm loads data by namespace", function(done) {
+      gopherApp.addSettingsForm("github", (gopher, settings) => {
         expect(settings.firstName).to.equal("Joe");
         done();
       });
-      fireWebhookRequest(extensionSettingsViewed);
+      fireWebhookRequest(extensionSettingsViewed, {
+        errOnFallthrough: false
+      });
+    });
+
+    it("merges namespaced settings while viewing", function(done) {
+      gopherApp.addSettingsForm("memorize", (gopher, settings) => {
+        return { my: "realtime settings" };
+      });
+      fireWebhookRequest(extensionSettingsViewed, {
+        errOnFallthrough: false
+      }).then(res => {
+        expect(res.body.settings.memorize.my).to.equal("realtime settings");
+        done();
+      });
+    });
+
+    it("merges multiple namespaced settings while viewing", function(done) {
+      gopherApp.addSettingsForm("memorize", (gopher, settings) => {
+        return { my: "realtime settings" };
+      });
+
+      gopherApp.addSettingsForm("github", (gopher, settings) => {
+        return { my: "other settings" };
+      });
+
+      fireWebhookRequest(extensionSettingsViewed, {
+        errOnFallthrough: false
+      }).then(res => {
+        console.log(res.body.settings);
+
+        expect(res.body.settings.memorize.my).to.equal("realtime settings");
+        expect(res.body.settings.github.my).to.equal("other settings");
+        done();
+      });
+    });
+
+    it("handles async settings handlers", function(done) {
+      // Async test function
+      function getSettingsAsync() {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => resolve({ my: "realtime settings" }), 500);
+        });
+      }
+      // Add handler
+      gopherApp.addSettingsForm("memorize", async (gopher, settings) => {
+        return await getSettingsAsync();
+      });
+      fireWebhookRequest(extensionSettingsViewed, {
+        errOnFallthrough: false
+      }).then(res => {
+        expect(res.body.settings.memorize.my).to.equal("realtime settings");
+        done();
+      });
+    });
+
+    it("handles settings handlers with errors", function(done) {
+      function getSettingsAsync() {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => reject(new Error("A Test Error")), 500);
+        });
+      }
+      // Add handler
+      gopherApp.addSettingsForm("memorize", async (gopher, settings) => {
+        return await getSettingsAsync();
+      });
+      fireWebhookRequest(extensionSettingsViewed, {
+        errOnFallthrough: false
+      }).then(res => {
+        expect(res.body).to.deep.equal({
+          webhook: { status: "failed", message: "A Test Error" }
+        });
+        done();
+      });
     });
 
     it("gopherApp.on method matches webhook types", function(done) {
