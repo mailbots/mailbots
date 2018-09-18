@@ -1,0 +1,42 @@
+{
+  "settings": {
+    "memorize": {
+      "firstName": "NewKarl",
+      "lastName": "Flabberson"
+    }
+  },
+  "event": "extension.settings_pre_save",
+  "version": "1",
+  "extension": {
+    "id": 84,
+    "name": "Gopher Memorize",
+    "subdomain": "gopher-memorize",
+    "developer_name": "Gopher, Inc",
+    "help_url": "http://help.followupthen.com/contact",
+    "private_data": {
+      "github": {
+        "firstName": "Joe",
+        "lastName": "Joe",
+        "password": "foo"
+      },
+      "memorize": {
+        "firstName": "Karl",
+        "lastName": "Flabberson",
+        "password": "foo"
+      }
+    }
+  },
+  "user": {
+    "name": "Joe Schmoe",
+    "primary_email": "esweetland@gmail.com",
+    "emails": ["esweetland@gmail.com"],
+    "is_validated": true,
+    "timezone": "America/Los_Angeles",
+    "preferred_date_format": "D, F jS Y g:ia T",
+    "preferred_date_format_js": "ddd, D MMM 'YY [at] h:mma z",
+    "postpone_times": "8h,1d,3d",
+    "flagged": 0,
+    "validate_sender_email": false,
+    "send_dev_errors": false
+  }
+}

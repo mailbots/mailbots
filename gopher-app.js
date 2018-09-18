@@ -277,12 +277,30 @@ class GopherApp {
    * Handle webhook that fires when user is viewing extension.
    * This is the only handler that fires ALL handler functions.
    * @param {function} injectSettingsFn - A function that accepts
-   * the user's current settings as the first param and returns a
-   * JSON Form Schema definition.
+   *   - gopher - The Gopher helper object
+   *   - namespaceSettings - The existing settings for that namespace
+   * It return returns a JSON Form Schema definition.
    * TODO: Validate JSON Form Schema
    */
   addSettingsForm(namespace, getSettingsFn) {
     this.on("extension.settings_viewed", getSettingsFn, {
+      namespace,
+      listenerType: "settingsListener"
+    });
+  }
+
+  /**
+   * Handle webhook that fires before settings are saved.
+   * This is the only handler that fires ALL handler functions.
+   * @param {function} handleNewSettingsFn - A function that is passed
+   *   - @param gopher - The Gopher helper object
+   *   - @param namespaceSettings - The existing settings for that namespace
+   *   - @param newNamespaceSettings - The new settings given by the user
+   *   - @returns standard webhook JSON response
+   * @todo Validate JSON Form Schema
+   */
+  beforeSettingsSaved(namespace, handleNewSettingsFn) {
+    this.on("extension.settings_pre_save", handleNewSettingsFn, {
       namespace,
       listenerType: "settingsListener"
     });
@@ -304,14 +322,20 @@ class GopherApp {
         if (!this.cbShouldTrigger(webhook, listener.triggerCondition)) return;
         const namespaceSettings =
           webhook.extension.private_data[listener.namespace];
+        const newNamespaceSettings = _.get(
+          webhook,
+          "settings." + listener.namespace
+        );
         const settingsJson = await listener.cb(
           gopher,
           namespaceSettings,
-          webhook
+          newNamespaceSettings
         );
         debug("SettingsJSON form", settingsJson);
         const namespace = listener.namespace;
-        this.aggregateSettingsResponse[namespace] = settingsJson;
+        if (settingsJson) {
+          this.aggregateSettingsResponse[namespace] = settingsJson;
+        }
       }
     );
     try {
@@ -351,7 +375,7 @@ class GopherApp {
       return webhook.event === String(triggerCondition);
     } else {
       throw new Error(
-        `Unrecognized trigger condition: ` + typeof triggerCondition
+        "Unrecognized trigger condition: " + typeof triggerCondition
       );
     }
   }
