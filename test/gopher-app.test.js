@@ -100,9 +100,9 @@ describe("Gopher App", function() {
 
     describe("settings", function() {
       const extensionSettingsViewed = require("./fixtures/extension-settings-viewed-webhook.json");
-      it("onSettingsViewed loads data by namespace", function(done) {
-        gopherApp.addSettingsForm("memorize", (gopher, settings) => {
-          expect(settings.firstName).to.equal("Karl");
+
+      it("fires onSettingsViewed handler", function(done) {
+        gopherApp.onSettingsViewed(gopher => {
           done();
         });
         fireWebhookRequest(extensionSettingsViewed, {
@@ -110,74 +110,44 @@ describe("Gopher App", function() {
         });
       });
 
-      it("addSettingsForm loads data by namespace", function(done) {
-        gopherApp.addSettingsForm("github", (gopher, settings) => {
-          expect(settings.firstName).to.equal("Joe");
-          done();
-        });
-        fireWebhookRequest(extensionSettingsViewed, {
-          errOnFallthrough: false
-        });
-      });
-
-      it("merges namespaced settings while viewing", function(done) {
-        gopherApp.addSettingsForm("memorize", (gopher, settings) => {
-          return { my: "realtime settings" };
+      it("onSettingsViewed handler adds a json response", function(done) {
+        gopherApp.onSettingsViewed(gopher => {
+          gopher.responseJson = {
+            settings: {
+              foo: "bar"
+            }
+          };
         });
         fireWebhookRequest(extensionSettingsViewed, {
           errOnFallthrough: false
         }).then(res => {
-          expect(res.body.settings.memorize.my).to.equal("realtime settings");
+          expect(res.body.settings.foo).to.equal("bar");
           done();
         });
       });
 
-      it("merges multiple namespaced settings while viewing", function(done) {
-        gopherApp.addSettingsForm("memorize", (gopher, settings) => {
-          return { my: "realtime settings" };
-        });
-
-        gopherApp.addSettingsForm("github", (gopher, settings) => {
-          return { my: "other settings" };
-        });
-
-        fireWebhookRequest(extensionSettingsViewed, {
-          errOnFallthrough: false
-        }).then(res => {
-          expect(res.body.settings.memorize.my).to.equal("realtime settings");
-          expect(res.body.settings.github.my).to.equal("other settings");
-          done();
-        });
-      });
-
-      it("handles async settings handlers", function(done) {
-        // Async test function
+      it("onSettingsViewed handler handles an async function", function(done) {
         function getSettingsAsync() {
           return new Promise((resolve, reject) => {
-            setTimeout(() => resolve({ my: "realtime settings" }), 500);
+            setTimeout(() => resolve({ my: "realtime settings" }), 10);
           });
         }
-        // Add handler
-        gopherApp.addSettingsForm("memorize", async (gopher, settings) => {
-          return await getSettingsAsync();
+
+        gopherApp.onSettingsViewed(async gopher => {
+          const settings = await getSettingsAsync();
+          gopher.responseJson = settings;
         });
         fireWebhookRequest(extensionSettingsViewed, {
           errOnFallthrough: false
         }).then(res => {
-          expect(res.body.settings.memorize.my).to.equal("realtime settings");
+          expect(res.body.my).to.equal("realtime settings");
           done();
         });
       });
 
-      it("handles settings handlers with errors", function(done) {
-        function getSettingsAsync() {
-          return new Promise((resolve, reject) => {
-            setTimeout(() => reject(new Error("A Test Error")), 500);
-          });
-        }
-        // Add handler
-        gopherApp.addSettingsForm("memorize", async (gopher, settings) => {
-          return await getSettingsAsync();
+      it("onSettingsViewed catches errors", function(done) {
+        gopherApp.onSettingsViewed(async gopher => {
+          throw new Error("A Test Error");
         });
         fireWebhookRequest(extensionSettingsViewed, {
           errOnFallthrough: false
@@ -189,56 +159,86 @@ describe("Gopher App", function() {
         });
       });
 
+      it("multiple onSettingsViewed handlers fire", function(done) {
+        gopherApp.onSettingsViewed(gopher => {
+          gopher.responseJson = {
+            settings: {
+              foo: "bar"
+            }
+          };
+        });
+
+        gopherApp.onSettingsViewed(gopher => {
+          gopher.responseJson.settings.shoe = "far";
+        });
+
+        fireWebhookRequest(extensionSettingsViewed, {
+          errOnFallthrough: false
+        }).then(res => {
+          expect(res.body.settings.foo).to.equal("bar");
+          expect(res.body.settings.shoe).to.equal("far");
+          done();
+        });
+      });
+
+      it("passes data between onSettingsViewed handlers", function(done) {
+        gopherApp.onSettingsViewed(gopher => {
+          gopher.responseJson = {
+            settings: {
+              foo: "bar"
+            }
+          };
+        });
+
+        gopherApp.onSettingsViewed(gopher => {
+          expect(gopher.responseJson.settings.foo).to.equal("bar");
+          done();
+        });
+
+        fireWebhookRequest(extensionSettingsViewed, {
+          errOnFallthrough: false
+        });
+      });
+
       const extensionSettingsBeforeSaved = require("./fixtures/extension-settings-pre-saved-webhook.json");
-      it("beforeSettingsSaved shows data by namespace", function(done) {
-        gopherApp.beforeSettingsSaved(
-          "memorize",
-          (gopher, settings, newSettings) => {
-            expect(settings.firstName).to.equal("Karl");
-            expect(newSettings.firstName).to.equal("NewKarl");
-            done();
-          }
-        );
+
+      it("fires beforeSettingsSaved handler", function(done) {
+        gopherApp.beforeSettingsSaved(gopher => {
+          done();
+        });
         fireWebhookRequest(extensionSettingsBeforeSaved, {
           errOnFallthrough: false
         });
       });
 
-      it("handles when the namespace does not exist and nothing is done", function(done) {
-        gopherApp.beforeSettingsSaved(
-          "does_not_exist",
-          (gopher, settings, newSettings) => {
-            expect(settings).to.be.undefined;
-            expect(newSettings).to.be.undefined;
-            done();
-          }
-        );
-        fireWebhookRequest(extensionSettingsBeforeSaved, {
-          errOnFallthrough: false
+      it("multiple beforeSettingsSaved handlers fire with data", function(done) {
+        gopherApp.beforeSettingsSaved(gopher => {
+          gopher.webhook.setExtensionData("github.foo", "bar");
         });
-      });
-
-      it.skip("injects entirely new settings on pre-settings-saved", function(done) {
-        gopherApp.beforeSettingsSaved(
-          "does_not_exist",
-          (gopher, settings, newSettings) => {
-            console.log("settings", settings);
-            // simple key / value pair of data for that namespace
-            return { settings };
-
-            // expect(settings).to.be.undefined;
-            // expect(newSettings).to.be.undefined;
-            // gopher.webhook.setExtensionData(
-            //   "does_not_exist.newsetting",
-            //   "newvalue"
-            // );
-            done();
-          }
-        );
+        gopherApp.beforeSettingsSaved(gopher => {
+          expect(gopher.webhook.getExtensionData("github.foo")).to.equal("bar");
+          gopher.webhook.setExtensionData("github.shoe", "far");
+        });
         fireWebhookRequest(extensionSettingsBeforeSaved, {
           errOnFallthrough: false
         }).then(res => {
-          console.log(res.body);
+          expect(res.body.extension.private_data.github.foo).to.equal("bar");
+          expect(res.body.extension.private_data.github.shoe).to.equal("far");
+          done();
+        });
+      });
+
+      // TODO: In GopherHelper
+      // it("uses gopher helper to get and set settings");
+      // Before saving
+
+      it("onSettingsViewed loads data by namespace", function(done) {
+        gopherApp.addSettingsForm("memorize", (gopher, settings) => {
+          expect(settings.firstName).to.equal("Karl");
+          done();
+        });
+        fireWebhookRequest(extensionSettingsViewed, {
+          errOnFallthrough: false
         });
       });
     });

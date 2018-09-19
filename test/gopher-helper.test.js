@@ -2,12 +2,14 @@ const { expect } = require("chai");
 const GopherHelper = require("../lib/gopher-helper");
 
 describe("Gopher Helper", function() {
-  const webhookJson = require("./fixtures/task-created-webhook.json");
+  // const webhookJson = require("./fixtures/task-created-webhook.json");
   // TODO: Improve testing different types of webhooks
   // const webhookJson = require("./fixtures/task-triggered-webhook.json");
   // const webhookJson = require("./fixtures/task-action-received-webhook.json");
   // const webhookJson = require("./fixtures/task-updated-webhook.json");
   // const webhookJson = require("./fixtures/extension-triggered-webhook.json"); //expected failures for undefined
+  const webhookJson = require("./fixtures/extension-settings-viewed-webhook.json");
+  // const webhookJson = require("./fixtures/extension-settings-pre-saved-webhook.json");
 
   const request = {};
   request.body = webhookJson;
@@ -15,6 +17,188 @@ describe("Gopher Helper", function() {
   response.locals = {};
   gopherHelper = new GopherHelper(request, response);
   const responseJson = gopherHelper.webhook.responseJson;
+
+  describe.only("settings helpers", function() {
+    it("creates an empty, namespaced settings form", function(done) {
+      const newForm = gopherHelper.webhook.settingsForm({
+        namespace: "memorize",
+        title: "Memorize Settings"
+      });
+      const settings = gopherHelper.webhook.responseJson.settings;
+      expect(settings.memorize).to.haveOwnProperty("JSONSchema");
+      expect(settings.memorize).to.haveOwnProperty("uiSchema");
+      expect(settings.memorize.JSONSchema.title).to.equal("Memorize Settings");
+      done();
+    });
+
+    it("adds a form input", function(done) {
+      const newForm = gopherHelper.webhook.settingsForm({
+        namespace: "memorize",
+        title: "Memorize Settings"
+      });
+      newForm.input({ name: "first_name", title: "First name" });
+      const settings = gopherHelper.webhook.responseJson.settings;
+      expect(settings.memorize.JSONSchema.properties).to.haveOwnProperty(
+        "first_name"
+      );
+      expect(settings.memorize.JSONSchema.properties.first_name).to.deep.equal({
+        type: "string",
+        title: "First name",
+        description: undefined
+      });
+      done();
+    });
+
+    it("adds a textarea input", function(done) {
+      const newForm = gopherHelper.webhook.settingsForm({
+        namespace: "memorize",
+        title: "Memorize Settings"
+      });
+      newForm.textarea({ name: "essay", title: "essay" });
+      const settings = gopherHelper.webhook.responseJson.settings;
+      expect(settings.memorize.JSONSchema.properties).to.haveOwnProperty(
+        "essay"
+      );
+      done();
+    });
+
+    it("adds an alert dialog", function(done) {
+      const newForm = gopherHelper.webhook.settingsForm({
+        namespace: "memorize",
+        title: "Memorize Settings"
+      });
+      newForm.alert({ name: "dialog", title: "An Alert Dialog" });
+      const settings = gopherHelper.webhook.responseJson.settings;
+      expect(settings.memorize.JSONSchema.properties).to.haveOwnProperty(
+        "alert"
+      );
+      done();
+    });
+
+    it("adds a markdown text block", function(done) {
+      const newForm = gopherHelper.webhook.settingsForm({
+        namespace: "memorize",
+        title: "Memorize Settings"
+      });
+      newForm.text(`--------------
+  ## ️⚠️ Connect Github
+  This is a text block here. Leading spaces can break this.
+  And this is a new line. Here is a new line
+  
+  [Connect Github](http://www.google.com)
+  
+  ------------------
+  `);
+
+      const fields =
+        gopherHelper.webhook.responseJson.settings.memorize.JSONSchema
+          .properties;
+      const hasMarkdown = Object.keys(fields).some(key => key.includes("_md_"));
+      expect(hasMarkdown).to.be.true;
+      done();
+    });
+
+    it("Adds a checkbox", function(done) {
+      const newForm = gopherHelper.webhook.settingsForm({
+        namespace: "memorize"
+      });
+      newForm.checkbox({ name: "notifications", title: "Notifications" });
+      const settings = gopherHelper.webhook.responseJson.settings;
+      expect(settings.memorize.JSONSchema.properties).to.haveOwnProperty(
+        "notifications"
+      );
+      done();
+    });
+
+    it("inserts custom schemas in the right locations", function(done) {
+      const newForm = gopherHelper.webhook.settingsForm({
+        namespace: "memorize"
+      });
+      newForm.insert({
+        name: "my_selection",
+        JSONSchema: {
+          title: "Something direct",
+          type: "string",
+          enum: ["foo", "bar", "show", "far"]
+        },
+        uiSchema: {
+          "ui:placeholder": "Choose one"
+        }
+      });
+      const settings = gopherHelper.webhook.responseJson.settings;
+      expect(settings.memorize.JSONSchema.properties).to.haveOwnProperty(
+        "my_selection"
+      );
+      expect(settings.memorize.uiSchema).to.haveOwnProperty("my_selection");
+      expect(settings.memorize.uiSchema.my_selection).to.deep.equal({
+        "ui:placeholder": "Choose one"
+      });
+      done();
+    });
+
+    it("Adds a select dropdown box", function(done) {
+      const newForm = gopherHelper.webhook.settingsForm({
+        namespace: "memorize"
+      });
+      newForm.select({
+        name: "select_something",
+        options: ["Red", "Blue", "Green"],
+        placeholder: "Select something",
+        title: "What's your favorite color?",
+        description: "This tells a lot about a person",
+        helpText: "(Hint: Blue is the best)"
+      });
+      const settings = gopherHelper.webhook.responseJson.settings;
+      expect(settings.memorize.JSONSchema.properties).to.haveOwnProperty(
+        "select_something"
+      );
+      expect(settings.memorize.uiSchema).to.haveOwnProperty("select_something");
+      expect(settings.memorize.uiSchema.select_something).to.deep.equal({
+        "ui:help": "(Hint: Blue is the best)",
+        "ui:placeholder": "Select something"
+      });
+      done();
+    });
+
+    it("Adds a textarea");
+
+    it("Marks a field as required");
+
+    it("builds an array of separate JSON Schema forms", function(done) {
+      const firstForm = gopherHelper.webhook.settingsForm({
+        namespace: "github",
+        title: "Github Settings"
+      });
+      firstForm.input({
+        name: "first_name",
+        title: "First Name"
+      });
+      firstForm.populate({ first_name: "Bob" });
+
+      const secondForm = gopherHelper.webhook.settingsForm({
+        namespace: "memorize",
+        title: "Github Settings"
+      });
+      secondForm.input({
+        name: "first_name",
+        title: "First Name"
+      });
+      secondForm.populate({ first_name: "Joe" });
+      const settings = gopherHelper.responseJson.settings;
+      expect(settings).to.haveOwnProperty("github");
+      expect(settings).to.haveOwnProperty("memorize");
+      expect(settings.github.formData.first_name).to.equal("Bob");
+      done();
+    });
+
+    it("gets new and old settings from pre-save webhook", function(done) {
+      done();
+    });
+
+    it("sets newly set data from extension.settings_pre_saved hook", function(done) {
+      done();
+    });
+  });
 
   describe("task data", function() {
     // Dependent tests

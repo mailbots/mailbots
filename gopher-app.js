@@ -33,6 +33,9 @@ class GopherApp {
     // Listener functions that build this.aggregateSettingsResponse
     this.settingsHandlers = [];
 
+    // Listener functions that build this.aggregateSettingsResponse
+    this.multiFireListeners = [];
+
     // As settings handlers are executed,
     this.aggregateSettingsResponse = {};
 
@@ -154,6 +157,8 @@ class GopherApp {
         cb,
         namespace: opts.namespace
       });
+    } else if (opts && opts.multiFire) {
+      this.multiFireListeners.push({ triggerCondition, cb });
     } else {
       debug("adding listener function");
       this.listeners.push({ triggerCondition, cb });
@@ -290,6 +295,29 @@ class GopherApp {
   }
 
   /**
+   * Handle webhook that fires when user is viewing extension.
+   * ALL onSettingsViewed handlers fire when this webhook arrives. Each
+   * handler can add and read data to and from its own namespace.
+   * @param {function} cb Callback function that receives the gopher object
+   */
+  onSettingsViewed(cb) {
+    this.on("extension.settings_viewed", cb, { multiFire: true });
+  }
+
+  /**
+   * Handle webhook that fires after a user hits "save" on their extension settings.
+   * Newly saved settings arrive at the top-level settings object.
+   * Existing settings are still in extension.private_data.
+   * Return webhook { status: "fail", message: "" } to abort the saving process.
+   * Return extenesion and user data to update to save data as with other webhooks.
+   * ALL beforeSettingsSaved handlers fire.
+   * @param {function} cb Callback function that receives the gopher object
+   */
+  beforeSettingsSaved(cb) {
+    this.on("extension.settings_pre_save", cb, { multiFire: true });
+  }
+
+  /**
    * Handle webhook that fires before settings are saved.
    * This is the only handler that fires ALL handler functions.
    * @param {function} handleNewSettingsFn - A function that is passed
@@ -299,12 +327,12 @@ class GopherApp {
    *   - @returns standard webhook JSON response
    * @todo Validate JSON Form Schema
    */
-  beforeSettingsSaved(namespace, handleNewSettingsFn) {
-    this.on("extension.settings_pre_save", handleNewSettingsFn, {
-      namespace,
-      listenerType: "settingsListener"
-    });
-  }
+  // beforeSettingsSaved(namespace, handleNewSettingsFn) {
+  //   this.on("extension.settings_pre_save", handleNewSettingsFn, {
+  //     namespace,
+  //     listenerType: "settingsListener"
+  //   });
+  // }
 
   /**
    * Fires the appropriate listener function for the webhook received
@@ -316,7 +344,33 @@ class GopherApp {
     const webhook = request.body;
 
     // Trigger all multi-fire settings listeners first.
-    // If these triggered, stop execution
+    // If at least one of these triggers, automatically return responseJSON after they process
+    let autoReturn = false;
+    const multiFireListenerPromises = this.multiFireListeners.map(
+      async listener => {
+        if (this.cbShouldTrigger(webhook, listener.triggerCondition)) {
+          autoReturn = true;
+          const ret = listener.cb(gopher, request, response);
+          return ret;
+        }
+      }
+    );
+
+    try {
+      await Promise.all(multiFireListenerPromises);
+    } catch (e) {
+      console.error(e);
+      return response.send({
+        webhook: { status: "failed", message: e.message }
+      });
+    }
+
+    // Return if we have an aggregate settings response
+    if (autoReturn) {
+      return response.send(gopher.responseJson);
+    }
+
+    // Trigger legacy settingshandlers (remove these)
     const settingsHandlerPromises = await this.settingsHandlers.map(
       async listener => {
         if (!this.cbShouldTrigger(webhook, listener.triggerCondition)) return;
