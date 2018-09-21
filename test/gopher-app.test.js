@@ -222,23 +222,9 @@ describe("Gopher App", function() {
         fireWebhookRequest(extensionSettingsBeforeSaved, {
           errOnFallthrough: false
         }).then(res => {
-          expect(res.body.extension.private_data.github.foo).to.equal("bar");
-          expect(res.body.extension.private_data.github.shoe).to.equal("far");
+          expect(res.body.extension.stored_data.github.foo).to.equal("bar");
+          expect(res.body.extension.stored_data.github.shoe).to.equal("far");
           done();
-        });
-      });
-
-      // TODO: In GopherHelper
-      // it("uses gopher helper to get and set settings");
-      // Before saving
-
-      it("onSettingsViewed loads data by namespace", function(done) {
-        gopherApp.addSettingsForm("memorize", (gopher, settings) => {
-          expect(settings.firstName).to.equal("Karl");
-          done();
-        });
-        fireWebhookRequest(extensionSettingsViewed, {
-          errOnFallthrough: false
         });
       });
     });

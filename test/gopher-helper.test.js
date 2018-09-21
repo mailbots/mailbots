@@ -2,13 +2,13 @@ const { expect } = require("chai");
 const GopherHelper = require("../lib/gopher-helper");
 
 describe("Gopher Helper", function() {
-  // const webhookJson = require("./fixtures/task-created-webhook.json");
+  const webhookJson = require("./fixtures/task-created-webhook.json");
   // TODO: Improve testing different types of webhooks
   // const webhookJson = require("./fixtures/task-triggered-webhook.json");
   // const webhookJson = require("./fixtures/task-action-received-webhook.json");
   // const webhookJson = require("./fixtures/task-updated-webhook.json");
   // const webhookJson = require("./fixtures/extension-triggered-webhook.json"); //expected failures for undefined
-  const webhookJson = require("./fixtures/extension-settings-viewed-webhook.json");
+  // const webhookJson = require("./fixtures/extension-settings-viewed-webhook.json");
   // const webhookJson = require("./fixtures/extension-settings-pre-saved-webhook.json");
 
   const request = {};
@@ -18,7 +18,7 @@ describe("Gopher Helper", function() {
   gopherHelper = new GopherHelper(request, response);
   const responseJson = gopherHelper.webhook.responseJson;
 
-  describe.only("settings helpers", function() {
+  describe("settings helpers", function() {
     it("creates an empty, namespaced settings form", function(done) {
       const newForm = gopherHelper.webhook.settingsForm({
         namespace: "memorize",
@@ -160,10 +160,6 @@ describe("Gopher Helper", function() {
       done();
     });
 
-    it("Adds a textarea");
-
-    it("Marks a field as required");
-
     it("builds an array of separate JSON Schema forms", function(done) {
       const firstForm = gopherHelper.webhook.settingsForm({
         namespace: "github",
@@ -216,7 +212,7 @@ describe("Gopher Helper", function() {
     it("sets task data using object path and string", done => {
       gopherHelper.webhook.setTaskData("frequency_pref", "8");
       expect(
-        gopherHelper.webhook.responseJson.task.private_data.frequency_pref
+        gopherHelper.webhook.responseJson.task.stored_data.frequency_pref
       ).to.equal("8");
       done();
     });
@@ -284,7 +280,7 @@ describe("Gopher Helper", function() {
       gopherHelper.webhook.setTaskData({
         foo: { bar: "baz" }
       });
-      expect(responseJson.task.private_data).to.have.property("foo");
+      expect(responseJson.task.stored_data).to.have.property("foo");
       done();
     });
 
@@ -298,7 +294,7 @@ describe("Gopher Helper", function() {
       gopherHelper.webhook.setTaskData({
         foo: { nine: "ten" }
       });
-      expect(JSON.stringify(responseJson.task.private_data)).to.equal(
+      expect(JSON.stringify(responseJson.task.stored_data)).to.equal(
         '{"frequency_pref":"8","foo":{"bar":"baz","nine":"ten"}}'
       );
       done();
@@ -319,7 +315,7 @@ describe("Gopher Helper", function() {
           name: "bob"
         }
       });
-      expect(responseJson.extension.private_data.crm).to.deep.equal({
+      expect(responseJson.extension.stored_data.crm).to.deep.equal({
         key: "23432",
         name: "bob"
       });
@@ -338,7 +334,7 @@ describe("Gopher Helper", function() {
           another: "key"
         }
       });
-      expect(responseJson.extension.private_data.crm).to.deep.equal({
+      expect(responseJson.extension.stored_data.crm).to.deep.equal({
         key: "23432",
         name: "bob",
         another: "key"
@@ -351,7 +347,7 @@ describe("Gopher Helper", function() {
         key: "9876",
         name: "joe"
       });
-      expect(responseJson.extension.private_data.crm).to.deep.equal({
+      expect(responseJson.extension.stored_data.crm).to.deep.equal({
         another: "key",
         key: "9876",
         name: "joe"

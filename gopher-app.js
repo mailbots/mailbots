@@ -307,7 +307,7 @@ class GopherApp {
   /**
    * Handle webhook that fires after a user hits "save" on their extension settings.
    * Newly saved settings arrive at the top-level settings object.
-   * Existing settings are still in extension.private_data.
+   * Existing settings are still in extension.stored_data.
    * Return webhook { status: "fail", message: "" } to abort the saving process.
    * Return extenesion and user data to update to save data as with other webhooks.
    * ALL beforeSettingsSaved handlers fire.
@@ -346,72 +346,39 @@ class GopherApp {
     // Trigger all multi-fire settings listeners first.
     // If at least one of these triggers, automatically return responseJSON after they process
     let autoReturn = false;
-    const multiFireListenerPromises = this.multiFireListeners.map(
-      async listener => {
-        if (this.cbShouldTrigger(webhook, listener.triggerCondition)) {
-          autoReturn = true;
-          const ret = listener.cb(gopher, request, response);
-          return ret;
-        }
-      }
-    );
-
     try {
+      const multiFireListenerPromises = this.multiFireListeners.map(
+        async listener => {
+          if (this.cbShouldTrigger(webhook, listener.triggerCondition)) {
+            autoReturn = true;
+            const ret = listener.cb(gopher, request, response);
+            return ret;
+          }
+        }
+      );
+
       await Promise.all(multiFireListenerPromises);
-    } catch (e) {
-      console.error(e);
-      return response.send({
-        webhook: { status: "failed", message: e.message }
-      });
-    }
 
-    // Return if we have an aggregate settings response
-    if (autoReturn) {
-      return response.send(gopher.responseJson);
-    }
+      // Return if we have an aggregate settings response
+      if (autoReturn) {
+        return response.send(gopher.responseJson);
+      }
 
-    // Trigger legacy settingshandlers (remove these)
-    const settingsHandlerPromises = await this.settingsHandlers.map(
-      async listener => {
-        if (!this.cbShouldTrigger(webhook, listener.triggerCondition)) return;
-        const namespaceSettings =
-          webhook.extension.private_data[listener.namespace];
-        const newNamespaceSettings = _.get(
-          webhook,
-          "settings." + listener.namespace
-        );
-        const settingsJson = await listener.cb(
-          gopher,
-          namespaceSettings,
-          newNamespaceSettings
-        );
-        debug("SettingsJSON form", settingsJson);
-        const namespace = listener.namespace;
-        if (settingsJson) {
-          this.aggregateSettingsResponse[namespace] = settingsJson;
+      // Trigger single-fire listeners. Stop after first matching listener.
+      this.listeners.some(listener => {
+        if (this.cbShouldTrigger(webhook, listener.triggerCondition)) {
+          listener.cb(gopher, request, response);
+          return true;
         }
-      }
-    );
-    try {
-      await Promise.all(settingsHandlerPromises);
+      });
     } catch (e) {
+      if (process.env.NODE_ENV !== "test") {
+        console.error(e);
+      }
       return response.send({
         webhook: { status: "failed", message: e.message }
       });
     }
-
-    // Return if we have an aggregate settings response
-    if (!_.isEmpty(this.aggregateSettingsResponse)) {
-      return response.send({ settings: this.aggregateSettingsResponse });
-    }
-
-    // Trigger only the first matching listener for the event
-    this.listeners.some(listener => {
-      if (this.cbShouldTrigger(webhook, listener.triggerCondition)) {
-        listener.cb(gopher, request, response);
-        return true;
-      }
-    });
   }
 
   /**

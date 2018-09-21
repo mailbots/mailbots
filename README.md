@@ -262,7 +262,7 @@ When a user loads the extension settings page on gopher.email, this handler resp
 
 Each instance of this handler renders its own settings form. Unlike the other handlers, every instances is called. Every instance of this handler can render its own settings form.
 
-The first parameter is the `namespace` for the data stored in `extension.private_data`.
+The first parameter is the `namespace` for the data stored in `extension.stored_data`.
 
 The second param is a function that is passed 3 arguments:
 

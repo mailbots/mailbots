@@ -13,7 +13,7 @@
     "subdomain": "gopher-memorize",
     "developer_name": "Gopher, Inc",
     "help_url": "http://help.followupthen.com/contact",
-    "private_data": {
+    "stored_data": {
       "github": {
         "firstName": "Joe",
         "lastName": "Joe",

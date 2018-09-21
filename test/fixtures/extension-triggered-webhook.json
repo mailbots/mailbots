@@ -32,7 +32,7 @@
     "subdomain": "gopher-memorize",
     "developer_name": "",
     "help_url": "",
-    "private_data": {
+    "stored_data": {
       "gopher_token": "[redacted]"
     }
   },
