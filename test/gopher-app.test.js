@@ -330,4 +330,30 @@ describe("Gopher App", function() {
       fireWebhookRequest(taskCreatedWebhook);
     });
   });
+
+  describe("request information", function() {
+    it("checks if current request is a webhook or not", function(done) {
+      gopherApp.app.use((req, res, next) => {
+        expect(res.locals.gopher.isWebhook).to.be.true;
+        done();
+        next();
+      });
+      fireWebhookRequest(taskCreatedWebhook);
+    });
+
+    it("checks if current request is not a webhook", function(done) {
+      gopherApp.app.use((req, res, next) => {
+        expect(res.locals.gopher.isWebhook).to.be.false;
+        done();
+        next();
+      });
+      request(gopherApp.app)
+        .get("/something-else")
+        .set("Accept", "application/json")
+        .catch(err => {
+          console.log(err);
+          debugger;
+        });
+    });
+  });
 });

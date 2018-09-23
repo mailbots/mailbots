@@ -459,7 +459,7 @@ gopherApp.onTrigger("remember", function(gopher) {
 
 Stand-alone skills (as shown above) can be published to npm and shared with others.
 
-#### Naming Conventions
+**Naming Conventions**
 
 Try to use the same unique string (ex: "skill-name") for:
 
@@ -558,6 +558,21 @@ gopherApp.onCommand("hi", function(gopher) {
 ```
 
 For some cases (loggers, configuraed object) passing a skill via via gopher.skills can come in handy. For most cases, explicitly `require` your skills to make your code more self-documenting.
+
+Note that middleware runs for _all_ requests. Run the middleware for only certain cases like this:
+
+```javascript
+gopherApp.app.use(function(req, res, next) {
+  // Only execute middleware for webhooks that have the word `task` in them
+  const taskWebhook =
+    gopher.get("event") && !gopher.get("event").includes("task");
+  if (!gopher.isWebhook || !taskWebhook) {
+    return next();
+  }
+  // your logic here
+  next();
+});
+```
 
 Finally, an important note from Express.js:
 
