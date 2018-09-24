@@ -49,6 +49,37 @@ describe("Gopher Helper", function() {
       done();
     });
 
+    it("adds a form input with a default value", function(done) {
+      const newForm = gopherHelper.webhook.settingsForm({
+        namespace: "memorize",
+        title: "Memorize Settings"
+      });
+      newForm.input({
+        name: "first_name",
+        title: "First name",
+        defaultValue: "Joe"
+      });
+      const settings = gopherHelper.webhook.responseJson.settings;
+      expect(settings.memorize.formData.first_name).to.equal("Joe");
+      done();
+    });
+
+    it("overwrites default input value when populating", function(done) {
+      const newForm = gopherHelper.webhook.settingsForm({
+        namespace: "memorize",
+        title: "Memorize Settings"
+      });
+      newForm.input({
+        name: "first_name",
+        title: "First name",
+        defaultValue: "Joe"
+      });
+      newForm.populate({ first_name: "Bob" });
+      const settings = gopherHelper.webhook.responseJson.settings;
+      expect(settings.memorize.formData.first_name).to.equal("Bob");
+      done();
+    });
+
     it("adds a textarea input", function(done) {
       const newForm = gopherHelper.webhook.settingsForm({
         namespace: "memorize",
