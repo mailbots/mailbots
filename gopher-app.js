@@ -149,15 +149,7 @@ class GopherApp {
    * @param {function} cb Callback function with signature cb(gopher, req, res)
    */
   on(triggerCondition, cb, opts) {
-    if (opts && opts.listenerType === "settingsListener") {
-      if (!opts.namespace)
-        throw new Error("A namespace wasn't given to a settings listener");
-      this.settingsHandlers.push({
-        triggerCondition,
-        cb,
-        namespace: opts.namespace
-      });
-    } else if (opts && opts.multiFire) {
+    if (opts && opts.multiFire) {
       this.multiFireListeners.push({ triggerCondition, cb });
     } else {
       debug("adding listener function");

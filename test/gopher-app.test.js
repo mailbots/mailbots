@@ -4,14 +4,18 @@ const { expect } = require("chai");
 const request = require("supertest");
 const fs = require("fs");
 const GopherApp = require("../gopher-app");
+const crypto = require("crypto");
+
+const clientId = "foo";
+const clientSecret = "bar";
 
 describe("Gopher App", function() {
   const taskCreatedWebhook = require("./fixtures/task-created-webhook.json");
   let gopherApp = {}; // reinitialized before each test
   beforeEach(function() {
     gopherApp = new GopherApp({
-      clientId: "foo",
-      clientSecret: "bar"
+      clientId,
+      clientSecret
     });
   });
 
@@ -22,11 +26,21 @@ describe("Gopher App", function() {
         throw new Error("Gopher handler did not run");
       });
     }
+
+    // Sign request
+    const exampleTimestamp = Math.floor(Date.now() / 1000).toString();
+    const generatedSignature = crypto
+      .createHmac("sha256", exampleTimestamp + clientSecret)
+      .update(JSON.stringify(webhook))
+      .digest("hex");
+
     const app = gopherApp.exportApp();
     return (
       request(app)
         .post("/webhooks")
         .set("Accept", "application/json")
+        .set("X-Gopher-Timestamp", exampleTimestamp)
+        .set("X-Gopher-Signature", generatedSignature)
         .send(webhook)
         // .then(res => {})
         .catch(err => {
@@ -35,17 +49,64 @@ describe("Gopher App", function() {
         })
     );
   }
+
   describe("configuration", function() {
     it("should throw if instaniated without config", function(done) {
       expect(() => new GopherApp()).to.throw();
-      expect(
-        () => new GopherApp({ clientId: "foo", clientSecret: "bar" })
-      ).to.not.throw();
+      expect(() => new GopherApp({ clientId, clientSecret })).to.not.throw();
       done();
     });
   });
 
+  describe("webhook validation", function() {
+    it("should only accept validate webhooks", function(done) {
+      gopherApp.on(/.*/, gopher => {
+        // Should fire and be valid
+        expect(gopher.requestJson.event).to.equal("task.created");
+        done();
+        gopher.webhook.respond();
+      });
+      const exampleJson = require("./fixtures/task-created-webhook.json");
+      fireWebhookRequest(exampleJson);
+    });
+
+    it("should fail webhook with an invalid secret", function(done) {
+      gopherApp.on(/.*/, gopher => {
+        done("An invalid webhook is executing");
+        gopher.webhook.respond();
+      });
+
+      const app = gopherApp.exportApp();
+
+      // build and sign request
+      const exampleJson = require("./fixtures/task-created-webhook.json");
+
+      const exampleTimestamp = Math.floor(Date.now() / 1000).toString();
+      let generatedSignature = crypto
+        .createHmac("sha256", exampleTimestamp + clientSecret + "foo")
+        .update(JSON.stringify(exampleJson))
+        .digest("hex");
+
+      request(app)
+        .post("/webhooks")
+        .set("Accept", "application/json")
+        .set("X-Gopher-Timestamp", exampleTimestamp)
+        .set("X-Gopher-Signature", generatedSignature)
+        .send(exampleJson)
+        .then(res => {
+          expect(res.status).to.equal(403);
+          expect(res.body.message).to.equal("Webhook validation failed");
+          done();
+        })
+        .catch(err => {
+          console.log(err);
+          debugger;
+        });
+    });
+  });
+
   describe("event matching", function() {
+    // Request headers are missing..but how best to catch this error??
     it("onCommand handler matches a command by regex", function(done) {
       gopherApp.onCommand(/.*/, gopher => {
         expect(gopher.command).to.equal("memorize");
