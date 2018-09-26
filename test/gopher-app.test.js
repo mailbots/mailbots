@@ -326,9 +326,7 @@ describe("Gopher App", function() {
         setTimeout(() => done(), 500);
       });
       gopherApp.on(/.*/, gopher => {
-        expect(gopher.command).to.equal("memorize");
-        gopher.webhook.respond();
-        throw new Error("This should never run");
+        done("This should not run");
       });
       fireWebhookRequest(taskCreatedWebhook);
     });

@@ -218,11 +218,21 @@ describe("Gopher Helper", function() {
       done();
     });
 
-    it("gets new and old settings from pre-save webhook", function(done) {
-      done();
-    });
+    it("gets new and old settings from pre-save webhook");
+    it("sets newly set data from extension.settings_pre_saved hook");
 
-    it("sets newly set data from extension.settings_pre_saved hook", function(done) {
+    it.only("adds a custom submit button with url params", function(done) {
+      const newForm = gopherHelper.webhook.settingsForm({
+        namespace: "memorize",
+        title: "Memorize Settings"
+      });
+      newForm.submitButton({
+        submitText: "Submit Me",
+        urlParams: { foo: "bar" }
+      });
+      const settings = gopherHelper.responseJson.settings;
+      expect(settings.memorize.formMeta).to.haveOwnProperty("submitText");
+      expect(settings.memorize.formMeta).to.haveOwnProperty("urlParams");
       done();
     });
   });

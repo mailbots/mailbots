@@ -272,22 +272,6 @@ class GopherApp {
 
   /**
    * Handle webhook that fires when user is viewing extension.
-   * This is the only handler that fires ALL handler functions.
-   * @param {function} injectSettingsFn - A function that accepts
-   *   - gopher - The Gopher helper object
-   *   - namespaceSettings - The existing settings for that namespace
-   * It return returns a JSON Form Schema definition.
-   * TODO: Validate JSON Form Schema
-   */
-  addSettingsForm(namespace, getSettingsFn) {
-    this.on("extension.settings_viewed", getSettingsFn, {
-      namespace,
-      listenerType: "settingsListener"
-    });
-  }
-
-  /**
-   * Handle webhook that fires when user is viewing extension.
    * ALL onSettingsViewed handlers fire when this webhook arrives. Each
    * handler can add and read data to and from its own namespace.
    * @param {function} cb Callback function that receives the gopher object
@@ -308,23 +292,6 @@ class GopherApp {
   beforeSettingsSaved(cb) {
     this.on("extension.settings_pre_save", cb, { multiFire: true });
   }
-
-  /**
-   * Handle webhook that fires before settings are saved.
-   * This is the only handler that fires ALL handler functions.
-   * @param {function} handleNewSettingsFn - A function that is passed
-   *   - @param gopher - The Gopher helper object
-   *   - @param namespaceSettings - The existing settings for that namespace
-   *   - @param newNamespaceSettings - The new settings given by the user
-   *   - @returns standard webhook JSON response
-   * @todo Validate JSON Form Schema
-   */
-  // beforeSettingsSaved(namespace, handleNewSettingsFn) {
-  //   this.on("extension.settings_pre_save", handleNewSettingsFn, {
-  //     namespace,
-  //     listenerType: "settingsListener"
-  //   });
-  // }
 
   /**
    * Fires the appropriate listener function for the webhook received
