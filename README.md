@@ -260,7 +260,7 @@ gopherApp.onEvent("issue.created", function(gopher) {
 
 When a user loads the extension settings page on gopher.email, this handler responds with a [JSON form schema](https://mozilla-services.github.io/react-jsonschema-form/) to render a settings form and pre-populate it with values.
 
-Each instance of this handler renders its own settings form. Unlike the other handlers, every instances is called. Every instance of this handler can render its own settings form.
+A Gopher skill can render its own settings form, or even multiple settings forms. Unlike the other handlers, every instance of this handler is called so that all settings forms are rendered.
 
 The first parameter is the `namespace` for the data stored in `extension.stored_data`.
 
@@ -273,24 +273,74 @@ The second param is a function that is passed 3 arguments:
   This function should return a [JSON schema](https://mozilla-services.github.io/react-jsonschema-form/) to render a settings form. See the settings example in Gopher Skills Kit. (Note all JSON Form Schema UI options are supported)
 
 ```javascript
-// Allow a user to manage logging settings
-// See https://mozilla-services.github.io/react-jsonschema-form/
-gopherApp.onSettingsViewed("todo", function(gopher, settings) {
-  return {
-    JSONSchema: {
-      title: "Logger",
-      type: "object",
-      properties: {
-        log: {
-          type: "boolean",
-          title: "Log everything"
-        }
-      }
-    },
-    // uiSchema: {},
-    formData: settings
-  };
+// Render a settings field for the user to enter their first name
+gopherApp.onSettingsViewed(function(gopher) {
+  const settingsForm = gopher.webhook.settingsForm({ namespace: "todo" });
+  settingsForm.input({ name: "first_name", title: "First name" });
+
+  // Populate form values
+  settingsForm.populate(gopher.get("extension.saved_data.todo"));
 });
+```
+
+The viewer's URL parameters are passed through to the settings webhooks.
+For example when an extension has been just installed, Gopher appends `?installed=1`
+
+```javascript
+gopherApp.onSettingsViewed(function(gopher) {
+  const settingsForm = gopher.webhook.settingsForm({ namespace: "todo" });
+
+  // It was just installed, welcome the user!
+  if (gopher.get("url_params.installed", false)) {
+    settings.text(`# Welcome!`);
+  }
+});
+```
+
+Pass URL params to your `beforeSettingsSaved` handler using the `urlParams` key in the `submit` form element
+
+```javascript
+// within a onSettingsViewed form as shown above
+settings.submitButton({
+  submitText: "Save Notification Settings",
+  urlParams: { saveSettings: 1 }
+  // Tip: Pass through all URL current params like so (note these should be sanitized)
+  // urlParams: {saveSettings: 1, ...gopher.get("url_params", {})}
+});
+```
+
+### beforeSettingsSaved
+
+This is called when the user saves their settings, before settings are actually saved.
+
+Similar to the above `onSettingsViewed` handler, every instance of this handler is called when settings are saved.
+
+Validate user data, perform API calls to keep other systems in sync. Return an error
+to abort the settings process.
+
+```javascript
+  gopherApp.beforeSettingsSaved(gopher =>
+
+    // assuming the same "todo" namespace as shown in the above examples
+    const data = gopher.get("settings.todo");
+
+    // handler is fired any times settings are saved, even if its not our form
+    if(!data) return;
+
+    // perform API calls, synchronize systems, etc.
+    if(!isvalid(data)) {
+
+    // abort the saving process
+    gopher.webhook.respond({
+      webhook: {
+        status: "error",
+        message: "This is  a warning message"
+      }
+    });
+    }
+
+    // implicitly returns successfully
+  });
 ```
 
 ### on
