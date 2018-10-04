@@ -20,7 +20,7 @@ describe("Gopher Helper", function() {
 
   describe("settings helpers", function() {
     it("creates an empty, namespaced settings form", function(done) {
-      const newForm = gopherHelper.webhook.settingsForm({
+      const newForm = gopherHelper.webhook.settingsPage({
         namespace: "memorize",
         title: "Memorize Settings"
       });
@@ -32,7 +32,7 @@ describe("Gopher Helper", function() {
     });
 
     it("adds a form input", function(done) {
-      const newForm = gopherHelper.webhook.settingsForm({
+      const newForm = gopherHelper.webhook.settingsPage({
         namespace: "memorize",
         title: "Memorize Settings"
       });
@@ -50,7 +50,7 @@ describe("Gopher Helper", function() {
     });
 
     it("adds a form input with a default value", function(done) {
-      const newForm = gopherHelper.webhook.settingsForm({
+      const newForm = gopherHelper.webhook.settingsPage({
         namespace: "memorize",
         title: "Memorize Settings"
       });
@@ -65,7 +65,7 @@ describe("Gopher Helper", function() {
     });
 
     it("overwrites default input value when populating", function(done) {
-      const newForm = gopherHelper.webhook.settingsForm({
+      const newForm = gopherHelper.webhook.settingsPage({
         namespace: "memorize",
         title: "Memorize Settings"
       });
@@ -81,7 +81,7 @@ describe("Gopher Helper", function() {
     });
 
     it("adds a textarea input", function(done) {
-      const newForm = gopherHelper.webhook.settingsForm({
+      const newForm = gopherHelper.webhook.settingsPage({
         namespace: "memorize",
         title: "Memorize Settings"
       });
@@ -94,7 +94,7 @@ describe("Gopher Helper", function() {
     });
 
     it("adds an alert dialog", function(done) {
-      const newForm = gopherHelper.webhook.settingsForm({
+      const newForm = gopherHelper.webhook.settingsPage({
         namespace: "memorize",
         title: "Memorize Settings"
       });
@@ -107,7 +107,7 @@ describe("Gopher Helper", function() {
     });
 
     it("adds a markdown text block", function(done) {
-      const newForm = gopherHelper.webhook.settingsForm({
+      const newForm = gopherHelper.webhook.settingsPage({
         namespace: "memorize",
         title: "Memorize Settings"
       });
@@ -130,7 +130,7 @@ describe("Gopher Helper", function() {
     });
 
     it("Adds a checkbox", function(done) {
-      const newForm = gopherHelper.webhook.settingsForm({
+      const newForm = gopherHelper.webhook.settingsPage({
         namespace: "memorize"
       });
       newForm.checkbox({ name: "notifications", title: "Notifications" });
@@ -142,7 +142,7 @@ describe("Gopher Helper", function() {
     });
 
     it("inserts custom schemas in the right locations", function(done) {
-      const newForm = gopherHelper.webhook.settingsForm({
+      const newForm = gopherHelper.webhook.settingsPage({
         namespace: "memorize"
       });
       newForm.insert({
@@ -168,7 +168,7 @@ describe("Gopher Helper", function() {
     });
 
     it("Adds a select dropdown box", function(done) {
-      const newForm = gopherHelper.webhook.settingsForm({
+      const newForm = gopherHelper.webhook.settingsPage({
         namespace: "memorize"
       });
       newForm.select({
@@ -192,7 +192,7 @@ describe("Gopher Helper", function() {
     });
 
     it("builds an array of separate JSON Schema forms", function(done) {
-      const firstForm = gopherHelper.webhook.settingsForm({
+      const firstForm = gopherHelper.webhook.settingsPage({
         namespace: "github",
         title: "Github Settings"
       });
@@ -202,7 +202,7 @@ describe("Gopher Helper", function() {
       });
       firstForm.populate({ first_name: "Bob" });
 
-      const secondForm = gopherHelper.webhook.settingsForm({
+      const secondForm = gopherHelper.webhook.settingsPage({
         namespace: "memorize",
         title: "Github Settings"
       });
@@ -221,8 +221,8 @@ describe("Gopher Helper", function() {
     it("gets new and old settings from pre-save webhook");
     it("sets newly set data from extension.settings_pre_saved hook");
 
-    it.only("adds a custom submit button with url params", function(done) {
-      const newForm = gopherHelper.webhook.settingsForm({
+    it("adds a custom submit button with url params", function(done) {
+      const newForm = gopherHelper.webhook.settingsPage({
         namespace: "memorize",
         title: "Memorize Settings"
       });

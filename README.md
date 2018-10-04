@@ -260,9 +260,9 @@ gopherApp.onEvent("issue.created", function(gopher) {
 
 When a user loads the extension settings page on gopher.email, this handler responds with a [JSON form schema](https://mozilla-services.github.io/react-jsonschema-form/) to render a settings form and pre-populate it with values.
 
-A Gopher skill can render its own settings form, or even multiple settings forms. Unlike the other handlers, every instance of this handler is called so that all settings forms are rendered.
+A Gopher skill can render its own settings pages. Unlike the other handlers, every instance of this handler is called. All settings pages are rendered.
 
-The first parameter is the `namespace` for the data stored in `extension.stored_data`.
+The first parameter is the `namespace` for the data stored in `extension.stored_data`. This is also used in the URL on the settings page so it can be linked to directly.
 
 The second param is a function that is passed 3 arguments:
 
@@ -275,29 +275,36 @@ The second param is a function that is passed 3 arguments:
 ```javascript
 // Render a settings field for the user to enter their first name
 gopherApp.onSettingsViewed(function(gopher) {
-  const settingsForm = gopher.webhook.settingsForm({ namespace: "todo" });
-  settingsForm.input({ name: "first_name", title: "First name" });
+  const settingsPage = gopher.webhook.settingsPage({
+    namespace: "todo",
+    title: "Todo Settings", // Page title
+    menuTitle: "Todo" // Name of menu item
+  });
+  settingsPage.input({ name: "first_name", title: "First name" });
+  settingsPage.submitButton();
 
   // Populate form values
-  settingsForm.populate(gopher.get("extension.saved_data.todo"));
+  settingsPage.populate(gopher.get("extension.saved_data.todo"));
 });
 ```
 
-The viewer's URL parameters are passed through to the settings webhooks.
-For example when an extension has been just installed, Gopher appends `?installed=1`
+The viewer's URL parameters are passed through to the settings webhooks. Use this to pass data into your settings when you link to it.
 
 ```javascript
 gopherApp.onSettingsViewed(function(gopher) {
-  const settingsForm = gopher.webhook.settingsForm({ namespace: "todo" });
+  const settingsPage = gopher.webhook.settingsPage({ namespace: "todo" });
 
   // It was just installed, welcome the user!
-  if (gopher.get("url_params.installed", false)) {
-    settings.text(`# Welcome!`);
+  if (gopher.get("url_params.linkInstructions", false)) {
+    settings.text(`# Instructions to link your account!`);
   }
+  // Note that there is no submit button. It's just an informational page.
 });
 ```
 
-Pass URL params to your `beforeSettingsSaved` handler using the `urlParams` key in the `submit` form element
+Pass URL params to your `beforeSettingsSaved` handler using the `urlParams` key in the `submit` form element. This appends the url parameter to the settings form.
+
+NOTE: Depending on how you are using this URL parameter, you may wish to confirm actions iwth users to guarad against (cross site forgery)[https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)].
 
 ```javascript
 // within a onSettingsViewed form as shown above
