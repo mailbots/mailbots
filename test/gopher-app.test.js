@@ -330,6 +330,28 @@ describe("Gopher App", function() {
       });
       fireWebhookRequest(taskCreatedWebhook);
     });
+
+    it("sends json response if not called by handler", async function() {
+      gopherApp.on("task.created", gopher => {
+        // gopher.webhook.respond(); //deliberately omitted
+      });
+      const res = await fireWebhookRequest(taskCreatedWebhook);
+      expect(res.body.version).to.equal("1");
+    });
+
+    // Tests do not fail when a response is sent twice.
+    // Run only this test and log around handleEvent to verify
+    it.skip("does not re-send json response handler already responded", async function() {
+      gopherApp.on("task.created", gopher => {
+        gopher.webhook.respond({
+          task: {
+            completed: 1
+          }
+        });
+      });
+      const res = await fireWebhookRequest(taskCreatedWebhook);
+      expect(res.body.version).to.equal("1");
+    });
   });
 
   describe("middleware", function() {

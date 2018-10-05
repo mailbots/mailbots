@@ -53,7 +53,6 @@ var gopherApp = new GopherApp();
 // When someone emails: hi@your-extension.gopher.email, respond "Hello world!"
 gopherApp.onCommand("hi", function(gopher) {
   gopher.webhook.quickReply("Hello world!");
-  gopher.webhook.respond();
 });
 
 gopherApp.listen();
@@ -75,16 +74,20 @@ The Gopher.email core API provides core email APIs for sending email, receiving 
 
 Creating a Gopher Extension grants developer access to Gopher's Core APIs, allowing someone to create an email-only utility (like followupthen.com). Extensions, are set up to be publishable, but they can also be kept private.
 
+**Webhook Based**
+
+When events happen in the core API (ex: email is received), it sends webhooks to your Gopher Extension. Your extension responds with JSON that tells Gopher what to do next (ex: send an email, store data, set a reminder, etc). JSON in, JSON out. What happens in between those points is the business of this project.
+
 **Skills**
 
 Extensions are composed of one or more "skills". GopherApp (this project) provides a framework to create and install skills that accomplish specific email-based tasks. For example:
 
-- Telling Gopher how to respond to an email address to your extension
-- Rendering a set of email UI elements
-- Parsing email
+- Parsing inbound email
+- Sending email at exactly the right moment
+- Querying APIs to put useful information in an email
 - Submitting data to CRMs, project management systems, etc
-- Scheduling team email reminders
-- Tracking team todo items
+- Handling commands and actions using purely email
+- Rendering email UI elements
 
 Skills can register "handlers" – functions that tell Gopher what to do when certain events occur. Skills can respond to emails and / or provide components to other skills.
 
@@ -99,7 +102,6 @@ var gopherApp = new GopherApp();
 
 gopherApp.onCommand("hi", function(gopher) {
   gopher.webhook.quickReply("Hi back!");
-  gopher.webhook.respond();
 });
 
 gopherApp.listen();
@@ -117,13 +119,11 @@ var gopherApp = new GopherApp();
 
 gopherApp.onCommand("hi", function(gopher) {
   gopher.webhook.setTriggerTime("1min");
-  gopher.webhook.respond();
 });
 
 // When a task with "hi" command triggers, run this function
 gopherApp.onTrigger("hi", function(gopher) {
   gopher.webhook.quickReply("Hi 1 minute later!");
-  gopher.webhook.respond();
 });
 
 gopherApp.listen();
@@ -165,7 +165,6 @@ var gopherApp = new GopherApp();
   // Handle the event created by our UI above
   gopherApp.onAction('say.hi', function(gopher) {
     gopher.webhook.quickReply('hi');
-    gopher.webhook.respond();
   });
 
   gopherApp.listen();
@@ -416,7 +415,6 @@ module.exports = function(gopherApp) {
   // Handle UI events
   gopherApp.onAction("say.hi", function(gopher) {
     gopher.webhook.quickReply("hi");
-    gopher.webhook.respond();
   });
 
   return {
@@ -501,14 +499,12 @@ var memorizeSkill = require("gopher-memorize")(gopherApp);
 gopherApp.onCommand("remember", function(gopher) {
   memorizeSkill.memorizeTask(gopher); //  ⬅ Tells Gopher to memorize your task
   gopher.webhook.quickResponse("Memorizing!");
-  gopher.webhook.respond();
 });
 
 // Called each time the reminder is triggered
 gopherApp.onTrigger("remember", function(gopher) {
   memorizeSkill.memorizeTask(gopher); // ⬅ Invoke skill to continue memorizing
   gopher.webhook.quickResponse("An email with decreasing frequency");
-  gopher.webhook.respond();
 });
 ```
 

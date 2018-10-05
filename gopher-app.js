@@ -327,6 +327,11 @@ class GopherApp {
       this.listeners.some(listener => {
         if (this.cbShouldTrigger(webhook, listener.triggerCondition)) {
           listener.cb(gopher, request, response);
+
+          // The listener may, itself send a response via gopher.webhook.respond()
+          if (!gopher.webhook.alreadyResponded) {
+            response.send(gopher.responseJson);
+          }
           return true;
         }
       });
