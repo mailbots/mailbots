@@ -363,6 +363,15 @@ describe("Gopher App", function() {
       const res = await fireWebhookRequest(taskCreatedWebhook);
       expect(res.body.version).to.equal("1");
     });
+
+    it("gives a nice message when no handlers fire ", async function() {
+      const res = await fireWebhookRequest(taskCreatedWebhook, {
+        errOnFallthrough: false
+      });
+      expect(res.body.webhook.message).to.equal(
+        "Webhook received but not handled: task.created"
+      );
+    });
   });
 
   describe("middleware", function() {
@@ -424,13 +433,12 @@ describe("Gopher App", function() {
   });
 
   describe("request information", function() {
-    it("checks if current request is a webhook or not", function(done) {
+    it("checks if current request is a webhook or not", function() {
       gopherApp.app.use((req, res, next) => {
         expect(res.locals.gopher.isWebhook).to.be.true;
-        done();
         next();
       });
-      fireWebhookRequest(taskCreatedWebhook);
+      fireWebhookRequest(taskCreatedWebhook, { errOnFallthrough: false });
     });
 
     it("checks if current request is not a webhook", function(done) {
