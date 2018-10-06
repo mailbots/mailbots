@@ -186,7 +186,8 @@ describe("Gopher Helper", function() {
       expect(settings.memorize.uiSchema).to.haveOwnProperty("select_something");
       expect(settings.memorize.uiSchema.select_something).to.deep.equal({
         "ui:help": "(Hint: Blue is the best)",
-        "ui:placeholder": "Select something"
+        "ui:placeholder": "Select something",
+        "ui:emptyValue": ""
       });
       done();
     });

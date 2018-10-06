@@ -59,6 +59,14 @@ describe("Gopher App", function() {
   });
 
   describe("webhook validation", function() {
+    before(function() {
+      process.env.NODE_ENV = "production";
+    });
+
+    after(function() {
+      process.env.NODE_ENV = "testing";
+    });
+
     it("should only accept validate webhooks", function(done) {
       gopherApp.on(/.*/, gopher => {
         // Should fire and be valid
@@ -170,6 +178,9 @@ describe("Gopher App", function() {
           errOnFallthrough: false
         });
       });
+
+      // TODO: Make sure all form schemas are objects
+      it("onSettingsViewed handler returns proper data types");
 
       it("onSettingsViewed handler adds a json response", function(done) {
         gopherApp.onSettingsViewed(gopher => {

@@ -649,13 +649,47 @@ gopherApp.app.get("/hi", function(req, res) {
 
 ### Install Flow
 
-When the extension has just been installed, the user will be directed to your settings URL with `installed=1` in the URL. Use this param to welcome the new user. See the example settings page.
+When the extension has just been installed, the user will be directed to the `welcome` settings URL. Create a settings form with the namespace `welcome` to welcome the new user. Ex:
 
-Note: When your extension is in `dev_mode` the extension owner is automatically directed to the sandbox. Take your extension out of dev mode to prevent this automatic redirection.
+Note: When your extension is in `dev_mode` the extension owner is automatically directed to the sandbox.
 
 ## Testing
 
-Export your gopher app by calling `gopherApp.exportApp()` instead of calling `gopherApp.listen()`. This gives you a testable instance of the Express App that Gopher builds, which can be used with any number of existing testing frameworks, for example, [Supertest](https://www.npmjs.com/package/supertest).
+Export your gopher app by calling `gopherApp.exportApp()` instead of calling `gopherApp.listen()`. This gives you a testable instance of the Express app, which can be used with any number of existing testing frameworks. Below is an example with [Supertest](https://www.npmjs.com/package/supertest).
+
+Set `NODE_ENV` to `testing` to disable webhook validation.
+
+```javascript
+const request = require("supertest");
+const GopherApp = require("gopher-app");
+const gopherApp = new GopherApp({ clientId: "foo", clientSecret: "bar" });
+const mocha = require("mocha");
+
+it("should send a webhook", function(done) {
+  // set up your handlers
+  gopherApp.onCommand("my-command", gopher => {
+    gopher.webhook.quickReply("Hello");
+  });
+
+  const testableApp = gopherApp.exportApp();
+
+  // copy paste request JSON from Sandbox
+  const taskCreatedRequestJson = require("./_fixtures/task.created.json");
+  request(testableApp)
+    .post("/webhooks")
+    .set("Accept", "application/json")
+    .send(taskCreatedRequestJson)
+    .then(res => {
+      // test that your handlers ran...
+      console.log(res.body);
+      done();
+    })
+    .catch(err => {
+      console.error(err);
+      done(err);
+    });
+});
+```
 
 ## Installing
 
