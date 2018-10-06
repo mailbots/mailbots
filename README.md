@@ -655,39 +655,45 @@ Note: When your extension is in `dev_mode` the extension owner is automatically 
 
 ## Testing
 
-Export your gopher app by calling `gopherApp.exportApp()` instead of calling `gopherApp.listen()`. This gives you a testable instance of the Express app, which can be used with any number of existing testing frameworks. Below is an example with [Supertest](https://www.npmjs.com/package/supertest).
+Export a testable instance of your Gopher app by calling `gopherApp.exportApp()` instead of calling `gopherApp.listen()`. Below is an example of testing the exported app with [Supertest](https://www.npmjs.com/package/supertest).
 
-Set `NODE_ENV` to `testing` to disable webhook validation.
+Note: Set `NODE_ENV` to `testing` to disable webhook validation.
 
 ```javascript
 const request = require("supertest");
-const GopherApp = require("gopher-app");
-const gopherApp = new GopherApp({ clientId: "foo", clientSecret: "bar" });
 const mocha = require("mocha");
+const expect = require("chai").expect;
+const GopherApp = require("gopher-app");
+let gopherApp; // re-instantiated before each test
 
-it("should send a webhook", function(done) {
-  // set up your handlers
-  gopherApp.onCommand("my-command", gopher => {
-    gopher.webhook.quickReply("Hello");
-  });
-
-  const testableApp = gopherApp.exportApp();
-
-  // copy paste request JSON from Sandbox
-  const taskCreatedRequestJson = require("./_fixtures/task.created.json");
-  request(testableApp)
+// Utility function to send webhook to our app
+function sendWebhook({ app, webhookJson }) {
+  return request(app)
     .post("/webhooks")
     .set("Accept", "application/json")
-    .send(taskCreatedRequestJson)
-    .then(res => {
-      // test that your handlers ran...
-      console.log(res.body);
-      done();
-    })
-    .catch(err => {
-      console.error(err);
-      done(err);
+    .send(webhookJson);
+}
+
+describe("integration tests", function() {
+  beforeEach(function() {
+    gopherApp = new GopherApp({ clientId: "foo", clientSecret: "bar" });
+  });
+
+  it("responds correctly to a webhook", async function() {
+    const gopherApp = new GopherApp({ clientId: "foo", clientSecret: "bar" });
+
+    // set up handlers
+    gopherApp.onCommand("memorize", gopher => {
+      gopher.webhook.quickReply("I dig email");
     });
+
+    const app = gopherApp.exportApp();
+    const webhookJson = require("./_fixtures/task.created.json");
+    let { body } = await sendWebhook({ app, webhookJson });
+
+    // Test our webhook response
+    expect(body.send_messages[0].subject).to.equal("I dig email");
+  });
 });
 ```
 
