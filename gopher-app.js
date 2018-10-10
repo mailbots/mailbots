@@ -13,8 +13,8 @@ class GopherApp {
    * Optionally instantiate with config. Pass any key shown in config.js.
    * @param {object} config
    */
-  constructor(config) {
-    config = Object.assign({}, configDefaults, config);
+  constructor(instanceConfig) {
+    const config = getConfig(instanceConfig);
     debug("instantiating GopherApp instance with config:", config);
     if (!config.clientId || !config.clientSecret) {
       throw new Error(
