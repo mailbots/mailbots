@@ -342,6 +342,15 @@ describe("Gopher Helper", function() {
       done();
     });
 
+    it("should require arrays are wrapped in objects when saving", done => {
+      try {
+        gopherHelper.webhook.setTaskData(["a", "b"]);
+      } catch (e) {
+        expect(e).to.be.not.null;
+        done();
+      }
+    });
+
     it.skip("throws an error if its overwriting a data key", done => {
       const data = gopherHelper.webhook.setTaskData("foo.bar");
       expect(data).to.equal("baz");

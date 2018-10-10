@@ -467,19 +467,6 @@ gopherApp.onAction("say.hi", function(gopher) {
 
 Organizing skills as above makes them portable. Use them across different components, projects or publish them to npm.
 
-## Gopher API
-
-A pre-authenticated [Gopher API client](https://github.com/gopherhq/gopherhq-js) is available within every handler at `gopher.api`.
-
-```javascript
-gopherApp.onCommand("remember", function(gopher) {
-  // An authenticated API Client is available on gopher.api
-  gopher.api.getExtensionData(); // this just works!
-};
-
-// See https://github.com/gopherhq/gopherhq-js for api
-```
-
 ## Installing 3rd Party Skills
 
 Skills can be installed from npm.
@@ -612,7 +599,9 @@ gopherApp.onCommand("hi", function(gopher) {
 
 For some cases (loggers, configuraed object) passing a skill via via gopher.skills can come in handy. For most cases, explicitly `require` your skills to make your code more self-documenting.
 
-Note that middleware runs for _all_ requests. Run the middleware for only certain cases like this:
+Note that middleware runs for _all_ requests.
+
+Here is an example of running middleware that appends stored data to the task object only in certain cases.
 
 ```javascript
 gopherApp.app.use(function(req, res, next) {
@@ -623,6 +612,7 @@ gopherApp.app.use(function(req, res, next) {
     return next();
   }
   // your logic here
+  gopher.set("task.stored_data.todo", { done: false });
   next();
 });
 ```
@@ -645,6 +635,19 @@ Handle http routes the same as you would in [Express.js](https://expressjs.com/e
 gopherApp.app.get("/hi", function(req, res) {
   res.send("<h1>Hi http request!</h1>");
 });
+```
+
+## Gopher API
+
+A pre-authenticated [Gopher API client](https://github.com/gopherhq/gopherhq-js) is available within every handler at `gopher.api`.
+
+```javascript
+gopherApp.onCommand("remember", function(gopher) {
+  // An authenticated API Client is available on gopher.api
+  gopher.api.getExtensionData(); // this just works!
+};
+
+// See https://github.com/gopherhq/gopherhq-js for api
 ```
 
 ### Install Flow

@@ -372,6 +372,19 @@ describe("Gopher App", function() {
         "Webhook received but not handled: task.created"
       );
     });
+
+    it("allows middleware to add data to a task without a handler", async function() {
+      gopherApp.app.use((req, res, next) => {
+        const gopher = res.locals.gopher;
+        gopher.set("task.stored_data.test", "foo");
+        next();
+      });
+      const res = await fireWebhookRequest(taskCreatedWebhook, {
+        errOnFallthrough: false
+      });
+      expect(res.body.webhook).to.be.undefined;
+      expect(res.body.task.stored_data.test).to.equal("foo");
+    });
   });
 
   describe("middleware", function() {
