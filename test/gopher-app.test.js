@@ -127,7 +127,6 @@ describe("Gopher App", function() {
     it("onCommand handler matches a command by string", function(done) {
       gopherApp.onCommand("memorize", gopher => {
         expect(gopher.command).to.equal("memorize");
-        gopher.webhook.respond();
         done();
       });
       fireWebhookRequest(taskCreatedWebhook);
@@ -401,9 +400,80 @@ describe("Gopher App", function() {
       });
       fireWebhookRequest(taskCreatedWebhook);
     });
+
+    // @todo Address when we created gopherApp.use top-level middleware handler.
+    // See the following test for a workaround
+    it.skip("does not add middleware if it has already been added", function(done) {
+      function mw(req, res, next) {
+        console.log("foo");
+        next();
+      }
+      gopherApp.app.use(mw);
+      gopherApp.app.use(mw);
+      // Logs "foo" "foo"
+    });
+
+    it("allows middleware to make itself run once per request", async function() {
+      let runCount = 0;
+      function mw(req, res, next) {
+        const gopher = res.locals.gopher;
+        if (gopher.alreadyRan(mw)) return next(); // reference itself
+        runCount++;
+        next();
+      }
+
+      // duplicate middleware function on stack
+      gopherApp.app.use(mw);
+      gopherApp.app.use(mw);
+      gopherApp.app.use(mw);
+      gopherApp.app.use(mw);
+
+      // only two requests
+      await fireWebhookRequest(taskCreatedWebhook, {
+        errOnFallthrough: false
+      });
+
+      await fireWebhookRequest(taskCreatedWebhook, {
+        errOnFallthrough: false
+      });
+
+      expect(runCount).to.equal(2);
+    });
   });
 
   describe("loading skills", function() {
+    it("does not load duplicate single-fire handlers", function(done) {
+      gopherApp.onTrigger("foo", gopher => console.log("foo"));
+      gopherApp.onTrigger("foo", gopher => console.log("foo"));
+      gopherApp.onTrigger("foo", gopher => console.log("foo"));
+      expect(gopherApp.listeners.length).to.eq(1);
+      done();
+    });
+
+    it("does not load duplicate multifire handlers", function(done) {
+      gopherApp.onSettingsViewed(gopher => console.log("settings viewed"));
+      gopherApp.onSettingsViewed(gopher => console.log("settings viewed"));
+      gopherApp.onSettingsViewed(gopher => console.log("settings viewed"));
+      expect(gopherApp.multiFireListeners.length).to.eq(1);
+      done();
+    });
+
+    it("_listenerAlreadyAdded detects identical one-time listeners", function(done) {
+      // Trigger condition function is what gets passed from gopherApp.onCommand("foo")
+      const triggerCondition = webhook =>
+        webhook.event === "task.created" &&
+        this.getTaskCommand(webhook) === "foo";
+      const cb = gopher => gopher.webhook.quickReply("bar");
+      gopherApp.on(triggerCondition, cb);
+      const alreadyAdded = gopherApp._listenerAlreadyAdded({
+        listeners: gopherApp.listeners,
+        triggerCondition,
+        cb
+      });
+      expect(alreadyAdded).to.be.true;
+      done();
+    });
+
     it("loads skills from a directory", function(done) {
       gopherApp.loadSkill(__dirname + "/test-skills-1");
       gopherApp.onCommand("memorize", gopher => {

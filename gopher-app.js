@@ -1,6 +1,6 @@
 const _ = require("lodash");
 const express = require("express");
-const configDefaults = require("./lib/config-defaults");
+const getConfig = require("./lib/config-defaults");
 const debug = require("debug")("gopher-app");
 
 /**
@@ -149,11 +149,44 @@ class GopherApp {
    * @param {function} cb Callback function with signature cb(gopher, req, res)
    */
   on(triggerCondition, cb, opts) {
+    if (this._listenerAlreadyAdded({ triggerCondition, cb, opts })) {
+      debug("ignoring duplicate listener");
+      return;
+    }
+    debug("adding listener");
     if (opts && opts.multiFire) {
       this.multiFireListeners.push({ triggerCondition, cb });
     } else {
-      debug("adding listener function");
       this.listeners.push({ triggerCondition, cb });
+    }
+  }
+
+  /**
+   * Prevent adding duplicate listener functions
+   * @param {function} params.triggerCondition - see "on" function.
+   * @param {function} params.db - same as "on" function
+   * @param {opts} params.opts - same as "on" function
+   */
+  _listenerAlreadyAdded({ triggerCondition, cb, opts }) {
+    function duplicateExists(listnersArray) {
+      return listnersArray.some(listener => {
+        const dupTriggerCondition = _.isEqual(
+          listener.triggerCondition.toString(),
+          triggerCondition.toString()
+        );
+
+        const dupCb = _.isEqual(listener.cb.toString(), cb.toString());
+        debug(
+          `Duplicate trigger: ${dupTriggerCondition}. Duplicate listener: ${dupCb}`
+        );
+        return dupTriggerCondition && dupCb;
+      });
+    }
+
+    if (opts && opts.multiFire) {
+      return duplicateExists(this.multiFireListeners);
+    } else {
+      return duplicateExists(this.listeners);
     }
   }
 
