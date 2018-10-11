@@ -1,6 +1,7 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+
 - [Gopher App](#gopher-app)
   - [Quick Start](#quick-start)
   - [Overview](#overview)
@@ -13,20 +14,26 @@
     - [onAction](#onaction)
     - [onTaskViewed](#ontaskviewed)
     - [onEvent](#onevent)
-    - [on](#on)
     - [onSettingsViewed](#onsettingsviewed)
+    - [beforeSettingsSaved](#beforesettingssaved)
+    - [on](#on)
   - [Organizing Skills](#organizing-skills)
-    - [Making Reusable Skills](#making-reusable-skills)
-  - [Gopher API](#gopher-api)
-  - [Installing 3rd Party Skills](#installing-3rd-party-skills)
-    - [Publishing Skills](#publishing-skills)
-      - [Naming Conventions](#naming-conventions)
-    - [Sharing UI Elements](#sharing-ui-elements)
+    - [Making Modular Skills](#making-modular-skills)
+    - [Ways of Sharing Functionality](#ways-of-sharing-functionality)
+      - [1. Handle requests](#1-handle-requests)
+      - [2. Export a function](#2-export-a-function)
+      - [3. Middleware](#3-middleware)
     - [Activating Skills](#activating-skills)
+  - [Installing 3rd Party Skills](#installing-3rd-party-skills)
+  - [Publishing Skills](#publishing-skills)
+    - [Sharing UI Elements](#sharing-ui-elements)
+    - [Activating Skills](#activating-skills-1)
   - [Using Express.js Middlware and Routes](#using-expressjs-middlware-and-routes)
     - [Adding to gopher.skills with middlware](#adding-to-gopherskills-with-middlware)
     - [Handling routes](#handling-routes)
-    - [Install Flow](#install-flow)
+  - [Gopher API](#gopher-api)
+  - [The "Gopher Object" Reference](#the-gopher-object-reference)
+  - [Install Flow](#install-flow)
   - [Testing](#testing)
   - [Installing](#installing)
   - [Design Philosophy](#design-philosophy)
@@ -40,7 +47,7 @@ GopherApp is the open-source counterpart to Gopher.email. It provides an easy-to
 
 ## Quick Start
 
-Go through the extension setup process at gopher.email. This will provide a working, authenticated instance of GopherApp in about one minute. (See below for local install instructions).
+Go through the extension setup process at gopher.email. This will provide a working, authenticated instance of GopherApp in about one minute. ([Local install instructions](<(#installing)>)).
 
 Then, add a skill.
 
@@ -403,7 +410,7 @@ Pass an optional config object to each loaded skill.
 gopherApp.loadSkill(__dirname + "/my/skills/", config);
 ```
 
-### Making Reusable Skills
+### Making Modular Skills
 
 Gopher Skills can be organized into reusable components that have everything they need for a particular function: UI elements, events handlers and settings.
 
@@ -465,6 +472,68 @@ gopherApp.onAction("say.hi", function(gopher) {
 };
 ```
 
+### Ways of Sharing Functionality
+
+Ther are different ways a component-skill (a skill designed to be used as a component of other skills) can share functionality with other skills.
+
+#### 1. Handle requests
+
+The example above shows a skill directly handling an email command directly (`gopherApp.onCommand("remember"...`). This is simplest method, but not always desirable since it hijacks the interaction from the top-level skill and prevents it from adding data to the request.
+
+#### 2. Export a function
+
+A skill can export a function that processes the request in some way. is possible to create It leaves the top-level skill powerless to It is not always appropriate for your skill to automatically receive and respond to a user email. Often times, it is better for a component-skill to expose functionality differently.
+
+```
+const { hiButton } = require('./hi-skill')(gopherApp);
+```
+
+As convention, these functions take the `gopher` object which provides a common
+
+#### 3. Middleware
+
+A skill can automatically act on on a request using middleware. This lets the top-level skill still write handlers for the skill. For example, we we can rewrite the above `onAction` handler using middleware:
+
+```javascript
+// Use middleware to add an outbound email
+let alreadyRan = false; // Accounts for middlware being added multiple times.
+gopherApp.app.use(function(req, res, next) {
+  alreadyRan = true;
+  const gopher = res.locals.gopher;
+  if (gopher.requestJson.event === "action.received" && gopher.action.includes("say.hi")) {
+    gopher.webhook.quickReply("An email from middleware");
+    // more commonly, data will be saved to and from the task.stored_data object
+  }
+  next();
+};
+```
+
+The aboe middlware will add an email to the request. The top-level handler can also act on the request before can now perform its own actions based on the request.
+
+```javascript
+// An onAction handler still works. The above middleware's json has already been added to the responseJson object
+gopherApp.onAction("say.hi", function(gopher) {
+  gopher.quickReply("Another email from the top-level handler");
+});
+```
+
+### Activating Skills
+
+A skill becomes "activated" the moment it is required.
+
+```javascript
+var memorizeSkill = require("gopher-memorize")(gopherApp);
+```
+
+From this point on, its handlers and middleware are active.
+
+If a skill requires configuration, a second, config object can be passed:
+
+```javascript
+var memorizeSkill = require("gopher-memorize")(gopherApp, config);
+// optional config object would be defined by each skill
+```
+
 Organizing skills as above makes them portable. Use them across different components, projects or publish them to npm.
 
 ## Installing 3rd Party Skills
@@ -495,7 +564,7 @@ gopherApp.onTrigger("remember", function(gopher) {
 });
 ```
 
-### Publishing Skills
+## Publishing Skills
 
 Stand-alone skills (as shown above) can be published to npm and shared with others.
 
@@ -530,7 +599,7 @@ This method signatures the makes for a simple, consistent developer experience a
 
 ### Sharing UI Elements
 
-Skills can render UI elements by returning [JSON UI elements](https://docs.gopher.email/docs/email-ui-reference). For example, our memorizaiton skill has a UI element that changes the memorizaiton frequency.
+Skills can render UI elements by exporring function that return [JSON UI elements](https://docs.gopher.email/docs/email-ui-reference). For example, our memorizaiton skill has a UI element that changes the memorizaiton frequency.
 
 By convention, methods that render UI elements start with `render`. For example, `renderMemorizationControls`.
 
@@ -650,7 +719,36 @@ gopherApp.onCommand("remember", function(gopher) {
 // See https://github.com/gopherhq/gopherhq-js for api
 ```
 
-### Install Flow
+## The "Gopher Object" Reference
+
+(TODO)
+The gopher object passed into the handlers above is an instance of GopherHelper. Documentation will soon follow. For now read through the gopher-helper.test.js file.
+
+** Setting Data Works By Shallow Merging **
+Similar to React, data is set by shallow merging. For example.
+
+```javascript
+gopher.webhook.setTaskData("my_namespace", { name: "Joe" });
+gopher.webhook.setTaskData("my_namespace", { key: "123" });
+// task data is now
+console.log(gopher.webhook.responseJson);
+// {my_namespace: { name: "Joe", key: "123" }}
+```
+
+```javascript
+gopher.webhook.setTaskData("my_namespace", {
+  name: "Joe",
+  data: { value: "here" } // ⚠️ Overwritten (shallow merge)
+});
+gopher.webhook.setTaskData("my_namespace", {
+  data: { value2: "there" }
+});
+// task data is now
+console.log(gopher.webhook.responseJson);
+// {my_namespace: { data: { value2: "there" } }}
+```
+
+## Install Flow
 
 When the extension has just been installed, the user will be directed to the `welcome` settings URL. Create a settings form with the namespace `welcome` to welcome the new user. Ex:
 
@@ -712,41 +810,30 @@ Here are install instructions for local development or production deployments:
 - `npm install gopher-app`
 - `touch app.js`
 
-**2. Add handlers**
+**2. Basic Handler**
 
 ```javascript
 var GopherApp = require("GopherApp");
-var gopherApp = newGopherApp();
+var gopherApp = newGopherApp({
+  clientId: "your_client_id",
+  clientSecret: "your_secret",
+  extensionUrl: "http://your_extension_url" // See step #3
+});
 
-//handlers, etc as above go here
+gopherApp.onCommand("hello", gopher => gopher.webhook.quickReply("world"));
 
 gopherApp.listen();
 ```
 
-**3. Configure**
+**3. Create Gopher Extension**
 
-Create an .env file with these options (which you can find in your extension details page). Use something like [dotenv](https://www.npmjs.com/package/dotenv') to load them:
+Create an extension on Gopher.email (https://app.gopher.email/developer/create). Click "Manual Setup" at the bottom.
 
-```
-CLIENT_ID=
-CLIENT_SECRET=
-SCOPE=
-EXTENSION_URL=
-REDIRECT_URI=
-EXT_ID=
-```
+Gopher needs to send HTTP POSTs to your extension, which means it will need a public URL. Use [ngrok](https://ngrok.com/) to set up a public-facing url to your extension. Enter the base URL on your edit page.
 
-You can also pass a config object to GopherApp to override any settings within `lib/config-defaults.js`.
+**4. Install and Go to Sandbox**
 
-**4. Connect Gopher + Your Code**
-
-Gopher needs to send HTTP POSTs to your extension, which means it will need a public URL. For local development, you can use use something like [ngrok](https://ngrok.com/).
-
-Once you have your public URL, go back go app.gopher.email and adjust your settings to point to your install.
-
-**5. Install and Start**
-
-Authenticate your extension with Gopher by visiting http://your-extension-url/auth/login. If your extension is still in "dev mode", you'll end up on the Sandbox, which should look familiar.
+Click the "Install" button on your extension's developer page. After you've authenticated, go back to the extension's developer page and click "Sandbox". Send a test "hello" command and your handler should run!
 
 ## Design Philosophy
 

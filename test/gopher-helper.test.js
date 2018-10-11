@@ -318,41 +318,67 @@ describe("Gopher Helper", function() {
 
   describe("deeply gets and sets object data", function() {
     // Dependent tests
-    it("deeply sets object data", done => {
-      gopherHelper.webhook.setTaskData({
-        foo: { bar: "baz" }
-      });
-      expect(responseJson.task.stored_data).to.have.property("foo");
-      done();
+    beforeEach(function() {
+      // Matches the frequency_pref settings from above task
+      gopherHelper.webhook.setTaskData("frequency_pref", "8");
     });
 
-    it("deeply gets a data key", done => {
-      const data = gopherHelper.webhook.getTaskData("foo.bar");
-      expect(data).to.equal("baz");
-      done();
-    });
-
-    it("sets deep object data by merging", done => {
-      gopherHelper.webhook.setTaskData({
-        foo: { nine: "ten" }
-      });
-      expect(JSON.stringify(responseJson.task.stored_data)).to.equal(
-        '{"frequency_pref":"8","foo":{"bar":"baz","nine":"ten"}}'
+    it("merges task data when passed an object", done => {
+      gopherHelper.webhook.setTaskData({ new: "value" });
+      expect(JSON.stringify(responseJson.task.stored_data)).to.eq(
+        '{"frequency_pref":"8","new":"value"}'
       );
       done();
     });
 
-    it("should require arrays are wrapped in objects when saving", done => {
-      try {
-        gopherHelper.webhook.setTaskData(["a", "b"]);
-      } catch (e) {
-        expect(e).to.be.not.null;
-        done();
-      }
+    it("only shallow-merges task data when passed only an object", done => {
+      gopherHelper.webhook.setTaskData({ new: { inside: "key" } });
+      gopherHelper.webhook.setTaskData({ new: "value" });
+      expect(JSON.stringify(responseJson.task.stored_data)).to.eq(
+        '{"frequency_pref":"8","new":"value"}'
+      );
+      done();
     });
 
-    it.skip("throws an error if its overwriting a data key", done => {
-      const data = gopherHelper.webhook.setTaskData("foo.bar");
+    it("deeply, non-destructively sets properties when passed a JSON path string", done => {
+      gopherHelper.webhook.setTaskData({ new: { inside: "key" } });
+      gopherHelper.webhook.setTaskData("new.inside", "updated_key");
+      expect(JSON.stringify(responseJson.task.stored_data)).to.eq(
+        `{"frequency_pref":"8","new":{"inside":"updated_key"}}`
+      );
+      done();
+    });
+
+    it("shallow merges a 'deep object' using a json path string", done => {
+      gopherHelper.webhook.setTaskData({
+        new: { inside: "key", nested_obj: { key: "v" } }
+      });
+      gopherHelper.webhook.setTaskData("new", { anohter_inside: "overridden" });
+      expect(JSON.stringify(responseJson.task.stored_data)).to.eq(
+        `{"frequency_pref":"8","new":{"inside":"key","nested_obj":{"key":"v"},"anohter_inside":"overridden"}}`
+      );
+      done();
+    });
+
+    it("array data ovewrites and does not merge", done => {
+      gopherHelper.webhook.setTaskData("frequency_pref", "8");
+      gopherHelper.webhook.setTaskData(["a", "b"]);
+      expect(JSON.stringify(responseJson.task.stored_data)).to.eq(`["a","b"]`);
+      gopherHelper.webhook.setTaskData({ foo: { bar: { something: "here" } } });
+      // Note: If lodash _.set tries to set a object path on an array,
+      // it turns the array into an object.
+      gopherHelper.webhook.setTaskData("foo.bar", ["no", "more"]);
+      expect(JSON.stringify(responseJson.task.stored_data)).to.eq(
+        `{"foo":{"bar":["no","more"]}}`
+      );
+      done();
+    });
+
+    it("deeply gets a data key", done => {
+      gopherHelper.webhook.setTaskData({
+        foo: { bar: "baz" }
+      });
+      const data = gopherHelper.webhook.getTaskData("foo.bar");
       expect(data).to.equal("baz");
       done();
     });
@@ -379,15 +405,13 @@ describe("Gopher Helper", function() {
       done();
     });
 
-    it("deeply sets extension data", done => {
+    it("shallow merges extension data", done => {
       gopherHelper.webhook.setExtensionData({
         crm: {
           another: "key"
         }
       });
       expect(responseJson.extension.stored_data.crm).to.deep.equal({
-        key: "23432",
-        name: "bob",
         another: "key"
       });
       done();
@@ -490,6 +514,11 @@ describe("Gopher Helper", function() {
     // TODO: This fails when running action_received webhook
     it("exposes command as gopher.command", done => {
       expect(gopherHelper.command).to.equal("memorize");
+      done();
+    });
+
+    it("exposes event as gopher.webhook.event", done => {
+      expect(gopherHelper.event).to.equal("task.created");
       done();
     });
 
