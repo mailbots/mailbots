@@ -2,22 +2,31 @@ const { expect } = require("chai");
 const GopherHelper = require("../lib/gopher-helper");
 const _ = require("lodash");
 
-describe("Gopher Helper", function() {
-  const webhookJson = require("./fixtures/task-created-webhook.json");
-  // TODO: Improve testing different types of webhooks
-  // const webhookJson = require("./fixtures/task-triggered-webhook.json");
-  // const webhookJson = require("./fixtures/task-action-received-webhook.json");
-  // const webhookJson = require("./fixtures/task-updated-webhook.json");
-  // const webhookJson = require("./fixtures/extension-triggered-webhook.json"); //expected failures for undefined
-  // const webhookJson = require("./fixtures/extension-settings-viewed-webhook.json");
-  // const webhookJson = require("./fixtures/extension-settings-pre-saved-webhook.json");
+let gopherHelper;
+let responseJson;
+let request = {};
 
-  const request = {};
-  request.body = webhookJson;
-  response = {};
-  response.locals = {};
-  gopherHelper = new GopherHelper(request, response);
-  const responseJson = gopherHelper.webhook.responseJson;
+describe("Gopher Helper", function() {
+  beforeEach(function() {
+    delete require.cache[
+      require("path").join(__dirname, "./fixtures/task-created-webhook.json")
+    ];
+    const webhookJson = require("./fixtures/task-created-webhook.json");
+    // TODO: Improve testing different types of webhooks
+    // const webhookJson = require("./fixtures/task-triggered-webhook.json");
+    // const webhookJson = require("./fixtures/task-action-received-webhook.json");
+    // const webhookJson = require("./fixtures/task-updated-webhook.json");
+    // const webhookJson = require("./fixtures/extension-triggered-webhook.json"); //expected failures for undefined
+    // const webhookJson = require("./fixtures/extension-settings-viewed-webhook.json");
+    // const webhookJson = require("./fixtures/extension-settings-pre-saved-webhook.json");
+
+    request.body = webhookJson;
+    response = {};
+    response.locals = {};
+    gopherHelper = new GopherHelper(request, response);
+    responseJson = gopherHelper.webhook.responseJson;
+    // const ref = gopherHelper.webhook.getReferenceEmail();
+  });
 
   describe("settings helpers", function() {
     it("creates an empty, namespaced settings form", function(done) {
@@ -240,7 +249,7 @@ describe("Gopher Helper", function() {
   });
 
   describe("task data", function() {
-    // Dependent tests
+    // Dependent tests - TODO: Separate tests
     it("gets task data", done => {
       _.set(
         gopherHelper.webhook,
@@ -272,30 +281,9 @@ describe("Gopher Helper", function() {
     });
 
     it("prioritizes newly set responseJson data", done => {
+      gopherHelper.webhook.setTaskData("frequency_pref", "8");
       const fq = gopherHelper.webhook.getTaskData("frequency_pref");
       expect(fq).to.equal("8");
-      done();
-    });
-
-    it("lets data accumulate with requestJson values and added data", done => {
-      _.set(gopherHelper.webhook, "requestJson.task.stored_data", null);
-      _.set(gopherHelper.webhook, "responseJson.task.stored_data", null);
-      // data can be set on the
-      _.set(gopherHelper.webhook, "requestJson.task.stored_data", {
-        foo: "bar",
-        second: { inside: "value" }, // this will be overridden
-        third: { another: "value" }
-      });
-      gopherHelper.webhook.setTaskData({ first: "value" });
-      gopherHelper.webhook.setTaskData({ second: "value" });
-      expect(gopherHelper.webhook.responseJson.task.stored_data).to.deep.eq({
-        first: "value",
-        foo: "bar",
-        second: "value", // since we shallowly merge, this gets overwritten
-        third: {
-          another: "value" // left untouched from request object since it was never reset
-        }
-      });
       done();
     });
 
@@ -342,26 +330,73 @@ describe("Gopher Helper", function() {
       expect(gopherHelper.responseJson.task.completed).to.equal(1);
       done();
     });
+
+    it("lets data accumulate with requestJson values and added data", done => {
+      _.set(gopherHelper.webhook, "requestJson.task.stored_data", null);
+      _.set(gopherHelper.webhook, "responseJson.task.stored_data", null);
+      // data can be set on the
+      _.set(gopherHelper.webhook, "requestJson.task.stored_data", {
+        foo: "bar",
+        second: { inside: "value" }, // this will be overridden
+        third: { another: "value" }
+      });
+      gopherHelper.webhook.setTaskData({ first: "value" });
+      gopherHelper.webhook.setTaskData({ second: "value" });
+      expect(gopherHelper.webhook.responseJson.task.stored_data).to.deep.eq({
+        first: "value",
+        foo: "bar",
+        second: "value", // since we shallowly merge, this gets overwritten
+        third: {
+          another: "value" // left untouched from request object since it was never reset
+        }
+      });
+      done();
+    });
   });
 
   describe("deeply gets and sets object data", function() {
-    // Dependent tests
-    beforeEach(function() {
-      // gopherHelper.set("task.stored_data", null);
-      _.set(gopherHelper, "webhook.responseJson.task.stored_data", null);
-      _.set(gopherHelper, "webhook.requestJson.task.stored_data", null);
-    });
-
-    it("getting task data gets it responseJson first and requestJson second", done => {
-      gopherHelper.webhook.requestJson.task.stored_data = {
+    it("getting task data shallowly merges requestJson and response JSON", done => {
+      _.set(gopherHelper, "webhook.requestJson.task.stored_data", {
         foo: "bar"
-      };
-      gopherHelper.webhook.responseJson.task.stored_data = {
+      });
+      _.set(gopherHelper, "webhook.responseJson.task.stored_data", {
         shoe: "far"
-      };
+      });
       const taskData = gopherHelper.webhook.getTaskData();
       expect(taskData).to.deep.eq({
+        foo: "bar",
         shoe: "far"
+      });
+      done();
+    });
+
+    it("getting data unmergable data returns responseJson over requestJson", done => {
+      _.set(gopherHelper, "webhook.requestJson.task.trigger_time", 1539680468);
+      _.set(gopherHelper, "webhook.responseJson.task.trigger_time", 153968000);
+      expect(gopherHelper.get("task.trigger_time")).to.deep.eq(153968000);
+      done();
+    });
+
+    // Common scenario
+    it("returns a shallowly merged task object when partially set", done => {
+      gopherHelper.webhook.responseJson.task = {
+        trigger_time: 153968000
+      };
+      gopherHelper.webhook.requestJson.task = {
+        created: 1539642091,
+        id: 3541,
+        trigger_time: 153961111,
+        trigger_timeformat: "",
+        command: "memorize@memorize.gopher.email",
+        stored_data: null
+      };
+      expect(gopherHelper.get("task")).to.deep.eq({
+        created: 1539642091,
+        id: 3541,
+        trigger_time: 153968000, // <-- updated trigger time
+        trigger_timeformat: "",
+        command: "memorize@memorize.gopher.email",
+        stored_data: null
       });
       done();
     });
@@ -369,6 +404,7 @@ describe("Gopher Helper", function() {
     it("merges task data when passed an object", done => {
       gopherHelper.webhook.setTaskData({ new: "value" });
       expect(gopherHelper.responseJson.task.stored_data).to.deep.eq({
+        frequency_pref: "1.5",
         new: "value"
       });
       done();
@@ -378,7 +414,7 @@ describe("Gopher Helper", function() {
       gopherHelper.webhook.setTaskData({ new: { inside: "key" } });
       gopherHelper.webhook.setTaskData({ new: "value" });
       expect(JSON.stringify(responseJson.task.stored_data)).to.eq(
-        '{"new":"value"}'
+        '{"frequency_pref":"1.5","new":"value"}'
       );
       done();
     });
@@ -387,6 +423,7 @@ describe("Gopher Helper", function() {
       gopherHelper.webhook.setTaskData({ pref: 1, new: { inside: "key" } });
       gopherHelper.webhook.setTaskData("new.inside", "updated_key");
       expect(responseJson.task.stored_data).to.deep.eq({
+        frequency_pref: "1.5",
         pref: 1,
         new: { inside: "updated_key" }
       });
@@ -399,7 +436,7 @@ describe("Gopher Helper", function() {
       });
       gopherHelper.webhook.setTaskData("new", { anohter_inside: "overridden" });
       expect(JSON.stringify(responseJson.task.stored_data)).to.eq(
-        `{"new":{"inside":"key","nested_obj":{"key":"v"},"anohter_inside":"overridden"}}`
+        `{"frequency_pref":"1.5","new":{"inside":"key","nested_obj":{"key":"v"},"anohter_inside":"overridden"}}`
       );
       done();
     });
@@ -441,6 +478,12 @@ describe("Gopher Helper", function() {
     });
 
     it("gets extension data", done => {
+      _.set(gopherHelper, "webhook.responseJson.extension.stored_data", {
+        crm: {
+          key: "23432",
+          name: "bob"
+        }
+      });
       const data = gopherHelper.webhook.getExtensionData("crm.name");
       expect(data).to.equal("bob");
       done();
@@ -458,8 +501,9 @@ describe("Gopher Helper", function() {
       done();
     });
 
-    it("sets extension data using lodash _.set string", done => {
+    it("sets extension data using json path string", done => {
       gopherHelper.webhook.setExtensionData("crm", {
+        another: "key",
         key: "9876",
         name: "joe"
       });
@@ -499,15 +543,15 @@ describe("Gopher Helper", function() {
       done();
     });
 
-    // Depends on above test
-    it("adds outbound email to response", done => {
-      gopherHelper.webhook.quickReply("quick reply");
+    it("adds multiple emails to a response", done => {
+      gopherHelper.webhook.quickReply("first reply");
+      gopherHelper.webhook.quickReply("another reply");
       expect(gopherHelper.responseJson).to.haveOwnProperty("send_messages");
       expect(gopherHelper.responseJson.send_messages[1].body[0].text).to.equal(
-        "quick reply"
+        "another reply"
       );
       expect(gopherHelper.responseJson.send_messages[1].subject).to.equal(
-        "quick reply"
+        "another reply"
       );
       done();
     });
