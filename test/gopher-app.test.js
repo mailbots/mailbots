@@ -391,8 +391,42 @@ describe("Gopher App", function() {
   describe("middleware", function() {
     it("uses middleware to add skills", function(done) {
       gopherApp.app.use((req, res, next) => {
-        res.locals.gopher.skills.completeTest = function(mochaDone) {
-          mochaDone();
+        res.locals.gopher.skills.completeTest = function(done) {
+          done();
+        };
+        next();
+      });
+      gopherApp.on(/.*/, gopher => {
+        gopher.skills.completeTest(done);
+        gopher.webhook.respond();
+      });
+      fireWebhookRequest(taskCreatedWebhook);
+    });
+
+    // middleware with callback
+    // middlewarew with promise
+    // middleware without handler that uses promise
+    // middleware withouth handler that uses callback
+
+    it("middleware handles requests without handlers", async function() {
+      gopherApp.app.use(async (req, res, next) => {
+        const gopher = res.locals.gopher;
+        const settings = await getAsyncThing(1500);
+        gopher.webhook.set("task.stored_data", settings);
+        next();
+      });
+      const res = await fireWebhookRequest(taskCreatedWebhook, {
+        errOnFallthrough: false
+      });
+      console.log(res.body);
+    });
+
+    // implicit return...if no handlers fire, return middleware.
+
+    it("uses async middleware to add skills", function(done) {
+      gopherApp.app.use((req, res, next) => {
+        res.locals.gopher.skills.completeTest = function(done) {
+          done();
         };
         next();
       });

@@ -1,7 +1,6 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Gopher App](#gopher-app)
   - [Quick Start](#quick-start)
   - [Overview](#overview)
@@ -476,65 +475,123 @@ gopherApp.onAction("say.hi", function(gopher) {
 
 Ther are different ways a component-skill (a skill designed to be used as a component of other skills) can share functionality with other skills.
 
-#### 1. Handle requests
+#### 1. Directly handling requests
 
-The example above shows a skill directly handling an email command directly (`gopherApp.onCommand("remember"...`). This is simplest method, but not always desirable since it hijacks the interaction from the top-level skill and prevents it from adding data to the request.
+The example above shows a skill directly handling an email command directly (`gopherApp.onCommand("remember"...`). This is simplest method, but not always desirable because it handles the complete request without the knowledge of the top-level skill. It's good for your own sub-skills where are you are in control, but for sharing reusable components there are emore granular and composable techniques.
 
-#### 2. Export a function
+#### 2. Export a "Gopher function"
 
-A skill can export a function that processes the request in some way. is possible to create It leaves the top-level skill powerless to It is not always appropriate for your skill to automatically receive and respond to a user email. Often times, it is better for a component-skill to expose functionality differently.
+A skill can export a function that:
 
-```
-const { hiButton } = require('./hi-skill')(gopherApp);
-```
-
-As convention, these functions take the `gopher` object which provides a common
-
-#### 3. Middleware
-
-A skill can automatically act on on a request using middleware. This lets the top-level skill still write handlers for the skill. For example, we we can rewrite the above `onAction` handler using middleware:
+1. Directly returns json (like our `hiButton` example above) and / or
+2. Alters alters the response object in some way (example below).
 
 ```javascript
-// Use middleware to add an outbound email
-let alreadyRan = false; // Accounts for middlware being added multiple times.
-gopherApp.app.use(function(req, res, next) {
-  alreadyRan = true;
-  const gopher = res.locals.gopher;
-  if (gopher.requestJson.event === "action.received" && gopher.action.includes("say.hi")) {
-    gopher.webhook.quickReply("An email from middleware");
-    // more commonly, data will be saved to and from the task.stored_data object
-  }
-  next();
+// Create sharable Gopher function that emails "hi" when called
+module.exports = function(gopherApp) {
+  return {
+    sayHi: function(gopher) {
+      gopher.webhook.quickReply("hi");
+    }
+  };
 };
 ```
 
-The aboe middlware will add an email to the request. The top-level handler can also act on the request before can now perform its own actions based on the request.
-
 ```javascript
-// An onAction handler still works. The above middleware's json has already been added to the responseJson object
-gopherApp.onAction("say.hi", function(gopher) {
-  gopher.quickReply("Another email from the top-level handler");
+// Use the Gopher function
+const { sayHi } = require("./hi-skill")(gopherApp);
+
+gopherApp.onCommand("whatever-custom-command", function(gopher) {
+  sayHi(gopher); // Sends an email that says "hi"
+  gopher.webhook.respond();
 });
 ```
 
-### Activating Skills
+As convention, these functions take the `gopher` object which contains the request / response state, utilities to alter the request, and maintains our mental model of a metaphorical gopher getting things done by eagerly diving through functions and handlers.
 
-A skill becomes "activated" the moment it is required.
+#### 3. Export Middleware
+
+Middlware can be exported and "used" by the top-level skill. This has the advantage of applying some action or behavior across multiple handlers.
 
 ```javascript
-var memorizeSkill = require("gopher-memorize")(gopherApp);
+// Export middleware to log everything
+module.exports = function(gopherApp) {
+  function logEverythingMiddleware(req, res, next) {
+    const gopher = res.locals.gopher; // Gopher lives here
+    const emailSubject = gopher.get("source.subject");
+    require("my-great-logger").log(`Got an email about ${emailSubject}`);
+    next(); // <-- Don't forget this!
+  }
+  return { logEverythingMiddleware };
+};
 ```
 
-From this point on, its handlers and middleware are active.
+```javascript
+// Using our middleware
+const { logEverythingMiddleware } = require("./log-everything")(gopherApp);
 
-If a skill requires configuration, a second, config object can be passed:
+// Apply to all subsequent handlers
+gopherApp.app.use(logEverythingMiddleware);
+
+gopherApp.onCommand("command-one", function(gopher) {
+  // everything is logged
+});
+gopherApp.onCommand("command-two", function(gopher) {
+  // everything is logged
+});
+gopherApp.onCommand("command-three", function(gopher) {
+  // everything is logged
+});
+```
+
+#### 4. Automatically Applying Middleware
+
+Middlware may be automatically invoked, which can be useful in some situations. Generally, it is advisable to export middleware so it can be explicitly "used" by the top-level skill.
 
 ```javascript
+// Automatically log everything
+module.exports = function(gopherApp) {
+  function logEverythingMiddleware(req, res, next) {
+    const gopher = res.locals.gopher;
+
+    // Prevent middleware from running multiple times
+    if (gopher.alreadyRan(logEverything)) return next();
+    const emailSubject = gopher.get("source.subject");
+    require("my-great-logger").log(`Got an email about ${emailSubject}`);
+    next(); // <-- Again, don't forget this!
+  }
+
+  // Automatically apply middleware the moment the skill is required
+  gopherApp.app.use(logEverything);
+};
+```
+
+Use middleware:
+
+```javascript
+// middleware is automatically activated (use with caution)
+require("./log-everything")(gopherApp);
+```
+
+### Configurable Milddeware and Functions
+
+If a skill or function requires configuration, a second, config object can be passed:
+
+```javascript
+// Configure a skill
 var memorizeSkill = require("gopher-memorize")(gopherApp, config);
-// optional config object would be defined by each skill
 ```
 
-Organizing skills as above makes them portable. Use them across different components, projects or publish them to npm.
+```javascript
+// Configure a Gopher Function
+var { hiButton } = require("gopher-memorize")(gopherApp);
+
+gopherApp.onCommand("hi", gopher => {
+  hiButton(gopher, { text: });
+});
+```
+
+Use skills across different components, projects or publish them to npm.
 
 ## Installing 3rd Party Skills
 
@@ -599,7 +656,7 @@ This method signatures the makes for a simple, consistent developer experience a
 
 ### Sharing UI Elements
 
-Skills can render UI elements by exporring function that return [JSON UI elements](https://docs.gopher.email/docs/email-ui-reference). For example, our memorizaiton skill has a UI element that changes the memorizaiton frequency.
+Skills can render UI elements by exporting function that return [JSON UI elements](https://docs.gopher.email/docs/email-ui-reference). For example, our memorizaiton skill has a UI element that changes the memorizaiton frequency.
 
 By convention, methods that render UI elements start with `render`. For example, `renderMemorizationControls`.
 
