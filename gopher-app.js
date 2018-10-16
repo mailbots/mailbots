@@ -334,6 +334,7 @@ class GopherApp {
   async handleEvent(request, response) {
     const gopher = response.locals.gopher;
     const webhook = request.body;
+    debug("Request JSON", webhook);
 
     // Trigger all multi-fire settings listeners first.
     // If at least one of these triggers, automatically return responseJSON after they process
@@ -343,7 +344,7 @@ class GopherApp {
         async listener => {
           if (this.cbShouldTrigger(webhook, listener.triggerCondition)) {
             autoReturn = true;
-            const ret = listener.cb(gopher, request, response);
+            const ret = await listener.cb(gopher, request, response);
             return ret;
           }
         }
@@ -357,11 +358,10 @@ class GopherApp {
       }
 
       // Trigger single-fire listeners. Stop after first matching listener.
-      this.listeners.some(listener => {
+      this.listeners.some(async listener => {
         if (this.cbShouldTrigger(webhook, listener.triggerCondition)) {
-          listener.cb(gopher, request, response);
-
-          // The listener may, itself send a response via gopher.webhook.respond()
+          const res = await listener.cb(gopher);
+          // The listener may, itself, have already sent a response via gopher.webhook.respond()
           if (!gopher.webhook.alreadyResponded) {
             response.send(gopher.responseJson);
           }

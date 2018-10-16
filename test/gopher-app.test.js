@@ -50,6 +50,13 @@ describe("Gopher App", function() {
     );
   }
 
+  // Example async function
+  function getAsyncThing(delay = 10) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => resolve({ my: "async settings" }), delay);
+    });
+  }
+
   describe("configuration", function() {
     it("should throw if instaniated without config", function(done) {
       expect(() => new GopherApp()).to.throw();
@@ -198,20 +205,14 @@ describe("Gopher App", function() {
       });
 
       it("onSettingsViewed handler handles an async function", function(done) {
-        function getSettingsAsync() {
-          return new Promise((resolve, reject) => {
-            setTimeout(() => resolve({ my: "realtime settings" }), 10);
-          });
-        }
-
         gopherApp.onSettingsViewed(async gopher => {
-          const settings = await getSettingsAsync();
+          const settings = await getAsyncThing();
           gopher.responseJson = settings;
         });
         fireWebhookRequest(extensionSettingsViewed, {
           errOnFallthrough: false
         }).then(res => {
-          expect(res.body.my).to.equal("realtime settings");
+          expect(res.body.my).to.equal("async settings");
           done();
         });
       });
@@ -299,6 +300,7 @@ describe("Gopher App", function() {
         });
       });
     });
+
     it("gopherApp.on method matches webhook types", function(done) {
       gopherApp.on("task.created", gopher => {
         expect(gopher.command).to.equal("memorize");
@@ -350,7 +352,7 @@ describe("Gopher App", function() {
     });
 
     // Tests do not fail when a response is sent twice.
-    // Run only this test and log around handleEvent to verify
+    // Run only this test and log around handleEvent in gopher-app.js to verify
     it.skip("does not re-send json response handler already responded", async function() {
       gopherApp.on("task.created", gopher => {
         gopher.webhook.respond({
@@ -538,5 +540,22 @@ describe("Gopher App", function() {
           debugger;
         });
     });
+  });
+
+  describe("async handlers", function() {
+    it("handles an onCommand handler that returns a promise", async function() {
+      gopherApp.onCommand("memorize", async function(gopher) {
+        let res = await getAsyncThing(10);
+        gopher.set("task.stored_data", res);
+      });
+      const exampleJson = require("./fixtures/task-created-webhook.json");
+      const webhookResponse = await fireWebhookRequest(exampleJson);
+      expect(webhookResponse.body).to.deep.eq({
+        version: "1",
+        task: { stored_data: { frequency_pref: "1.5", my: "async settings" } }
+      });
+    });
+
+    it.skip("doesn't support async handlers that use callbacks");
   });
 });
