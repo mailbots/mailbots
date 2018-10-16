@@ -343,28 +343,6 @@ describe("Gopher App", function() {
       fireWebhookRequest(taskCreatedWebhook);
     });
 
-    it("sends json response if not called by handler", async function() {
-      gopherApp.on("task.created", gopher => {
-        // gopher.webhook.respond(); //deliberately omitted
-      });
-      const res = await fireWebhookRequest(taskCreatedWebhook);
-      expect(res.body.version).to.equal("1");
-    });
-
-    // Tests do not fail when a response is sent twice.
-    // Run only this test and log around handleEvent in gopher-app.js to verify
-    it.skip("does not re-send json response handler already responded", async function() {
-      gopherApp.on("task.created", gopher => {
-        gopher.webhook.respond({
-          task: {
-            completed: 1
-          }
-        });
-      });
-      const res = await fireWebhookRequest(taskCreatedWebhook);
-      expect(res.body.version).to.equal("1");
-    });
-
     it("gives a nice message when no handlers fire ", async function() {
       const res = await fireWebhookRequest(taskCreatedWebhook, {
         errOnFallthrough: false
@@ -372,19 +350,6 @@ describe("Gopher App", function() {
       expect(res.body.webhook.message).to.equal(
         "Webhook received but not handled: task.created"
       );
-    });
-
-    it("allows middleware to add data to a task without a handler", async function() {
-      gopherApp.app.use((req, res, next) => {
-        const gopher = res.locals.gopher;
-        gopher.set("task.stored_data.test", "foo");
-        next();
-      });
-      const res = await fireWebhookRequest(taskCreatedWebhook, {
-        errOnFallthrough: false
-      });
-      expect(res.body.webhook).to.be.undefined;
-      expect(res.body.task.stored_data.test).to.equal("foo");
     });
   });
 
@@ -402,26 +367,6 @@ describe("Gopher App", function() {
       });
       fireWebhookRequest(taskCreatedWebhook);
     });
-
-    // middleware with callback
-    // middlewarew with promise
-    // middleware without handler that uses promise
-    // middleware withouth handler that uses callback
-
-    it("middleware handles requests without handlers", async function() {
-      gopherApp.app.use(async (req, res, next) => {
-        const gopher = res.locals.gopher;
-        const settings = await getAsyncThing(1500);
-        gopher.webhook.set("task.stored_data", settings);
-        next();
-      });
-      const res = await fireWebhookRequest(taskCreatedWebhook, {
-        errOnFallthrough: false
-      });
-      console.log(res.body);
-    });
-
-    // implicit return...if no handlers fire, return middleware.
 
     it("uses async middleware to add skills", function(done) {
       gopherApp.app.use((req, res, next) => {
@@ -579,8 +524,9 @@ describe("Gopher App", function() {
   describe("async handlers", function() {
     it("handles an onCommand handler that returns a promise", async function() {
       gopherApp.onCommand("memorize", async function(gopher) {
-        let res = await getAsyncThing(10);
+        let res = await getAsyncThing();
         gopher.set("task.stored_data", res);
+        gopher.webhook.respond();
       });
       const exampleJson = require("./fixtures/task-created-webhook.json");
       const webhookResponse = await fireWebhookRequest(exampleJson);

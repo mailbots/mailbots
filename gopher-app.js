@@ -361,10 +361,6 @@ class GopherApp {
       this.listeners.some(async listener => {
         if (this.cbShouldTrigger(webhook, listener.triggerCondition)) {
           const res = await listener.cb(gopher);
-          // The listener may, itself, have already sent a response via gopher.webhook.respond()
-          if (!gopher.webhook.alreadyResponded) {
-            response.send(gopher.responseJson);
-          }
           return true;
         }
       });

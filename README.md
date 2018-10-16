@@ -59,6 +59,7 @@ var gopherApp = new GopherApp();
 // When someone emails: hi@your-extension.gopher.email, respond "Hello world!"
 gopherApp.onCommand("hi", function(gopher) {
   gopher.webhook.quickReply("Hello world!");
+  gopher.webhook.respond();
 });
 
 gopherApp.listen();
@@ -108,6 +109,7 @@ var gopherApp = new GopherApp();
 
 gopherApp.onCommand("hi", function(gopher) {
   gopher.webhook.quickReply("Hi back!");
+  gopher.webhook.respond();
 });
 
 gopherApp.listen();
@@ -125,11 +127,13 @@ var gopherApp = new GopherApp();
 
 gopherApp.onCommand("hi", function(gopher) {
   gopher.webhook.setTriggerTime("1min");
+  gopher.webhook.respond();
 });
 
 // When a task with "hi" command triggers, run this function
 gopherApp.onTrigger("hi", function(gopher) {
   gopher.webhook.quickReply("Hi 1 minute later!");
+  gopher.webhook.respond();
 });
 
 gopherApp.listen();
@@ -165,12 +169,14 @@ var gopherApp = new GopherApp();
           subject: "Hit Send to Say hi"
         }
       ]
-    })
+    });
+    gopher.webhook.respond();
   };
 
   // Handle the event created by our UI above
   gopherApp.onAction('say.hi', function(gopher) {
     gopher.webhook.quickReply('hi');
+    gopher.webhook.respond();
   });
 
   gopherApp.listen();
@@ -263,9 +269,9 @@ gopherApp.onEvent("issue.created", function(gopher) {
 
 ### onSettingsViewed
 
-When a user loads the extension settings page on gopher.email, this handler responds with a [JSON form schema](https://mozilla-services.github.io/react-jsonschema-form/) to render a settings form and pre-populate it with values.
+A Gopher skill can render its own settings pages.
 
-A Gopher skill can render its own settings pages. Unlike the other handlers, every instance of this handler is called. All settings pages are rendered.
+When a user loads the extension settings page on gopher.email, this handler responds with a [JSON form schema](https://mozilla-services.github.io/react-jsonschema-form/) to render a settings form and pre-populate it with values.
 
 The first parameter is the `namespace` for the data stored in `extension.stored_data`. This is also used in the URL on the settings page so it can be linked to directly.
 
@@ -275,11 +281,14 @@ The second param is a function that is passed 3 arguments:
 - The settings for that data namespace
 - The complete webhook (with extension and user data)
 
-  This function should return a [JSON schema](https://mozilla-services.github.io/react-jsonschema-form/) to render a settings form. See the settings example in Gopher Skills Kit. (Note all JSON Form Schema UI options are supported)
+  This function should return a [JSON schema](https://mozilla-services.github.io/react-jsonschema-form/) to render a settings form. See the settings example in Gopher Skills Kit. (Note: Not all JSON Form Schema UI options are supported)
+
+  Unlike the other handlers, every instance of this handler is called. (ie, all settings pages from all extensions are rendered). Also, do not call `gopher.webhook.respond()` at the end of the request. Gopher App's internals take care of compiling the JSON and responding. If you need to perform an async request in the handler, make your handler function async and use async / await.
 
 ```javascript
 // Render a settings field for the user to enter their first name
-gopherApp.onSettingsViewed(function(gopher) {
+gopherApp.onSettingsViewed(async function(gopher) {
+  // const myAsyncThing = await getAsyncThing();
   const settingsPage = gopher.webhook.settingsPage({
     namespace: "todo",
     title: "Todo Settings", // Page title
@@ -421,6 +430,7 @@ module.exports = function(gopherApp) {
   // Handle UI events
   gopherApp.onAction("say.hi", function(gopher) {
     gopher.webhook.quickReply("hi");
+    gopher.webhook.respond();
   });
 
   return {
@@ -451,7 +461,8 @@ gopherApp.onCommand("remember", function(gopher) {
     body: [
       hiButton() // <-- A self-contained UI component
     ]
-  })
+  });
+  gopher.webhook.respond();
 };
 ```
 
@@ -467,7 +478,8 @@ gopherApp.onAction("say.hi", function(gopher) {
     body: [
       hiButton() // <-- Same button, DRY
     ]
-  })
+  });
+  gopher.webhook.respond();
 };
 ```
 
@@ -588,6 +600,7 @@ var { hiButton } = require("gopher-memorize")(gopherApp);
 
 gopherApp.onCommand("hi", gopher => {
   hiButton(gopher, { text: });
+  gopher.webhook.respond();
 });
 ```
 
@@ -612,12 +625,14 @@ var memorizeSkill = require("gopher-memorize")(gopherApp);
 gopherApp.onCommand("remember", function(gopher) {
   memorizeSkill.memorizeTask(gopher); //  ⬅ Tells Gopher to memorize your task
   gopher.webhook.quickResponse("Memorizing!");
+  gopher.webhook.respond();
 });
 
 // Called each time the reminder is triggered
 gopherApp.onTrigger("remember", function(gopher) {
   memorizeSkill.memorizeTask(gopher); // ⬅ Invoke skill to continue memorizing
   gopher.webhook.quickResponse("An email with decreasing frequency");
+  gopher.webhook.respond();
 });
 ```
 
@@ -677,6 +692,7 @@ By convention, methods that render UI elements start with `render`. For example,
         memorizeSkill.renderMemorizationControls()
       ]
     })
+    gopher.webhook.respond();
   }
 ```
 
@@ -720,6 +736,7 @@ gopherApp.app.use(function(req, res, next) {
 gopherApp.onCommand("hi", function(gopher) {
   // The configured skill is available in subsequent handlers
   gopher.skills.myCustomSkill.logger.log("Log with my pre-configured logger");
+  gopher.webhook.respond();
 });
 ```
 
@@ -771,6 +788,7 @@ A pre-authenticated [Gopher API client](https://github.com/gopherhq/gopherhq-js)
 gopherApp.onCommand("remember", function(gopher) {
   // An authenticated API Client is available on gopher.api
   gopher.api.getExtensionData(); // this just works!
+  gopher.webhook.respond();
 };
 
 // See https://github.com/gopherhq/gopherhq-js for api
@@ -843,6 +861,7 @@ describe("integration tests", function() {
     // set up handlers
     gopherApp.onCommand("memorize", gopher => {
       gopher.webhook.quickReply("I dig email");
+      gopher.webhook.respond();
     });
 
     const app = gopherApp.exportApp();
@@ -877,7 +896,10 @@ var gopherApp = newGopherApp({
   extensionUrl: "http://your_extension_url" // See step #3
 });
 
-gopherApp.onCommand("hello", gopher => gopher.webhook.quickReply("world"));
+gopherApp.onCommand("hello", gopher => {
+  gopher.webhook.quickReply("world");
+  gopher.webhook.respond();
+});
 
 gopherApp.listen();
 ```
