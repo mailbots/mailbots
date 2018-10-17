@@ -176,9 +176,6 @@ class GopherApp {
         );
 
         const dupCb = _.isEqual(listener.cb.toString(), cb.toString());
-        debug(
-          `Duplicate trigger: ${dupTriggerCondition}. Duplicate listener: ${dupCb}`
-        );
         return dupTriggerCondition && dupCb;
       });
     }

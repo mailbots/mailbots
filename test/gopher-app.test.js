@@ -331,6 +331,25 @@ describe("Gopher App", function() {
       fireWebhookRequest(taskCreatedWebhook);
     });
 
+    it("gopherApp.on method matches webhook by regex", function(done) {
+      gopherApp.onEvent("intercom", gopher => {
+        gopher.webhook.quickReply("test");
+        gopher.webhook.respond();
+        done();
+      });
+      const intercomEvent = require("./fixtures/extension-event-received.json");
+      fireWebhookRequest(intercomEvent);
+    });
+
+    it("gopherApp.on method matches webhook by regex (async)", async function() {
+      gopherApp.onEvent("intercom", async gopher => {
+        let res = await getAsyncThing();
+        gopher.webhook.respond();
+      });
+      const intercomEvent = require("./fixtures/extension-event-received.json");
+      await fireWebhookRequest(intercomEvent);
+    });
+
     it("once a match is found, no future routes are matched", function(done) {
       gopherApp.on("task.created", gopher => {
         expect(gopher.command).to.equal("memorize");

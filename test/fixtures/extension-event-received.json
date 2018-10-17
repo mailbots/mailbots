@@ -1,0 +1,134 @@
+{
+  "payload": {
+    "type": "intercom",
+    "uri": "http://api.gopher.email/api/v1/extension_event/428/1fds1fdsfs22788/?type=intercom",
+    "headers": {
+      "host": "api.gopher.email",
+      "accept": "application/json, text/plain, */*",
+      "accept-encoding": "gzip, deflate, br",
+      "accept-language": "en-US,en;q=0.9",
+      "content-type": "application/json; charset=UTF-8",
+      "origin": "https://app.gopher.email",
+      "referer": "https://app.gopher.email/sandbox/1534",
+      "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36",
+      "x-forwarded-for": "24.6.120.149",
+      "x-forwarded-port": "443",
+      "x-forwarded-proto": "https",
+      "content-length": "2591",
+      "connection": "keep-alive",
+      "x-php-ob-level": "1"
+    },
+    "method": "POST",
+    "body_text": "{\n            \"type\": \"notification_event\",\n            \"app_id\": \"t8fxcdwo\",\n            \"data\": {\n                \"type\": \"notification_event_data\",\n                \"item\": {\n                    \"type\": \"conversation\",\n                    \"id\": \"19057391780\",\n                    \"created_at\": 1539650357,\n                    \"updated_at\": 1539650357,\n                    \"user\": {\n                        \"type\": \"lead\",\n                        \"id\": \"5ba03e231b4237d006bffad1\",\n                        \"user_id\": \"5699358c-6b3d-4e75-b75a-cf58edfb71ae\",\n                        \"name\": \"Andy Librian\",\n                        \"email\": \"andy@humans.fut.io\",\n                        \"do_not_track\": null\n                    },\n                    \"assignee\": {\n                        \"type\": \"nobody_admin\",\n                        \"id\": null\n                    },\n                    \"conversation_message\": {\n                        \"type\": \"conversation_message\",\n                        \"id\": \"268284025\",\n                        \"url\": null,\n                        \"subject\": \"<p>test 40</p>\",\n                        \"body\": \"<p>test 40<br></p>\",\n                        \"author\": {\n                            \"type\": \"user\",\n                            \"id\": \"5ba03e231b4237d006bffad1\"\n                        },\n                        \"attachments\": []\n                    },\n                    \"conversation_parts\": {\n                        \"type\": \"conversation_part.list\",\n                        \"conversation_parts\": [],\n                        \"total_count\": 0\n                    },\n                    \"open\": true,\n                    \"state\": \"open\",\n                    \"read\": true,\n                    \"metadata\": [],\n                    \"tags\": {\n                        \"type\": \"tag.list\",\n                        \"tags\": []\n                    },\n                    \"tags_added\": {\n                        \"type\": \"tag.list\",\n                        \"tags\": []\n                    },\n                    \"links\": {\n                        \"conversation_web\": \"https://app.intercom.io/a/apps/t8fxcdwo/inbox/all/conversations/19057391780\"\n                    }\n                }\n            },\n            \"links\": [],\n            \"id\": \"notif_ea743660-d0db-11e8-9f6d-3916361ed176\",\n            \"topic\": \"conversation.user.created\",\n            \"delivery_status\": \"pending\",\n            \"delivery_attempts\": 1,\n            \"delivered_at\": 0,\n            \"first_sent_at\": 1539650358,\n            \"created_at\": 1539650358,\n            \"self\": null\n        }\n    ",
+    "body_json": {
+      "type": "notification_event",
+      "app_id": "t8fbcwo",
+      "data": {
+        "type": "notification_event_data",
+        "item": {
+          "type": "conversation",
+          "id": "19054380",
+          "created_at": 1539650357,
+          "updated_at": 1539650357,
+          "user": {
+            "type": "lead",
+            "id": "5ba3e231fdsaad1",
+            "user_id": "56358c-6b3d-4e75-b75a-cf58edfbfdsae",
+            "name": "Andy Librian",
+            "email": "foo@humans.fut.io",
+            "do_not_track": null
+          },
+          "assignee": {
+            "type": "nobody_admin",
+            "id": null
+          },
+          "conversation_message": {
+            "type": "conversation_message",
+            "id": "2682823235",
+            "url": null,
+            "subject": "<p>test 40</p>",
+            "body": "<p>test 40<br></p>",
+            "author": {
+              "type": "user",
+              "id": "5ba03e231b422334d006bffad1"
+            },
+            "attachments": []
+          },
+          "conversation_parts": {
+            "type": "conversation_part.list",
+            "conversation_parts": [],
+            "total_count": 0
+          },
+          "open": true,
+          "state": "open",
+          "read": true,
+          "metadata": [],
+          "tags": {
+            "type": "tag.list",
+            "tags": []
+          },
+          "tags_added": {
+            "type": "tag.list",
+            "tags": []
+          },
+          "links": {
+            "conversation_web": "https://app.intercom.io/a/apps/t8fxcdwo/inbox/all/conversations/1902334291780"
+          }
+        }
+      },
+      "links": [],
+      "id": "notif_ea743660-d0db-18-9f6d-39163614343176",
+      "topic": "conversation.user.created",
+      "delivery_status": "pending",
+      "delivery_attempts": 1,
+      "delivered_at": 0,
+      "first_sent_at": 1539650358,
+      "created_at": 1539650358,
+      "self": null
+    }
+  },
+  "event": "extension.event_received",
+  "version": "1",
+  "user": {
+    "name": "Andy Librian",
+    "primary_email": "foo@gmail.com",
+    "emails": ["foo@gmail.com"],
+    "is_validated": true,
+    "timezone": "Asia/Bangkok",
+    "preferred_date_format": "D, F jS Y g:ia T",
+    "preferred_date_format_js": "ddd, D MMM 'YY [at] h:mma z",
+    "postpone_times": "2h,4h,8h,1d,3d,1w,2w,1mo,3mo,6mo,1y",
+    "flagged": 0,
+    "validate_sender_email": false,
+    "send_dev_errors": false
+  },
+  "extension": {
+    "name": "futsupport",
+    "subdomain": "futsupport",
+    "stored_data": {
+      "access_token": "fdsa"
+    },
+    "installed": true,
+    "event_url": "https://api.gopher.email/api/v1/extension_event/428/18162e23338/",
+    "id": 1534,
+    "owner": {
+      "email": "foo@gmail.com"
+    },
+    "description": "",
+    "icon": "",
+    "tags": "",
+    "published": false,
+    "devmode": true,
+    "enabled": false,
+    "install_url": "",
+    "settings_url": "",
+    "base_url": "",
+    "developer_name": "",
+    "help_url": "",
+    "learn_more_url": "",
+    "privacy_policy_url": "",
+    "oauth2_client_id": "ext_99876abccfc454a53t55ddsqw9ij",
+    "oauth2_scope": "get_user_info extension_manage_self read_own_tasks manage_own_tasks",
+    "oauth2_redirect_uri": ""
+  }
+}
