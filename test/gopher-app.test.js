@@ -22,7 +22,7 @@ describe("Gopher App", function() {
   function fireWebhookRequest(webhook, { errOnFallthrough = true } = {}) {
     // Throw an error if a request fails to match
     if (errOnFallthrough) {
-      gopherApp.on(/.*/, gopher => {
+      gopherApp.on(/.*/, function failOnFallthrough(gopher) {
         throw new Error("Gopher handler did not run");
       });
     }
@@ -147,6 +147,53 @@ describe("Gopher App", function() {
         done();
       });
       fireWebhookRequest(actionReceivedWebhook);
+    });
+
+    it("multiple handlers and requests can fire", async function() {
+      gopherApp.onCommand("memorize", function handleCmd(gopher) {
+        gopher.webhook.quickReply("foo");
+        expect(gopher.command).to.equal("memorize");
+        gopher.webhook.respond();
+      });
+
+      gopherApp.onAction(/^freque.*/, function handleFreq(gopher) {
+        gopher.webhook.quickReply("got action");
+        expect(gopher.action).to.equal("frequency.0-2");
+        gopher.webhook.respond();
+      });
+
+      const result = await fireWebhookRequest(taskCreatedWebhook);
+      const result2 = await fireWebhookRequest(actionReceivedWebhook);
+    });
+
+    it("multiple async handlers and requests can fire", async function() {
+      gopherApp.onCommand("memorize", async function handleCmd(gopher) {
+        await getAsyncThing(100);
+        gopher.webhook.quickReply("foo");
+        expect(gopher.command).to.equal("memorize");
+        gopher.webhook.respond();
+      });
+
+      gopherApp.onAction(/^freque.*/, async function handleFreq(gopher) {
+        await getAsyncThing(100);
+        gopher.webhook.quickReply("got action");
+        expect(gopher.action).to.equal("frequency.0-2");
+        gopher.webhook.respond();
+      });
+
+      const result = await fireWebhookRequest(taskCreatedWebhook);
+      const result2 = await fireWebhookRequest(actionReceivedWebhook);
+    });
+
+    // TODO: This doesn't work because we're not awaiting the handler
+    it.only("doesn't handle uncaught exceptions within async handlers", async function() {
+      gopherApp.onCommand("memorize", async function handleCmd(gopher) {
+        await getAsyncThing(100);
+        throw new Error("An error!");
+        gopher.webhook.respond();
+      });
+
+      const result = await fireWebhookRequest(taskCreatedWebhook);
     });
 
     const taskTriggeredWebhook = require("./fixtures/task-triggered-webhook.json");

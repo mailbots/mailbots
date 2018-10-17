@@ -355,9 +355,9 @@ class GopherApp {
       }
 
       // Trigger single-fire listeners. Stop after first matching listener.
-      this.listeners.some(async listener => {
+      this.listeners.some(listener => {
         if (this.cbShouldTrigger(webhook, listener.triggerCondition)) {
-          const res = await listener.cb(gopher);
+          listener.cb(gopher);
           return true;
         }
       });
