@@ -355,12 +355,12 @@ class GopherApp {
       }
 
       // Trigger single-fire listeners. Stop after first matching listener.
-      this.listeners.some(listener => {
+      for (const listener of this.listeners) {
         if (this.cbShouldTrigger(webhook, listener.triggerCondition)) {
-          listener.cb(gopher);
-          return true;
+          await listener.cb(gopher); // awaits for possible error
+          break;
         }
-      });
+      }
     } catch (e) {
       if (process.env.NODE_ENV !== "test") {
         console.error(e);

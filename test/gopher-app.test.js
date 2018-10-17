@@ -186,7 +186,7 @@ describe("Gopher App", function() {
     });
 
     // TODO: This doesn't work because we're not awaiting the handler
-    it.only("doesn't handle uncaught exceptions within async handlers", async function() {
+    it("doesn't handle uncaught exceptions within async handlers", async function() {
       gopherApp.onCommand("memorize", async function handleCmd(gopher) {
         await getAsyncThing(100);
         throw new Error("An error!");
