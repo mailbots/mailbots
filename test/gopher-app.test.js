@@ -11,6 +11,8 @@ const clientSecret = "bar";
 
 describe("Gopher App", function() {
   const taskCreatedWebhook = require("./fixtures/task-created-webhook.json");
+  const actionReceivedWebhook = require("./fixtures/task-action-received-webhook.json");
+
   let gopherApp = {}; // reinitialized before each test
   beforeEach(function() {
     gopherApp = new GopherApp({
@@ -71,7 +73,7 @@ describe("Gopher App", function() {
     });
 
     after(function() {
-      process.env.NODE_ENV = "testing";
+      process.env.NODE_ENV = "test";
     });
 
     it("should only accept validate webhooks", function(done) {
@@ -139,7 +141,6 @@ describe("Gopher App", function() {
       fireWebhookRequest(taskCreatedWebhook);
     });
 
-    const actionReceivedWebhook = require("./fixtures/task-action-received-webhook.json");
     it("onAction handler matches by regex", function(done) {
       gopherApp.onAction(/^freque.*/, gopher => {
         expect(gopher.action).to.equal("frequency.0-2");
@@ -183,17 +184,6 @@ describe("Gopher App", function() {
 
       const result = await fireWebhookRequest(taskCreatedWebhook);
       const result2 = await fireWebhookRequest(actionReceivedWebhook);
-    });
-
-    // TODO: This doesn't work because we're not awaiting the handler
-    it("doesn't handle uncaught exceptions within async handlers", async function() {
-      gopherApp.onCommand("memorize", async function handleCmd(gopher) {
-        await getAsyncThing(100);
-        throw new Error("An error!");
-        gopher.webhook.respond();
-      });
-
-      const result = await fireWebhookRequest(taskCreatedWebhook);
     });
 
     const taskTriggeredWebhook = require("./fixtures/task-triggered-webhook.json");
@@ -260,20 +250,6 @@ describe("Gopher App", function() {
           errOnFallthrough: false
         }).then(res => {
           expect(res.body.my).to.equal("async settings");
-          done();
-        });
-      });
-
-      it("onSettingsViewed catches errors", function(done) {
-        gopherApp.onSettingsViewed(async gopher => {
-          throw new Error("A Test Error");
-        });
-        fireWebhookRequest(extensionSettingsViewed, {
-          errOnFallthrough: false
-        }).then(res => {
-          expect(res.body).to.deep.equal({
-            webhook: { status: "failed", message: "A Test Error" }
-          });
           done();
         });
       });
@@ -603,5 +579,157 @@ describe("Gopher App", function() {
     });
 
     it.skip("doesn't support async handlers that use callbacks");
+  });
+
+  describe("error handling", function() {
+    const extensionSettingsViewed = require("./fixtures/extension-settings-viewed-webhook.json");
+
+    it("uses the default error handler", async function() {
+      gopherApp.onCommand("memorize", gopher => {
+        throw new Error("An error!");
+        gopher.webhook.respond(); // isnt' called
+      });
+      const result = await fireWebhookRequest(taskCreatedWebhook);
+      expect(result.status).to.equal(500);
+      expect(result.body.webhook.message).to.contain(
+        "Gopher App caught an unhandled error"
+      );
+    });
+
+    it("uses the default error handler in async requests", async function() {
+      gopherApp.onCommand("memorize", async gopher => {
+        await getAsyncThing(20);
+        throw new Error("An error!");
+        gopher.webhook.respond(); // isnt' called
+      });
+      const result = await fireWebhookRequest(taskCreatedWebhook);
+      expect(result.body.webhook.message).to.contain(
+        "Gopher App caught an unhandled error"
+      );
+    });
+
+    it("uses the default error handler in multi-fire handlers", async function() {
+      gopherApp.onSettingsViewed(gopher => {
+        throw new Error("An error!");
+        gopher.webhook.respond(); // isnt' called
+      });
+      const result = await fireWebhookRequest(extensionSettingsViewed);
+      expect(result.body.webhook.message).to.contain(
+        "Gopher App caught an unhandled error"
+      );
+    });
+
+    it("uses the default error handler in in async multi-fire handlers", async function() {
+      gopherApp.onSettingsViewed(async gopher => {
+        await getAsyncThing(20);
+        throw new Error("An error!");
+        gopher.webhook.respond(); // isnt' called
+      });
+      const result = await fireWebhookRequest(extensionSettingsViewed);
+      expect(result.body.webhook.message).to.contain(
+        "Gopher App caught an unhandled error"
+      );
+    });
+
+    it("uses a custom error handler in async one-time handlers", async function() {
+      gopherApp.setErrorHandler((err, gopher) => {
+        expect(err.message).to.equal("An error!");
+        return gopher.webhook.respond({
+          webhook: { status: "failed", message: err.message }
+        });
+      });
+
+      gopherApp.onCommand("memorize", async function handleCmd(gopher) {
+        const foo = await getAsyncThing(100);
+        throw new Error("An error!");
+        gopher.webhook.respond(); // isnt' called
+      });
+
+      const result = await fireWebhookRequest(taskCreatedWebhook);
+    });
+
+    it("handles an error and then more requets", async function() {
+      gopherApp.setErrorHandler((err, gopher) => {
+        expect(err.message).to.equal("An error!");
+        return gopher.webhook.respond({
+          webhook: { status: "failed", message: err.message }
+        });
+      });
+
+      gopherApp.onCommand("memorize", async function handleCmd(gopher) {
+        const foo = await getAsyncThing(100);
+        throw new Error("An error!");
+        gopher.webhook.respond(); // isnt' called
+      });
+
+      gopherApp.onAction(/^freque.*/, function handleFreq(gopher) {
+        gopher.webhook.quickReply("got action");
+        expect(gopher.action).to.equal("frequency.0-2");
+        gopher.webhook.respond();
+      });
+
+      const result = await fireWebhookRequest(taskCreatedWebhook);
+      const result2 = await fireWebhookRequest(actionReceivedWebhook);
+    });
+
+    it("uses a custom error handler with async multi-fire handlers (settings)", async function() {
+      gopherApp.setErrorHandler((err, gopher) => {
+        gopher.webhook.respond({ webhook: { message: "foo!" } });
+      });
+
+      gopherApp.onSettingsViewed(function(gopher) {
+        throw new Error("An error!");
+        gopher.webhook.respond();
+      });
+
+      const result = await fireWebhookRequest(extensionSettingsViewed);
+      expect(result.body.webhook.message).to.contain("foo!");
+    });
+
+    it("bubbles up Express middleware errors to Gopher App Error Handler", function(done) {
+      gopherApp.setErrorHandler((err, gopher) => {
+        expect(err.message).to.equal("Middleware Error");
+        done();
+        gopher.webhook.respond();
+      });
+
+      gopherApp.app.use((req, res, next) => {
+        return next(new Error("Middleware Error"));
+      });
+
+      gopherApp.onCommand("memorize", gopher => {
+        done("Handler should not have run");
+        gopher.webhook.respond();
+      });
+
+      const result = fireWebhookRequest(taskCreatedWebhook);
+    });
+  });
+
+  describe("problematic payloads", function() {
+    it("handles large files", async function() {
+      gopherApp.onCommand("memorize", gopher => {
+        gopher.webhook.respond({
+          webhook: {
+            message: "handled large file"
+          }
+        });
+      });
+
+      gopherApp.setErrorHandler(err => {
+        console.log(err);
+      });
+
+      const hugeTask = { ...taskCreatedWebhook };
+      for (let i = 0; i < 1000 * 1000 * 4; i++) {
+        hugeTask.source.html += ".";
+      }
+      const result = await fireWebhookRequest(hugeTask, {
+        errOnFallthrough: false
+      });
+
+      expect(result.body.webhook.message).to.equal("handled large file");
+      return;
+    });
   });
 });

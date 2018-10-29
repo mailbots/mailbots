@@ -1,6 +1,7 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+
 - [Gopher App](#gopher-app)
   - [Quick Start](#quick-start)
   - [Overview](#overview)
@@ -19,14 +20,15 @@
   - [Organizing Skills](#organizing-skills)
     - [Making Modular Skills](#making-modular-skills)
     - [Ways of Sharing Functionality](#ways-of-sharing-functionality)
-      - [1. Handle requests](#1-handle-requests)
-      - [2. Export a function](#2-export-a-function)
-      - [3. Middleware](#3-middleware)
-    - [Activating Skills](#activating-skills)
+      - [1. Directly handling requests](#1-directly-handling-requests)
+      - [2. Export a "Gopher function"](#2-export-a-gopher-function)
+      - [3. Export Middleware](#3-export-middleware)
+      - [4. Automatically Applying Middleware](#4-automatically-applying-middleware)
+    - [Configurable Milddeware and Functions](#configurable-milddeware-and-functions)
   - [Installing 3rd Party Skills](#installing-3rd-party-skills)
   - [Publishing Skills](#publishing-skills)
     - [Sharing UI Elements](#sharing-ui-elements)
-    - [Activating Skills](#activating-skills-1)
+    - [Activating Skills](#activating-skills)
   - [Using Express.js Middlware and Routes](#using-expressjs-middlware-and-routes)
     - [Adding to gopher.skills with middlware](#adding-to-gopherskills-with-middlware)
     - [Handling routes](#handling-routes)
@@ -35,6 +37,7 @@
   - [Install Flow](#install-flow)
   - [Testing](#testing)
   - [Installing](#installing)
+  - [Handling Errors](#handling-errors)
   - [Design Philosophy](#design-philosophy)
   - [Contributions](#contributions)
 
@@ -210,7 +213,7 @@ gopherApp.onCommand(/todo.*/, function(gopher) {
 
 ### onTrigger
 
-When a task "[triggers](https://docs.gopher.email/reference#perfect-timing)", it becomes relevant to the user and should be sent to their email inbox. The most common trigger (currently) is a when a scheduled task becomes due.
+Handle when a task "[triggers](https://docs.gopher.email/reference#perfect-timing)", it becomes relevant to the user and should be sent to their email inbox. The most common trigger (currently) is a when a scheduled task becomes due.
 
 Tasks with different commands may trigger differently. For example:
 
@@ -234,7 +237,7 @@ gopherApp.onTrigger("todo.crm", function(gopher) {
 
 ### onAction
 
-When a user clicks a mailto link within a Gopher email to accomplish an action ([Email Based Actions](https://docs.gopher.email/reference#email-based-actions)) the onAction handler is received. For example, postponing a reminder or completing a todo item.
+Handle when a user clicks a mailto link within a Gopher email to accomplish an action ([Email Based Actions](https://docs.gopher.email/reference#email-based-actions)) the onAction handler is received. For example, postponing a reminder or completing a todo item.
 
 ```javascript
 gopherApp.onAction("complete", function(gopher) {
@@ -256,26 +259,29 @@ Different task commands may render differently. For example a task with command 
 
 ### onEvent
 
-Handle when the extension receives an inbound webhok about about an external occurrence. For example, a support ticket is created or a lead is added to a CRM.
+Handle when the extension receives an inbound webhok from a 3rd party system about an external event. For example, a support ticket is created or a lead is added to a CRM.
 
 Note: This action does not automatically create a Gopher Task. One can be created with the pre-authenticated API client, `gopher.api`, as shown below.
 
 ```javascript
-gopherApp.onEvent("issue.created", function(gopher) {
+gopherApp.onEvent("issue.created", async function(gopher) {
   // Handle event, for example, create a Gopher Task.
-  // gopher.api.createTask();  // Pre-authenticated API client
+  await gopher.api.createTask({
+    // Pre-authenticated API client
+  });
+  gopher.webhook.respond({ webhook: { status: "success" } });
 });
 ```
 
 ### onSettingsViewed
 
-A Gopher skill can render its own settings pages.
+Handle when a user views this extension's settings.
 
 When a user loads the extension settings page on gopher.email, this handler responds with a [JSON form schema](https://mozilla-services.github.io/react-jsonschema-form/) to render a settings form and pre-populate it with values.
 
 The first parameter is the `namespace` for the data stored in `extension.stored_data`. This is also used in the URL on the settings page so it can be linked to directly.
 
-The second param is a function that is passed 3 arguments:
+The second parameter is a function that is passed 3 arguments:
 
 - The `gopher` helper object
 - The settings for that data namespace
@@ -332,12 +338,12 @@ settings.submitButton({
 
 ### beforeSettingsSaved
 
-This is called when the user saves their settings, before settings are actually saved.
+Handle when the user saves their settings. Called before settings are actually saved.
 
 Similar to the above `onSettingsViewed` handler, every instance of this handler is called when settings are saved.
 
 Validate user data, perform API calls to keep other systems in sync. Return an error
-to abort the settings process.
+to abort saving the settings.
 
 ```javascript
   gopherApp.beforeSettingsSaved(gopher =>
@@ -366,20 +372,31 @@ to abort the settings process.
 
 ### on
 
-This is a generic, low-level handler that can handle any webhook.
+This is a generic handler for any webhook. It can be used to handle any inbound webhook – mainly ones that are not covered by the handlers above. (Of note: The handlers above are simply wrappers for this lower-level handler).
 
-The first paramater can be:
-
-- a string that matches the webhook `type`. (ie. [`extension.installed`](https://docs.gopher.email/reference#extensioninstalled))
-- A regular expression that matches on webhook `type`
-- A function that takes the incoming webhook as the only parameter and returns a boolean value indicating whether or not that webhook should be handled by that function handler.
-
-THe second parameter is the function handler that runs based on the matching condition of the first parameter.
+Example:
 
 ```javascript
 gopherApp.on("extension.installed", function(gopher) {
   // Handle when an extension is installed
   // gopher.api.createTask();  // Pre-authenticated API client
+  // gopher.webhook.respond();
+});
+```
+
+The first paramater can be:
+
+- A string that matches the webhook `type`. (ie. [`extension.installed`](https://docs.gopher.email/reference#extensioninstalled))
+- A regular expression that matches on webhook `type`
+- A function that takes the incoming webhook as the only parameter and returns a boolean value indicating whether or not that webhook should be handled by that function handler.
+
+The second parameter is the function handler that runs if the matching condition (the first parameter) is met.
+
+```javascript
+gopherApp.on("extension.installed", function(gopher) {
+  // Handle when an extension is installed
+  // gopher.api.createTask();  // Pre-authenticated API client
+  // gopher.webhook.respond();
 });
 ```
 
@@ -796,7 +813,6 @@ gopherApp.onCommand("remember", function(gopher) {
 
 ## The "Gopher Object" Reference
 
-(TODO)
 The gopher object passed into the handlers above is an instance of GopherHelper. Documentation will soon follow. For now read through the gopher-helper.test.js file.
 
 ** Setting Data Works By Shallow Merging **
@@ -913,6 +929,25 @@ Gopher needs to send HTTP POSTs to your extension, which means it will need a pu
 **4. Install and Go to Sandbox**
 
 Click the "Install" button on your extension's developer page. After you've authenticated, go back to the extension's developer page and click "Sandbox". Send a test "hello" command and your handler should run!
+
+## Handling Errors
+
+Set a custom error handling function to catch errors within your handlers. Ideally, error conditions are handled within the normal application flow. Use this handler to intercept unexpected errors. You can add your own custom logging, alerting or cutom error messaging for users.
+
+If you want to send the user your own error message, use [gopher.api.sendEmail()](https://gopherhq-js.gopheremail.com/#sendemail). Not all webhook responses send emails.
+
+```javascript
+// define a custom error handler
+gopherApp.setErrorHandler(function(error, gopher) {
+  // myCustomLogger.log(error);
+  // gopher.api.sendEmail({ to: gopher.get('user.primary_email')}); // send a custom error email to user
+  // gopher.response.status(500); // 5xx status code sends generic error to user
+  gopher.webhook.respond({
+    status: "failure",
+    message: "A custom error message"
+  }); // A webhook response must be sent
+});
+```
 
 ## Design Philosophy
 

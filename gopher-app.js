@@ -39,6 +39,9 @@ class GopherApp {
     // As settings handlers are executed,
     this.aggregateSettingsResponse = {};
 
+    // Developer-defined function to handle errors
+    this.errorHandler = () => {};
+
     // Set up base skills
     this.loadFirstCoreSkills();
   }
@@ -310,6 +313,10 @@ class GopherApp {
     this.on("extension.settings_viewed", cb, { multiFire: true });
   }
 
+  setErrorHandler(cb) {
+    this.errorHandler = cb;
+  }
+
   /**
    * Handle webhook that fires after a user hits "save" on their extension settings.
    * Newly saved settings arrive at the top-level settings object.
@@ -336,38 +343,46 @@ class GopherApp {
     // Trigger all multi-fire settings listeners first.
     // If at least one of these triggers, automatically return responseJSON after they process
     let autoReturn = false;
-    try {
-      const multiFireListenerPromises = this.multiFireListeners.map(
-        async listener => {
-          if (this.cbShouldTrigger(webhook, listener.triggerCondition)) {
-            autoReturn = true;
+
+    const multiFireListenerPromises = this.multiFireListeners.map(
+      async listener => {
+        if (this.cbShouldTrigger(webhook, listener.triggerCondition)) {
+          autoReturn = true;
+          try {
             const ret = await listener.cb(gopher, request, response);
             return ret;
+          } catch (e) {
+            if (process.env.NODE_ENV !== "test") console.error(e);
+            this.errorHandler(e, gopher);
           }
         }
-      );
-
-      await Promise.all(multiFireListenerPromises);
-
-      // Return if we have an aggregate settings response
-      if (autoReturn) {
-        return response.send(gopher.responseJson);
       }
+    );
 
-      // Trigger single-fire listeners. Stop after first matching listener.
-      for (const listener of this.listeners) {
-        if (this.cbShouldTrigger(webhook, listener.triggerCondition)) {
-          await listener.cb(gopher); // awaits for possible error
-          break;
+    await Promise.all(multiFireListenerPromises);
+
+    // Return if we have an aggregate settings response
+    if (autoReturn && !gopher.webhook.alreadyResponded) {
+      return response.send(gopher.responseJson);
+    }
+
+    // A handler already replied, for example an error handler
+    if (gopher.webhook.alreadyResponded) {
+      return;
+    }
+
+    // Trigger single-fire listeners. Stop after first matching listener.
+    for (const listener of this.listeners) {
+      if (this.cbShouldTrigger(webhook, listener.triggerCondition)) {
+        try {
+          const res = await listener.cb(gopher); // awaits for possible error
+        } catch (e) {
+          if (process.env.NODE_ENV !== "test") console.error(e);
+          gopher.error = e;
+          this.errorHandler(e, gopher);
         }
+        break;
       }
-    } catch (e) {
-      if (process.env.NODE_ENV !== "test") {
-        console.error(e);
-      }
-      return response.send({
-        webhook: { status: "failed", message: e.message }
-      });
     }
   }
 
