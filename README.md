@@ -1,7 +1,6 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Gopher App](#gopher-app)
   - [Quick Start](#quick-start)
   - [Overview](#overview)
@@ -277,19 +276,13 @@ gopherApp.onEvent("issue.created", async function(gopher) {
 
 Handle when a user views this extension's settings.
 
-When a user loads the extension settings page on gopher.email, this handler responds with a [JSON form schema](https://mozilla-services.github.io/react-jsonschema-form/) to render a settings form and pre-populate it with values.
+The handler's only parameter is a callback function that responds with a [JSON form schema](https://mozilla-services.github.io/react-jsonschema-form/) to render a settings form. The callback function is passed the `gopher` object as usual.
 
-The first parameter is the `namespace` for the data stored in `extension.stored_data`. This is also used in the URL on the settings page so it can be linked to directly.
+This function should return a [JSON schema](https://mozilla-services.github.io/react-jsonschema-form/) to render a settings form. See the settings example in Gopher Skills Kit. (Note: Not all JSON Form Schema UI options are supported)
 
-The second parameter is a function that is passed 3 arguments:
+Unlike the other handlers, every instance of this handler is called. (ie, all settings pages from all extensions are rendered).
 
-- The `gopher` helper object
-- The settings for that data namespace
-- The complete webhook (with extension and user data)
-
-  This function should return a [JSON schema](https://mozilla-services.github.io/react-jsonschema-form/) to render a settings form. See the settings example in Gopher Skills Kit. (Note: Not all JSON Form Schema UI options are supported)
-
-  Unlike the other handlers, every instance of this handler is called. (ie, all settings pages from all extensions are rendered). Also, do not call `gopher.webhook.respond()` at the end of the request. Gopher App's internals take care of compiling the JSON and responding. If you need to perform an async request in the handler, make your handler function async and use async / await.
+Do not call `gopher.webhook.respond()` at the end of the request. Gopher App's internals take care of compiling the JSON and responding.
 
 ```javascript
 // Render a settings field for the user to enter their first name
@@ -943,8 +936,8 @@ gopherApp.setErrorHandler(function(error, gopher) {
   // gopher.api.sendEmail({ to: gopher.get('user.primary_email')}); // send a custom error email to user
   // gopher.response.status(500); // 5xx status code sends generic error to user
   gopher.webhook.respond({
-    status: "failure",
-    message: "A custom error message"
+    status: "error",
+    message: "A custom error message" // Shown to user if in the web UI.
   }); // A webhook response must be sent
 });
 ```
