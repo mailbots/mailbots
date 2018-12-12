@@ -31,7 +31,6 @@
   - [Using Express.js Middlware and Routes](#using-expressjs-middlware-and-routes)
     - [Adding to gopher.skills with middlware](#adding-to-gopherskills-with-middlware)
     - [Handling routes](#handling-routes)
-  - [Gopher API](#gopher-api)
   - [The "Gopher Object" Reference](#the-gopher-object-reference)
   - [Install Flow](#install-flow)
   - [Testing](#testing)
@@ -788,20 +787,6 @@ Handle http routes the same as you would in [Express.js](https://expressjs.com/e
 gopherApp.app.get("/hi", function(req, res) {
   res.send("<h1>Hi http request!</h1>");
 });
-```
-
-## Gopher API
-
-A pre-authenticated [Gopher API client](https://github.com/gopherhq/gopherhq-js) is available within every handler at `gopher.api`.
-
-```javascript
-gopherApp.onCommand("remember", function(gopher) {
-  // An authenticated API Client is available on gopher.api
-  gopher.api.getExtensionData(); // this just works!
-  gopher.webhook.respond();
-};
-
-// See https://github.com/gopherhq/gopherhq-js for api
 ```
 
 ## The "Gopher Object" Reference
