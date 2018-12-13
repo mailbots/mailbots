@@ -3,19 +3,19 @@
 const { expect } = require("chai");
 const request = require("supertest");
 const fs = require("fs");
-const GopherApp = require("../gopher-app");
+const MailBots = require("../mailbots");
 const crypto = require("crypto");
 
 const clientId = "foo";
 const clientSecret = "bar";
 
-describe("Gopher App", function() {
+describe("MailBots App", function() {
   const taskCreatedWebhook = require("./fixtures/task-created-webhook.json");
   const actionReceivedWebhook = require("./fixtures/task-action-received-webhook.json");
 
-  let gopherApp = {}; // reinitialized before each test
+  let mailbot = {}; // reinitialized before each test
   beforeEach(function() {
-    gopherApp = new GopherApp({
+    mailbot = new MailBots({
       clientId,
       clientSecret
     });
@@ -24,8 +24,8 @@ describe("Gopher App", function() {
   function fireWebhookRequest(webhook, { errOnFallthrough = true } = {}) {
     // Throw an error if a request fails to match
     if (errOnFallthrough) {
-      gopherApp.on(/.*/, function failOnFallthrough(gopher) {
-        throw new Error("Gopher handler did not run");
+      mailbot.on(/.*/, function failOnFallthrough(bot) {
+        throw new Error("mailbot handler did not run");
       });
     }
 
@@ -36,7 +36,7 @@ describe("Gopher App", function() {
       .update(JSON.stringify(webhook))
       .digest("hex");
 
-    const app = gopherApp.exportApp();
+    const app = mailbot.exportApp();
     return (
       request(app)
         .post("/webhooks")
@@ -61,8 +61,8 @@ describe("Gopher App", function() {
 
   describe("configuration", function() {
     it("should throw if instaniated without config", function(done) {
-      expect(() => new GopherApp()).to.throw();
-      expect(() => new GopherApp({ clientId, clientSecret })).to.not.throw();
+      expect(() => new MailBots()).to.throw();
+      expect(() => new MailBots({ clientId, clientSecret })).to.not.throw();
       done();
     });
   });
@@ -77,23 +77,23 @@ describe("Gopher App", function() {
     });
 
     it("should only accept validate webhooks", function(done) {
-      gopherApp.on(/.*/, gopher => {
+      mailbot.on(/.*/, bot => {
         // Should fire and be valid
-        expect(gopher.requestJson.event).to.equal("task.created");
+        expect(bot.requestJson.event).to.equal("task.created");
         done();
-        gopher.webhook.respond();
+        bot.webhook.respond();
       });
       const exampleJson = require("./fixtures/task-created-webhook.json");
       fireWebhookRequest(exampleJson);
     });
 
     it("should fail webhook with an invalid secret", function(done) {
-      gopherApp.on(/.*/, gopher => {
+      mailbot.on(/.*/, bot => {
         done("An invalid webhook is executing");
-        gopher.webhook.respond();
+        bot.webhook.respond();
       });
 
-      const app = gopherApp.exportApp();
+      const app = mailbot.exportApp();
 
       // build and sign request
       const exampleJson = require("./fixtures/task-created-webhook.json");
@@ -125,42 +125,42 @@ describe("Gopher App", function() {
   describe("event matching", function() {
     // Request headers are missing..but how best to catch this error??
     it("onCommand handler matches a command by regex", function(done) {
-      gopherApp.onCommand(/.*/, gopher => {
-        expect(gopher.command).to.equal("memorize");
-        gopher.webhook.respond();
+      mailbot.onCommand(/.*/, bot => {
+        expect(bot.command).to.equal("memorize");
+        bot.webhook.respond();
         done();
       });
       fireWebhookRequest(taskCreatedWebhook);
     });
 
     it("onCommand handler matches a command by string", function(done) {
-      gopherApp.onCommand("memorize", gopher => {
-        expect(gopher.command).to.equal("memorize");
+      mailbot.onCommand("memorize", bot => {
+        expect(bot.command).to.equal("memorize");
         done();
       });
       fireWebhookRequest(taskCreatedWebhook);
     });
 
     it("onAction handler matches by regex", function(done) {
-      gopherApp.onAction(/^freque.*/, gopher => {
-        expect(gopher.action).to.equal("frequency.0-2");
-        gopher.webhook.respond();
+      mailbot.onAction(/^freque.*/, bot => {
+        expect(bot.action).to.equal("frequency.0-2");
+        bot.webhook.respond();
         done();
       });
       fireWebhookRequest(actionReceivedWebhook);
     });
 
     it("multiple handlers and requests can fire", async function() {
-      gopherApp.onCommand("memorize", function handleCmd(gopher) {
-        gopher.webhook.quickReply("foo");
-        expect(gopher.command).to.equal("memorize");
-        gopher.webhook.respond();
+      mailbot.onCommand("memorize", function handleCmd(bot) {
+        bot.webhook.quickReply("foo");
+        expect(bot.command).to.equal("memorize");
+        bot.webhook.respond();
       });
 
-      gopherApp.onAction(/^freque.*/, function handleFreq(gopher) {
-        gopher.webhook.quickReply("got action");
-        expect(gopher.action).to.equal("frequency.0-2");
-        gopher.webhook.respond();
+      mailbot.onAction(/^freque.*/, function handleFreq(bot) {
+        bot.webhook.quickReply("got action");
+        expect(bot.action).to.equal("frequency.0-2");
+        bot.webhook.respond();
       });
 
       const result = await fireWebhookRequest(taskCreatedWebhook);
@@ -168,18 +168,18 @@ describe("Gopher App", function() {
     });
 
     it("multiple async handlers and requests can fire", async function() {
-      gopherApp.onCommand("memorize", async function handleCmd(gopher) {
+      mailbot.onCommand("memorize", async function handleCmd(bot) {
         await getAsyncThing(100);
-        gopher.webhook.quickReply("foo");
-        expect(gopher.command).to.equal("memorize");
-        gopher.webhook.respond();
+        bot.webhook.quickReply("foo");
+        expect(bot.command).to.equal("memorize");
+        bot.webhook.respond();
       });
 
-      gopherApp.onAction(/^freque.*/, async function handleFreq(gopher) {
+      mailbot.onAction(/^freque.*/, async function handleFreq(bot) {
         await getAsyncThing(100);
-        gopher.webhook.quickReply("got action");
-        expect(gopher.action).to.equal("frequency.0-2");
-        gopher.webhook.respond();
+        bot.webhook.quickReply("got action");
+        expect(bot.action).to.equal("frequency.0-2");
+        bot.webhook.respond();
       });
 
       const result = await fireWebhookRequest(taskCreatedWebhook);
@@ -188,11 +188,11 @@ describe("Gopher App", function() {
 
     const taskTriggeredWebhook = require("./fixtures/task-triggered-webhook.json");
     it("onTrigger handler matches task command by regex", function(done) {
-      gopherApp.onTrigger(/^mem.*/, gopher => {
-        expect(gopher.get("task.command")).to.equal(
-          "memorize@gopher-memorize.gopher.email"
+      mailbot.onTrigger(/^mem.*/, bot => {
+        expect(bot.get("task.command")).to.equal(
+          "memorize@gopher-memorize.eml.bot"
         );
-        gopher.webhook.respond();
+        bot.webhook.respond();
         done();
       });
       fireWebhookRequest(taskTriggeredWebhook);
@@ -200,11 +200,11 @@ describe("Gopher App", function() {
 
     const taskViewedWebhook = require("./fixtures/task-viewed-webhook.json");
     it("onTaskViewed handler matches task command by regex", function(done) {
-      gopherApp.onTaskViewed(/^memorize.*/, gopher => {
-        expect(gopher.get("task.command")).to.equal(
-          "memorize@gopher-memorize.gopher.email"
+      mailbot.onTaskViewed(/^memorize.*/, bot => {
+        expect(bot.get("task.command")).to.equal(
+          "memorize@gopher-memorize.eml.bot"
         );
-        gopher.webhook.respond();
+        bot.webhook.respond();
         done();
       });
       fireWebhookRequest(taskViewedWebhook);
@@ -214,7 +214,7 @@ describe("Gopher App", function() {
       const extensionSettingsViewed = require("./fixtures/extension-settings-viewed-webhook.json");
 
       it("fires onSettingsViewed handler", function(done) {
-        gopherApp.onSettingsViewed(gopher => {
+        mailbot.onSettingsViewed(bot => {
           done();
         });
         fireWebhookRequest(extensionSettingsViewed, {
@@ -226,8 +226,8 @@ describe("Gopher App", function() {
       it("onSettingsViewed handler returns proper data types");
 
       it("onSettingsViewed handler adds a json response", function(done) {
-        gopherApp.onSettingsViewed(gopher => {
-          gopher.responseJson = {
+        mailbot.onSettingsViewed(bot => {
+          bot.responseJson = {
             settings: {
               foo: "bar"
             }
@@ -242,9 +242,9 @@ describe("Gopher App", function() {
       });
 
       it("onSettingsViewed handler handles an async function", function(done) {
-        gopherApp.onSettingsViewed(async gopher => {
+        mailbot.onSettingsViewed(async bot => {
           const settings = await getAsyncThing();
-          gopher.responseJson = settings;
+          bot.responseJson = settings;
         });
         fireWebhookRequest(extensionSettingsViewed, {
           errOnFallthrough: false
@@ -255,16 +255,16 @@ describe("Gopher App", function() {
       });
 
       it("multiple onSettingsViewed handlers fire", function(done) {
-        gopherApp.onSettingsViewed(gopher => {
-          gopher.responseJson = {
+        mailbot.onSettingsViewed(bot => {
+          bot.responseJson = {
             settings: {
               foo: "bar"
             }
           };
         });
 
-        gopherApp.onSettingsViewed(gopher => {
-          gopher.responseJson.settings.shoe = "far";
+        mailbot.onSettingsViewed(bot => {
+          bot.responseJson.settings.shoe = "far";
         });
 
         fireWebhookRequest(extensionSettingsViewed, {
@@ -277,16 +277,16 @@ describe("Gopher App", function() {
       });
 
       it("passes data between onSettingsViewed handlers", function(done) {
-        gopherApp.onSettingsViewed(gopher => {
-          gopher.responseJson = {
+        mailbot.onSettingsViewed(bot => {
+          bot.responseJson = {
             settings: {
               foo: "bar"
             }
           };
         });
 
-        gopherApp.onSettingsViewed(gopher => {
-          expect(gopher.responseJson.settings.foo).to.equal("bar");
+        mailbot.onSettingsViewed(bot => {
+          expect(bot.responseJson.settings.foo).to.equal("bar");
           done();
         });
 
@@ -298,7 +298,7 @@ describe("Gopher App", function() {
       const extensionSettingsBeforeSaved = require("./fixtures/extension-settings-pre-saved-webhook.json");
 
       it("fires beforeSettingsSaved handler", function(done) {
-        gopherApp.beforeSettingsSaved(gopher => {
+        mailbot.beforeSettingsSaved(bot => {
           done();
         });
         fireWebhookRequest(extensionSettingsBeforeSaved, {
@@ -307,12 +307,12 @@ describe("Gopher App", function() {
       });
 
       it("multiple beforeSettingsSaved handlers fire with data", function(done) {
-        gopherApp.beforeSettingsSaved(gopher => {
-          gopher.webhook.setExtensionData("github.foo", "bar");
+        mailbot.beforeSettingsSaved(bot => {
+          bot.webhook.setExtensionData("github.foo", "bar");
         });
-        gopherApp.beforeSettingsSaved(gopher => {
-          expect(gopher.webhook.getExtensionData("github.foo")).to.equal("bar");
-          gopher.webhook.setExtensionData("github.shoe", "far");
+        mailbot.beforeSettingsSaved(bot => {
+          expect(bot.webhook.getExtensionData("github.foo")).to.equal("bar");
+          bot.webhook.setExtensionData("github.shoe", "far");
         });
         fireWebhookRequest(extensionSettingsBeforeSaved, {
           errOnFallthrough: false
@@ -324,62 +324,62 @@ describe("Gopher App", function() {
       });
     });
 
-    it("gopherApp.on method matches webhook types", function(done) {
-      gopherApp.on("task.created", gopher => {
-        expect(gopher.command).to.equal("memorize");
-        gopher.webhook.respond();
+    it("mailbot.on method matches webhook types", function(done) {
+      mailbot.on("task.created", bot => {
+        expect(bot.command).to.equal("memorize");
+        bot.webhook.respond();
         done();
       });
       fireWebhookRequest(taskCreatedWebhook);
     });
 
-    it("gopherApp.on method matches webhook by function", function(done) {
+    it("mailbot.on method matches webhook by function", function(done) {
       function matchFunction(webhook) {
         if (webhook.event == "task.created") return true;
       }
-      gopherApp.on(matchFunction, gopher => {
-        expect(gopher.command).to.equal("memorize");
-        gopher.webhook.respond();
+      mailbot.on(matchFunction, bot => {
+        expect(bot.command).to.equal("memorize");
+        bot.webhook.respond();
         done();
       });
       fireWebhookRequest(taskCreatedWebhook);
     });
 
-    it("gopherApp.on method matches webhook by regex", function(done) {
-      gopherApp.on(/task\..*/, gopher => {
-        expect(gopher.command).to.equal("memorize");
-        gopher.webhook.respond();
+    it("mailbot.on method matches webhook by regex", function(done) {
+      mailbot.on(/task\..*/, bot => {
+        expect(bot.command).to.equal("memorize");
+        bot.webhook.respond();
         done();
       });
       fireWebhookRequest(taskCreatedWebhook);
     });
 
-    it("gopherApp.on method matches webhook by regex", function(done) {
-      gopherApp.onEvent("intercom", gopher => {
-        gopher.webhook.quickReply("test");
-        gopher.webhook.respond();
+    it("mailbot.on method matches webhook by regex", function(done) {
+      mailbot.onEvent("intercom", bot => {
+        bot.webhook.quickReply("test");
+        bot.webhook.respond();
         done();
       });
       const intercomEvent = require("./fixtures/extension-event-received.json");
       fireWebhookRequest(intercomEvent);
     });
 
-    it("gopherApp.on method matches webhook by regex (async)", async function() {
-      gopherApp.onEvent("intercom", async gopher => {
+    it("mailbot.on method matches webhook by regex (async)", async function() {
+      mailbot.onEvent("intercom", async bot => {
         let res = await getAsyncThing();
-        gopher.webhook.respond();
+        bot.webhook.respond();
       });
       const intercomEvent = require("./fixtures/extension-event-received.json");
       await fireWebhookRequest(intercomEvent);
     });
 
     it("once a match is found, no future routes are matched", function(done) {
-      gopherApp.on("task.created", gopher => {
-        expect(gopher.command).to.equal("memorize");
-        gopher.webhook.respond();
+      mailbot.on("task.created", bot => {
+        expect(bot.command).to.equal("memorize");
+        bot.webhook.respond();
         setTimeout(() => done(), 500);
       });
-      gopherApp.on(/.*/, gopher => {
+      mailbot.on(/.*/, bot => {
         done("This should not run");
       });
       fireWebhookRequest(taskCreatedWebhook);
@@ -397,59 +397,59 @@ describe("Gopher App", function() {
 
   describe("middleware", function() {
     it("uses middleware to add skills", function(done) {
-      gopherApp.app.use((req, res, next) => {
-        res.locals.gopher.skills.completeTest = function(done) {
+      mailbot.app.use((req, res, next) => {
+        res.locals.bot.skills.completeTest = function(done) {
           done();
         };
         next();
       });
-      gopherApp.on(/.*/, gopher => {
-        gopher.skills.completeTest(done);
-        gopher.webhook.respond();
+      mailbot.on(/.*/, bot => {
+        bot.skills.completeTest(done);
+        bot.webhook.respond();
       });
       fireWebhookRequest(taskCreatedWebhook);
     });
 
     it("uses async middleware to add skills", function(done) {
-      gopherApp.app.use((req, res, next) => {
-        res.locals.gopher.skills.completeTest = function(done) {
+      mailbot.app.use((req, res, next) => {
+        res.locals.bot.skills.completeTest = function(done) {
           done();
         };
         next();
       });
-      gopherApp.on(/.*/, gopher => {
-        gopher.skills.completeTest(done);
-        gopher.webhook.respond();
+      mailbot.on(/.*/, bot => {
+        bot.skills.completeTest(done);
+        bot.webhook.respond();
       });
       fireWebhookRequest(taskCreatedWebhook);
     });
 
-    // @todo Address when we created gopherApp.use top-level middleware handler.
+    // @todo Address when we created mailbot.use top-level middleware handler.
     // See the following test for a workaround
     it.skip("does not add middleware if it has already been added", function(done) {
       function mw(req, res, next) {
         console.log("foo");
         next();
       }
-      gopherApp.app.use(mw);
-      gopherApp.app.use(mw);
+      mailbot.app.use(mw);
+      mailbot.app.use(mw);
       // Logs "foo" "foo"
     });
 
     it("allows middleware to make itself run once per request", async function() {
       let runCount = 0;
       function mw(req, res, next) {
-        const gopher = res.locals.gopher;
-        if (gopher.alreadyRan(mw)) return next(); // reference itself
+        const bot = res.locals.bot;
+        if (bot.alreadyRan(mw)) return next(); // reference itself
         runCount++;
         next();
       }
 
       // duplicate middleware function on stack
-      gopherApp.app.use(mw);
-      gopherApp.app.use(mw);
-      gopherApp.app.use(mw);
-      gopherApp.app.use(mw);
+      mailbot.app.use(mw);
+      mailbot.app.use(mw);
+      mailbot.app.use(mw);
+      mailbot.app.use(mw);
 
       // only two requests
       await fireWebhookRequest(taskCreatedWebhook, {
@@ -466,30 +466,30 @@ describe("Gopher App", function() {
 
   describe("loading skills", function() {
     it("does not load duplicate single-fire handlers", function(done) {
-      gopherApp.onTrigger("foo", gopher => console.log("foo"));
-      gopherApp.onTrigger("foo", gopher => console.log("foo"));
-      gopherApp.onTrigger("foo", gopher => console.log("foo"));
-      expect(gopherApp.listeners.length).to.eq(1);
+      mailbot.onTrigger("foo", bot => console.log("foo"));
+      mailbot.onTrigger("foo", bot => console.log("foo"));
+      mailbot.onTrigger("foo", bot => console.log("foo"));
+      expect(mailbot.listeners.length).to.eq(1);
       done();
     });
 
     it("does not load duplicate multifire handlers", function(done) {
-      gopherApp.onSettingsViewed(gopher => console.log("settings viewed"));
-      gopherApp.onSettingsViewed(gopher => console.log("settings viewed"));
-      gopherApp.onSettingsViewed(gopher => console.log("settings viewed"));
-      expect(gopherApp.multiFireListeners.length).to.eq(1);
+      mailbot.onSettingsViewed(bot => console.log("settings viewed"));
+      mailbot.onSettingsViewed(bot => console.log("settings viewed"));
+      mailbot.onSettingsViewed(bot => console.log("settings viewed"));
+      expect(mailbot.multiFireListeners.length).to.eq(1);
       done();
     });
 
     it("_listenerAlreadyAdded detects identical one-time listeners", function(done) {
-      // Trigger condition function is what gets passed from gopherApp.onCommand("foo")
+      // Trigger condition function is what gets passed from mailbot.onCommand("foo")
       const triggerCondition = webhook =>
         webhook.event === "task.created" &&
         this.getTaskCommand(webhook) === "foo";
-      const cb = gopher => gopher.webhook.quickReply("bar");
-      gopherApp.on(triggerCondition, cb);
-      const alreadyAdded = gopherApp._listenerAlreadyAdded({
-        listeners: gopherApp.listeners,
+      const cb = bot => bot.webhook.quickReply("bar");
+      mailbot.on(triggerCondition, cb);
+      const alreadyAdded = mailbot._listenerAlreadyAdded({
+        listeners: mailbot.listeners,
         triggerCondition,
         cb
       });
@@ -498,40 +498,40 @@ describe("Gopher App", function() {
     });
 
     it("loads skills from a directory", function(done) {
-      gopherApp.loadSkill(__dirname + "/test-skills-1");
-      gopherApp.onCommand("memorize", gopher => {
-        expect(gopher.skills.testing1).to.be.true;
+      mailbot.loadSkill(__dirname + "/test-skills-1");
+      mailbot.onCommand("memorize", bot => {
+        expect(bot.skills.testing1).to.be.true;
         done();
       });
       fireWebhookRequest(taskCreatedWebhook);
     });
 
     it("loads skills from multiple directories", function(done) {
-      gopherApp.loadSkill(__dirname + "/test-skills-1");
-      gopherApp.loadSkill(__dirname + "/test-skills-2/");
-      gopherApp.onCommand("memorize", gopher => {
-        expect(gopher.skills.testing1).to.be.true;
-        expect(gopher.skills.testing2).to.be.false;
+      mailbot.loadSkill(__dirname + "/test-skills-1");
+      mailbot.loadSkill(__dirname + "/test-skills-2/");
+      mailbot.onCommand("memorize", bot => {
+        expect(bot.skills.testing1).to.be.true;
+        expect(bot.skills.testing2).to.be.false;
         done();
       });
       fireWebhookRequest(taskCreatedWebhook);
     });
 
     it("loads skill files in alpha order by filename", function(done) {
-      gopherApp.loadSkill(__dirname + "/test-skills-1");
-      gopherApp.onCommand("memorize", gopher => {
-        expect(gopher.skills.overwrite).to.equal("z-test-skill");
+      mailbot.loadSkill(__dirname + "/test-skills-1");
+      mailbot.onCommand("memorize", bot => {
+        expect(bot.skills.overwrite).to.equal("z-test-skill");
         done();
       });
       fireWebhookRequest(taskCreatedWebhook);
     });
   });
 
-  describe("Gopher API", function() {
-    it("loads authenticated gopher api client on gopher.api", function(done) {
-      gopherApp.onCommand("memorize", gopher => {
-        expect(gopher.api._accessToken).to.be.not.null;
-        gopher.webhook.respond();
+  describe("MailBots API", function() {
+    it("loads authenticated bot api client on bot.api", function(done) {
+      mailbot.onCommand("memorize", bot => {
+        expect(bot.api._accessToken).to.be.not.null;
+        bot.webhook.respond();
         done();
       });
       fireWebhookRequest(taskCreatedWebhook);
@@ -540,20 +540,20 @@ describe("Gopher App", function() {
 
   describe("request information", function() {
     it("checks if current request is a webhook or not", function() {
-      gopherApp.app.use((req, res, next) => {
-        expect(res.locals.gopher.isWebhook).to.be.true;
+      mailbot.app.use((req, res, next) => {
+        expect(res.locals.bot.isWebhook).to.be.true;
         next();
       });
       fireWebhookRequest(taskCreatedWebhook, { errOnFallthrough: false });
     });
 
     it("checks if current request is not a webhook", function(done) {
-      gopherApp.app.use((req, res, next) => {
-        expect(res.locals.gopher.isWebhook).to.be.false;
+      mailbot.app.use((req, res, next) => {
+        expect(res.locals.bot.isWebhook).to.be.false;
         done();
         next();
       });
-      request(gopherApp.app)
+      request(mailbot.app)
         .get("/something-else")
         .set("Accept", "application/json")
         .catch(err => {
@@ -565,10 +565,10 @@ describe("Gopher App", function() {
 
   describe("async handlers", function() {
     it("handles an onCommand handler that returns a promise", async function() {
-      gopherApp.onCommand("memorize", async function(gopher) {
+      mailbot.onCommand("memorize", async function(bot) {
         let res = await getAsyncThing();
-        gopher.set("task.stored_data", res);
-        gopher.webhook.respond();
+        bot.set("task.stored_data", res);
+        bot.webhook.respond();
       });
       const exampleJson = require("./fixtures/task-created-webhook.json");
       const webhookResponse = await fireWebhookRequest(exampleJson);
@@ -585,87 +585,87 @@ describe("Gopher App", function() {
     const extensionSettingsViewed = require("./fixtures/extension-settings-viewed-webhook.json");
 
     it("uses the default error handler", async function() {
-      gopherApp.onCommand("memorize", gopher => {
+      mailbot.onCommand("memorize", bot => {
         throw new Error("An error!");
-        gopher.webhook.respond(); // isnt' called
+        bot.webhook.respond(); // isnt' called
       });
       const result = await fireWebhookRequest(taskCreatedWebhook);
       expect(result.status).to.equal(500);
       expect(result.body.webhook.message).to.contain(
-        "Gopher App caught an unhandled error"
+        "Your MailBot caught an unhandled error"
       );
     });
 
     it("uses the default error handler in async requests", async function() {
-      gopherApp.onCommand("memorize", async gopher => {
+      mailbot.onCommand("memorize", async bot => {
         await getAsyncThing(20);
         throw new Error("An error!");
-        gopher.webhook.respond(); // isnt' called
+        bot.webhook.respond(); // isnt' called
       });
       const result = await fireWebhookRequest(taskCreatedWebhook);
       expect(result.body.webhook.message).to.contain(
-        "Gopher App caught an unhandled error"
+        "Your MailBot caught an unhandled error"
       );
     });
 
     it("uses the default error handler in multi-fire handlers", async function() {
-      gopherApp.onSettingsViewed(gopher => {
+      mailbot.onSettingsViewed(bot => {
         throw new Error("An error!");
-        gopher.webhook.respond(); // isnt' called
+        bot.webhook.respond(); // isnt' called
       });
       const result = await fireWebhookRequest(extensionSettingsViewed);
       expect(result.body.webhook.message).to.contain(
-        "Gopher App caught an unhandled error"
+        "Your MailBot caught an unhandled error"
       );
     });
 
     it("uses the default error handler in in async multi-fire handlers", async function() {
-      gopherApp.onSettingsViewed(async gopher => {
+      mailbot.onSettingsViewed(async bot => {
         await getAsyncThing(20);
         throw new Error("An error!");
-        gopher.webhook.respond(); // isnt' called
+        bot.webhook.respond(); // isnt' called
       });
       const result = await fireWebhookRequest(extensionSettingsViewed);
       expect(result.body.webhook.message).to.contain(
-        "Gopher App caught an unhandled error"
+        "Your MailBot caught an unhandled error"
       );
     });
 
     it("uses a custom error handler in async one-time handlers", async function() {
-      gopherApp.setErrorHandler((err, gopher) => {
+      mailbot.setErrorHandler((err, bot) => {
         expect(err.message).to.equal("An error!");
-        return gopher.webhook.respond({
+        return bot.webhook.respond({
           webhook: { status: "failed", message: err.message }
         });
       });
 
-      gopherApp.onCommand("memorize", async function handleCmd(gopher) {
+      mailbot.onCommand("memorize", async function handleCmd(bot) {
         const foo = await getAsyncThing(100);
         throw new Error("An error!");
-        gopher.webhook.respond(); // isnt' called
+        bot.webhook.respond(); // isnt' called
       });
 
       const result = await fireWebhookRequest(taskCreatedWebhook);
     });
 
     it("handles an error and then more requets", async function() {
-      gopherApp.setErrorHandler((err, gopher) => {
+      mailbot.setErrorHandler((err, bot) => {
         expect(err.message).to.equal("An error!");
-        return gopher.webhook.respond({
+        return bot.webhook.respond({
           webhook: { status: "failed", message: err.message }
         });
       });
 
-      gopherApp.onCommand("memorize", async function handleCmd(gopher) {
+      mailbot.onCommand("memorize", async function handleCmd(bot) {
         const foo = await getAsyncThing(100);
         throw new Error("An error!");
-        gopher.webhook.respond(); // isnt' called
+        bot.webhook.respond(); // isnt' called
       });
 
-      gopherApp.onAction(/^freque.*/, function handleFreq(gopher) {
-        gopher.webhook.quickReply("got action");
-        expect(gopher.action).to.equal("frequency.0-2");
-        gopher.webhook.respond();
+      mailbot.onAction(/^freque.*/, function handleFreq(bot) {
+        bot.webhook.quickReply("got action");
+        expect(bot.action).to.equal("frequency.0-2");
+        bot.webhook.respond();
       });
 
       const result = await fireWebhookRequest(taskCreatedWebhook);
@@ -673,33 +673,33 @@ describe("Gopher App", function() {
     });
 
     it("uses a custom error handler with async multi-fire handlers (settings)", async function() {
-      gopherApp.setErrorHandler((err, gopher) => {
-        gopher.webhook.respond({ webhook: { message: "foo!" } });
+      mailbot.setErrorHandler((err, bot) => {
+        bot.webhook.respond({ webhook: { message: "foo!" } });
       });
 
-      gopherApp.onSettingsViewed(function(gopher) {
+      mailbot.onSettingsViewed(function(bot) {
         throw new Error("An error!");
-        gopher.webhook.respond();
+        bot.webhook.respond();
       });
 
       const result = await fireWebhookRequest(extensionSettingsViewed);
       expect(result.body.webhook.message).to.contain("foo!");
     });
 
-    it("bubbles up Express middleware errors to Gopher App Error Handler", function(done) {
-      gopherApp.setErrorHandler((err, gopher) => {
+    it("bubbles up Express middleware errors to MailBots App Error Handler", function(done) {
+      mailbot.setErrorHandler((err, bot) => {
         expect(err.message).to.equal("Middleware Error");
         done();
-        gopher.webhook.respond();
+        bot.webhook.respond();
       });
 
-      gopherApp.app.use((req, res, next) => {
+      mailbot.app.use((req, res, next) => {
         return next(new Error("Middleware Error"));
       });
 
-      gopherApp.onCommand("memorize", gopher => {
+      mailbot.onCommand("memorize", bot => {
         done("Handler should not have run");
-        gopher.webhook.respond();
+        bot.webhook.respond();
       });
 
       const result = fireWebhookRequest(taskCreatedWebhook);
@@ -708,15 +708,15 @@ describe("Gopher App", function() {
 
   describe("problematic payloads", function() {
     it("handles large files", async function() {
-      gopherApp.onCommand("memorize", gopher => {
-        gopher.webhook.respond({
+      mailbot.onCommand("memorize", bot => {
+        bot.webhook.respond({
           webhook: {
             message: "handled large file"
           }
         });
       });
 
-      gopherApp.setErrorHandler(err => {
+      mailbot.setErrorHandler(err => {
         console.log(err);
       });
 

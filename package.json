@@ -1,8 +1,8 @@
 {
-  "name": "gopher-app",
-  "version": "0.0.30-beta",
-  "description": "The core skill framework to add and install skills for Gopher.email",
-  "main": "gopher-app.js",
+  "name": "mailbots",
+  "version": "0.1.0-beta",
+  "description": "Create email-based bots with MailBots.com",
+  "main": "mailbots.js",
   "directories": {
     "lib": "lib",
     "test": "test"
@@ -11,6 +11,10 @@
     "test": "NODE_ENV=test mocha test -w",
     "test:inspect": "NODE_ENV=test mocha test --inspect-brk -w",
     "docs:build": "doctoc ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mailbots/mailbots"
   },
   "author": "Reilly Sweetland <esweetland@gmail.com> (https://reillysweetland.com/)",
   "license": "(c) 2018 (unpublished).",
@@ -21,10 +25,10 @@
     "supertest": "3.1.0"
   },
   "dependencies": {
+    "@mailbots/mailbots-sdk": "0.1.1-beta",
     "body-parser": "1.18.3",
     "cookie-parser": "1.4.3",
     "express": "4.16.3",
-    "gopherhq": "0.0.21-beta",
     "lodash": "4.17.10",
     "request": "2.87.0",
     "url-join": "4.0.0",

@@ -1,30 +1,25 @@
 const _ = require("lodash");
 const express = require("express");
 const getConfig = require("./lib/config-defaults");
-const debug = require("debug")("gopher-app");
+const debug = require("debug")("mailbots");
 
-/**
- * A light weight wrapper around the Express App object to provide an authenticated
- * Gopher API Client, enable Gopher Skills, middlware, and provide better
- * isolation / componentization around custom and shared Gopher Skills.
- */
-class GopherApp {
+class MailBots {
   /**
    * Optionally instantiate with config. Pass any key shown in config.js.
    * @param {object} config
    */
   constructor(instanceConfig) {
     const config = getConfig(instanceConfig);
-    debug("instantiating GopherApp instance with config:", config);
+    debug("instantiating MailBots instance with config:", config);
     if (!config.clientId || !config.clientSecret) {
       throw new Error(
-        "GopherApp is not configured. Read more: https://github.com/gopherhq/gopher-app"
+        "MailBots is not configured. Read more: https://github.com/mailbots/mailbots"
       );
     }
 
     this.app = (config && config.app) || express();
 
-    // Config opts are also available to the user via gopher.config
+    // Config opts are also available to the user via bot.config
     this.config = config;
 
     // Listens for anything posted to /webhooks, firing appropriate listener.
@@ -51,12 +46,14 @@ class GopherApp {
    * Must be called after other skills and routes are added.
    * Anything posted to /webhooks route is automatically handled.
    * Other routes must be created as usual with the Express App object.
-   * For example: gopherApp.app.get("/", (req, res) => {});
+   * For example: mailbots.app.get("/", (req, res) => {});
    */
   listen() {
     this.loadLastCoreSkills();
     const listener = this.app.listen(process.env.PORT || 3011, function() {
-      console.log("Gopher is listening on port " + listener.address().port);
+      console.log(
+        "Your MailBot is listening on port " + listener.address().port
+      );
     });
   }
 
@@ -64,18 +61,18 @@ class GopherApp {
    * For testing, export app object instead of starating server
    */
   exportApp() {
-    debug("exporting gopherApp");
+    debug("exporting MailBots App");
     this.loadLastCoreSkills();
     return this.app;
   }
 
   /**
-   * Loads base gopher skills
+   * Loads base MailBot skills
    * Skills are Express middleware and route handlers. Some must be called before
-   * any other middleware / skill is added. For example, auth, loading Gopher Helper, etc.
+   * any other middleware / skill is added. For example, auth, loading BotRequest, etc.
    * Other skills must be called last, ex: a catch-all redirect for web request.
    * Users can specify their own order of skills by adding skills line-by-line,
-   * or by loading skill directories (with gopherApp.loadSkill()) in order.
+   * or by loading skill directories (with mailbot.loadSkill()) in order.
    */
   loadFirstCoreSkills() {
     require("./lib/core-skills-first")(this);
@@ -90,14 +87,14 @@ class GopherApp {
   }
 
   /**
-   * See commit 9afba5d6 for simplified gopher middlware idea
+   * See commit 9afba5d6 for simplified bot middlware idea
    */
   use() {
-    throw new Error("Call gopherApp.app.use to add Express middleware");
+    throw new Error("Call mailbots.app.use to add Express middleware");
   }
 
   /**
-   * Load Gopher skills from a directory, non-recursively
+   * Load MailBots skills from a directory, non-recursively
    * This can be called more than once to load skills in order. Skills loaded
    * this method are preceeded by loadFirstCoreSkills, succeeded by loadLastCoreSkills.
    * This can also receive a path to a file.
@@ -129,7 +126,7 @@ class GopherApp {
 
       // Unexpected
     } else {
-      throw new Error("Skill type unrecognized by gopherApp.loadSkill()");
+      throw new Error("Skill type unrecognized by mailbots.loadSkill()");
     }
   }
 
@@ -145,11 +142,11 @@ class GopherApp {
 
   /**
    * Adds a listener function to listeners array
-   * Example: controller.on('task.created', (gopher, req, res) => { });
+   * Example: controller.on('task.created', (bot, req, res) => { });
    * Example: controller.on((webhook) => webhook.event === 'task.created', cb)
    * @param {string|function} event A webhook event string (ex: task.created). Or
    * a function receives the webhook as a param, which returns a boolean value.
-   * @param {function} cb Callback function with signature cb(gopher, req, res)
+   * @param {function} cb Callback function with signature cb(bot, req, res)
    */
   on(triggerCondition, cb, opts) {
     if (this._listenerAlreadyAdded({ triggerCondition, cb, opts })) {
@@ -237,7 +234,7 @@ class GopherApp {
   /**
    * Captures only 'extension.event_received' events
    * Note: This "Event" refers to the 3rd party webhooks
-   * that are posted to the Gopher Extension.
+   * that are posted to the MailBot.
    * @param {string|RexExp} eventSearch
    */
   onEvent(eventSearch, cb) {
@@ -304,10 +301,10 @@ class GopherApp {
   }
 
   /**
-   * Handle webhook that fires when user is viewing extension.
+   * Handle webhook that fires when user is viewing MailBot.
    * ALL onSettingsViewed handlers fire when this webhook arrives. Each
    * handler can add and read data to and from its own namespace.
-   * @param {function} cb Callback function that receives the gopher object
+   * @param {function} cb Callback function that receives the bot object
    */
   onSettingsViewed(cb) {
     this.on("extension.settings_viewed", cb, { multiFire: true });
@@ -318,13 +315,13 @@ class GopherApp {
   }
 
   /**
-   * Handle webhook that fires after a user hits "save" on their extension settings.
+   * Handle webhook that fires after a user hits "save" on their MailBot settings.
    * Newly saved settings arrive at the top-level settings object.
    * Existing settings are still in extension.stored_data.
    * Return webhook { status: "fail", message: "" } to abort the saving process.
    * Return extenesion and user data to update to save data as with other webhooks.
    * ALL beforeSettingsSaved handlers fire.
-   * @param {function} cb Callback function that receives the gopher object
+   * @param {function} cb Callback function that receives the bot object
    */
   beforeSettingsSaved(cb) {
     this.on("extension.settings_pre_save", cb, { multiFire: true });
@@ -336,7 +333,7 @@ class GopherApp {
    * @param {object} response Express response object
    */
   async handleEvent(request, response) {
-    const gopher = response.locals.gopher;
+    const bot = response.locals.bot;
     const webhook = request.body;
     debug("Request JSON", webhook);
 
@@ -349,11 +346,11 @@ class GopherApp {
         if (this.cbShouldTrigger(webhook, listener.triggerCondition)) {
           autoReturn = true;
           try {
-            const ret = await listener.cb(gopher, request, response);
+            const ret = await listener.cb(bot, request, response);
             return ret;
           } catch (e) {
             if (process.env.NODE_ENV !== "test") console.error(e);
-            this.errorHandler(e, gopher);
+            this.errorHandler(e, bot);
           }
         }
       }
@@ -362,12 +359,12 @@ class GopherApp {
     await Promise.all(multiFireListenerPromises);
 
     // Return if we have an aggregate settings response
-    if (autoReturn && !gopher.webhook.alreadyResponded) {
-      return response.send(gopher.responseJson);
+    if (autoReturn && !bot.webhook.alreadyResponded) {
+      return response.send(bot.responseJson);
     }
 
     // A handler already replied, for example an error handler
-    if (gopher.webhook.alreadyResponded) {
+    if (bot.webhook.alreadyResponded) {
       return;
     }
 
@@ -375,11 +372,11 @@ class GopherApp {
     for (const listener of this.listeners) {
       if (this.cbShouldTrigger(webhook, listener.triggerCondition)) {
         try {
-          const res = await listener.cb(gopher); // awaits for possible error
+          const res = await listener.cb(bot); // awaits for possible error
         } catch (e) {
           if (process.env.NODE_ENV !== "test") console.error(e);
-          gopher.error = e;
-          this.errorHandler(e, gopher);
+          bot.error = e;
+          this.errorHandler(e, bot);
         }
         break;
       }
@@ -418,4 +415,4 @@ class GopherApp {
   }
 }
 
-module.exports = GopherApp;
+module.exports = MailBots;

@@ -33,7 +33,7 @@
     "trigger_timeformat": "3days",
     "reference_email": {
       "to": ["test@example.com"],
-      "cc": ["memorize@gopher-memorize.gopher.email"],
+      "cc": ["memorize@gopher-memorize.eml.bot"],
       "bcc": [],
       "from": "esweetland@gmail.com",
       "reply_to": "",
@@ -42,7 +42,7 @@
       "text": "This is a body\n",
       "attachments": []
     },
-    "command": "memorize@gopher-memorize.gopher.email",
+    "command": "memorize@gopher-memorize.eml.bot",
     "stored_data": {
       "frequency_pref": "1.5"
     }

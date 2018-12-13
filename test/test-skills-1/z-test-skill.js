@@ -1,7 +1,7 @@
-module.exports = function(gopherApp) {
-  gopherApp.app.use((req, res, next) => {
-    const gopher = res.locals.gopher;
-    gopher.skills.overwrite = "z-test-skill";
+module.exports = function(mailbot) {
+  mailbot.app.use((req, res, next) => {
+    const bot = res.locals.bot;
+    bot.skills.overwrite = "z-test-skill";
     next();
   });
 };

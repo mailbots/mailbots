@@ -1,17 +1,17 @@
 {
   "source": {
     "type": "email",
-    "recipient": "memorize@gopher-memorize.gopher.email",
+    "recipient": "memorize@gopher-memorize.eml.bot",
     "from": "esweetland@gmail.com",
     "method": "bcc",
-    "to": ["memorize@gopher-memorize.gopher.email"],
+    "to": ["memorize@gopher-memorize.eml.bot"],
     "cc": [],
     "bcc": [],
     "subject": "fdsafdsa",
     "html": "",
     "text": "",
     "headers": {
-      "to": "memorize@gopher-memorize.gopher.email",
+      "to": "memorize@gopher-memorize.eml.bot",
       "cc": "",
       "bcc": "",
       "subject": "fdsafdsa",
@@ -20,7 +20,7 @@
   },
   "command": {
     "format": "memorize",
-    "full_address": "memorize@gopher-memorize.gopher.email"
+    "full_address": "memorize@gopher-memorize.eml.bot"
   },
   "event": "task.created",
   "version": 1,
@@ -55,7 +55,7 @@
     "trigger_time": null,
     "trigger_timeformat": "",
     "reference_email": {
-      "to": ["memorize@gopher-memorize.gopher.email"],
+      "to": ["memorize@gopher-memorize.eml.bot"],
       "cc": [],
       "bcc": [],
       "from": "esweetland@gmail.com",
@@ -65,7 +65,7 @@
       "text": "",
       "attachments": []
     },
-    "command": "memorize@gopher-memorize.gopher.email",
+    "command": "memorize@gopher-memorize.eml.bot",
     "stored_data": {
       "frequency_pref": "1.5"
     }
