@@ -1,6 +1,6 @@
 {
   "name": "mailbots",
-  "version": "0.1.0-beta",
+  "version": "0.1.1-beta",
   "description": "Create email-based bots with MailBots.com",
   "main": "mailbots.js",
   "directories": {
@@ -10,7 +10,7 @@
   "scripts": {
     "test": "NODE_ENV=test mocha test -w",
     "test:inspect": "NODE_ENV=test mocha test --inspect-brk -w",
-    "docs:build": "doctoc ."
+    "docs:build": "doctoc . --maxlevel 2"
   },
   "repository": {
     "type": "git",

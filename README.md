@@ -3,11 +3,19 @@
 
 
 - [Quick Start](#quick-start)
-- [Overview](#overview)
-- [Example: Hello World](#example-hello-world)
-- [Example: A Reminder](#example-a-reminder)
-- [Example: Handle Email Actions](#example-handle-email-actions)
-- [Handlers](#handlers)
+- [How MailBots Work](#how-mailbots-work)
+  - [Commands](#commands)
+  - [Tasks](#tasks)
+  - [Triggering](#triggering)
+  - [Architecture](#architecture)
+  - [Handlers](#handlers)
+  - [Skills](#skills)
+- [Examples:](#examples)
+  - [Hello World](#hello-world)
+  - [Set a Reminder](#set-a-reminder)
+  - [Handle Action-Emails](#handle-action-emails)
+  - [Install A Skill](#install-a-skill)
+- [Handler Reference](#handler-reference)
   - [onCommand](#oncommand)
   - [onTrigger](#ontrigger)
   - [onAction](#onaction)
@@ -16,91 +24,90 @@
   - [onSettingsViewed](#onsettingsviewed)
   - [beforeSettingsSaved](#beforesettingssaved)
   - [on](#on)
-- [Organizing Skills](#organizing-skills)
-  - [Making Modular Skills](#making-modular-skills)
-  - [Ways of Sharing Functionality](#ways-of-sharing-functionality)
-    - [1. Directly handling requests](#1-directly-handling-requests)
-    - [2. Export a "Gopher function"](#2-export-a-gopher-function)
-    - [3. Export Middleware](#3-export-middleware)
-    - [4. Automatically Applying Middleware](#4-automatically-applying-middleware)
-  - [Configurable Milddeware and Functions](#configurable-milddeware-and-functions)
-- [Installing 3rd Party Skills](#installing-3rd-party-skills)
-- [Publishing Skills](#publishing-skills)
-  - [Sharing UI Elements](#sharing-ui-elements)
-  - [Activating Skills](#activating-skills)
-- [Using Express.js Middlware and Routes](#using-expressjs-middlware-and-routes)
-  - [Adding to bot.skills with middlware](#adding-to-botskills-with-middlware)
-  - [Handling routes](#handling-routes)
-- [The "Gopher Object" Reference](#the-gopher-object-reference)
-- [Install Flow](#install-flow)
+  - [Handling Errors](#handling-errors)
+- [The "bot" Object Reference](#the-bot-object-reference)
+- [Building Skills](#building-skills)
+  - [Using Handlers](#using-handlers)
+  - [The "one-bot function"](#the-one-bot-function)
+  - [Handling Web Requests](#handling-web-requests)
+  - [Middleware](#middleware)
+  - [Namespacing Conventions](#namespacing-conventions)
+- [Installing Skills From npm](#installing-skills%C2%A0from-npm)
+  - [Skills With Side-Effects](#skills-with-side-effects)
+- [Welcoming New Bot Users](#welcoming-new-bot-users)
 - [Testing](#testing)
 - [Installing](#installing)
-- [Handling Errors](#handling-errors)
-- [Design Philosophy](#design-philosophy)
 - [Contributions](#contributions)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-An easy-to-use, open-source framework to create and install skills for your [MailBots.com](https://www.mailbots.com) email bot.
+[MailBots](https://www.mailbots.com) is a platform for creating bots, AIs and assistants that get things done right from your inbox.
 
-## Quick Start
+A MailBot is not "chatty" and it will not (usually) pretend to be human. A MailBot is an efficient utility that streamlines your day to day actions. It works on all email clients and excels at placing the right information in someone's inbox at the right time. Read more at mailbots.com
 
-Go through the extension setup process at mailbots.com. This will provide a fully editable, working and authenticated instance of this framework within about one minute. You can also install [locally](<(<(#installing)>)>).
+# Quick Start
 
-Let's tell our bot what do to when it receives the [email command](https://docs.mailbots.com/reference#email-commands) "hi":
+Go to mailbots.com and create a MailBot. The bot creation process sets up a working instance of this framework.
+
+Next, let's tell our MailBot what to do when it receives an email:
 
 ```javascript
 var MailBot = require("mailbots");
-var mailbot = new MailBot();
+var mailbot = new MailBot(); // assuming .env is set
 
-// When someone emails: hi@my-bot.eml.bot, respond "Hello world!"
-mailbot.onCommand("hi", function(bot) {
-  bot.webhook.quickReply("Hello world!");
+// When someone emails: say-hi@my-bot.eml.bot, respond "Hello Human!"
+mailbot.onCommand("say-hi", function(bot) {
+  bot.webhook.quickReply("Hello Human!");
   bot.webhook.respond();
 });
 
 mailbot.listen();
 ```
 
-Now when anyone\* emails `hi@my-bot.eml.bot` they will get this email back.
+`say-hi@my-bot.eml.bot` is an example of an "email command". Whatever is before the @ sign is a command to your bot to accomplish some task. [Read more about email commands](https://docs.mailbots.com/reference#email-commands).
 
-\*"Anyone" means anyone with an email address, regardless of email client, language, geography, platform (mobile, tablet, Raspberry Pi, etc). It's just email!
+# How MailBots Work
 
-## Overview
+A MailBot's purpose is to help someone get something done quickly, efficiently and without leaving their inbox.
 
-MailBots help you get things done without leaving your email, like an exceptionally skilled lovable rodent that digs tunnels from your inbox to your other systems.
+## Commands
 
-**Core API**
+MailBots execute commands. Even when using natural language, or passively listening for an event, a MailBot will always act in the context of a command. Email Commands (as above) are one way to issue commands. Creating a task with the API also requires a command.
 
-The MailBots core API provides core email APIs for sending email, receiving and parsing email, storing data, and setting reminders.
+## Tasks
 
-**MailBots**
+In carrying out a command, MailBots create tasks. Tasks can scheduled, edited or "completed". Tasks are always associated with a command.
 
-Creating a MailBot grants developer access to Gopher's Core APIs, allowing someone to create an email-only utility (like followupthen.com). MailBots, are set up to be publishable, but they can also be kept private.
+## Triggering
 
-**Webhook Based**
+A task (that carries out a command) can be created then wait for the perfect moment to notify a user. Timliness is a core feature of of a MailBot.
 
-When events happen in the core API (ex: email is received), it sends webhooks to your MailBot. Your extension responds with JSON that tells Gopher what to do next (ex: send an email, store data, set a reminder, etc). JSON in, JSON out. What happens in between those points is the business of this project.
+## Architecture
 
-**Skills**
+When events happen in the MailBots platform (ex: an email is received), your MailBot receives webhooks. Your MailBot then gets some useful bit of work done (ex: enters data into a CRM) and responds with JSON that tells the MailBots platform what to do next (ex: send an email, store data, set a reminder, etc). JSON in, JSON out.
 
-MailBots are composed of one or more "skills". This project provides a framework to create and install skills that accomplish specific email-based tasks. For example:
+## Handlers
 
-- Parsing inbound email
-- Sending email at exactly the right moment
-- Querying APIs to put useful information in an email
-- Submitting data to CRMs, project management systems, etc
-- Handling commands and actions using purely email
-- Rendering email UI elements
+MailBots are composed of handlers – functions that run when certain events occur. For example: _When the bot receives an email at this address, execute these actions_
 
-Skills can register "handlers" – functions that tell Gopher what to do when certain events occur. Skills can respond to emails and / or provide components to other skills.
+## Skills
 
-## Example: Hello World
+Handlers and other bot functionality can be packaged into "skills" – high-level abilities that can shared between bots. Here are some example skills:
 
-Create an [email command](https://docs.mailbots.com/reference#email-commands) that says hi
+- Interact with a CRM
+- Parse natural language
+- Send a text message or Slack message
+- Render special UI elements
+
+You can publish, share and install new skills from npm.
+
+# Examples:
+
+## Hello World
+
+Create an [email command](https://docs.mailbots.com/reference#email-commands) that says hi.
 
 ```javascript
-// Inside app.js
 var MailBotsApp = require("mailbots");
 var app = new MailBotsApp();
 
@@ -112,84 +119,86 @@ mailbot.onCommand("hi", function(bot) {
 mailbot.listen();
 ```
 
-## Example: A Reminder
+## Set a Reminder
 
 The first handler creates the reminder. The second one handles the reminder when it becomes due.
 
 ```javascript
-// Inside app.js
-// Schedule the task to trigger in 1 minute
-var MailBotsApp = require("mailbots");
-var app = new MailBotsApp();
-
 mailbot.onCommand("hi", function(bot) {
+  // Schedule the task to trigger in 1 minute
   bot.webhook.setTriggerTime("1min");
   bot.webhook.respond();
 });
 
-// When a task with "hi" command triggers, run this function
+// When a task with "hi" command triggers, run this
 mailbot.onTrigger("hi", function(bot) {
   bot.webhook.quickReply("Hi 1 minute later!");
   bot.webhook.respond();
 });
-
-mailbot.listen();
 ```
 
-## Example: Handle Email Actions
+## Handle Action-Emails
 
-Here an example of handling
-an [Action Email](https://docs.mailbots.com/reference#email-based-actions).
-
-The interaction would start with emailing `hi-example@my-bot.eml.bot`. This email would render a button to `Say Hi` which, when clicked, would trigger an Action.
+MailBots can render quick-action buttons (mailto links that map to executable code) that let users get things done without leaving their inbox. Read more about [action emails](https://docs.mailbots.com/reference#email-based-actions).
 
 ```javascript
-var MailBotsApp = require("mailbots");
-var app = new MailBotsApp();
 
- mailbot.onCommand("hi-example", function(bot) {
+// This first handler renders an email with an action-email button
+ mailbot.onCommand("send-buttons", function(bot) {
     bot.webhook.addEmail({
       to: bot.get('source.from')
-      from: "Hi Gopher",
+      from: "MyBot",
       subject: bot.get('source.subject'),
       body: [
-        {
-          type: 'title',
-          text: 'Click button to say hi'
-        },
 
-        // An email based action
+        // 👇 An email-action
         {
           type: "button",
-          text: "Say Hi",
+          text: "Press Me",
           action: 'say.hi',
-          subject: "Hit Send to Say hi"
+          subject: "Just hit 'send'",
         }
       ]
     });
     bot.webhook.respond();
   };
 
-  // Handle the event created by our UI above
+  // This handler handles the email action
   mailbot.onAction('say.hi', function(bot) {
     bot.webhook.quickReply('hi');
+    // Lots of useful things can be done here. Completing a todo item, adding notes to a CRM, etc.
     bot.webhook.respond();
   });
 
   mailbot.listen();
 ```
 
-## Handlers
+## Install A Skill
 
-The Gopher Core API sends a webhook webhooks to your Gopher App extension when certain events occur (for example, an email is received). These events are handled by the following handlers.
+Let's install a skill to that extracts the email message from previously quoted emails and signatures.
+
+```javascript
+var mailbotsTalon = require("mailbots-talon");
+mailbot.onCommand("hi", function(bot) {
+  const emailWithoutSignature = mailbotsTalon.getEmail(bot);
+  bot.quickReply(
+    "Here is the email without the signature:" + emailWithoutSignature
+  );
+  bot.webhook.respond();
+});
+```
+
+# Handler Reference
 
 Note: The first matching event handler ends the request, even if subsequent handlers also match, except where otherwise noted.
 
-### onCommand
+## onCommand
 
-Handle when a new task is created either via an [email command](https://docs.mailbots.com/reference#email-commands) or via the API. For example, add an item to a todo list.
+```
+mailbot.onCommand(command, handlerFn)
+```
 
-Note that a task always has a command.
+Handle when an [email command](https://docs.mailbots.com/reference) is received. This also fires when a new task is created via the API (All tasks have a command to define their purpose or reason for existence.)
 
 ```javascript
 mailbot.onCommand("todo", function(bot) {
@@ -197,7 +206,7 @@ mailbot.onCommand("todo", function(bot) {
 });
 ```
 
-Regular expressions work, too. RegEx expressions work other handlers as well.
+Regular expressions work with all handlers.
 
 ```javascript
 mailbot.onCommand(/todo.*/, function(bot) {
@@ -205,9 +214,13 @@ mailbot.onCommand(/todo.*/, function(bot) {
 });
 ```
 
-### onTrigger
+## onTrigger
 
-Handle when a task "[triggers](https://docs.mailbots.com/reference#perfect-timing)", it becomes relevant to the user and should be sent to their email inbox. The most common trigger (currently) is a when a scheduled task becomes due.
+```
+mailbot.onTrigger(command, handlerFn)
+```
+
+Timeliness is a MailBot superpower. A user can schedule a task, then days, months or years later your bot can follow up at the exact right moment – scheduled by the user, or by another event. Read more about [triggering](https://docs.mailbots.com/reference#perfect-timing).
 
 Tasks with different commands may trigger differently. For example:
 
@@ -229,9 +242,15 @@ mailbot.onTrigger("todo.crm", function(bot) {
 });
 ```
 
-### onAction
+## onAction
 
-Handle when a user clicks a mailto link within a Gopher email to accomplish an action ([Email Based Actions](https://docs.mailbots.com/reference#email-based-actions)) the onAction handler is received. For example, postponing a reminder or completing a todo item.
+```
+mailbot.onAction(action, handlerFn)
+```
+
+Handle when a user performs an action that relates to a task.
+
+For example a user can send an [action-email](https://docs.mailbots.com/reference#email-based-actions) to accomplish an action without leaving their inbox (postponing a reminder, completing a todo item, logging a call, etc).
 
 ```javascript
 mailbot.onAction("complete", function(bot) {
@@ -239,9 +258,25 @@ mailbot.onAction("complete", function(bot) {
 });
 ```
 
-### onTaskViewed
+**MailBot Conversations**
 
-Handle when a task is viewed in the Gopher Web UI, allowing a user to view and interact with a future Gopher email.
+Set the reply-to address of a MailBot email to an action email to carry out a conversation with the user.
+
+```javascript
+mailbot.onAction("assistant", function(bot) {
+  // Use luis-ai middlweare to dtermine intent
+  // Store conversation state
+  // send-email whose reply-to is also "assistant"
+});
+```
+
+## onTaskViewed
+
+```
+mailbot.onTaskViewed(command, handlerFn)
+```
+
+Handle when a task is viewed in the MailBots Web UI, allowing a user to view and interact with a future MailBots email.
 
 ```javascript
 mailbot.onTaskViewed("todo.me", function(bot) {
@@ -251,17 +286,19 @@ mailbot.onTaskViewed("todo.me", function(bot) {
 
 Different task commands may render differently. For example a task with command `todo.crm` may query and render current CRM data within the preview.
 
-### onEvent
+## onEvent
 
-Handle when the extension receives an inbound webhok from a 3rd party system about an external event. For example, a support ticket is created or a lead is added to a CRM.
+```
+mailbot.onEvent(event, handlerFn)
+```
 
-Note: This action does not automatically create a Gopher Task. One can be created with [mailbots-sdk](https://www.npmjs.com/package/@mailbots/mailbots-sdk)
+Handle when the MailBot receives an inbound webhok from a 3rd party system about an external event. For example, a support ticket is created or a lead is added to a CRM.
+
+Note: This action does not automatically create a MailBots Task. One can be created with [mailbots-sdk](https://www.npmjs.com/package/@mailbots/mailbots-sdk)
 
 ```javascript
-MailBotsClient = require("@mailbots/mailbots-sdk");
-
 mailbot.onEvent("issue.created", async function(bot) {
-  // Handle event, for example, create a Gopher Task.
+  // Handle event, for example, create a MailBots Task.
   const mailBotsClient = new MailBotsClient.fromBot(bot);
   await mailBotsClient.createTask({
     // Pre-authenticated API client
@@ -270,42 +307,45 @@ mailbot.onEvent("issue.created", async function(bot) {
 });
 ```
 
-### onSettingsViewed
+## onSettingsViewed
 
-Handle when a user views this extension's settings.
+```
+mailbot.onSettingsViewed(handlerFn)
+```
+
+Handle when a user views this MailBot's settings.
 
 The handler's only parameter is a callback function that responds with a [JSON form schema](https://mozilla-services.github.io/react-jsonschema-form/) to render a settings form. The callback function is passed the `bot` object as usual.
 
-This function should return a [JSON schema](https://mozilla-services.github.io/react-jsonschema-form/) to render a settings form. See the settings example in Gopher Skills Kit. (Note: Not all JSON Form Schema UI options are supported)
+This function should return a [JSON schema](https://mozilla-services.github.io/react-jsonschema-form/) to render a settings form. See the settings example in MailBots Skills Kit.
 
-Unlike the other handlers, every instance of this handler is called. (ie, all settings pages from all extensions are rendered).
+Unlike the other handlers, every instance of this handler is called. (ie, all settings pages from all settings handlers are rendered).
 
-Do not call `bot.webhook.respond()` at the end of this particular request. Gopher App's internals take care of compiling the JSON and responding.
+Do not call `bot.webhook.respond()` at the end of this particular request. MailBots' internals take care of compiling the JSON and responding.
 
 ```javascript
 // Render a settings field for the user to enter their first name
 mailbot.onSettingsViewed(async function(bot) {
-  // const myAsyncThing = await getAsyncThing();
-  const settingsPage = bot.webhook.settingsPage({
+  const todoSettings = bot.webhook.todoSettings({
     namespace: "todo",
     title: "Todo Settings", // Page title
     menuTitle: "Todo" // Name of menu item
   });
-  settingsPage.input({ name: "first_name", title: "First name" });
-  settingsPage.submitButton();
+  todoSettings.input({ name: "first_name", title: "First name" });
+  todoSettings.submitButton();
 
   // Populate form values
-  settingsPage.populate(bot.get("extension.saved_data.todo"));
+  todoSettings.populate(bot.get("extension.saved_data.todo"));
+  // Note bot.webhook.respond() is NOT called
 });
 ```
 
-The viewer's URL parameters are passed through to the settings webhooks. Use this to pass data into your settings when you link to it.
+URL parameters are passed through to the settings webhook. Use this to pass data into your settings when linking to it.
 
 ```javascript
 mailbot.onSettingsViewed(function(bot) {
   const settingsPage = bot.webhook.settingsPage({ namespace: "todo" });
 
-  // It was just installed, welcome the user!
   if (bot.get("url_params.linkInstructions", false)) {
     settings.text(`# Instructions to link your account!`);
   }
@@ -313,21 +353,25 @@ mailbot.onSettingsViewed(function(bot) {
 });
 ```
 
-Pass URL params to your `beforeSettingsSaved` handler using the `urlParams` key in the `submit` form element. This appends the url parameter to the settings form.
-
-NOTE: Depending on how you are using this URL parameter, you may wish to confirm actions iwth users to guarad against (cross site forgery)[https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)].
+If you wish to use URL params in your `beforeSettingsSaved` handler (below), pass them via the `urlParams` key in the `submit` form element.
 
 ```javascript
 // within a onSettingsViewed form as shown above
 settings.submitButton({
   submitText: "Save Notification Settings",
   urlParams: { saveSettings: 1 }
-  // Tip: Pass through all URL current params like so (note these should be sanitized)
+  // Tip: Pass through all URL current params, but use caution! (see note)
   // urlParams: {saveSettings: 1, ...bot.get("url_params", {})}
 });
 ```
 
-### beforeSettingsSaved
+NOTE: URL parameters are an easy way to pass data into your bot settings, but **keep this in mind while using URL params**: Anyone can link a user to their settings page with _anything_ in URL. Do not, for example, create a url like: `/settings?delete_everything=true` that deletes all their tasks. An unsuspecting user may arrive on their settings page from an external link, not see this in the URL and submit the form only find themselves without any data. [Read more](<https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)>).
+
+## beforeSettingsSaved
+
+```
+mailbot.beforeSettingsSaved(handlerFn)
+```
 
 Handle when the user saves their settings. Called before settings are actually saved.
 
@@ -361,7 +405,11 @@ to abort saving the settings.
   });
 ```
 
-### on
+## on
+
+```
+mailbot.on(webhookEvent, handlerFn)
+```
 
 This is a generic handler for any webhook. It can be used to handle any inbound webhook – mainly ones that are not covered by the handlers above. (Of note: The handlers above are simply wrappers for this lower-level handler).
 
@@ -369,7 +417,7 @@ Example:
 
 ```javascript
 mailbot.on("extension.installed", function(bot) {
-  // Handle when an extension is installed
+  // Handle when a MailBot is installed
   // Create task with MailBots SDK
   // bot.webhook.respond();
 });
@@ -381,176 +429,236 @@ The first paramater can be:
 - A regular expression that matches on webhook `type`
 - A function that takes the incoming webhook as the only parameter and returns a boolean value indicating whether or not that webhook should be handled by that function handler.
 
-The second parameter is the function handler that runs if the matching condition (the first parameter) is met.
+The second parameter is the function handler that runs only if the matching condition (the first parameter) is met.
 
 ```javascript
 mailbot.on("extension.installed", function(bot) {
-  // Handle when an extension is installed
-  // Create at ask from mailbots sdk
+  // Handle when a MailBot is installed
+  // Create a task from mailbots sdk
   // bot.webhook.respond();
 });
 ```
 
-## Organizing Skills
+## Handling Errors
 
-Skills can have multiple handlers (like in the last examples). To keep things organized, we can group a collection of skill handlers into their own files, and group multiple files for a skill into a directory. For example:
+Ideally, error conditions are handled within the normal application flow. If something unexpected happens you can set up a custom error handler for adding logs, alerting or providing error messaging to users.
+
+If you want to send the user your own error email, use the [sendEmail](https://mailbots-sdk-js.mailbots.com/#sendemaill) method from the MailBots SDK. (Not all webhook responses send emails).
 
 ```javascript
-// In my-new-reminder-skill.js, wrap your code like this:
-module.exports = function(app) {
-  // Same code as previous example
-  // mailbot.onCommand("hi", function(bot) {}
-  // mailbot.onTrigger("hi", function(bot) {}
+// define a custom error handler
+app.setErrorHandler(function(error, bot) {
+  // myCustomLogger.log(error);
+  // send email with mailbots sdk
+  // send a custom error email to user
+  // Respond with 5xx status code to send the generic MailBots error email to the user
+  // bot.response.status(500);
+
+  bot.webhook.respond({
+    status: "error",
+    message: "A custom error message" // Shown to user if in the web UI.
+  }); // A webhook response must be sent
+});
+```
+
+# The "bot" Object Reference
+
+The `bot` object passed into the handlers above is an instance of BotRequest. Documentation will soon follow. For now, reference the [bot-request.test.js](https://github.com/mailbots/mailbots/blob/master/test/bot-request.test.js).
+
+**Setting Data Works By Shallow Merging**
+Data is set by shallow merging. For example.
+
+```javascript
+bot.webhook.setTaskData("my_namespace", { name: "Joe" });
+bot.webhook.setTaskData("my_namespace", { key: "123" });
+// task data is now
+console.log(bot.webhook.responseJson);
+// {my_namespace: { name: "Joe", key: "123" }}
+```
+
+```javascript
+bot.webhook.setTaskData("my_namespace", {
+  name: "Joe",
+  data: { value: "here" } // ⚠️ Overwritten (shallow merge)
+});
+bot.webhook.setTaskData("my_namespace", {
+  data: { value2: "there" }
+});
+// task data is now
+console.log(bot.webhook.responseJson);
+// {my_namespace: { data: { value2: "there" } }}
+```
+
+# Building Skills
+
+"Skills" are sharable pieces of bot functionality. Skills can encapsulate everything they need (handlers, settings panels helper funcitons and UI elements) into a package that "just works" when installed. They are great for keeping your code organized and for sharing functionality with others.
+
+A skill can share functionality in several ways:
+
+## Using Handlers
+
+We could better organize our handlers in the above examples by grouping them into different files. For example:
+
+```javascript
+// my-new-reminder-skill.js
+module.exports = function(mailbot) {
+  // Handlers can go here
+  // mailbot.onCommand...
 };
 ```
 
-Then load your skill file like this:
+It can be loaded like this:
 
 ```javascript
+// In top-level app.js
 require("./my-new-skill")(mailbot);
 ```
 
-There is a helper method that makes it easy to load multiple skills at once:
+Once loaded, all handlers within the file become active.
+
+A directory of skill files (like the one above) can be loaded using the `loadSkill` helper:
 
 ```javascript
-// Install all skills in a directory (but not its directories)
-mailbot.loadSkill(__dirname + "/my/skills/");
+// Load all skill files in a directory
+mailbot.loadSkill(__dirname + "/my/skill/");
 ```
 
-The `loadSkill` helper does not load skills in subdirectories. Subdirectories are reserved for libs, tests and sub-skills that can themesleves be explicitly loaded.
+`loadSkill` only looks for skill files in the top-level directory. This allows a skill to hide its implementation details in subdirectories.
 
-Pass an optional config object to each loaded skill.
+A config object can optionally be passed.
 
 ```javascript
-// Pass optional config object
+// app.js
 mailbot.loadSkill(__dirname + "/my/skills/", config);
 ```
 
-### Making Modular Skills
-
-Gopher Skills can be organized into reusable components that have everything they need for a particular function: UI elements, events handlers and settings.
-
-Here is our [previous example](https://github.com/mailbots/mailbots#example-handle-email-actions), this time in its own stand-alone, reusable skill:
-
 ```javascript
-// hi-skill.js (As an isolated component)
-module.exports = function(mailbot) {
-  // Handle UI events
-  mailbot.onAction("say.hi", function(bot) {
-    bot.webhook.quickReply("hi");
-    bot.webhook.respond();
-  });
-
-  return {
-    // Return UI elements
-    renderHiButton: function() {
-      return {
-        type: "button",
-        text: "Say Hi",
-        action: "say.hi",
-        subject: "Hit Send to Say hi"
-      };
-    }
-  };
+// skill-file.js
+module.exports = function(mailbot, config) {
+  // All of your handlers can go here
 };
 ```
 
-Any [handler](https://github.com/mailbots/mailbots#handlers) can be included in our skill – settings, actions, email commands, etc.
+Grouping your handlers into skills is a great way to keep your project organized. The down-side is that the skill owns each request from beginning to end – not very flexible.
 
-Use our stand-alone skill like this:
+The next section covers a more granular and composable technique for sharing functionality across multiple handlers or multiple MailBots.
 
-```javascript
-// Get UI elements and activate all handlers
-const { hiButton } = require('./hi-skill')(mailbot);
+## The "one-bot function"
 
-mailbot.onCommand("remember", function(bot) {
-  bot.webhook.addEmail({
-    // to, cc, etc
-    body: [
-      hiButton() // <-- A self-contained UI component
-    ]
-  });
-  bot.webhook.respond();
-};
-```
+A "one-bot function" is a function that takes a single `bot` object (an instance of BotRequest) which, itself, contains the request / response state and utilities to alter the request. It is one instance of a bot request, hence, a one-bot function.
 
-Continue to share the same element and logic across different handlers and files. MailBotsApp doesn't mind the handlers being re-activated.
+One-bot functions are called within handlers, allowing for a top-level handler to compose multiple one-bot functions to get something done.
 
 ```javascript
-// different file
-const { hiButton } = require('./hi-skill')(mailbot);
-
-mailbot.onAction("say.hi", function(bot) {
-  bot.webhook.addEmail({
-    // to, cc, etc
-    body: [
-      hiButton() // <-- Same button, DRY
-    ]
-  });
-  bot.webhook.respond();
-};
-```
-
-### Ways of Sharing Functionality
-
-Ther are different ways a component-skill (a skill designed to be used as a component of other skills) can share functionality with other skills.
-
-#### 1. Directly handling requests
-
-The example above shows a skill directly handling an email command directly (`mailbot.onCommand("remember"...`). This is simplest method, but not always desirable because it handles the complete request without the knowledge of the top-level skill. It's good for your own sub-skills where are you are in control, but for sharing reusable components there are emore granular and composable techniques.
-
-#### 2. Export a "Gopher function"
-
-A skill can export a function that:
-
-1. Directly returns json (like our `hiButton` example above) and / or
-2. Alters alters the response object in some way (example below).
-
-```javascript
-// Create sharable Gopher function that emails "hi" when called
-module.exports = function(mailbot) {
-  return {
-    sayHi: function(bot) {
-      bot.webhook.quickReply("hi");
-    }
-  };
-};
+// sayHi.js
+// A simple "one-bot function"
+function sayHi(bot) {
+  bot.webhook.quickReply("hi");
+}
+module.exports = sayHi;
 ```
 
 ```javascript
-// Use the Gopher function
-const { sayHi } = require("./hi-skill")(mailbot);
-
-mailbot.onCommand("whatever-custom-command", function(bot) {
-  sayHi(bot); // Sends an email that says "hi"
+// in main app.js
+const sayHi = require("./sayHi.js");
+//...
+mailbots.onCommand("hi", function(bot) {
+  sayHi(bot);
   bot.webhook.respond();
 });
 ```
 
-As convention, these functions take the `bot` object which contains the request / response state, utilities to alter the request.
+You can, of course, use both the one-bot function and a handler within one skill:
 
-#### 3. Export Middleware
+```javascript
+// my-reminder-skill.js
+module.exports = function(mailbot) {
+  // Handles all triggering for this MailBot (/.*/ matches anything)
+  mailbot.onTrigger(/.*/, funciton(bot) {
+    // Do some useful things, send emails,etc.
+    bot.webhook.respond();
+  });
 
-Middlware can be exported and "used" by the top-level skill. This has the advantage of applying some action or behavior across multiple handlers.
+  return {
+    remindTomorrow: function(bot) {
+        bot.webhook.setTriggerTime("tomorrow");
+    }
+  };
+};
+```
+
+```javascript
+// Use the reminder skill
+const { remindTomorrow } = require("./my-reminder-skill")(mailbot);
+
+mailbot.onCommand("whatever-custom-command", function(bot) {
+  // Set a reminder. When due, the skill automatically handles it.
+  remindTomorrow(bot);
+  bot.webhook.respond();
+});
+```
+
+### Sharing UI Elements
+
+Skills can use one-bot functions to share [UI elements](https://docs.mailbots.com/docs/email-ui-reference).
+
+By convention, UI functions that output UI start with `render`. For example, `renderMemorizationControls`.
+
+```javascript
+  var memorizeSkill = require("gopher-memorize")(mailbot);
+  mailbot.onCommand("remember", function(bot) {
+    bot.webhook.addEmail({
+      to: "you@email.com"
+      from: "MailBots",
+      subject: "Email Subject"
+      body: [
+        {
+          type: 'title',
+          text: 'A Title'
+        },
+
+        // Render JSON UI
+        memorizeSkill.renderMemorizationControls(bot)
+      ]
+    })
+    bot.webhook.respond();
+  }
+```
+
+## Handling Web Requests
+
+The `mailbots` framework relies on Express.js for many of its internals. Your skill can access the internal Express `app` object at `mailbot.app`, allowing your skill to do anything that can be done with Express: authenticate other services, interact with APIs, respond to webhooks and render web pages.
+
+Just like in [handling routes in Express](https://expressjs.com/en/guide/routing.html):
+
+```javascript
+mailbot.app.get("/hi", function(req, res) {
+  res.send("<h1>Hi http request!</h1>");
+});
+```
+
+## Middleware
+
+[Middlware](https://expressjs.com/en/guide/writing-middleware.html) can be exported and "used" by other skills. This is useful for implementing common functionality across multiple handlers.
 
 ```javascript
 // Export middleware to log everything
-module.exports = function(mailbot) {
-  function logEverythingMiddleware(req, res, next) {
-    const bot = res.locals.bot; // Gopher lives here
-    const emailSubject = bot.get("source.subject");
-    require("my-great-logger").log(`Got an email about ${emailSubject}`);
-    next(); // <-- Don't forget this!
-  }
-  return { logEverythingMiddleware };
+function logEverythingMiddleware(req, res, next) {
+  const bot = res.locals.bot; // bot lives here
+  const emailSubject = bot.get("source.subject");
+  require("my-great-logger").log(`Got an email about ${emailSubject}`);
+  next(); // <-- Don't forget this!
+}
+module.exports = logEverythingMiddleware;
 };
 ```
 
 ```javascript
 // Using our middleware
-const { logEverythingMiddleware } = require("./log-everything")(mailbot);
+const logEverythingMiddleware = require("./log-everything");
 
 // Apply to all subsequent handlers
+// Note: It does not apply to earlier handlers
 mailbot.app.use(logEverythingMiddleware);
 
 mailbot.onCommand("command-one", function(bot) {
@@ -564,57 +672,25 @@ mailbot.onCommand("command-three", function(bot) {
 });
 ```
 
-#### 4. Automatically Applying Middleware
+## Namespacing Conventions
 
-Middlware may be automatically invoked, which can be useful in some situations. Generally, it is advisable to export middleware so it can be explicitly "used" by the top-level skill.
+To prevent conflicts and facilitate debugging, it is helpful to follow these conventions. For examples below, our skill is `skill-name`.
 
-```javascript
-// Automatically log everything
-module.exports = function(mailbot) {
-  function logEverythingMiddleware(req, res, next) {
-    const bot = res.locals.bot;
+- The module name
+  ```
+  # Example module name
+  npm install mailbots-skill-name
+  ```
+- Store data against the task or bot in a subject with key of the skill name using underscores instead of dashes.
+  ```json
+  (task.stored_data = { "skill_name": { "key": "val" } })
+  ```
+- Preface event names and actions with the skill name or an abbreviation (accounting for [character limitations](http://www.rfc-editor.org/errata/eid1690))
+  ```javascript
+  mailbots.onAction("sn.do-action", bot => {});
+  ```
 
-    // Prevent middleware from running multiple times
-    if (bot.alreadyRan(logEverything)) return next();
-    const emailSubject = bot.get("source.subject");
-    require("my-great-logger").log(`Got an email about ${emailSubject}`);
-    next(); // <-- Again, don't forget this!
-  }
-
-  // Automatically apply middleware the moment the skill is required
-  mailbot.app.use(logEverything);
-};
-```
-
-Use middleware:
-
-```javascript
-// middleware is automatically activated (use with caution)
-require("./log-everything")(mailbot);
-```
-
-### Configurable Milddeware and Functions
-
-If a skill or function requires configuration, a second, config object can be passed:
-
-```javascript
-// Configure a skill
-var memorizeSkill = require("gopher-memorize")(mailbot, config);
-```
-
-```javascript
-// Configure a Gopher Function
-var { hiButton } = require("gopher-memorize")(mailbot);
-
-mailbot.onCommand("hi", bot => {
-  hiButton(bot, { text: });
-  bot.webhook.respond();
-});
-```
-
-Use skills across different components, projects or publish them to npm.
-
-## Installing 3rd Party Skills
+# Installing Skills From npm
 
 Skills can be installed from npm.
 
@@ -644,186 +720,63 @@ mailbot.onTrigger("remember", function(bot) {
 });
 ```
 
-## Publishing Skills
+## Skills With Side-Effects
 
-Stand-alone skills (as shown above) can be published to npm and shared with others.
-
-**Naming Conventions**
-
-Try to use the same unique string (ex: "skill-name") for:
-
-- The module "gopher-skill-name"
-- Preface your event names, commands and actions with your skill name, or an
-  abbreviation if it is long (due to character limitations in the part of
-  of email addresses before the @ sign)
-- When storing data against the task or extension, put your skill data
-  in an object with a key of the skill name.
-
-These conventions improve usability and trackability of your extension.
-
-**Skill naming conventions**
-
-Skills added to the `bot.skills` object via middleware should be camelCased version of their skill name (ie, `bot.skills.skillName`). They should also be invokable with no parameters.
+Skills that accept the `mailbots` object may automatically alter requests, reply to webhooks or take other automatic action behind the scenes.
 
 ```javascript
-bot.skills.memorize.memorizeTask();
+// May automatically handle requets (ex, render settings pages, send emails)
+var handleEverything = require("mailbots-handle-everything");
+handleEverything(mailbot);
+// or
+require("handleEverything")(mailbot);
 ```
 
-Add additional options by passing a configuration object:
+Skills that are not passed the `mailbot` object will export components (middleware, one-bot functions, etc) for you to explicitly use in your handlers.
 
 ```javascript
-bot.skills.memorize.memorizeTask({ frequencyPref: 0.1 });
-```
+// These types of skills offer components to your handlers
+var {
+  someMiddleware,
+  renderSomething
+} = require("mailbots-provide-components");
 
-This method signatures the makes for a simple, consistent developer experience and maintains the metaphor of our bot being ordered around.
+mailbots.app.use(someMiddleware);
 
-### Sharing UI Elements
-
-Skills can render UI elements by exporting function that return [JSON UI elements](https://docs.mailbots.com/docs/email-ui-reference). For example, our memorizaiton skill has a UI element that changes the memorizaiton frequency.
-
-By convention, methods that render UI elements start with `render`. For example, `renderMemorizationControls`.
-
-```javascript
-  var memorizeSkill = require("gopher-memorize")(mailbot);
-  mailbot.onCommand("remember", function(bot) {
-    bot.webhook.addEmail({
-      to: "you@email.com"
-      from: "Gopher",
-      subject: "Email Subject"
-      body: [
-        {
-          type: 'title',
-          text: 'A Title'
-        },
-
-        // UI Components in a Gopher skill
-        memorizeSkill.renderMemorizationControls()
-      ]
-    })
-    bot.webhook.respond();
-  }
-```
-
-### Activating Skills
-
-A skill becomes "activated" the moment it is required.
-
-```javascript
-var memorizeSkill = require("gopher-memorize")(mailbot);
-```
-
-From this point on, its handlers and middleware are active.
-
-If a skill requires configuration, a second, config object can be passed:
-
-```javascript
-var memorizeSkill = require("gopher-memorize")(mailbot, config);
-// optional config object would be defined by each skill
-```
-
-## Using Express.js Middlware and Routes
-
-MailBotsApp is a wrapper for an instance of Express.js. The Express.js `app` object is available for use at `mailbot.app`. This allows your sharable skill to do anything that can be done with Express: Authentiate other services, interact with APIs, respond to webhooks and render web pages.
-
-### Adding to bot.skills with middlware
-
-The `bot` object passed into your handlers can be modified with middlware. Internally, MailBotsApp uses middlware to pre-load the `bot` object with with various functions. You can take this further. For example:
-
-```javascript
-// Configure a logging object
-mailbot.app.use(function(req, res, next) {
-  var bot = res.locals.bot; // bot object lives here
-  var logger = require("./logger");
-  logger.setup({ key: "123" });
-
-  // configure and add our custom logger skill
-  bot.skills.myCustomSkill.logger = logger.config({ key: "123" });
-  next(); // Don't forget this!
-});
-
-mailbot.onCommand("hi", function(bot) {
-  // The configured skill is available in subsequent handlers
-  bot.skills.myCustomSkill.logger.log("Log with my pre-configured logger");
-  bot.webhook.respond();
+mailbots.onCommand("foo", function(bot) {
+  doSomething(bot);
 });
 ```
 
-For some cases (loggers, configuraed object) passing a skill via via bot.skills can come in handy. For most cases, explicitly `require` your skills to make your code more self-documenting.
+Skills will, themselves, document how they are used. Different approaches are right for different circumstances.
 
-Note that middleware runs for _all_ requests.
+# Welcoming New Bot Users
 
-Here is an example of running middleware that appends stored data to the task object only in certain cases.
-
-```javascript
-mailbot.app.use(function(req, res, next) {
-  // Only execute middleware for webhooks that have the word `task` in them
-  const taskWebhook = bot.get("event") && !bot.get("event").includes("task");
-  if (!bot.isWebhook || !taskWebhook) {
-    return next();
-  }
-  // your logic here
-  bot.set("task.stored_data.todo", { done: false });
-  next();
-});
-```
-
-Finally, an important note from Express.js:
-
-> Middleware is like a plumbing pipe: requests start at the first middleware function defined and work their way “down” the middleware stack processing for each path they match.
-
-> They [middleware handlers] are invoked sequentially, thus the order defines middleware precedence. For example, usually a logger is the very first middleware you would use, so that every request gets logged.
-
-In short, make sure you load your middlware before trying to use it in a handler.
-
-One way to do this is to use the `loadSkill` helper first on a middleware directory, then again on the rest of your skills.
-
-### Handling routes
-
-Handle http routes the same as you would in [Express.js](https://expressjs.com/en/guide/routing.html):
+When a new user installs your MailBot, they are directed to a settings page with the `welcome` namespace. Render a custom welcome message for your user by creating a settings page that targets this namespace.
 
 ```javascript
-mailbot.app.get("/hi", function(req, res) {
-  res.send("<h1>Hi http request!</h1>");
-});
+gopherApp.onSettingsViewed(function(bot)  {
+    const welcomeSettings = bot.webhook.settingsPage({
+      namespace: "welcome", // MailBots sends new users to this namespace automatically
+      menuTitle: "Welcome"
+    });
+
+    welcomeSettings.text(`
+# Welcome To My MailBot
+_Markdown_ works here.`);
+)}
+
 ```
 
-## The "Gopher Object" Reference
+Note: While in dev_mode, the MailBot owner is instead redirected to the sandbox.
 
-The bot object passed into the handlers above is an instance of BotRequest. Documentation will soon follow. For now read through the bot-request.test.js file.
+Your bot receives the `extension.installed` webhook which can be used to schedule a series of welcome emails to the user.
 
-** Setting Data Works By Shallow Merging **
-Similar to React, data is set by shallow merging. For example.
+# Testing
 
-```javascript
-bot.webhook.setTaskData("my_namespace", { name: "Joe" });
-bot.webhook.setTaskData("my_namespace", { key: "123" });
-// task data is now
-console.log(bot.webhook.responseJson);
-// {my_namespace: { name: "Joe", key: "123" }}
-```
+Export a testable instance of your MailBot by calling `mailbot.exportApp()` instead of calling `mailbot.listen()`. Below is an example of testing the exported app with [Supertest](https://www.npmjs.com/package/supertest).
 
-```javascript
-bot.webhook.setTaskData("my_namespace", {
-  name: "Joe",
-  data: { value: "here" } // ⚠️ Overwritten (shallow merge)
-});
-bot.webhook.setTaskData("my_namespace", {
-  data: { value2: "there" }
-});
-// task data is now
-console.log(bot.webhook.responseJson);
-// {my_namespace: { data: { value2: "there" } }}
-```
-
-## Install Flow
-
-When the extension has just been installed, the user will be directed to the `welcome` settings URL. Create a settings form with the namespace `welcome` to welcome the new user. Ex:
-
-Note: When your extension is in `dev_mode` the extension owner is automatically directed to the sandbox.
-
-## Testing
-
-Export a testable instance of your Gopher app by calling `mailbot.exportApp()` instead of calling `mailbot.listen()`. Below is an example of testing the exported app with [Supertest](https://www.npmjs.com/package/supertest).
+For a sample request (the `./_fixtures/task.created.json` file below), fire a request and go to the sandbox. Click the "copy" icon that appears when you over over the the top-level key the request JSON.
 
 Note: Set `NODE_ENV` to `testing` to disable webhook validation.
 
@@ -835,8 +788,8 @@ const MailBotsApp = require("mailbots");
 let mailbot; // re-instantiated before each test
 
 // Utility function to send webhook to our app
-function sendWebhook({ app, webhookJson }) {
-  return request(app)
+function sendWebhook({ exportedApp, webhookJson }) {
+  return request(exportedApp)
     .post("/webhooks")
     .set("Accept", "application/json")
     .send(webhookJson);
@@ -856,9 +809,9 @@ describe("integration tests", function() {
       bot.webhook.respond();
     });
 
-    const app = mailbot.exportApp();
-    const webhookJson = require("./_fixtures/task.created.json");
-    let { body } = await sendWebhook({ app, webhookJson });
+    const exportedApp = mailbot.exportApp();
+    const webhookJson = require("./_fixtures/task.created.json"); // Copy request from Sandbox
+    let { body } = await sendWebhook({ exportedApp, webhookJson });
 
     // Test our webhook response
     expect(body.send_messages[0].subject).to.equal("I dig email");
@@ -866,27 +819,29 @@ describe("integration tests", function() {
 });
 ```
 
-## Installing
+# Installing
 
-The setup process from mailbots.com creates a pre-installed instance of Gopher App using [Glitch](https://glitch.com/) to get started quickly.
+The setup process on mailbots.com creates a pre-installed instance of your MailBot using [Glitch](https://glitch.com/).
 
-Here are install instructions for local development or production deployments:
+For local development or production deployments:
 
 **1. Install**
 
-- `mkdir my-skill`
+- `mkdir my-bot`
 - `npm install mailbots`
 - `touch app.js`
 
-**2. Basic Handler**
+**2. Add Setup Code**
 
 ```javascript
 var MailBot = require("mailbots");
 var mailbot = new MailBot({
   clientId: "your_client_id",
   clientSecret: "your_secret",
-  botUrl: "http://your_extension_url" // See step #3
+  botUrl: "http://your_bot_url"
 });
+// You can also set CLIENT_ID, CLIENT_SECRET and BOT_URL environment vars
+// as an alternative to explicitly passing them in.
 
 mailbot.onCommand("hello", bot => {
   bot.webhook.quickReply("world");
@@ -896,47 +851,10 @@ mailbot.onCommand("hello", bot => {
 mailbot.listen();
 ```
 
-**3. Create MailBot**
+3. Use [ngrok](https://ngrok.com/) to set up a public-facing url that MailBots.com can reach.
 
-Create an extension at mailbots.com(https://app.mailbots.com/developer/create). Click "Manual Setup" at the bottom.
+4. Create a MailBot at mailbots.com. Click "Manual Setup" at the bottom and follow instructions from there.
 
-Gopher needs to send HTTP POSTs to your extension, which means it will need a public URL. Use [ngrok](https://ngrok.com/) to set up a public-facing url to your extension. Enter the base URL on your edit page.
-
-**4. Install and Go to Sandbox**
-
-Click the "Install" button on your extension's developer page. After you've authenticated, go back to the extension's developer page and click "Sandbox". Send a test "hello" command and your handler should run!
-
-## Handling Errors
-
-Set a custom error handling function to catch errors within your handlers. Ideally, error conditions are handled within the normal application flow. Use this handler to intercept unexpected errors. You can add your own custom logging, alerting or cutom error messaging for users.
-
-If you want to send the user your own error message, use the[sendEmail](https://mailbots-sdk-js.mailbots.com/#sendemaill) method from the MailBots SDK. Not all webhook responses send emails.
-
-```javascript
-// define a custom error handler
-app.setErrorHandler(function(error, bot) {
-  // myCustomLogger.log(error);
-  // send email with mailbots sdk
-  // send a custom error email to user
-  // bot.response.status(500); // 5xx status code sends generic error to user
-  bot.webhook.respond({
-    status: "error",
-    message: "A custom error message" // Shown to user if in the web UI.
-  }); // A webhook response must be sent
-});
-```
-
-## Design Philosophy
-
-Gopher App was created with two types of developers in mind:
-
-1.  "Low-Code" developers that want to throw together an extension as quickly as possible.
-2.  More experineced skill developers that wish to encapsulate some complex task as an easy-to-use Gopher Skill.
-
-For category 1, we employ the metaphorical bot to invoke skills that "just work". Code is deliberately hidden. Sensible defaults are used so the user's first-time use makes sense. The conceptual model for this user is a lovable rodent that digs tunnels and gets things done for you. What's not to like?
-
-For category 2, the more experience user, we don't try to hide Gopher App's internals. Gopher App is, essentially, an Express middleware stack along with some conventions to load and share this middlware – a familiar stack for most experienced Node.js developers.
-
-## Contributions
+# Contributions
 
 Contributions are welcome in the form of PRs and / or Github tickets for issues, bugs, ideas and feature requests.
