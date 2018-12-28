@@ -86,7 +86,7 @@ class MailBots {
     require("./lib/core-skills-last")(this);
   }
 
-  /**
+  /*
    * See commit 9afba5d6 for simplified bot middlware idea
    */
   use() {
@@ -161,7 +161,7 @@ class MailBots {
     }
   }
 
-  /**
+  /*
    * Prevent adding duplicate listener functions
    * @param {function} params.triggerCondition - see "on" function.
    * @param {function} params.db - same as "on" function
@@ -356,6 +356,7 @@ class MailBots {
       }
     );
 
+    // Each listener modifies bot.responseJson
     await Promise.all(multiFireListenerPromises);
 
     // Return if we have an aggregate settings response

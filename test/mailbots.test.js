@@ -210,120 +210,6 @@ describe("MailBots App", function() {
       fireWebhookRequest(taskViewedWebhook);
     });
 
-    describe("settings", function() {
-      const extensionSettingsViewed = require("./fixtures/extension-settings-viewed-webhook.json");
-
-      it("fires onSettingsViewed handler", function(done) {
-        mailbot.onSettingsViewed(bot => {
-          done();
-        });
-        fireWebhookRequest(extensionSettingsViewed, {
-          errOnFallthrough: false
-        });
-      });
-
-      // TODO: Make sure all form schemas are objects
-      it("onSettingsViewed handler returns proper data types");
-
-      it("onSettingsViewed handler adds a json response", function(done) {
-        mailbot.onSettingsViewed(bot => {
-          bot.responseJson = {
-            settings: {
-              foo: "bar"
-            }
-          };
-        });
-        fireWebhookRequest(extensionSettingsViewed, {
-          errOnFallthrough: false
-        }).then(res => {
-          expect(res.body.settings.foo).to.equal("bar");
-          done();
-        });
-      });
-
-      it("onSettingsViewed handler handles an async function", function(done) {
-        mailbot.onSettingsViewed(async bot => {
-          const settings = await getAsyncThing();
-          bot.responseJson = settings;
-        });
-        fireWebhookRequest(extensionSettingsViewed, {
-          errOnFallthrough: false
-        }).then(res => {
-          expect(res.body.my).to.equal("async settings");
-          done();
-        });
-      });
-
-      it("multiple onSettingsViewed handlers fire", function(done) {
-        mailbot.onSettingsViewed(bot => {
-          bot.responseJson = {
-            settings: {
-              foo: "bar"
-            }
-          };
-        });
-
-        mailbot.onSettingsViewed(bot => {
-          bot.responseJson.settings.shoe = "far";
-        });
-
-        fireWebhookRequest(extensionSettingsViewed, {
-          errOnFallthrough: false
-        }).then(res => {
-          expect(res.body.settings.foo).to.equal("bar");
-          expect(res.body.settings.shoe).to.equal("far");
-          done();
-        });
-      });
-
-      it("passes data between onSettingsViewed handlers", function(done) {
-        mailbot.onSettingsViewed(bot => {
-          bot.responseJson = {
-            settings: {
-              foo: "bar"
-            }
-          };
-        });
-
-        mailbot.onSettingsViewed(bot => {
-          expect(bot.responseJson.settings.foo).to.equal("bar");
-          done();
-        });
-
-        fireWebhookRequest(extensionSettingsViewed, {
-          errOnFallthrough: false
-        });
-      });
-
-      const extensionSettingsBeforeSaved = require("./fixtures/extension-settings-pre-saved-webhook.json");
-
-      it("fires beforeSettingsSaved handler", function(done) {
-        mailbot.beforeSettingsSaved(bot => {
-          done();
-        });
-        fireWebhookRequest(extensionSettingsBeforeSaved, {
-          errOnFallthrough: false
-        });
-      });
-
-      it("multiple beforeSettingsSaved handlers fire with data", function(done) {
-        mailbot.beforeSettingsSaved(bot => {
-          bot.webhook.setExtensionData("github.foo", "bar");
-        });
-        mailbot.beforeSettingsSaved(bot => {
-          expect(bot.webhook.getExtensionData("github.foo")).to.equal("bar");
-          bot.webhook.setExtensionData("github.shoe", "far");
-        });
-        fireWebhookRequest(extensionSettingsBeforeSaved, {
-          errOnFallthrough: false
-        }).then(res => {
-          expect(res.body.extension.stored_data.github.foo).to.equal("bar");
-          expect(res.body.extension.stored_data.github.shoe).to.equal("far");
-          done();
-        });
-      });
-    });
-
     it("mailbot.on method matches webhook types", function(done) {
       mailbot.on("task.created", bot => {
         expect(bot.command).to.equal("memorize");
@@ -395,6 +281,117 @@ describe("MailBots App", function() {
     });
   });
 
+  describe("settings", function() {
+    const extensionSettingsViewed = require("./fixtures/extension-settings-viewed-webhook.json");
+
+    it("fires onSettingsViewed handler", function(done) {
+      mailbot.onSettingsViewed(bot => {
+        done();
+      });
+      fireWebhookRequest(extensionSettingsViewed, {
+        errOnFallthrough: false
+      });
+    });
+
+    it("onSettingsViewed handler adds a json response", function(done) {
+      mailbot.onSettingsViewed(bot => {
+        bot.responseJson = {
+          settings: {
+            foo: "bar"
+          }
+        };
+      });
+      fireWebhookRequest(extensionSettingsViewed, {
+        errOnFallthrough: false
+      }).then(res => {
+        expect(res.body.settings.foo).to.equal("bar");
+        done();
+      });
+    });
+
+    it("onSettingsViewed handler handles an async function", function(done) {
+      mailbot.onSettingsViewed(async bot => {
+        const settings = await getAsyncThing();
+        bot.responseJson = settings;
+      });
+      fireWebhookRequest(extensionSettingsViewed, {
+        errOnFallthrough: false
+      }).then(res => {
+        expect(res.body.my).to.equal("async settings");
+        done();
+      });
+    });
+
+    it("multiple onSettingsViewed handlers fire", function(done) {
+      mailbot.onSettingsViewed(bot => {
+        bot.responseJson = {
+          settings: {
+            foo: "bar"
+          }
+        };
+      });
+
+      mailbot.onSettingsViewed(bot => {
+        bot.responseJson.settings.shoe = "far";
+      });
+
+      fireWebhookRequest(extensionSettingsViewed, {
+        errOnFallthrough: false
+      }).then(res => {
+        expect(res.body.settings.foo).to.equal("bar");
+        expect(res.body.settings.shoe).to.equal("far");
+        done();
+      });
+    });
+
+    it("passes data between onSettingsViewed handlers", function(done) {
+      mailbot.onSettingsViewed(bot => {
+        bot.responseJson = {
+          settings: {
+            foo: "bar"
+          }
+        };
+      });
+
+      mailbot.onSettingsViewed(bot => {
+        expect(bot.responseJson.settings.foo).to.equal("bar");
+        done();
+      });
+
+      fireWebhookRequest(extensionSettingsViewed, {
+        errOnFallthrough: false
+      });
+    });
+
+    const extensionSettingsBeforeSaved = require("./fixtures/extension-settings-pre-saved-webhook.json");
+
+    it("fires beforeSettingsSaved handler", function(done) {
+      mailbot.beforeSettingsSaved(bot => {
+        done();
+      });
+      fireWebhookRequest(extensionSettingsBeforeSaved, {
+        errOnFallthrough: false
+      });
+    });
+
+    it("multiple beforeSettingsSaved handlers fire with data", function(done) {
+      mailbot.beforeSettingsSaved(bot => {
+        bot.webhook.setExtensionData("github.foo", "bar");
+      });
+      mailbot.beforeSettingsSaved(bot => {
+        expect(bot.webhook.getExtensionData("github.foo")).to.equal("bar");
+        bot.webhook.setExtensionData("github.shoe", "far");
+      });
+      fireWebhookRequest(extensionSettingsBeforeSaved, {
+        errOnFallthrough: false
+      }).then(res => {
+        expect(res.body.extension.stored_data.github.foo).to.equal("bar");
+        expect(res.body.extension.stored_data.github.shoe).to.equal("far");
+        done();
+      });
+    });
+  });
+
   describe("middleware", function() {
     it("uses middleware to add skills", function(done) {
       mailbot.app.use((req, res, next) => {
@@ -422,18 +419,6 @@ describe("MailBots App", function() {
         bot.webhook.respond();
       });
       fireWebhookRequest(taskCreatedWebhook);
-    });
-
-    // @todo Address when we created mailbot.use top-level middleware handler.
-    // See the following test for a workaround
-    it.skip("does not add middleware if it has already been added", function(done) {
-      function mw(req, res, next) {
-        console.log("foo");
-        next();
-      }
-      mailbot.app.use(mw);
-      mailbot.app.use(mw);
-      // Logs "foo" "foo"
     });
 
     it("allows middleware to make itself run once per request", async function() {
@@ -521,17 +506,6 @@ describe("MailBots App", function() {
       mailbot.loadSkill(__dirname + "/test-skills-1");
       mailbot.onCommand("memorize", bot => {
         expect(bot.skills.overwrite).to.equal("z-test-skill");
-        done();
-      });
-      fireWebhookRequest(taskCreatedWebhook);
-    });
-  });
-
-  describe("MailBots API", function() {
-    it("loads authenticated bot api client on bot.api", function(done) {
-      mailbot.onCommand("memorize", bot => {
-        expect(bot.api._accessToken).to.be.not.null;
-        bot.webhook.respond();
         done();
       });
       fireWebhookRequest(taskCreatedWebhook);

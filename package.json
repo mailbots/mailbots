@@ -8,9 +8,11 @@
     "test": "test"
   },
   "scripts": {
-    "test": "NODE_ENV=test mocha test -w",
-    "test:inspect": "NODE_ENV=test mocha test --inspect-brk -w",
-    "docs:build": "doctoc . --maxlevel 2"
+    "test": "NODE_ENV=test mocha test -w --full-trace",
+    "test:inspect": "NODE_ENV=test mocha test --full-trace --inspect-brk -w",
+    "docs:build": "doctoc . --maxlevel 2",
+    "dev:docs": "documentation -c documentation.yml serve",
+    "dev:docs:build": "documentation -c documentation.yml -f html build -o docs-html"
   },
   "repository": {
     "type": "git",
