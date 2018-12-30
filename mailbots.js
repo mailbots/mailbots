@@ -5,6 +5,7 @@ const debug = require("debug")("mailbots");
 
 class MailBots {
   /**
+   * @private
    * Optionally instantiate with config. Pass any key shown in config.js.
    * @param {object} config
    */
@@ -67,6 +68,7 @@ class MailBots {
   }
 
   /**
+   * @private
    * Loads base MailBot skills
    * Skills are Express middleware and route handlers. Some must be called before
    * any other middleware / skill is added. For example, auth, loading BotRequest, etc.
@@ -79,6 +81,7 @@ class MailBots {
   }
 
   /**
+   * @private
    * Loads final skills
    */
   loadLastCoreSkills() {
@@ -86,7 +89,8 @@ class MailBots {
     require("./lib/core-skills-last")(this);
   }
 
-  /*
+  /**
+   * @private
    * See commit 9afba5d6 for simplified bot middlware idea
    */
   use() {
@@ -131,6 +135,7 @@ class MailBots {
   }
 
   /**
+   * @private
    * Is directory?
    * @param {string} path full file path
    */
@@ -161,7 +166,8 @@ class MailBots {
     }
   }
 
-  /*
+  /**
+   * @private
    * Prevent adding duplicate listener functions
    * @param {function} params.triggerCondition - see "on" function.
    * @param {function} params.db - same as "on" function
@@ -328,6 +334,7 @@ class MailBots {
   }
 
   /**
+   * @private
    * Fires the appropriate listener function for the webhook received
    * @param {object} request Express request object
    * @param {object} response Express response object
@@ -385,6 +392,7 @@ class MailBots {
   }
 
   /**
+   * @private
    * Evaluates a trigger condition against a given webhook
    * @param {object} webhook Complete webhook request
    * @param {string|function} triggerCondition A string or function returning a boolean when passed webhook
@@ -405,6 +413,7 @@ class MailBots {
   }
 
   /**
+   * @private
    * Extract command string from webhook, if present.
    * @param {object} webhook
    */

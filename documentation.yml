@@ -1,16 +1,3 @@
 toc:
-  - name: MailBot Handlers
-    description: |
-      This is a function reference for mailbots-sdk-js. View the 
-      [readme.md](https://github.com/mailbots/mailbots-sdk-js/blob/master/readme.md)
-      file in the the repo that corresponds with this version. Also, view 
-      [MailBots REST API](https://mailbots.postman.co/collections/113668-74bb4ea1-f0cc-bf5a-ab93-1978fcbcce45?workspace=4d742517-576d-424d-8918-b54b31164c30)
-      and the [MailBots API Docs](https://docs.mailbots.com) for more information.
-    children:
-      - oncommand
-      - onaction
-  - name: bot
-    description: The "bot" in the handler functions
-    children:
-      - BotRequest#set
-      - BotRequest#get
+  - WebhookHelpers
+  - SettingsPage
