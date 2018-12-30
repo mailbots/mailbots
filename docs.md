@@ -76,50 +76,55 @@
         -   [Examples][72]
     -   [alert][73]
         -   [Parameters][74]
-    -   [video][75]
-        -   [Parameters][76]
-    -   [text][77]
-        -   [Parameters][78]
-        -   [Examples][79]
-    -   [hiddenInput][80]
-        -   [Parameters][81]
-    -   [submitButton][82]
+        -   [Examples][75]
+    -   [video][76]
+        -   [Parameters][77]
+        -   [Examples][78]
+    -   [text][79]
+        -   [Parameters][80]
+        -   [Examples][81]
+    -   [hiddenInput][82]
         -   [Parameters][83]
         -   [Examples][84]
-    -   [populate][85]
+    -   [submitButton][85]
         -   [Parameters][86]
         -   [Examples][87]
--   [listen][88]
--   [exportApp][89]
--   [loadSkill][90]
-    -   [Parameters][91]
--   [on][92]
-    -   [Parameters][93]
--   [onCommand][94]
-    -   [Parameters][95]
--   [onTrigger][96]
-    -   [Parameters][97]
--   [onEvent][98]
-    -   [Parameters][99]
--   [onAction][100]
-    -   [Parameters][101]
--   [onTaskViewed][102]
-    -   [Parameters][103]
--   [onSettingsViewed][104]
-    -   [Parameters][105]
--   [beforeSettingsSaved][106]
-    -   [Parameters][107]
--   [on][108]
+    -   [populate][88]
+        -   [Parameters][89]
+        -   [Examples][90]
+-   [listen][91]
+-   [exportApp][92]
+-   [loadSkill][93]
+    -   [Parameters][94]
+-   [on][95]
+    -   [Parameters][96]
+-   [onCommand][97]
+    -   [Parameters][98]
+-   [onTrigger][99]
+    -   [Parameters][100]
+-   [onEvent][101]
+    -   [Parameters][102]
+-   [onAction][103]
+    -   [Parameters][104]
+-   [onTaskViewed][105]
+    -   [Parameters][106]
+-   [onSettingsViewed][107]
+    -   [Parameters][108]
+-   [beforeSettingsSaved][109]
+    -   [Parameters][110]
+-   [on][111]
 
 ## WebhookHelpers
 
 The 'bot' object passed into the handlers comes with a number
-of helpers to handle the request. The methods in this class are
-available under bot.webhook.
+of helpers to handle the request.
+
+NOTE: This class is automatically instantiated with an instance
+of BotRequest and made available under bot.webhook.
 
 ### Parameters
 
--   `botRequest` **[object][109]** An instnace of BotRequest
+-   `botRequest` **[object][112]** An instnace of BotRequest
     -   `botRequest.botRequest`  
 
 ### Examples
@@ -137,7 +142,7 @@ otherwise it returns the value in the request object.
 
 #### Parameters
 
--   `key` **[string][110]** JSON path to key
+-   `key` **[string][113]** JSON path to key
 -   `defaultValue` **mixed** Default if key is falsy
 
 #### Examples
@@ -159,9 +164,9 @@ entirely.
 
 #### Parameters
 
--   `key` **[string][110]** JSON Path to object within responseJson object
+-   `key` **[string][113]** JSON Path to object within responseJson object
 -   `value` **any** Value
--   `merge` **[boolean][111]** Objets are shallow-merged by default. Set this to
+-   `merge` **[boolean][114]** Objets are shallow-merged by default. Set this to
     false to force the replacement of an object.
 
 #### Examples
@@ -180,7 +185,7 @@ Get data for current task
 
 #### Parameters
 
--   `key` **[string][110]** JSON Path to key within task.private_data
+-   `key` **[string][113]** JSON Path to key within task.private_data
 -   `defaultValue` **any** If there is no key, return this
 
 ### setTaskData
@@ -206,7 +211,7 @@ Get data stored in extension.private_data
 
 #### Parameters
 
--   `key` **[string][110]** JSON Path to data from extension
+-   `key` **[string][113]** JSON Path to data from extension
 -   `defaultValue` **any** If value is undefined, use this value instead
 
 #### Examples
@@ -229,7 +234,7 @@ as the second.
 #### Parameters
 
 -   `args` **...any** 
--   `param` **([string][110] \| [object][109])** Either a lodash set param or an
+-   `param` **([string][113] \| [object][112])** Either a lodash set param or an
     object to be shallowly merged into extension.private_data
 -   `value` **any?** When passing lodash set path string as first
     param, this is the value.
@@ -264,14 +269,14 @@ for easy partial updates
 
 #### Parameters
 
--   `referenceEmail` **[object][109]** 
-    -   `referenceEmail.to` **[array][112]** Array of email address strings
-    -   `referenceEmail.cc` **[array][112]** Array of email address strings
-    -   `referenceEmail.bcc` **[array][112]** Array of email address strings
-    -   `referenceEmail.subject` **[string][110]** Email subject
-    -   `referenceEmail.reply_to` **[string][110]** Email address or action-email
-    -   `referenceEmail.html` **[string][110]** html HTML content of email
-    -   `referenceEmail.text` **[string][110]** html text-only content of email
+-   `referenceEmail` **[object][112]** 
+    -   `referenceEmail.to` **[array][115]** Array of email address strings
+    -   `referenceEmail.cc` **[array][115]** Array of email address strings
+    -   `referenceEmail.bcc` **[array][115]** Array of email address strings
+    -   `referenceEmail.subject` **[string][113]** Email subject
+    -   `referenceEmail.reply_to` **[string][113]** Email address or action-email
+    -   `referenceEmail.html` **[string][113]** html HTML content of email
+    -   `referenceEmail.text` **[string][113]** html text-only content of email
 
 #### Examples
 
@@ -285,8 +290,8 @@ bot.webhook.setReferenceEmail({
 
 ### getReplyTo
 
-Get replyto replyto email from a webhook, taking into account a user
-or routine changing it before this method is called.
+Get replyto email, taking into this value being edited
+after the original email was sent.
 
 #### Examples
 
@@ -301,14 +306,14 @@ the core API to send an email. Multiple emails can be sent.
 
 #### Parameters
 
--   `email` **[object][109]** email object
-    -   `email.to` **[string][110]** comma separated emails
-    -   `email.cc` **[string][110]** comma separated emails
-    -   `email.bcc` **[string][110]** comma separated emails
-    -   `email.from` **[string][110]** from name only (message-envelope is always from mailbots)
-    -   `email.reply_to` **[string][110]** email address or action-email
-    -   `email.subject` **[string][110]** email subject
-    -   `email.body` **[array][112]** Array of ui objects [https://docs.mailbots.com/docs/email-ui-reference][113]
+-   `email` **[object][112]** email object
+    -   `email.to` **[string][113]** comma separated emails
+    -   `email.cc` **[string][113]** comma separated emails
+    -   `email.bcc` **[string][113]** comma separated emails
+    -   `email.from` **[string][113]** from name only (message-envelope is always from mailbots)
+    -   `email.reply_to` **[string][113]** email address or action-email
+    -   `email.subject` **[string][113]** email subject
+    -   `email.body` **[array][115]** Array of ui objects [https://docs.mailbots.com/docs/email-ui-reference][116]
 
 #### Examples
 
@@ -326,7 +331,7 @@ const email = bot.webhook.addEmail({
 email.from = "New Sender"; // still updatable
 ```
 
-Returns **[object][109]** A reference to the email object for additional changes
+Returns **[object][112]** A reference to the email object for additional changes
 
 ### quickReply
 
@@ -335,7 +340,7 @@ of the incoming email. The subject and body share the same text.
 
 #### Parameters
 
--   `text` **[string][110]** Content
+-   `text` **[string][113]** Content
 
 #### Examples
 
@@ -349,7 +354,7 @@ Set trigger time for a task using natural language
 
 #### Parameters
 
--   `time` **[string][110]** FollowUpThen-style time description
+-   `time` **[string][113]** FollowUpThen-style time description
 
 #### Examples
 
@@ -385,7 +390,7 @@ Trigger MailBots to invite the given email address(es) to use a bot
 
 #### Parameters
 
--   `invitees` **[array][112]** Array of email addresses
+-   `invitees` **[array][115]** Array of email addresses
 
 #### Examples
 
@@ -417,7 +422,7 @@ or remove additional recipients from the task.
 bot.webhook.getAllContacts();
 ```
 
-Returns **[array][112]** Email addresses
+Returns **[array][115]** Email addresses
 
 ### respond
 
@@ -429,7 +434,7 @@ second time. Provided JSON is shallowly merged into response object.
 
 #### Parameters
 
--   `json` **[object][109]** Response JSON
+-   `json` **[object][112]** Response JSON
 
 #### Examples
 
@@ -444,9 +449,9 @@ of the Admin UI. See SettingsPage docs for details
 
 #### Parameters
 
--   `params` **[object][109]** 
-    -   `params.namespace` **[string][110]** Namespace used on extension.private_data
-    -   `params.title` **[string][110]** Page title (optional, default `""`)
+-   `params` **[object][112]** 
+    -   `params.namespace` **[string][113]** Namespace used on extension.private_data
+    -   `params.title` **[string][113]** Page title (optional, default `""`)
     -   `params.menuTitle` **menuTitle** Menu item title
 
 #### Examples
@@ -468,7 +473,7 @@ in `responseJson.settings[namespace]`. This class represents one
 such settings form. Each settings form lives in its own namespace.
 Instantiating a new SettingsPage adds a new namespace to
 `responseJson.settings` key and populates it with React JSON Form
-Schema JSON. [https://github.com/mozilla-services/react-jsonschema-form][114]
+Schema JSON. [https://github.com/mozilla-services/react-jsonschema-form][117]
 The Gopher Admin UI loops through namespaces, rendering forms appropriately.
 
 NOTE: This class directly mutates MailBot's response JSON to add
@@ -476,10 +481,10 @@ settings pages and form fields.
 
 ### Parameters
 
--   `params` **[object][109]** Object params
-    -   `params.responseJson` **[object][109]** Reference to MailBots responseJson obj
-    -   `params.title` **[string][110]** Display title of settings page (optional, default `""`)
-    -   `params.menuTitle` **[string][110]** Menu name
+-   `params` **[object][112]** Object params
+    -   `params.responseJson` **[object][112]** Reference to MailBots responseJson obj
+    -   `params.title` **[string][113]** Display title of settings page (optional, default `""`)
+    -   `params.menuTitle` **[string][113]** Menu name
     -   `params.namespace`  
 
 ### Examples
@@ -505,7 +510,7 @@ Retrieve the JSON Form Schema for this form
 const thisJsonSchema = settingsForm.getSettingsFormJSON();
 ```
 
-Returns **[object][109]** JSON Form Schema
+Returns **[object][112]** JSON Form Schema
 
 ### insert
 
@@ -514,14 +519,14 @@ create custom form elements.
 Mozilla's React JSON Schema Form manages the form JSON and
 UI JSON as two separate objects to keep the form JSON prestine and
 compliant. This method lets us manage a form element in one place. 
-Ref: [https://github.com/mozilla-services/react-jsonschema-form][114]
+Ref: [https://github.com/mozilla-services/react-jsonschema-form][117]
 
 #### Parameters
 
--   `params` **[object][109]** 
-    -   `params.name` **[object][109]** Namespace
-    -   `params.JSONSchema` **[object][109]** JSON Schema
-    -   `params.uiSchema` **[object][109]** Corresponding uiSchemaThis example is taken from [https://mozilla-services.github.io/react-jsonschema-form/][115]
+-   `params` **[object][112]** 
+    -   `params.name` **[object][112]** Namespace
+    -   `params.JSONSchema` **[object][112]** JSON Schema
+    -   `params.uiSchema` **[object][112]** Corresponding uiSchemaThis example is taken from [https://mozilla-services.github.io/react-jsonschema-form/][118]
 
 #### Examples
 
@@ -539,13 +544,13 @@ Add text input field
 
 #### Parameters
 
--   `params` **[Object][109]** 
-    -   `params.name` **[string][110]** 
-    -   `params.title` **[string][110]** 
-    -   `params.description` **[string][110]** 
-    -   `params.helpText` **[string][110]** 
-    -   `params.placeholder` **[string][110]** 
-    -   `params.defaultValue` **[string][110]** 
+-   `params` **[Object][112]** 
+    -   `params.name` **[string][113]** 
+    -   `params.title` **[string][113]** 
+    -   `params.description` **[string][113]** 
+    -   `params.helpText` **[string][113]** 
+    -   `params.placeholder` **[string][113]** 
+    -   `params.defaultValue` **[string][113]** 
 
 #### Examples
 
@@ -566,13 +571,13 @@ Add textarea input
 
 #### Parameters
 
--   `params` **[Object][109]** 
-    -   `params.name` **[string][110]** 
-    -   `params.title` **[string][110]** 
-    -   `params.description` **[string][110]** 
-    -   `params.helpText` **[string][110]** 
-    -   `params.placeholder` **[string][110]** 
-    -   `params.defaultValue` **[string][110]** 
+-   `params` **[Object][112]** 
+    -   `params.name` **[string][113]** 
+    -   `params.title` **[string][113]** 
+    -   `params.description` **[string][113]** 
+    -   `params.helpText` **[string][113]** 
+    -   `params.placeholder` **[string][113]** 
+    -   `params.defaultValue` **[string][113]** 
 
 #### Examples
 
@@ -593,12 +598,12 @@ Add checkbox field
 
 #### Parameters
 
--   `params` **[Object][109]** 
-    -   `params.name` **[string][110]** 
-    -   `params.title` **[string][110]** 
-    -   `params.description` **[string][110]** 
-    -   `params.helpText` **[string][110]** 
-    -   `params.defaultValue` **[string][110]** 
+-   `params` **[Object][112]** 
+    -   `params.name` **[string][113]** 
+    -   `params.title` **[string][113]** 
+    -   `params.description` **[string][113]** 
+    -   `params.helpText` **[string][113]** 
+    -   `params.defaultValue` **[string][113]** 
 
 #### Examples
 
@@ -612,14 +617,14 @@ Add select dropdown
 
 #### Parameters
 
--   `params` **[Object][109]** 
-    -   `params.name` **[string][110]** 
-    -   `params.title` **[string][110]** 
-    -   `params.description` **[string][110]** 
-    -   `params.helpText` **[string][110]** 
-    -   `params.options` **[array][112]** Array of options
-    -   `params.placeholder` **[string][110]** // when no option is selected
-    -   `params.defaultValue` **[string][110]** 
+-   `params` **[Object][112]** 
+    -   `params.name` **[string][113]** 
+    -   `params.title` **[string][113]** 
+    -   `params.description` **[string][113]** 
+    -   `params.helpText` **[string][113]** 
+    -   `params.options` **[array][115]** Array of options
+    -   `params.placeholder` **[string][113]** // when no option is selected
+    -   `params.defaultValue` **[string][113]** 
 
 #### Examples
 
@@ -642,11 +647,22 @@ for interrupt-messaging.
 
 #### Parameters
 
--   `params` **[object][109]** 
-    -   `params.title` **[string][110]** Alert box title
-    -   `params.text` **[string][110]** Alert box text
-    -   `params.linkText` **[string][110]** Action button link text
-    -   `params.linkHref` **[string][110]** URL of button
+-   `params` **[object][112]** 
+    -   `params.title` **[string][113]** Alert box title
+    -   `params.text` **[string][113]** Alert box text
+    -   `params.linkText` **[string][113]** Action button link text
+    -   `params.linkHref` **[string][113]** URL of button
+
+#### Examples
+
+```javascript
+formPage.alert({
+  title: "Connect",
+  text: "Connect GitHub",
+  linkText: "Connect",
+  linkHref: "https://www.github.com"
+})
+```
 
 ### video
 
@@ -654,9 +670,18 @@ Insert Video. Only YouTube supported for now.
 
 #### Parameters
 
--   `params` **[object][109]** 
-    -   `params.url` **[string][110]** URL of video (optional, default `""`)
+-   `params` **[object][112]** 
+    -   `params.url` **[string][113]** URL of video (optional, default `""`)
     -   `params.type`   (optional, default `"youtube"`)
+
+#### Examples
+
+```javascript
+formPage.video({
+  url: "https://www.youtube.com/watch?v=y1GyXuU2J5k",
+  type: "youtube"
+})
+```
 
 ### text
 
@@ -664,7 +689,7 @@ Add a text block. Markdown supported!
 
 #### Parameters
 
--   `text` **[string][110]** – Text with optional markdownNote: This field is whitespace sensitive. New lines
+-   `text` **[string][113]** – Text with optional markdownNote: This field is whitespace sensitive. New lines
     cannot have leading spaces.
 
 #### Examples
@@ -688,9 +713,18 @@ values behind the scenes.
 
 #### Parameters
 
--   `params` **[object][109]** 
-    -   `params.name` **[string][110]** Field name
-    -   `params.value` **[string][110]** Field value
+-   `params` **[object][112]** 
+    -   `params.name` **[string][113]** Field name
+    -   `params.value` **[string][113]** Field value
+
+#### Examples
+
+```javascript
+formPage.hiddenInput({
+  name: "key",
+  value: "value"
+});
+```
 
 ### submitButton
 
@@ -700,15 +734,16 @@ them available to the next handler. Make sure to validate URL input.
 
 #### Parameters
 
--   `params` **[object][109]**  (optional, default `{}`)
-    -   `params.submitText` **[string][110]** 
-    -   `params.urlParams` **[string][110]** 
+-   `params` **[object][112]**  (optional, default `{}`)
+    -   `params.submitText` **[string][113]** 
+    -   `params.urlParams` **[object][112]** Key value of url params
 
 #### Examples
 
 ```javascript
 formPage.submitButton({
-  submitText: "Save Settings"
+  submitText: "Save Settings",
+  urlParams: { key: "value" }
 });
 ```
 
@@ -720,7 +755,7 @@ method to populate the form values.
 
 #### Parameters
 
--   `formData` **[object][109]** JSON object containing form values.
+-   `formData` **[object][112]** JSON object containing form values.
 
 #### Examples
 
@@ -731,19 +766,18 @@ formPage.populate(storedData);
 
 ## listen
 
-Loads final skills and start http server
-Must be called after other skills and routes are added.
+Loads final skills and start http server.
 Anything posted to /webhooks route is automatically handled.
 Other routes must be created as usual with the Express App object.
-For example: mailbots.app.get("/", (req, res) => {});
+For example: mailbots.app.get("my-route/", (req, res) => {});
 
 ## exportApp
 
-For testing, export app object instead of starating server
+Export app for automated testing
 
 ## loadSkill
 
-Load MailBots skills from a directory, non-recursively
+Load MailBots skills from a directory, non-recursively.
 This can be called more than once to load skills in order. Skills loaded
 this method are preceeded by loadFirstCoreSkills, succeeded by loadLastCoreSkills.
 This can also receive a path to a file.
@@ -751,21 +785,24 @@ This can also receive a path to a file.
 ### Parameters
 
 -   `skill`  
--   `config` **[object][109]** optional skill configuration object
--   `skillPath` **[string][110]** path to skills directory
+-   `config` **[object][112]** optional skill configuration object
+-   `skillPath` **[string][113]** path to skills directory
 
 ## on
 
-Adds a listener function to listeners array
+Add handler for a given webhook event. Executes only the first handler
+for a matching event. The first parameter can be either a string
+(the named webhook event) or a function that is passed the webhook and
+returns true or false to indicate if the handler should be run.
 Example: controller.on('task.created', (bot, req, res) => { });
 Example: controller.on((webhook) => webhook.event === 'task.created', cb)
 
 ### Parameters
 
 -   `triggerCondition`  
--   `cb` **[function][116]** Callback function with signature cb(bot, req, res)
+-   `cb` **[function][119]** Handler function
 -   `opts`  
--   `event` **([string][110] \| [function][116])** A webhook event string (ex: task.created). Or
+-   `event` **([string][113] \| [function][119])** A webhook event string (ex: task.created). Or
     a function receives the webhook as a param, which returns a boolean value.
 
 ## onCommand
@@ -774,7 +811,7 @@ Captures only 'task.created' events where the command string matches
 
 ### Parameters
 
--   `commandSearch` **([string][110] | RexExp)** 
+-   `commandSearch` **([string][113] | RexExp)** 
 -   `cb`  
 
 ## onTrigger
@@ -783,7 +820,7 @@ Captures only 'task.triggered' events where the command string matches
 
 ### Parameters
 
--   `commandSearch` **([string][110] | RexExp)** 
+-   `commandSearch` **([string][113] | RexExp)** 
 -   `cb`  
 
 ## onEvent
@@ -794,7 +831,7 @@ that are posted to the MailBot.
 
 ### Parameters
 
--   `eventSearch` **([string][110] | RexExp)** 
+-   `eventSearch` **([string][113] | RexExp)** 
 -   `cb`  
 
 ## onAction
@@ -803,7 +840,7 @@ Captures only 'task.action_received' events where the action string matches
 
 ### Parameters
 
--   `actionSearch` **([string][110] \| [RegExp][117])** 
+-   `actionSearch` **([string][113] \| [RegExp][120])** 
 -   `cb`  
 
 ## onTaskViewed
@@ -812,7 +849,7 @@ Captures only 'task.viewed' events where the command string matches
 
 ### Parameters
 
--   `commandSearch` **([string][110] | RexExp)** 
+-   `commandSearch` **([string][113] | RexExp)** 
 -   `cb`  
 
 ## onSettingsViewed
@@ -823,7 +860,7 @@ handler can add and read data to and from its own namespace.
 
 ### Parameters
 
--   `cb` **[function][116]** Callback function that receives the bot object
+-   `cb` **[function][119]** Callback function that receives the bot object
 
 ## beforeSettingsSaved
 
@@ -836,7 +873,7 @@ ALL beforeSettingsSaved handlers fire.
 
 ### Parameters
 
--   `cb` **[function][116]** Callback function that receives the bot object
+-   `cb` **[function][119]** Callback function that receives the bot object
 
 ## on
 
@@ -990,88 +1027,94 @@ Default webhook response for unhandled webhook events
 
 [74]: #parameters-21
 
-[75]: #video
+[75]: #examples-25
 
-[76]: #parameters-22
+[76]: #video
 
-[77]: #text
+[77]: #parameters-22
 
-[78]: #parameters-23
+[78]: #examples-26
 
-[79]: #examples-25
+[79]: #text
 
-[80]: #hiddeninput
+[80]: #parameters-23
 
-[81]: #parameters-24
+[81]: #examples-27
 
-[82]: #submitbutton
+[82]: #hiddeninput
 
-[83]: #parameters-25
+[83]: #parameters-24
 
-[84]: #examples-26
+[84]: #examples-28
 
-[85]: #populate
+[85]: #submitbutton
 
-[86]: #parameters-26
+[86]: #parameters-25
 
-[87]: #examples-27
+[87]: #examples-29
 
-[88]: #listen
+[88]: #populate
 
-[89]: #exportapp
+[89]: #parameters-26
 
-[90]: #loadskill
+[90]: #examples-30
 
-[91]: #parameters-27
+[91]: #listen
 
-[92]: #on
+[92]: #exportapp
 
-[93]: #parameters-28
+[93]: #loadskill
 
-[94]: #oncommand
+[94]: #parameters-27
 
-[95]: #parameters-29
+[95]: #on
 
-[96]: #ontrigger
+[96]: #parameters-28
 
-[97]: #parameters-30
+[97]: #oncommand
 
-[98]: #onevent
+[98]: #parameters-29
 
-[99]: #parameters-31
+[99]: #ontrigger
 
-[100]: #onaction
+[100]: #parameters-30
 
-[101]: #parameters-32
+[101]: #onevent
 
-[102]: #ontaskviewed
+[102]: #parameters-31
 
-[103]: #parameters-33
+[103]: #onaction
 
-[104]: #onsettingsviewed
+[104]: #parameters-32
 
-[105]: #parameters-34
+[105]: #ontaskviewed
 
-[106]: #beforesettingssaved
+[106]: #parameters-33
 
-[107]: #parameters-35
+[107]: #onsettingsviewed
 
-[108]: #on-1
+[108]: #parameters-34
 
-[109]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[109]: #beforesettingssaved
 
-[110]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[110]: #parameters-35
 
-[111]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[111]: #on-1
 
-[112]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[112]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 
-[113]: https://docs.mailbots.com/docs/email-ui-reference
+[113]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[114]: https://github.com/mozilla-services/react-jsonschema-form
+[114]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
-[115]: https://mozilla-services.github.io/react-jsonschema-form/
+[115]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
-[116]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[116]: https://docs.mailbots.com/docs/email-ui-reference
 
-[117]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp
+[117]: https://github.com/mozilla-services/react-jsonschema-form
+
+[118]: https://mozilla-services.github.io/react-jsonschema-form/
+
+[119]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+
+[120]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp

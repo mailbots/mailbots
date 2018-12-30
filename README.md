@@ -1,8 +1,33 @@
+[MailBots](https://www.mailbots.com) is a platform for creating bots, AIs and assistants that get things done right from your inbox. Read more at [mailbots.com](https://www.mailbots.com).
+
+# Quick Start
+
+Go to mailbots.com and create a MailBot. The bot creation process sets up a working instance of this framework.
+
+Next, let's tell our MailBot what to do when it receives an email:
+
+```javascript
+var MailBot = require("mailbots");
+var mailbot = new MailBot(); // assuming .env is set
+
+// When someone emails: say-hi@my-bot.eml.bot, respond "Hello Human!"
+mailbot.onCommand("say-hi", function(bot) {
+  bot.webhook.quickReply("Hello Human!");
+  bot.webhook.respond();
+});
+
+mailbot.listen();
+```
+
+`say-hi@my-bot.eml.bot` is an example of an "email command". Whatever is before the @ sign is a command to your bot to accomplish some task. [Read more about email commands](https://docs.mailbots.com/reference#email-commands).
+
+# Docs
+
+Tip: Use our [reference guide](https://mailbots-app.mailbots.com) to quickly lookup helpers and method names.
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
-- [Quick Start](#quick-start)
 - [How MailBots Work](#how-mailbots-work)
   - [Commands](#commands)
   - [Tasks](#tasks)
@@ -25,7 +50,7 @@
   - [beforeSettingsSaved](#beforesettingssaved)
   - [on](#on)
   - [Handling Errors](#handling-errors)
-- [The "bot" Object Reference](#the-bot-object-reference)
+- [The "bot" Object](#the-bot-object)
 - [Building Skills](#building-skills)
   - [Using Handlers](#using-handlers)
   - [The "one-bot function"](#the-one-bot-function)
@@ -40,31 +65,6 @@
 - [Contributions](#contributions)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-[MailBots](https://www.mailbots.com) is a platform for creating bots, AIs and assistants that get things done right from your inbox.
-
-A MailBot is not "chatty" and it will not (usually) pretend to be human. A MailBot is an efficient utility that streamlines your day to day actions. It works on all email clients and excels at placing the right information in someone's inbox at the right time. Read more at mailbots.com
-
-# Quick Start
-
-Go to mailbots.com and create a MailBot. The bot creation process sets up a working instance of this framework.
-
-Next, let's tell our MailBot what to do when it receives an email:
-
-```javascript
-var MailBot = require("mailbots");
-var mailbot = new MailBot(); // assuming .env is set
-
-// When someone emails: say-hi@my-bot.eml.bot, respond "Hello Human!"
-mailbot.onCommand("say-hi", function(bot) {
-  bot.webhook.quickReply("Hello Human!");
-  bot.webhook.respond();
-});
-
-mailbot.listen();
-```
-
-`say-hi@my-bot.eml.bot` is an example of an "email command". Whatever is before the @ sign is a command to your bot to accomplish some task. [Read more about email commands](https://docs.mailbots.com/reference#email-commands).
 
 # How MailBots Work
 
@@ -315,13 +315,17 @@ mailbot.onSettingsViewed(handlerFn)
 
 Handle when a user views this MailBot's settings.
 
-The handler's only parameter is a callback function that responds with a [JSON form schema](https://mozilla-services.github.io/react-jsonschema-form/) to render a settings form. The callback function is passed the `bot` object as usual.
+Bots can build custom settings pages. These are rendered when a user views bot settings on the MailBots.com admin UI.
 
-This function should return a [JSON schema](https://mozilla-services.github.io/react-jsonschema-form/) to render a settings form. See the settings example in MailBots Skills Kit.
+See the [settings page reference](https://mailbots-app.mailbots.com/#settingspage).
+
+The handler's only parameter is a callback function that responds with JSON to to render a settings form. The callback function is passed the `bot` object as usual.
+
+Settings form JSON can be easily built using the [settings helper functions](https://mailbots-app.mailbots.com/#settingspage).
 
 Unlike the other handlers, every instance of this handler is called. (ie, all settings pages from all settings handlers are rendered).
 
-Do not call `bot.webhook.respond()` at the end of this particular request. MailBots' internals take care of compiling the JSON and responding.
+NOTE: Do not call `bot.webhook.respond()` at the end of this particular request. MailBots' internals take care of compiling the JSON and responding.
 
 ```javascript
 // Render a settings field for the user to enter their first name
@@ -461,9 +465,9 @@ app.setErrorHandler(function(error, bot) {
 });
 ```
 
-# The "bot" Object Reference
+# The "bot" Object
 
-The `bot` object passed into the handlers above is an instance of BotRequest. Documentation will soon follow. For now, reference the [bot-request.test.js](https://github.com/mailbots/mailbots/blob/master/test/bot-request.test.js).
+The `bot` object passed to the handlers above contains useful helpers that make it easy to handle bot requests. See [webhook helpers reference docs](https://mailbots-app.mailbots.com/#webhookhelpers).
 
 **Setting Data Works By Shallow Merging**
 Data is set by shallow merging. For example.

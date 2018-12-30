@@ -43,11 +43,10 @@ class MailBots {
   }
 
   /**
-   * Loads final skills and start http server
-   * Must be called after other skills and routes are added.
+   * Loads final skills and start http server.
    * Anything posted to /webhooks route is automatically handled.
    * Other routes must be created as usual with the Express App object.
-   * For example: mailbots.app.get("/", (req, res) => {});
+   * For example: mailbots.app.get("my-route/", (req, res) => {});
    */
   listen() {
     this.loadLastCoreSkills();
@@ -59,7 +58,7 @@ class MailBots {
   }
 
   /**
-   * For testing, export app object instead of starating server
+   * Export app for automated testing
    */
   exportApp() {
     debug("exporting MailBots App");
@@ -98,7 +97,7 @@ class MailBots {
   }
 
   /**
-   * Load MailBots skills from a directory, non-recursively
+   * Load MailBots skills from a directory, non-recursively.
    * This can be called more than once to load skills in order. Skills loaded
    * this method are preceeded by loadFirstCoreSkills, succeeded by loadLastCoreSkills.
    * This can also receive a path to a file.
@@ -146,12 +145,15 @@ class MailBots {
   }
 
   /**
-   * Adds a listener function to listeners array
+   * Add handler for a given webhook event. Executes only the first handler
+   * for a matching event. The first parameter can be either a string
+   * (the named webhook event) or a function that is passed the webhook and
+   * returns true or false to indicate if the handler should be run.
    * Example: controller.on('task.created', (bot, req, res) => { });
    * Example: controller.on((webhook) => webhook.event === 'task.created', cb)
    * @param {string|function} event A webhook event string (ex: task.created). Or
    * a function receives the webhook as a param, which returns a boolean value.
-   * @param {function} cb Callback function with signature cb(bot, req, res)
+   * @param {function} cb Handler function
    */
   on(triggerCondition, cb, opts) {
     if (this._listenerAlreadyAdded({ triggerCondition, cb, opts })) {
