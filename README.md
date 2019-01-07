@@ -23,7 +23,7 @@ mailbot.listen();
 
 # Docs
 
-Tip: Use our [reference guide](https://mailbots-app.mailbots.com) to quickly lookup helpers and method names.
+Tip: Use our [reference guide](https://mailbots-app.mailbots.com) to quickly look up helpers and method names.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -70,13 +70,13 @@ Tip: Use our [reference guide](https://mailbots-app.mailbots.com) to quickly loo
 
 A MailBot's purpose is to help someone get something done quickly, efficiently and without leaving their inbox.
 
-## Commands
-
-MailBots execute commands. Even when using natural language, or passively listening for an event, a MailBot will always act in the context of a command. Email Commands (as above) are one way to issue commands. Creating a task with the API also requires a command.
-
 ## Tasks
 
-In carrying out a command, MailBots create tasks. Tasks can scheduled, edited or "completed". Tasks are always associated with a command.
+A unit of work accomplished by a MailBot is called a "task". Tasks can scheduled, edited or "completed". Tasks are always associated with a command.
+
+## Commands
+
+MailBots always work in the context of commands while accomplishing tasks. A command can be thought of as the instruction for how to complete a particular task, or the purpose of the task. Email Commands (shown above) are one way to issue commands. Creating a task with the API also requires a command.
 
 ## Triggering
 
@@ -85,6 +85,10 @@ A task (that carries out a command) can be created then wait for the perfect mom
 ## Architecture
 
 When events happen in the MailBots platform (ex: an email is received), your MailBot receives webhooks. Your MailBot then gets some useful bit of work done (ex: enters data into a CRM) and responds with JSON that tells the MailBots platform what to do next (ex: send an email, store data, set a reminder, etc). JSON in, JSON out.
+
+This library simplifies much of the above architecture, allowing you to simply create handler functions for certain events.
+
+The webhook request and response can be viewed via the [MailBots Sandbox](https://app.mailbots.com/sandbox).
 
 ## Handlers
 
