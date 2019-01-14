@@ -1,7 +1,7 @@
 {
   "event": "task.updated",
   "version": 1,
-  "extension": {
+  "mailbot": {
     "id": 15,
     "name": "memorize",
     "subdomain": "gopher-memorize",

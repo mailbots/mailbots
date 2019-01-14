@@ -303,7 +303,7 @@ Note: This action does not automatically create a MailBots Task. One can be crea
 ```javascript
 mailbot.onEvent("issue.created", async function(bot) {
   // Handle event, for example, create a MailBots Task.
-  const mailBotsClient = new MailBotsClient.fromBot(bot);
+  const mailBotsClient = MailBotsClient.fromBot(bot);
   await mailBotsClient.createTask({
     // Pre-authenticated API client
   });

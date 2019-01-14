@@ -1,6 +1,6 @@
 {
   "name": "mailbots",
-  "version": "0.1.2-beta",
+  "version": "0.1.4-beta",
   "description": "Create email-based bots with MailBots.com",
   "main": "mailbots.js",
   "directories": {
