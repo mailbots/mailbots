@@ -207,11 +207,11 @@ setTaskData('my_bot.magic_number', 42);
 
 ### getExtensionData
 
-Get data stored in extension.private_data
+Get data stored in mailbot.private_data
 
 #### Parameters
 
--   `key` **[string][113]** JSON Path to data from extension
+-   `key` **[string][113]** JSON Path to data from mailbot
 -   `defaultValue` **any** If value is undefined, use this value instead
 
 #### Examples
@@ -222,11 +222,11 @@ bot.webhook.getExtensionData('my_bot.setting', 42);
 
 ### setExtensionData
 
-Set data stored in extension.private_data. Objects are shallow merged if
+Set data stored in mailbot.private_data. Objects are shallow merged if
 existing data is present. All other values (including arrays) are replaced.
 
 This method has two signatures. It can take an object as its only param
-which will be shallowly merged into extension.private_data.
+which will be shallowly merged into mailbot.private_data.
 
 It can also take a lodash \_.set path as its first parameter and a value
 as the second.
@@ -235,7 +235,7 @@ as the second.
 
 -   `args` **...any** 
 -   `param` **([string][113] \| [object][112])** Either a lodash set param or an
-    object to be shallowly merged into extension.private_data
+    object to be shallowly merged into mailbot.private_data
 -   `value` **any?** When passing lodash set path string as first
     param, this is the value.
 
@@ -450,7 +450,7 @@ of the Admin UI. See SettingsPage docs for details
 #### Parameters
 
 -   `params` **[object][112]** 
-    -   `params.namespace` **[string][113]** Namespace used on extension.private_data
+    -   `params.namespace` **[string][113]** Namespace used on mailbot.private_data
     -   `params.title` **[string][113]** Page title (optional, default `""`)
     -   `params.menuTitle` **menuTitle** Menu item title
 
@@ -474,7 +474,7 @@ such settings form. Each settings form lives in its own namespace.
 Instantiating a new SettingsPage adds a new namespace to
 `responseJson.settings` key and populates it with React JSON Form
 Schema JSON. [https://github.com/mozilla-services/react-jsonschema-form][117]
-The Gopher Admin UI loops through namespaces, rendering forms appropriately.
+The MailBots Admin UI loops through namespaces, rendering forms appropriately.
 
 NOTE: This class directly mutates MailBot's response JSON to add
 settings pages and form fields.
@@ -490,7 +490,7 @@ settings pages and form fields.
 ### Examples
 
 ```javascript
-const mySettingsPage = gopher.webhook.settingsPage({
+const mySettingsPage = mailbots.webhook.settingsPage({
  namespace: "memorize",
  title: "Memorization Settings",
  menuTitle: "Memorization"
@@ -760,7 +760,7 @@ method to populate the form values.
 #### Examples
 
 ```javascript
-const storedData = gopher.webhook.getExtensionData("mem", {});
+const storedData = mailbots.webhook.getExtensionData("mem", {});
 formPage.populate(storedData);
 ```
 
@@ -825,7 +825,7 @@ Captures only 'task.triggered' events where the command string matches
 
 ## onEvent
 
-Captures only 'extension.event_received' events
+Captures only 'mailbot.event_received' events
 Note: This "Event" refers to the 3rd party webhooks
 that are posted to the MailBot.
 
@@ -866,7 +866,7 @@ handler can add and read data to and from its own namespace.
 
 Handle webhook that fires after a user hits "save" on their MailBot settings.
 Newly saved settings arrive at the top-level settings object.
-Existing settings are still in extension.stored_data.
+Existing settings are still in mailbot.stored_data.
 Return webhook { status: "fail", message: "" } to abort the saving process.
 Return extenesion and user data to update to save data as with other webhooks.
 ALL beforeSettingsSaved handlers fire.
@@ -907,13 +907,13 @@ Default webhook response for unhandled webhook events
 
 [14]: #examples-3
 
-[15]: #getextensiondata
+[15]: #getmailbotdata
 
 [16]: #parameters-5
 
 [17]: #examples-4
 
-[18]: #setextensiondata
+[18]: #setmailbotdata
 
 [19]: #parameters-6
 

@@ -1,7 +1,7 @@
 {
   "payload": {
     "type": "intercom",
-    "uri": "http://api.mailbots.com/api/v1/extension_event/428/1fds1fdsfs22788/?type=intercom",
+    "uri": "http://api.mailbots.com/api/v1/mailbot_event/428/1fds1fdsfs22788/?type=intercom",
     "headers": {
       "host": "api.mailbots.com",
       "accept": "application/json, text/plain, */*",
@@ -87,7 +87,7 @@
       "self": null
     }
   },
-  "event": "extension.event_received",
+  "event": "mailbot.event_received",
   "version": "1",
   "user": {
     "name": "Andy Librian",
@@ -102,14 +102,14 @@
     "validate_sender_email": false,
     "send_dev_errors": false
   },
-  "extension": {
+  "mailbot": {
     "name": "futsupport",
     "subdomain": "futsupport",
     "stored_data": {
       "access_token": "fdsa"
     },
     "installed": true,
-    "event_url": "https://api.mailbots.com/api/v1/extension_event/428/18162e23338/",
+    "event_url": "https://api.mailbots.com/api/v1/mailbot_event/428/18162e23338/",
     "id": 1534,
     "owner": {
       "email": "foo@gmail.com"
@@ -128,7 +128,7 @@
     "learn_more_url": "",
     "privacy_policy_url": "",
     "oauth2_client_id": "ext_99876abccfc454a53t55ddsqw9ij",
-    "oauth2_scope": "get_user_info extension_manage_self read_own_tasks manage_own_tasks",
+    "oauth2_scope": "get_user_info mailbot_manage_self read_own_tasks manage_own_tasks",
     "oauth2_redirect_uri": ""
   }
 }

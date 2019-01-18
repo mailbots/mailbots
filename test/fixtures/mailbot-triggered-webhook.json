@@ -10,7 +10,7 @@
       "origin": "http://localhost:3000",
       "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36",
       "content-type": "application/json",
-      "referer": "http://localhost:3000/sandbox/15?subject=fdsafdsa&to=memorize%40gopher-memorize.eml.bot",
+      "referer": "http://localhost:3000/sandbox/15?subject=fdsafdsa&to=memorize%40mailbot-memorize.eml.bot",
       "accept-encoding": "gzip, deflate",
       "accept-language": "en-US,en;q=0.9",
       "x-forwarded-for": "24.6.120.149",
@@ -22,16 +22,16 @@
       "foo": "bar"
     }
   },
-  "event": "extension.triggered",
+  "event": "mailbot.triggered",
   "version": 1,
-  "extension": {
+  "mailbot": {
     "id": 15,
     "name": "memorize",
-    "subdomain": "gopher-memorize",
+    "subdomain": "mailbots-memorize",
     "developer_name": "",
     "help_url": "",
     "stored_data": {
-      "gopher_token": "[redacted]"
+      "mailbot_token": "[redacted]"
     }
   },
   "user": {

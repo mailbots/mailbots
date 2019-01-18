@@ -15,9 +15,9 @@ describe("Bot Request Helper", function() {
     // const webhookJson = require("./fixtures/task-triggered-webhook.json");
     // const webhookJson = require("./fixtures/task-action-received-webhook.json");
     // const webhookJson = require("./fixtures/task-updated-webhook.json");
-    // const webhookJson = require("./fixtures/extension-triggered-webhook.json"); //expected failures for undefined
-    // const webhookJson = require("./fixtures/extension-settings-viewed-webhook.json");
-    // const webhookJson = require("./fixtures/extension-settings-pre-saved-webhook.json");
+    // const webhookJson = require("./fixtures/mailbot-triggered-webhook.json"); //expected failures for undefined
+    // const webhookJson = require("./fixtures/mailbot-settings-viewed-webhook.json");
+    // const webhookJson = require("./fixtures/mailbot-settings-pre-saved-webhook.json");
 
     request.body = webhookJson;
     response = {};
@@ -228,7 +228,7 @@ describe("Bot Request Helper", function() {
     });
 
     it("gets new and old settings from pre-save webhook");
-    it("sets newly set data from extension.settings_pre_saved hook");
+    it("sets newly set data from mailbot.settings_pre_saved hook");
 
     it("adds a custom submit button with url params", function(done) {
       const newForm = botRequest.webhook.settingsPage({
@@ -457,23 +457,23 @@ describe("Bot Request Helper", function() {
     });
   });
 
-  describe("extension", function() {
-    it("sets extension data", done => {
+  describe("mailbot", function() {
+    it("sets mailbot data", done => {
       botRequest.webhook.setExtensionData({
         crm: {
           key: "23432",
           name: "bob"
         }
       });
-      expect(responseJson.extension.stored_data.crm).to.deep.equal({
+      expect(responseJson.mailbot.stored_data.crm).to.deep.equal({
         key: "23432",
         name: "bob"
       });
       done();
     });
 
-    it("gets extension data", done => {
-      _.set(botRequest, "webhook.responseJson.extension.stored_data", {
+    it("gets mailbot data", done => {
+      _.set(botRequest, "webhook.responseJson.mailbot.stored_data", {
         crm: {
           key: "23432",
           name: "bob"
@@ -484,25 +484,25 @@ describe("Bot Request Helper", function() {
       done();
     });
 
-    it("shallow merges extension data", done => {
+    it("shallow merges mailbot data", done => {
       botRequest.webhook.setExtensionData({
         crm: {
           another: "key"
         }
       });
-      expect(responseJson.extension.stored_data.crm).to.deep.equal({
+      expect(responseJson.mailbot.stored_data.crm).to.deep.equal({
         another: "key"
       });
       done();
     });
 
-    it("sets extension data using json path string", done => {
+    it("sets mailbot data using json path string", done => {
       botRequest.webhook.setExtensionData("crm", {
         another: "key",
         key: "9876",
         name: "joe"
       });
-      expect(responseJson.extension.stored_data.crm).to.deep.equal({
+      expect(responseJson.mailbot.stored_data.crm).to.deep.equal({
         another: "key",
         key: "9876",
         name: "joe"
@@ -510,9 +510,9 @@ describe("Bot Request Helper", function() {
       done();
     });
 
-    it("invites other people to use the extension", done => {
+    it("invites other people to use the mailbot", done => {
       botRequest.webhook.invite(["newuser@fdsa.com"]);
-      expect(botRequest.responseJson.extension.invite).to.deep.equal([
+      expect(botRequest.responseJson.mailbot.invite).to.deep.equal([
         "newuser@fdsa.com"
       ]);
       done();

@@ -240,7 +240,7 @@ class MailBots {
   }
 
   /**
-   * Captures only 'extension.event_received' events
+   * Captures only 'mailbot.event_received' events
    * Note: This "Event" refers to the 3rd party webhooks
    * that are posted to the MailBot.
    * @param {string|RexExp} eventSearch
@@ -250,14 +250,14 @@ class MailBots {
       this.on(webhook => {
         const eventType = String(_.get(webhook, "payload.type"));
         return (
-          webhook.event === "extension.event_received" &&
+          webhook.event === "mailbot.event_received" &&
           eventSearch.exec(eventType)
         );
       }, cb);
     } else {
       this.on(
         webhook =>
-          webhook.event === "extension.event_received" &&
+          webhook.event === "mailbot.event_received" &&
           _.get(webhook, "payload.type") === eventSearch,
         cb
       );
@@ -315,7 +315,7 @@ class MailBots {
    * @param {function} cb Callback function that receives the bot object
    */
   onSettingsViewed(cb) {
-    this.on("extension.settings_viewed", cb, { multiFire: true });
+    this.on("mailbot.settings_viewed", cb, { multiFire: true });
   }
 
   setErrorHandler(cb) {
@@ -325,14 +325,14 @@ class MailBots {
   /**
    * Handle webhook that fires after a user hits "save" on their MailBot settings.
    * Newly saved settings arrive at the top-level settings object.
-   * Existing settings are still in extension.stored_data.
+   * Existing settings are still in mailbot.stored_data.
    * Return webhook { status: "fail", message: "" } to abort the saving process.
    * Return extenesion and user data to update to save data as with other webhooks.
    * ALL beforeSettingsSaved handlers fire.
    * @param {function} cb Callback function that receives the bot object
    */
   beforeSettingsSaved(cb) {
-    this.on("extension.settings_pre_save", cb, { multiFire: true });
+    this.on("mailbot.settings_pre_save", cb, { multiFire: true });
   }
 
   /**

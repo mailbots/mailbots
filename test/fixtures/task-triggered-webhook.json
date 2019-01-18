@@ -1,17 +1,17 @@
 {
   "trigger": {
-    "triggered_by": "gopher_reminder"
+    "triggered_by": "mailbot_reminder"
   },
   "event": "task.triggered",
   "version": 1,
   "mailbot": {
     "id": 15,
     "name": "memorize",
-    "subdomain": "gopher-memorize",
+    "subdomain": "mailbots-memorize",
     "developer_name": "",
     "help_url": "",
     "stored_data": {
-      "gopher_token": "[redacted]"
+      "mailbot_token": "[redacted]"
     }
   },
   "user": {
@@ -36,7 +36,7 @@
     "trigger_timeformat": "",
     "reference_email": {
       "to": ["test@example.com"],
-      "cc": ["memorize@gopher-memorize.eml.bot"],
+      "cc": ["memorize@mailbots-memorize.eml.bot"],
       "bcc": [],
       "from": "esweetland@gmail.com",
       "reply_to": "",
@@ -45,7 +45,7 @@
       "text": "This is a body\n",
       "attachments": []
     },
-    "command": "memorize@gopher-memorize.eml.bot",
+    "command": "memorize@mailbots-memorize.eml.bot",
     "stored_data": {
       "frequency_pref": "1.5"
     }

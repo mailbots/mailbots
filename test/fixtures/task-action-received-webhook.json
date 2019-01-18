@@ -1,17 +1,17 @@
 {
   "source": {
     "type": "email",
-    "recipient": "a+frequency.0-2+t.194+gopher-memorize+79c5b8@gopher.email",
+    "recipient": "a+frequency.0-2+t.194+mailbots-memorize+79c5b8@mailbots.email",
     "from": "esweetland@gmail.com",
     "method": "bcc",
-    "to": ["a+frequency.0-2+t.194+gopher-memorize+79c5b8@gopher.email"],
+    "to": ["a+frequency.0-2+t.194+mailbots-memorize+79c5b8@mailbots.email"],
     "cc": [],
     "bcc": [],
     "subject": "Hit 'send' to reset memorization schedule",
     "html": "<p>Memorization cues will be sent 1 days, 3 days, 6 days, 11 days, 17 days, 25 days, 36 days, 48 days, 63 days from today.</p>",
     "text": "<p>Memorization cues will be sent 1 days, 3 days, 6 days, 11 days, 17 days, 25 days, 36 days, 48 days, 63 days from today.</p>",
     "headers": {
-      "to": "a+frequency.0-2+t.194+gopher-memorize+79c5b8@gopher.email",
+      "to": "a+frequency.0-2+t.194+mailbots-memorize+79c5b8@mailbots.email",
       "cc": [],
       "bcc": [],
       "subject": "Hit 'send' to reset memorization schedule",
@@ -20,20 +20,20 @@
     }
   },
   "action": {
-    "full_address": "a+frequency.0-2+t.194+gopher-memorize+79c5b8@gopher-memorize.eml.bot",
+    "full_address": "a+frequency.0-2+t.194+mailbots-memorize+79c5b8@mailbots-memorize.eml.bot",
     "format": "frequency.0-2",
     "open": false
   },
   "event": "task.action_received",
   "version": 1,
-  "extension": {
+  "mailbot": {
     "id": 15,
     "name": "memorize",
-    "subdomain": "gopher-memorize",
+    "subdomain": "mailbots-memorize",
     "developer_name": "",
     "help_url": "",
     "stored_data": {
-      "gopher_token": "[readacted]"
+      "mailbot_token": "[readacted]"
     }
   },
   "user": {
@@ -58,7 +58,7 @@
     "trigger_timeformat": "3days",
     "reference_email": {
       "to": ["test@example.com"],
-      "cc": ["memorize@gopher-memorize.eml.bot"],
+      "cc": ["memorize@mailbots-memorize.eml.bot"],
       "bcc": [],
       "from": "esweetland@gmail.com",
       "reply_to": "",
@@ -67,7 +67,7 @@
       "text": "This is a body\n",
       "attachments": []
     },
-    "command": "memorize@gopher-memorize.eml.bot",
+    "command": "memorize@mailbots-memorize.eml.bot",
     "stored_data": {
       "frequency_pref": "1.5"
     }

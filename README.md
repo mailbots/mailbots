@@ -343,7 +343,7 @@ mailbot.onSettingsViewed(async function(bot) {
   todoSettings.submitButton();
 
   // Populate form values
-  todoSettings.populate(bot.get("extension.saved_data.todo"));
+  todoSettings.populate(bot.get("mailbot.saved_data.todo"));
   // Note bot.webhook.respond() is NOT called
 });
 ```
@@ -424,7 +424,7 @@ This is a generic handler for any webhook. It can be used to handle any inbound 
 Example:
 
 ```javascript
-mailbot.on("extension.installed", function(bot) {
+mailbot.on("mailbot.installed", function(bot) {
   // Handle when a MailBot is installed
   // Create task with MailBots SDK
   // bot.webhook.respond();
@@ -433,14 +433,14 @@ mailbot.on("extension.installed", function(bot) {
 
 The first paramater can be:
 
-- A string that matches the webhook `type`. (ie. [`extension.installed`](https://docs.mailbots.com/reference#extensioninstalled))
+- A string that matches the webhook `type`. (ie. [`mailbot.installed`](https://docs.mailbots.com/reference#mailbotinstalled))
 - A regular expression that matches on webhook `type`
 - A function that takes the incoming webhook as the only parameter and returns a boolean value indicating whether or not that webhook should be handled by that function handler.
 
 The second parameter is the function handler that runs only if the matching condition (the first parameter) is met.
 
 ```javascript
-mailbot.on("extension.installed", function(bot) {
+mailbot.on("mailbot.installed", function(bot) {
   // Handle when a MailBot is installed
   // Create a task from mailbots sdk
   // bot.webhook.respond();
@@ -613,7 +613,7 @@ Skills can use one-bot functions to share [UI elements](https://docs.mailbots.co
 By convention, UI functions that output UI start with `render`. For example, `renderMemorizationControls`.
 
 ```javascript
-  var memorizeSkill = require("gopher-memorize")(mailbot);
+  var memorizeSkill = require("mailbots-memorize")(mailbot);
   mailbot.onCommand("remember", function(bot) {
     bot.webhook.addEmail({
       to: "you@email.com"
@@ -702,17 +702,17 @@ To prevent conflicts and facilitate debugging, it is helpful to follow these con
 
 Skills can be installed from npm.
 
-Here we will use `gopher-memorize`, a skill that creates reminders for any [task](https://docs.mailbots.com/reference) using [spaced repetition](https://www.wikiwand.com/en/Spaced_repetition), a memorization technique that increases the time between reminders as more reminders are sent.
+Here we will use `mailbots-memorize`, a skill that creates reminders for any [task](https://docs.mailbots.com/reference) using [spaced repetition](https://www.wikiwand.com/en/Spaced_repetition), a memorization technique that increases the time between reminders as more reminders are sent.
 
 In your cli, run:
 
-`npm install --save gopher-memorize`
+`npm install --save mailbots-memorize`
 
 In our app.js file we will create a handler that uses our newly installed skill.
 
 ```javascript
 // In main app.js file
-var memorizeSkill = require("gopher-memorize")(mailbot);
+var memorizeSkill = require("mailbots-memorize")(mailbot);
 
 mailbot.onCommand("remember", function(bot) {
   memorizeSkill.memorizeTask(bot); //  ⬅ Tell bot to memorize your task
@@ -763,7 +763,7 @@ Skills will, themselves, document how they are used. Different approaches are ri
 When a new user installs your MailBot, they are directed to a settings page with the `welcome` namespace. Render a custom welcome message for your user by creating a settings page that targets this namespace.
 
 ```javascript
-gopherApp.onSettingsViewed(function(bot)  {
+mailbot.onSettingsViewed(function(bot)  {
     const welcomeSettings = bot.webhook.settingsPage({
       namespace: "welcome", // MailBots sends new users to this namespace automatically
       menuTitle: "Welcome"
@@ -778,7 +778,7 @@ _Markdown_ works here.`);
 
 Note: While in dev_mode, the MailBot owner is instead redirected to the sandbox.
 
-Your bot receives the `extension.installed` webhook which can be used to schedule a series of welcome emails to the user.
+Your bot receives the `mailbot.installed` webhook which can be used to schedule a series of welcome emails to the user.
 
 # Testing
 

@@ -1,17 +1,17 @@
 {
   "source": {
     "type": "email",
-    "recipient": "memorize@gopher-memorize.eml.bot",
+    "recipient": "memorize@mailbots-memorize.eml.bot",
     "from": "esweetland@gmail.com",
     "method": "bcc",
-    "to": ["memorize@gopher-memorize.eml.bot"],
+    "to": ["memorize@mailbots-memorize.eml.bot"],
     "cc": [],
     "bcc": [],
     "subject": "fdsafdsa",
     "html": "",
     "text": "",
     "headers": {
-      "to": "memorize@gopher-memorize.eml.bot",
+      "to": "memorize@mailbots-memorize.eml.bot",
       "cc": "",
       "bcc": "",
       "subject": "fdsafdsa",
@@ -20,18 +20,18 @@
   },
   "command": {
     "format": "memorize",
-    "full_address": "memorize@gopher-memorize.eml.bot"
+    "full_address": "memorize@mailbots-memorize.eml.bot"
   },
   "event": "task.created",
   "version": 1,
   "mailbot": {
     "id": 15,
     "name": "memorize",
-    "subdomain": "gopher-memorize",
+    "subdomain": "mailbots-memorize",
     "developer_name": "",
     "help_url": "",
     "stored_data": {
-      "gopher_token": "[redacted]"
+      "mailbot_token": "[redacted]"
     }
   },
   "user": {
@@ -55,7 +55,7 @@
     "trigger_time": null,
     "trigger_timeformat": "",
     "reference_email": {
-      "to": ["memorize@gopher-memorize.eml.bot"],
+      "to": ["memorize@mailbots-memorize.eml.bot"],
       "cc": [],
       "bcc": [],
       "from": "esweetland@gmail.com",
@@ -65,7 +65,7 @@
       "text": "",
       "attachments": []
     },
-    "command": "memorize@gopher-memorize.eml.bot",
+    "command": "memorize@mailbots-memorize.eml.bot",
     "stored_data": {
       "frequency_pref": "1.5"
     }

@@ -41,8 +41,8 @@ describe("MailBots App", function() {
       request(app)
         .post("/webhooks")
         .set("Accept", "application/json")
-        .set("X-Gopher-Timestamp", exampleTimestamp)
-        .set("X-Gopher-Signature", generatedSignature)
+        .set("X-MailBots-Timestamp", exampleTimestamp)
+        .set("X-MailBots-Signature", generatedSignature)
         .send(webhook)
         // .then(res => {})
         .catch(err => {
@@ -107,8 +107,8 @@ describe("MailBots App", function() {
       request(app)
         .post("/webhooks")
         .set("Accept", "application/json")
-        .set("X-Gopher-Timestamp", exampleTimestamp)
-        .set("X-Gopher-Signature", generatedSignature)
+        .set("X-MailBots-Timestamp", exampleTimestamp)
+        .set("X-MailBots-Signature", generatedSignature)
         .send(exampleJson)
         .then(res => {
           expect(res.status).to.equal(403);
@@ -190,7 +190,7 @@ describe("MailBots App", function() {
     it("onTrigger handler matches task command by regex", function(done) {
       mailbot.onTrigger(/^mem.*/, bot => {
         expect(bot.get("task.command")).to.equal(
-          "memorize@gopher-memorize.eml.bot"
+          "memorize@mailbots-memorize.eml.bot"
         );
         bot.webhook.respond();
         done();
@@ -202,7 +202,7 @@ describe("MailBots App", function() {
     it("onTaskViewed handler matches task command by regex", function(done) {
       mailbot.onTaskViewed(/^memorize.*/, bot => {
         expect(bot.get("task.command")).to.equal(
-          "memorize@gopher-memorize.eml.bot"
+          "memorize@mailbots-memorize.eml.bot"
         );
         bot.webhook.respond();
         done();
@@ -246,7 +246,7 @@ describe("MailBots App", function() {
         bot.webhook.respond();
         done();
       });
-      const intercomEvent = require("./fixtures/extension-event-received.json");
+      const intercomEvent = require("./fixtures/mailbot-event-received.json");
       fireWebhookRequest(intercomEvent);
     });
 
@@ -255,7 +255,7 @@ describe("MailBots App", function() {
         let res = await getAsyncThing();
         bot.webhook.respond();
       });
-      const intercomEvent = require("./fixtures/extension-event-received.json");
+      const intercomEvent = require("./fixtures/mailbot-event-received.json");
       await fireWebhookRequest(intercomEvent);
     });
 
@@ -282,13 +282,13 @@ describe("MailBots App", function() {
   });
 
   describe("settings", function() {
-    const extensionSettingsViewed = require("./fixtures/extension-settings-viewed-webhook.json");
+    const mailbotSettingsViewed = require("./fixtures/mailbot-settings-viewed-webhook.json");
 
     it("fires onSettingsViewed handler", function(done) {
       mailbot.onSettingsViewed(bot => {
         done();
       });
-      fireWebhookRequest(extensionSettingsViewed, {
+      fireWebhookRequest(mailbotSettingsViewed, {
         errOnFallthrough: false
       });
     });
@@ -301,7 +301,7 @@ describe("MailBots App", function() {
           }
         };
       });
-      fireWebhookRequest(extensionSettingsViewed, {
+      fireWebhookRequest(mailbotSettingsViewed, {
         errOnFallthrough: false
       }).then(res => {
         expect(res.body.settings.foo).to.equal("bar");
@@ -314,7 +314,7 @@ describe("MailBots App", function() {
         const settings = await getAsyncThing();
         bot.responseJson = settings;
       });
-      fireWebhookRequest(extensionSettingsViewed, {
+      fireWebhookRequest(mailbotSettingsViewed, {
         errOnFallthrough: false
       }).then(res => {
         expect(res.body.my).to.equal("async settings");
@@ -335,7 +335,7 @@ describe("MailBots App", function() {
         bot.responseJson.settings.shoe = "far";
       });
 
-      fireWebhookRequest(extensionSettingsViewed, {
+      fireWebhookRequest(mailbotSettingsViewed, {
         errOnFallthrough: false
       }).then(res => {
         expect(res.body.settings.foo).to.equal("bar");
@@ -358,18 +358,18 @@ describe("MailBots App", function() {
         done();
       });
 
-      fireWebhookRequest(extensionSettingsViewed, {
+      fireWebhookRequest(mailbotSettingsViewed, {
         errOnFallthrough: false
       });
     });
 
-    const extensionSettingsBeforeSaved = require("./fixtures/extension-settings-pre-saved-webhook.json");
+    const mailbotSettingsBeforeSaved = require("./fixtures/mailbot-settings-pre-saved-webhook.json");
 
     it("fires beforeSettingsSaved handler", function(done) {
       mailbot.beforeSettingsSaved(bot => {
         done();
       });
-      fireWebhookRequest(extensionSettingsBeforeSaved, {
+      fireWebhookRequest(mailbotSettingsBeforeSaved, {
         errOnFallthrough: false
       });
     });
@@ -382,11 +382,11 @@ describe("MailBots App", function() {
         expect(bot.webhook.getExtensionData("github.foo")).to.equal("bar");
         bot.webhook.setExtensionData("github.shoe", "far");
       });
-      fireWebhookRequest(extensionSettingsBeforeSaved, {
+      fireWebhookRequest(mailbotSettingsBeforeSaved, {
         errOnFallthrough: false
       }).then(res => {
-        expect(res.body.extension.stored_data.github.foo).to.equal("bar");
-        expect(res.body.extension.stored_data.github.shoe).to.equal("far");
+        expect(res.body.mailbot.stored_data.github.foo).to.equal("bar");
+        expect(res.body.mailbot.stored_data.github.shoe).to.equal("far");
         done();
       });
     });
@@ -556,7 +556,7 @@ describe("MailBots App", function() {
   });
 
   describe("error handling", function() {
-    const extensionSettingsViewed = require("./fixtures/extension-settings-viewed-webhook.json");
+    const mailbotSettingsViewed = require("./fixtures/mailbot-settings-viewed-webhook.json");
 
     it("uses the default error handler", async function() {
       mailbot.onCommand("memorize", bot => {
@@ -587,7 +587,7 @@ describe("MailBots App", function() {
         throw new Error("An error!");
         bot.webhook.respond(); // isnt' called
       });
-      const result = await fireWebhookRequest(extensionSettingsViewed);
+      const result = await fireWebhookRequest(mailbotSettingsViewed);
       expect(result.body.webhook.message).to.contain(
         "Your MailBot caught an unhandled error"
       );
@@ -599,7 +599,7 @@ describe("MailBots App", function() {
         throw new Error("An error!");
         bot.webhook.respond(); // isnt' called
       });
-      const result = await fireWebhookRequest(extensionSettingsViewed);
+      const result = await fireWebhookRequest(mailbotSettingsViewed);
       expect(result.body.webhook.message).to.contain(
         "Your MailBot caught an unhandled error"
       );
@@ -656,7 +656,7 @@ describe("MailBots App", function() {
         bot.webhook.respond();
       });
 
-      const result = await fireWebhookRequest(extensionSettingsViewed);
+      const result = await fireWebhookRequest(mailbotSettingsViewed);
       expect(result.body.webhook.message).to.contain("foo!");
     });
 

@@ -1,12 +1,18 @@
 {
-  "event": "extension.settings_viewed",
+  "settings": {
+    "memorize": {
+      "firstName": "NewKarl",
+      "lastName": "Flabberson"
+    }
+  },
+  "event": "mailbot.settings_pre_save",
   "version": "1",
-  "extension": {
-    "id": 89,
-    "name": "Gopher Skills Kit",
-    "subdomain": "gopher-skills-kit",
-    "developer_name": "",
-    "help_url": "",
+  "mailbot": {
+    "id": 84,
+    "name": "MailBots Memorize",
+    "subdomain": "mailbots-memorize",
+    "developer_name": "MailBots, Inc",
+    "help_url": "http://help.followupthen.com/contact",
     "stored_data": {
       "github": {
         "firstName": "Joe",
