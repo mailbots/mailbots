@@ -698,6 +698,14 @@ To prevent conflicts and facilitate debugging, it is helpful to follow these con
   mailbots.onAction("sn.do-action", bot => {});
   ```
 
+  ### Use of "MailBot", "mailbot", "MailBots" and "bots"
+  For clarity and to reduce ambiguity, follow these conventions:
+   * User-Facing: The name of the platform (and company) is "MailBots". Always studly-cased. Always plural.
+   * User-Facing: One email-based bot is a "MailBot". Always studly-cased.
+   * Code: `mailbot` (all lowercased) is an acceptable variable name, but...
+   * Code: When the first "M" is capitalized, always capitalize the second. Ex: `createMailBot()`. `Mailbot` (lowercase "b") never exists.
+   * Code: `bot` is only used for the bot helper object passed to handler functions.
+
 # Installing Skills From npm
 
 Skills can be installed from npm.
@@ -848,7 +856,7 @@ var mailbot = new MailBot({
   clientSecret: "your_secret",
   botUrl: "http://your_bot_url"
 });
-// You can also set CLIENT_ID, CLIENT_SECRET and BOT_URL environment vars
+// You can also set CLIENT_ID, CLIENT_SECRET and MAILBOT_URL environment vars
 // as an alternative to explicitly passing them in.
 
 mailbot.onCommand("hello", bot => {
@@ -865,4 +873,7 @@ mailbot.listen();
 
 # Contributions
 
-Contributions are welcome in the form of PRs and / or Github tickets for issues, bugs, ideas and feature requests.
+Contributions are welcome in the form of PRs and / or Github tickets for issues, bugs, ideas and feature requests. 
+Please follow the [MailBot naming conventions](https://github.com/mailbots/mailbots#use-of-mailbot-mailbot-mailbots-and-bots).
+We use ngrok to mock API requests, included in the test package here. This can be disabled to test against the live
+API (see package.json).
