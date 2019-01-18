@@ -459,7 +459,7 @@ describe("Bot Request Helper", function() {
 
   describe("mailbot", function() {
     it("sets mailbot data", done => {
-      botRequest.webhook.setExtensionData({
+      botRequest.webhook.setMailBotData({
         crm: {
           key: "23432",
           name: "bob"
@@ -479,13 +479,13 @@ describe("Bot Request Helper", function() {
           name: "bob"
         }
       });
-      const data = botRequest.webhook.getExtensionData("crm.name");
+      const data = botRequest.webhook.getMailBotData("crm.name");
       expect(data).to.equal("bob");
       done();
     });
 
     it("shallow merges mailbot data", done => {
-      botRequest.webhook.setExtensionData({
+      botRequest.webhook.setMailBotData({
         crm: {
           another: "key"
         }
@@ -497,7 +497,7 @@ describe("Bot Request Helper", function() {
     });
 
     it("sets mailbot data using json path string", done => {
-      botRequest.webhook.setExtensionData("crm", {
+      botRequest.webhook.setMailBotData("crm", {
         another: "key",
         key: "9876",
         name: "joe"

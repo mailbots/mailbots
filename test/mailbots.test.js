@@ -376,11 +376,11 @@ describe("MailBots App", function() {
 
     it("multiple beforeSettingsSaved handlers fire with data", function(done) {
       mailbot.beforeSettingsSaved(bot => {
-        bot.webhook.setExtensionData("github.foo", "bar");
+        bot.webhook.setMailBotData("github.foo", "bar");
       });
       mailbot.beforeSettingsSaved(bot => {
-        expect(bot.webhook.getExtensionData("github.foo")).to.equal("bar");
-        bot.webhook.setExtensionData("github.shoe", "far");
+        expect(bot.webhook.getMailBotData("github.foo")).to.equal("bar");
+        bot.webhook.setMailBotData("github.shoe", "far");
       });
       fireWebhookRequest(mailbotSettingsBeforeSaved, {
         errOnFallthrough: false

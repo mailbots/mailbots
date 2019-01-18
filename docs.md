@@ -16,10 +16,10 @@
     -   [setTaskData][12]
         -   [Parameters][13]
         -   [Examples][14]
-    -   [getExtensionData][15]
+    -   [getMailBotData][15]
         -   [Parameters][16]
         -   [Examples][17]
-    -   [setExtensionData][18]
+    -   [setMailBotData][18]
         -   [Parameters][19]
         -   [Examples][20]
     -   [getReferenceEmail][21]
@@ -130,7 +130,7 @@ of BotRequest and made available under bot.webhook.
 ### Examples
 
 ```javascript
-bot.webhook.getExtensionData('memorize.settings');
+bot.webhook.getMailBotData('memorize.settings');
 ```
 
 ### get
@@ -205,7 +205,7 @@ if new and old data are objects. (Arrays and other types are replaced).
 setTaskData('my_bot.magic_number', 42);
 ```
 
-### getExtensionData
+### getMailBotData
 
 Get data stored in mailbot.private_data
 
@@ -217,10 +217,10 @@ Get data stored in mailbot.private_data
 #### Examples
 
 ```javascript
-bot.webhook.getExtensionData('my_bot.setting', 42);
+bot.webhook.getMailBotData('my_bot.setting', 42);
 ```
 
-### setExtensionData
+### setMailBotData
 
 Set data stored in mailbot.private_data. Objects are shallow merged if
 existing data is present. All other values (including arrays) are replaced.
@@ -242,11 +242,11 @@ as the second.
 #### Examples
 
 ```javascript
-bot.webhook.setExtensionData({key: "value"});
+bot.webhook.setMailBotData({key: "value"});
 ```
 
 ```javascript
-bot.webhook.setExtensionData('foo.bar', "value");
+bot.webhook.setMailBotData('foo.bar', "value");
 ```
 
 ### getReferenceEmail
@@ -760,7 +760,7 @@ method to populate the form values.
 #### Examples
 
 ```javascript
-const storedData = mailbots.webhook.getExtensionData("mem", {});
+const storedData = mailbots.webhook.getMailBotData("mem", {});
 formPage.populate(storedData);
 ```
 
