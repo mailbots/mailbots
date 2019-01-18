@@ -12,7 +12,7 @@
     "test:inspect": "NODE_ENV=test mocha test --full-trace --inspect-brk -w",
     "docs:build": "doctoc . --maxlevel 2",
     "dev:docs": "documentation -c documentation.yml serve",
-    "dev:docs:build": "documentation -c documentation.yml -f html build -o docs-html; documentation -c documentation.yml build -f md -o docs.md",
+    "dev:docs:build": "documentation -c documentation.yml -f html build -o docs-html && documentation -c documentation.yml build -f md -o docs.md && cd docs-html && now --static && echo '\n Run: \n\n now alias mailbots-app.mailbots.com\n'",
     "publish": "git push && git push --tags && npm publish"
   },
   "repository": {
@@ -24,6 +24,7 @@
   "devDependencies": {
     "chai": "4.1.2",
     "doctoc": "1.3.1",
+    "documentation": "^9.1.1",
     "mocha": "5.2.0",
     "supertest": "3.1.0"
   },

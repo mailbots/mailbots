@@ -28,9 +28,10 @@ Tip: Use our [reference guide](https://mailbots-app.mailbots.com) to quickly loo
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+
 - [How MailBots Work](#how-mailbots-work)
-  - [Commands](#commands)
   - [Tasks](#tasks)
+  - [Commands](#commands)
   - [Triggering](#triggering)
   - [Architecture](#architecture)
   - [Handlers](#handlers)
