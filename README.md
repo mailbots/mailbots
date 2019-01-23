@@ -390,7 +390,7 @@ Validate user data, perform API calls to keep other systems in sync. Return an e
 to abort saving the settings.
 
 ```javascript
-  mailbot.beforeSettingsSaved(bot =>
+  mailbot.beforeSettingsSaved(bot => {
 
     // assuming the same "todo" namespace as shown in the above examples
     const data = bot.get("settings.todo");
@@ -398,19 +398,18 @@ to abort saving the settings.
     // handler is fired any times settings are saved, even if its not our form
     if(!data) return;
 
-    // perform API calls, synchronize systems, etc.
-    if(!isvalid(data)) {
-
-    // abort the saving process
-    bot.webhook.respond({
-      webhook: {
-        status: "error",
-        message: "This is  a warning message"
-      }
-    });
+    // perform API calls, update external systems, etc. If something goes wrong...
+    if(error) {
+      // abort the saving process
+      return bot.webhook.respond({
+        webhook: {
+          status: "error",
+          message: "This is  a warning message"
+        }
+      });
     }
 
-    // implicitly returns successfully
+    // Othwise, it implicitly returns success, and the saving process continues
   });
 ```
 
