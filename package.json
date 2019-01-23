@@ -1,6 +1,6 @@
 {
   "name": "mailbots",
-  "version": "0.1.10-beta",
+  "version": "0.1.11-beta",
   "description": "An open source bot framework for creating email-based bots using MailBots.com",
   "main": "mailbots.js",
   "directories": {
@@ -13,7 +13,7 @@
     "docs:build": "doctoc . --maxlevel 2",
     "dev:docs": "documentation -c documentation.yml serve",
     "dev:docs:build": "documentation -c documentation.yml -f html build -o docs-html && documentation -c documentation.yml build -f md -o docs.md && cd docs-html && now --static && echo '\n Run: \n\n now alias mailbots-app.mailbots.com\n'",
-    "publish": "git push && git push --tags && npm publish"
+    "publish:prod": "git push && git push --tags && npm publish"
   },
   "repository": {
     "type": "git",
