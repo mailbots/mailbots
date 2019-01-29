@@ -60,7 +60,7 @@ Tip: Use our [reference guide](https://mailbots-app.mailbots.com) to quickly loo
   - [Namespacing Conventions](#namespacing-conventions)
 - [Installing Skills From npm](#installing-skills%C2%A0from-npm)
   - [Skills With Side-Effects](#skills-with-side-effects)
-- [Welcoming New Bot Users](#welcoming-new-bot-users)
+- [Welcoming New WebhookHelpers Users](#welcoming-new-bot-users)
 - [Testing](#testing)
 - [Installing](#installing)
 - [Contributions](#contributions)
@@ -335,7 +335,7 @@ NOTE: Do not call `bot.webhook.respond()` at the end of this particular request.
 ```javascript
 // Render a settings field for the user to enter their first name
 mailbot.onSettingsViewed(async function(bot) {
-  const todoSettings = bot.webhook.todoSettings({
+  const todoSettings = bot.webhook.settingsPage({
     namespace: "todo",
     title: "Todo Settings", // Page title
     menuTitle: "Todo" // Name of menu item
@@ -344,7 +344,7 @@ mailbot.onSettingsViewed(async function(bot) {
   todoSettings.submitButton();
 
   // Populate form values
-  todoSettings.populate(bot.get("mailbot.saved_data.todo"));
+  todoSettings.populate(bot.get("mailbot.stored_data.todo"));
   // Note bot.webhook.respond() is NOT called
 });
 ```
@@ -766,7 +766,7 @@ mailbots.onCommand("foo", function(bot) {
 
 Skills will, themselves, document how they are used. Different approaches are right for different circumstances.
 
-# Welcoming New Bot Users
+# Welcoming New WebhookHelpers Users
 
 When a new user installs your MailBot, they are directed to a settings page with the `welcome` namespace. Render a custom welcome message for your user by creating a settings page that targets this namespace.
 
@@ -844,20 +844,21 @@ For local development or production deployments:
 **1. Install**
 
 - `mkdir my-bot`
+- `npm init -y`
 - `npm install mailbots`
 - `touch app.js`
 
 **2. Add Setup Code**
 
 ```javascript
-var MailBot = require("mailbots");
-var mailbot = new MailBot({
+const MailBot = require("mailbots");
+const mailbot = new MailBot({
   clientId: "your_client_id",
   clientSecret: "your_secret",
-  botUrl: "http://your_bot_url"
+  mailbotUrl: "http://your_bot_url"
 });
-// You can also set CLIENT_ID, CLIENT_SECRET and MAILBOT_URL environment vars
-// as an alternative to explicitly passing them in.
+// NOTE: The recommended way to set up your MailBot is to set 
+// CLIENT_ID, CLIENT_SECRET and MAILBOT_URL in env and use dotenv
 
 mailbot.onCommand("hello", bot => {
   bot.webhook.quickReply("world");

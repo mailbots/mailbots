@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>mailbots 0.1.9-beta | Documentation</title>
+  <title>mailbots 0.1.13-beta | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>mailbots</h3>
-          <div class='mb1'><code>0.1.9-beta</code></div>
+          <div class='mb1'><code>0.1.13-beta</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -26,9 +26,39 @@
               
                 
                 <li><a
-                  href='#webhookhelpers'
+                  href='#intro'
+                  class="h5 bold black caps">
+                  intro
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#bot'
+                  class="h5 bold black caps">
+                  bot
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#mailbots'
+                  class="h5 bold black caps">
+                  mailbots
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#mailbots'
                   class=" toggle-sibling">
-                  WebhookHelpers
+                  MailBots
                   <span class='icon'>▸</span>
                 </a>
                 
@@ -39,111 +69,69 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#webhookhelpersget'
+                        href='#mailbotslisten'
                         class='regular pre-open'>
-                        #get
+                        #listen
                       </a></li>
                       
                       <li><a
-                        href='#webhookhelpersset'
+                        href='#mailbotsexportapp'
                         class='regular pre-open'>
-                        #set
+                        #exportApp
                       </a></li>
                       
                       <li><a
-                        href='#webhookhelpersgettaskdata'
+                        href='#mailbotsloadskill'
                         class='regular pre-open'>
-                        #getTaskData
+                        #loadSkill
                       </a></li>
                       
                       <li><a
-                        href='#webhookhelperssettaskdata'
+                        href='#mailbotson'
                         class='regular pre-open'>
-                        #setTaskData
+                        #on
                       </a></li>
                       
                       <li><a
-                        href='#webhookhelpersgetmailbotdata'
+                        href='#mailbotsoncommand'
                         class='regular pre-open'>
-                        #getMailBotData
+                        #onCommand
                       </a></li>
                       
                       <li><a
-                        href='#webhookhelperssetmailbotdata'
+                        href='#mailbotsontrigger'
                         class='regular pre-open'>
-                        #setMailBotData
+                        #onTrigger
                       </a></li>
                       
                       <li><a
-                        href='#webhookhelpersgetreferenceemail'
+                        href='#mailbotsonevent'
                         class='regular pre-open'>
-                        #getReferenceEmail
+                        #onEvent
                       </a></li>
                       
                       <li><a
-                        href='#webhookhelperssetreferenceemail'
+                        href='#mailbotsonaction'
                         class='regular pre-open'>
-                        #setReferenceEmail
+                        #onAction
                       </a></li>
                       
                       <li><a
-                        href='#webhookhelpersgetreplyto'
+                        href='#mailbotsontaskviewed'
                         class='regular pre-open'>
-                        #getReplyTo
+                        #onTaskViewed
                       </a></li>
                       
                       <li><a
-                        href='#webhookhelpersaddemail'
+                        href='#mailbotsonsettingsviewed'
                         class='regular pre-open'>
-                        #addEmail
+                        #onSettingsViewed
                       </a></li>
                       
                       <li><a
-                        href='#webhookhelpersquickreply'
+                        href='#mailbotsbeforesettingssaved'
                         class='regular pre-open'>
-                        #quickReply
-                      </a></li>
-                      
-                      <li><a
-                        href='#webhookhelperssettriggertime'
-                        class='regular pre-open'>
-                        #setTriggerTime
-                      </a></li>
-                      
-                      <li><a
-                        href='#webhookhelperssettriggertimestamp'
-                        class='regular pre-open'>
-                        #setTriggerTimestamp
-                      </a></li>
-                      
-                      <li><a
-                        href='#webhookhelpersinvite'
-                        class='regular pre-open'>
-                        #invite
-                      </a></li>
-                      
-                      <li><a
-                        href='#webhookhelperscompletetask'
-                        class='regular pre-open'>
-                        #completeTask
-                      </a></li>
-                      
-                      <li><a
-                        href='#webhookhelpersgetallcontacts'
-                        class='regular pre-open'>
-                        #getAllContacts
-                      </a></li>
-                      
-                      <li><a
-                        href='#webhookhelpersrespond'
-                        class='regular pre-open'>
-                        #respond
-                      </a></li>
-                      
-                      <li><a
-                        href='#webhookhelperssettingspage'
-                        class='regular pre-open'>
-                        #settingsPage
+                        #beforeSettingsSaved
                       </a></li>
                       
                     </ul>
@@ -151,108 +139,194 @@
                   
                   
                 </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#botwebhook'
+                  class="">
+                  bot.webhook
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#get'
+                  class="">
+                  get
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#set'
+                  class="">
+                  set
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#gettaskdata'
+                  class="">
+                  getTaskData
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#settaskdata'
+                  class="">
+                  setTaskData
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getmailbotdata'
+                  class="">
+                  getMailBotData
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#setmailbotdata'
+                  class="">
+                  setMailBotData
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getreferenceemail'
+                  class="">
+                  getReferenceEmail
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#setreferenceemail'
+                  class="">
+                  setReferenceEmail
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getreplyto'
+                  class="">
+                  getReplyTo
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#addemail'
+                  class="">
+                  addEmail
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#quickreply'
+                  class="">
+                  quickReply
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#settriggertime'
+                  class="">
+                  setTriggerTime
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#settriggertimestamp'
+                  class="">
+                  setTriggerTimestamp
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#invite'
+                  class="">
+                  invite
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#completetask'
+                  class="">
+                  completeTask
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getallcontacts'
+                  class="">
+                  getAllContacts
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#respond'
+                  class="">
+                  respond
+                  
+                </a>
                 
                 </li>
               
                 
                 <li><a
                   href='#settingspage'
-                  class=" toggle-sibling">
-                  SettingsPage
-                  <span class='icon'>▸</span>
-                </a>
-                
-                <div class='toggle-target display-none'>
-                  
-                  
-                    <ul class='list-reset py1-ul pl1'>
-                      <li class='h5'><span>Instance members</span></li>
-                      
-                      <li><a
-                        href='#settingspagegetsettingsformjson'
-                        class='regular pre-open'>
-                        #getSettingsFormJSON
-                      </a></li>
-                      
-                      <li><a
-                        href='#settingspageinsert'
-                        class='regular pre-open'>
-                        #insert
-                      </a></li>
-                      
-                      <li><a
-                        href='#settingspageinput'
-                        class='regular pre-open'>
-                        #input
-                      </a></li>
-                      
-                      <li><a
-                        href='#settingspagetextarea'
-                        class='regular pre-open'>
-                        #textarea
-                      </a></li>
-                      
-                      <li><a
-                        href='#settingspagecheckbox'
-                        class='regular pre-open'>
-                        #checkbox
-                      </a></li>
-                      
-                      <li><a
-                        href='#settingspageselect'
-                        class='regular pre-open'>
-                        #select
-                      </a></li>
-                      
-                      <li><a
-                        href='#settingspagealert'
-                        class='regular pre-open'>
-                        #alert
-                      </a></li>
-                      
-                      <li><a
-                        href='#settingspagevideo'
-                        class='regular pre-open'>
-                        #video
-                      </a></li>
-                      
-                      <li><a
-                        href='#settingspagetext'
-                        class='regular pre-open'>
-                        #text
-                      </a></li>
-                      
-                      <li><a
-                        href='#settingspagehiddeninput'
-                        class='regular pre-open'>
-                        #hiddenInput
-                      </a></li>
-                      
-                      <li><a
-                        href='#settingspagesubmitbutton'
-                        class='regular pre-open'>
-                        #submitButton
-                      </a></li>
-                      
-                      <li><a
-                        href='#settingspagepopulate'
-                        class='regular pre-open'>
-                        #populate
-                      </a></li>
-                      
-                    </ul>
-                  
-                  
-                  
-                </div>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#listen'
                   class="">
-                  listen
+                  settingsPage
                   
                 </a>
                 
@@ -260,9 +334,9 @@
               
                 
                 <li><a
-                  href='#exportapp'
+                  href='#botwebooksettingspage'
                   class="">
-                  exportApp
+                  bot.webook.settingsPage
                   
                 </a>
                 
@@ -270,9 +344,9 @@
               
                 
                 <li><a
-                  href='#loadskill'
+                  href='#getsettingsformjson'
                   class="">
-                  loadSkill
+                  getSettingsFormJSON
                   
                 </a>
                 
@@ -280,9 +354,9 @@
               
                 
                 <li><a
-                  href='#on'
+                  href='#insert'
                   class="">
-                  on
+                  insert
                   
                 </a>
                 
@@ -290,9 +364,9 @@
               
                 
                 <li><a
-                  href='#oncommand'
+                  href='#input'
                   class="">
-                  onCommand
+                  input
                   
                 </a>
                 
@@ -300,9 +374,9 @@
               
                 
                 <li><a
-                  href='#ontrigger'
+                  href='#textarea'
                   class="">
-                  onTrigger
+                  textarea
                   
                 </a>
                 
@@ -310,9 +384,9 @@
               
                 
                 <li><a
-                  href='#onevent'
+                  href='#checkbox'
                   class="">
-                  onEvent
+                  checkbox
                   
                 </a>
                 
@@ -320,9 +394,9 @@
               
                 
                 <li><a
-                  href='#onaction'
+                  href='#select'
                   class="">
-                  onAction
+                  select
                   
                 </a>
                 
@@ -330,9 +404,9 @@
               
                 
                 <li><a
-                  href='#ontaskviewed'
+                  href='#alert'
                   class="">
-                  onTaskViewed
+                  alert
                   
                 </a>
                 
@@ -340,9 +414,9 @@
               
                 
                 <li><a
-                  href='#onsettingsviewed'
+                  href='#video'
                   class="">
-                  onSettingsViewed
+                  video
                   
                 </a>
                 
@@ -350,9 +424,9 @@
               
                 
                 <li><a
-                  href='#beforesettingssaved'
+                  href='#text'
                   class="">
-                  beforeSettingsSaved
+                  text
                   
                 </a>
                 
@@ -360,9 +434,29 @@
               
                 
                 <li><a
-                  href='#on'
+                  href='#hiddeninput'
                   class="">
-                  on
+                  hiddenInput
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#submitbutton'
+                  class="">
+                  submitButton
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#populate'
+                  class="">
+                  populate
                   
                 </a>
                 
@@ -378,13 +472,2341 @@
       <div id='split-right' class='relative overflow-auto height-viewport-100'>
         
           
+            <div class='keyline-top-not py2'>
+  <section class='py2 clearfix'>
+
+    <h2 id='intro' class='mt0'>
+      intro
+    </h2>
+
+    
+      <p><a href="https://www.mailbots.com">MailBots</a> is a platform for creating bots, AIs and assistants that get things done right from your inbox. Read more at <a href="https://www.mailbots.com">mailbots.com</a>.</p>
+<h1>Quick Start</h1>
+<p>Go to mailbots.com and create a MailBot. The bot creation process sets up a working instance of this framework.</p>
+<p>Next, let's tell our MailBot what to do when it receives an email:</p>
+<pre class='hljs'><span class="hljs-keyword">var</span> MailBot = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots"</span>);
+<span class="hljs-keyword">var</span> mailbot = <span class="hljs-keyword">new</span> MailBot(); <span class="hljs-comment">// assuming .env is set</span>
+
+<span class="hljs-comment">// When someone emails: say-hi@my-bot.eml.bot, respond "Hello Human!"</span>
+mailbot.onCommand(<span class="hljs-string">"say-hi"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  bot.webhook.quickReply(<span class="hljs-string">"Hello Human!"</span>);
+  bot.webhook.respond();
+});
+
+mailbot.listen();</pre>
+<p><code>say-hi@my-bot.eml.bot</code> is an example of an "email command". Whatever is before the @ sign is a command to your bot to accomplish some task. <a href="https://docs.mailbots.com/reference#email-commands">Read more about email commands</a>.</p>
+<h1>Docs</h1>
+<p>Tip: Use our <a href="https://mailbots-app.mailbots.com">reference guide</a> to quickly look up helpers and method names.</p>
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<ul>
+<li>
+<p><a href="#how-mailbots-work">How MailBots Work</a></p>
+<ul>
+<li><a href="#tasks">Tasks</a></li>
+<li><a href="#commands">Commands</a></li>
+<li><a href="#triggering">Triggering</a></li>
+<li><a href="#architecture">Architecture</a></li>
+<li><a href="#handlers">Handlers</a></li>
+<li><a href="#skills">Skills</a></li>
+</ul>
+</li>
+<li>
+<p><a href="#examples">Examples:</a></p>
+<ul>
+<li><a href="#hello-world">Hello World</a></li>
+<li><a href="#set-a-reminder">Set a Reminder</a></li>
+<li><a href="#handle-action-emails">Handle Action-Emails</a></li>
+<li><a href="#install-a-skill">Install A Skill</a></li>
+</ul>
+</li>
+<li>
+<p><a href="#handler-reference">Handler Reference</a></p>
+<ul>
+<li><a href="#oncommand">onCommand</a></li>
+<li><a href="#ontrigger">onTrigger</a></li>
+<li><a href="#onaction">onAction</a></li>
+<li><a href="#ontaskviewed">onTaskViewed</a></li>
+<li><a href="#onevent">onEvent</a></li>
+<li><a href="#onsettingsviewed">onSettingsViewed</a></li>
+<li><a href="#beforesettingssaved">beforeSettingsSaved</a></li>
+<li><a href="#on">on</a></li>
+<li><a href="#handling-errors">Handling Errors</a></li>
+</ul>
+</li>
+<li><a href="#the-bot-object">The "bot" Object</a></li>
+<li>
+<p><a href="#building-skills">Building Skills</a></p>
+<ul>
+<li><a href="#using-handlers">Using Handlers</a></li>
+<li><a href="#the-one-bot-function">The "one-bot function"</a></li>
+<li><a href="#handling-web-requests">Handling Web Requests</a></li>
+<li><a href="#middleware">Middleware</a></li>
+<li><a href="#namespacing-conventions">Namespacing Conventions</a></li>
+</ul>
+</li>
+<li>
+<p><a href="#installing-skills%C2%A0from-npm">Installing Skills From npm</a></p>
+<ul>
+<li><a href="#skills-with-side-effects">Skills With Side-Effects</a></li>
+</ul>
+</li>
+<li><a href="#welcoming-new-bot-users">Welcoming New WebhookHelpers Users</a></li>
+<li><a href="#testing">Testing</a></li>
+<li><a href="#installing">Installing</a></li>
+<li><a href="#contributions">Contributions</a></li>
+</ul>
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<h1>How MailBots Work</h1>
+<p>A MailBot's purpose is to help someone get something done quickly, efficiently and without leaving their inbox.</p>
+<h2>Tasks</h2>
+<p>A unit of work accomplished by a MailBot is called a "task". Tasks can scheduled, edited or "completed". Tasks are always associated with a command.</p>
+<h2>Commands</h2>
+<p>MailBots always work in the context of commands while accomplishing tasks. A command can be thought of as the instruction for how to complete a particular task, or the purpose of the task. Email Commands (shown above) are one way to issue commands. Creating a task with the API also requires a command.</p>
+<h2>Triggering</h2>
+<p>A task (that carries out a command) can be created then wait for the perfect moment to notify a user. Timliness is a core feature of of a MailBot.</p>
+<h2>Architecture</h2>
+<p>When events happen in the MailBots platform (ex: an email is received), your MailBot receives webhooks. Your MailBot then gets some useful bit of work done (ex: enters data into a CRM) and responds with JSON that tells the MailBots platform what to do next (ex: send an email, store data, set a reminder, etc). JSON in, JSON out.</p>
+<p>This library simplifies much of the above architecture, allowing you to simply create handler functions for certain events.</p>
+<p>The webhook request and response can be viewed via the <a href="https://app.mailbots.com/sandbox">MailBots Sandbox</a>.</p>
+<h2>Handlers</h2>
+<p>MailBots are composed of handlers – functions that run when certain events occur. For example: <em>When the bot receives an email at this address, execute these actions</em></p>
+<h2>Skills</h2>
+<p>Handlers and other bot functionality can be packaged into "skills" – high-level abilities that can shared between bots. Here are some example skills:</p>
+<ul>
+<li>Interact with a CRM</li>
+<li>Parse natural language</li>
+<li>Send a text message or Slack message</li>
+<li>Render special UI elements</li>
+</ul>
+<p>You can publish, share and install new skills from npm.</p>
+<h1>Examples:</h1>
+<h2>Hello World</h2>
+<p>Create an <a href="https://docs.mailbots.com/reference#email-commands">email command</a> that says hi.</p>
+<pre class='hljs'><span class="hljs-keyword">var</span> MailBotsApp = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots"</span>);
+<span class="hljs-keyword">var</span> app = <span class="hljs-keyword">new</span> MailBotsApp();
+
+mailbot.onCommand(<span class="hljs-string">"hi"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  bot.webhook.quickReply(<span class="hljs-string">"Hi back!"</span>);
+  bot.webhook.respond();
+});
+
+mailbot.listen();</pre>
+<h2>Set a Reminder</h2>
+<p>The first handler creates the reminder. The second one handles the reminder when it becomes due.</p>
+<pre class='hljs'>mailbot.onCommand(<span class="hljs-string">"hi"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// Schedule the task to trigger in 1 minute</span>
+  bot.webhook.setTriggerTime(<span class="hljs-string">"1min"</span>);
+  bot.webhook.respond();
+});
+
+<span class="hljs-comment">// When a task with "hi" command triggers, run this</span>
+mailbot.onTrigger(<span class="hljs-string">"hi"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  bot.webhook.quickReply(<span class="hljs-string">"Hi 1 minute later!"</span>);
+  bot.webhook.respond();
+});</pre>
+<h2>Handle Action-Emails</h2>
+<p>MailBots can render quick-action buttons (mailto links that map to executable code) that let users get things done without leaving their inbox. Read more about <a href="https://docs.mailbots.com/reference#email-based-actions">action emails</a>.</p>
+<pre class='hljs'><span class="hljs-comment">// This first handler renders an email with an action-email button</span>
+ mailbot.onCommand(<span class="hljs-string">"send-buttons"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+    bot.webhook.addEmail({
+      <span class="hljs-attr">to</span>: bot.get(<span class="hljs-string">'source.from'</span>)
+      <span class="hljs-keyword">from</span>: <span class="hljs-string">"MyBot"</span>,
+      <span class="hljs-attr">subject</span>: bot.get(<span class="hljs-string">'source.subject'</span>),
+      <span class="hljs-attr">body</span>: [
+
+        <span class="hljs-comment">// 👇 An email-action</span>
+        {
+          <span class="hljs-attr">type</span>: <span class="hljs-string">"button"</span>,
+          <span class="hljs-attr">text</span>: <span class="hljs-string">"Press Me"</span>,
+          <span class="hljs-attr">action</span>: <span class="hljs-string">'say.hi'</span>,
+          <span class="hljs-attr">subject</span>: <span class="hljs-string">"Just hit 'send'"</span>,
+        }
+      ]
+    });
+    bot.webhook.respond();
+  };
+
+  <span class="hljs-comment">// This handler handles the email action</span>
+  mailbot.onAction(<span class="hljs-string">'say.hi'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+    bot.webhook.quickReply(<span class="hljs-string">'hi'</span>);
+    <span class="hljs-comment">// Lots of useful things can be done here. Completing a todo item, adding notes to a CRM, etc.</span>
+    bot.webhook.respond();
+  });
+
+  mailbot.listen();</pre>
+<h2>Install A Skill</h2>
+<p>Let's install a skill to that extracts the email message from previously quoted emails and signatures.</p>
+<pre class='hljs'><span class="hljs-keyword">var</span> mailbotsTalon = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots-talon"</span>);
+mailbot.onCommand(<span class="hljs-string">"hi"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-keyword">const</span> emailWithoutSignature = mailbotsTalon.getEmail(bot);
+  bot.quickReply(
+    <span class="hljs-string">"Here is the email without the signature:"</span> + emailWithoutSignature
+  );
+  bot.webhook.respond();
+});</pre>
+<h1>Handler Reference</h1>
+<p>Note: The first matching event handler ends the request, even if subsequent handlers also match, except where otherwise noted.</p>
+<h2>onCommand</h2>
+<pre><code>mailbot.onCommand(command, handlerFn)
+</code></pre>
+<p>Handle when an <a href="https://docs.mailbots.com/reference">email command</a> is received. This also fires when a new task is created via the API (All tasks have a command to define their purpose or reason for existence.)</p>
+<pre class='hljs'>mailbot.onCommand(<span class="hljs-string">"todo"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">//handle when a task is created with this command string</span>
+});</pre>
+<p>Regular expressions work with all handlers.</p>
+<pre class='hljs'>mailbot.onCommand(<span class="hljs-regexp">/todo.*/</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">//Handle todo.me@my-ext.eml.bot, todo.you@my-ext.eml.bot, todo.everyone@my-ext.eml.bot</span>
+});</pre>
+<h2>onTrigger</h2>
+<pre><code>mailbot.onTrigger(command, handlerFn)
+</code></pre>
+<p>Timeliness is a MailBot superpower. A user can schedule a task, then days, months or years later your bot can follow up at the exact right moment – scheduled by the user, or by another event. Read more about <a href="https://docs.mailbots.com/reference#perfect-timing">triggering</a>.</p>
+<p>Tasks with different commands may trigger differently. For example:</p>
+<pre class='hljs'>mailbot.onTrigger(<span class="hljs-string">"todo.me"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// Assigned to myself, so only remind me</span>
+});</pre>
+<pre class='hljs'>mailbot.onTrigger(<span class="hljs-string">"todo.assign"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// Assigned to the person in the 'to' field, so remind them</span>
+});</pre>
+<pre class='hljs'>mailbot.onTrigger(<span class="hljs-string">"todo.crm"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// Query CRM API, populate email followup with contact data</span>
+});</pre>
+<h2>onAction</h2>
+<pre><code>mailbot.onAction(action, handlerFn)
+</code></pre>
+<p>Handle when a user performs an action that relates to a task.</p>
+<p>For example a user can send an <a href="https://docs.mailbots.com/reference#email-based-actions">action-email</a> to accomplish an action without leaving their inbox (postponing a reminder, completing a todo item, logging a call, etc).</p>
+<pre class='hljs'>mailbot.onAction(<span class="hljs-string">"complete"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// Complete the related todo</span>
+});</pre>
+<p><strong>MailBot Conversations</strong></p>
+<p>Set the reply-to address of a MailBot email to an action email to carry out a conversation with the user.</p>
+<pre class='hljs'>mailbot.onAction(<span class="hljs-string">"assistant"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// Use luis-ai middlweare to dtermine intent</span>
+  <span class="hljs-comment">// Store conversation state</span>
+  <span class="hljs-comment">// send-email whose reply-to is also "assistant"</span>
+});</pre>
+<h2>onTaskViewed</h2>
+<pre><code>mailbot.onTaskViewed(command, handlerFn)
+</code></pre>
+<p>Handle when a task is viewed in the MailBots Web UI, allowing a user to view and interact with a future MailBots email.</p>
+<pre class='hljs'>mailbot.onTaskViewed(<span class="hljs-string">"todo.me"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// Show a preview of the future email</span>
+});</pre>
+<p>Different task commands may render differently. For example a task with command <code>todo.crm</code> may query and render current CRM data within the preview.</p>
+<h2>onEvent</h2>
+<pre><code>mailbot.onEvent(event, handlerFn)
+</code></pre>
+<p>Handle when the MailBot receives an inbound webhok from a 3rd party system about an external event. For example, a support ticket is created or a lead is added to a CRM.</p>
+<p>Note: This action does not automatically create a MailBots Task. One can be created with <a href="https://www.npmjs.com/package/@mailbots/mailbots-sdk">mailbots-sdk</a></p>
+<pre class='hljs'>mailbot.onEvent(<span class="hljs-string">"issue.created"</span>, <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// Handle event, for example, create a MailBots Task.</span>
+  <span class="hljs-keyword">const</span> mailBotsClient = MailBotsClient.fromBot(bot);
+  <span class="hljs-keyword">await</span> mailBotsClient.createTask({
+    <span class="hljs-comment">// Pre-authenticated API client</span>
+  });
+  bot.webhook.respond({ <span class="hljs-attr">webhook</span>: { <span class="hljs-attr">status</span>: <span class="hljs-string">"success"</span> } });
+});</pre>
+<h2>onSettingsViewed</h2>
+<pre><code>mailbot.onSettingsViewed(handlerFn)
+</code></pre>
+<p>Handle when a user views this MailBot's settings.</p>
+<p>Bots can build custom settings pages. These are rendered when a user views bot settings on the MailBots.com admin UI.</p>
+<p>See the <a href="https://mailbots-app.mailbots.com/#settingspage">settings page reference</a>.</p>
+<p>The handler's only parameter is a callback function that responds with JSON to to render a settings form. The callback function is passed the <code>bot</code> object as usual.</p>
+<p>Settings form JSON can be easily built using the <a href="https://mailbots-app.mailbots.com/#settingspage">settings helper functions</a>.</p>
+<p>Unlike the other handlers, every instance of this handler is called. (ie, all settings pages from all settings handlers are rendered).</p>
+<p>NOTE: Do not call <code>bot.webhook.respond()</code> at the end of this particular request. MailBots' internals take care of compiling the JSON and responding.</p>
+<pre class='hljs'><span class="hljs-comment">// Render a settings field for the user to enter their first name</span>
+mailbot.onSettingsViewed(<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-keyword">const</span> todoSettings = bot.webhook.settingsPage({
+    <span class="hljs-attr">namespace</span>: <span class="hljs-string">"todo"</span>,
+    <span class="hljs-attr">title</span>: <span class="hljs-string">"Todo Settings"</span>, <span class="hljs-comment">// Page title</span>
+    menuTitle: <span class="hljs-string">"Todo"</span> <span class="hljs-comment">// Name of menu item</span>
+  });
+  todoSettings.input({ <span class="hljs-attr">name</span>: <span class="hljs-string">"first_name"</span>, <span class="hljs-attr">title</span>: <span class="hljs-string">"First name"</span> });
+  todoSettings.submitButton();
+
+  <span class="hljs-comment">// Populate form values</span>
+  todoSettings.populate(bot.get(<span class="hljs-string">"mailbot.stored_data.todo"</span>));
+  <span class="hljs-comment">// Note bot.webhook.respond() is NOT called</span>
+});</pre>
+<p>URL parameters are passed through to the settings webhook. Use this to pass data into your settings when linking to it.</p>
+<pre class='hljs'>mailbot.onSettingsViewed(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-keyword">const</span> settingsPage = bot.webhook.settingsPage({ <span class="hljs-attr">namespace</span>: <span class="hljs-string">"todo"</span> });
+
+  <span class="hljs-keyword">if</span> (bot.get(<span class="hljs-string">"url_params.linkInstructions"</span>, <span class="hljs-literal">false</span>)) {
+    settings.text(<span class="hljs-string">`# Instructions to link your account!`</span>);
+  }
+  <span class="hljs-comment">// Note that there is no submit button. It's just an informational page.</span>
+});</pre>
+<p>If you wish to use URL params in your <code>beforeSettingsSaved</code> handler (below), pass them via the <code>urlParams</code> key in the <code>submit</code> form element.</p>
+<pre class='hljs'><span class="hljs-comment">// within a onSettingsViewed form as shown above</span>
+settings.submitButton({
+  <span class="hljs-attr">submitText</span>: <span class="hljs-string">"Save Notification Settings"</span>,
+  <span class="hljs-attr">urlParams</span>: { <span class="hljs-attr">saveSettings</span>: <span class="hljs-number">1</span> }
+  <span class="hljs-comment">// Tip: Pass through all URL current params, but use caution! (see note)</span>
+  <span class="hljs-comment">// urlParams: {saveSettings: 1, ...bot.get("url_params", {})}</span>
+});</pre>
+<p>NOTE: URL parameters are an easy way to pass data into your bot settings, but <strong>keep this in mind while using URL params</strong>: Anyone can link a user to their settings page with <em>anything</em> in URL. Do not, for example, create a url like: <code>/settings?delete_everything=true</code> that deletes all their tasks. An unsuspecting user may arrive on their settings page from an external link, not see this in the URL and submit the form only find themselves without any data. <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)">Read more</a>.</p>
+<h2>beforeSettingsSaved</h2>
+<pre><code>mailbot.beforeSettingsSaved(handlerFn)
+</code></pre>
+<p>Handle when the user saves their settings. Called before settings are actually saved.</p>
+<p>Similar to the above <code>onSettingsViewed</code> handler, every instance of this handler is called when settings are saved.</p>
+<p>Validate user data, perform API calls to keep other systems in sync. Return an error
+to abort saving the settings.</p>
+<pre class='hljs'>  mailbot.beforeSettingsSaved(<span class="hljs-function"><span class="hljs-params">bot</span> =&gt;</span> {
+
+    <span class="hljs-comment">// assuming the same "todo" namespace as shown in the above examples</span>
+    <span class="hljs-keyword">const</span> data = bot.get(<span class="hljs-string">"settings.todo"</span>);
+
+    <span class="hljs-comment">// handler is fired any times settings are saved, even if its not our form</span>
+    <span class="hljs-keyword">if</span>(!data) <span class="hljs-keyword">return</span>;
+
+    <span class="hljs-comment">// perform API calls, update external systems, etc. If something goes wrong...</span>
+    <span class="hljs-keyword">if</span>(error) {
+      <span class="hljs-comment">// abort the saving process</span>
+      <span class="hljs-keyword">return</span> bot.webhook.respond({
+        <span class="hljs-attr">webhook</span>: {
+          <span class="hljs-attr">status</span>: <span class="hljs-string">"error"</span>,
+          <span class="hljs-attr">message</span>: <span class="hljs-string">"This is  a warning message"</span>
+        }
+      });
+    }
+
+    <span class="hljs-comment">// Othwise, it implicitly returns success, and the saving process continues</span>
+  });</pre>
+<h2>on</h2>
+<pre><code>mailbot.on(webhookEvent, handlerFn)
+</code></pre>
+<p>This is a generic handler for any webhook. It can be used to handle any inbound webhook – mainly ones that are not covered by the handlers above. (Of note: The handlers above are simply wrappers for this lower-level handler).</p>
+<p>Example:</p>
+<pre class='hljs'>mailbot.on(<span class="hljs-string">"mailbot.installed"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// Handle when a MailBot is installed</span>
+  <span class="hljs-comment">// Create task with MailBots SDK</span>
+  <span class="hljs-comment">// bot.webhook.respond();</span>
+});</pre>
+<p>The first paramater can be:</p>
+<ul>
+<li>A string that matches the webhook <code>type</code>. (ie. <a href="https://docs.mailbots.com/reference#mailbotinstalled"><code>mailbot.installed</code></a>)</li>
+<li>A regular expression that matches on webhook <code>type</code></li>
+<li>A function that takes the incoming webhook as the only parameter and returns a boolean value indicating whether or not that webhook should be handled by that function handler.</li>
+</ul>
+<p>The second parameter is the function handler that runs only if the matching condition (the first parameter) is met.</p>
+<pre class='hljs'>mailbot.on(<span class="hljs-string">"mailbot.installed"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// Handle when a MailBot is installed</span>
+  <span class="hljs-comment">// Create a task from mailbots sdk</span>
+  <span class="hljs-comment">// bot.webhook.respond();</span>
+});</pre>
+<h2>Handling Errors</h2>
+<p>Ideally, error conditions are handled within the normal application flow. If something unexpected happens you can set up a custom error handler for adding logs, alerting or providing error messaging to users.</p>
+<p>If you want to send the user your own error email, use the <a href="https://mailbots-sdk-js.mailbots.com/#sendemaill">sendEmail</a> method from the MailBots SDK. (Not all webhook responses send emails).</p>
+<pre class='hljs'><span class="hljs-comment">// define a custom error handler</span>
+app.setErrorHandler(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">error, bot</span>) </span>{
+  <span class="hljs-comment">// myCustomLogger.log(error);</span>
+  <span class="hljs-comment">// send email with mailbots sdk</span>
+  <span class="hljs-comment">// send a custom error email to user</span>
+  <span class="hljs-comment">// Respond with 5xx status code to send the generic MailBots error email to the user</span>
+  <span class="hljs-comment">// bot.response.status(500);</span>
+
+  bot.webhook.respond({
+    <span class="hljs-attr">status</span>: <span class="hljs-string">"error"</span>,
+    <span class="hljs-attr">message</span>: <span class="hljs-string">"A custom error message"</span> <span class="hljs-comment">// Shown to user if in the web UI.</span>
+  }); <span class="hljs-comment">// A webhook response must be sent</span>
+});</pre>
+<h1>The "bot" Object</h1>
+<p>The <code>bot</code> object passed to the handlers above contains useful helpers that make it easy to handle bot requests. See <a href="https://mailbots-app.mailbots.com/#webhookhelpers">webhook helpers reference docs</a>.</p>
+<p><strong>Setting Data Works By Shallow Merging</strong>
+Data is set by shallow merging. For example.</p>
+<pre class='hljs'>bot.webhook.setTaskData(<span class="hljs-string">"my_namespace"</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">"Joe"</span> });
+bot.webhook.setTaskData(<span class="hljs-string">"my_namespace"</span>, { <span class="hljs-attr">key</span>: <span class="hljs-string">"123"</span> });
+<span class="hljs-comment">// task data is now</span>
+<span class="hljs-built_in">console</span>.log(bot.webhook.responseJson);
+<span class="hljs-comment">// {my_namespace: { name: "Joe", key: "123" }}</span></pre>
+<pre class='hljs'>bot.webhook.setTaskData(<span class="hljs-string">"my_namespace"</span>, {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">"Joe"</span>,
+  <span class="hljs-attr">data</span>: { <span class="hljs-attr">value</span>: <span class="hljs-string">"here"</span> } <span class="hljs-comment">// ⚠️ Overwritten (shallow merge)</span>
+});
+bot.webhook.setTaskData(<span class="hljs-string">"my_namespace"</span>, {
+  <span class="hljs-attr">data</span>: { <span class="hljs-attr">value2</span>: <span class="hljs-string">"there"</span> }
+});
+<span class="hljs-comment">// task data is now</span>
+<span class="hljs-built_in">console</span>.log(bot.webhook.responseJson);
+<span class="hljs-comment">// {my_namespace: { data: { value2: "there" } }}</span></pre>
+<h1>Building Skills</h1>
+<p>"Skills" are sharable pieces of bot functionality. Skills can encapsulate everything they need (handlers, settings panels helper funcitons and UI elements) into a package that "just works" when installed. They are great for keeping your code organized and for sharing functionality with others.</p>
+<p>A skill can share functionality in several ways:</p>
+<h2>Using Handlers</h2>
+<p>We could better organize our handlers in the above examples by grouping them into different files. For example:</p>
+<pre class='hljs'><span class="hljs-comment">// my-new-reminder-skill.js</span>
+<span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">mailbot</span>) </span>{
+  <span class="hljs-comment">// Handlers can go here</span>
+  <span class="hljs-comment">// mailbot.onCommand...</span>
+};</pre>
+<p>It can be loaded like this:</p>
+<pre class='hljs'><span class="hljs-comment">// In top-level app.js</span>
+<span class="hljs-built_in">require</span>(<span class="hljs-string">"./my-new-skill"</span>)(mailbot);</pre>
+<p>Once loaded, all handlers within the file become active.</p>
+<p>A directory of skill files (like the one above) can be loaded using the <code>loadSkill</code> helper:</p>
+<pre class='hljs'><span class="hljs-comment">// Load all skill files in a directory</span>
+mailbot.loadSkill(__dirname + <span class="hljs-string">"/my/skill/"</span>);</pre>
+<p><code>loadSkill</code> only looks for skill files in the top-level directory. This allows a skill to hide its implementation details in subdirectories.</p>
+<p>A config object can optionally be passed.</p>
+<pre class='hljs'><span class="hljs-comment">// app.js</span>
+mailbot.loadSkill(__dirname + <span class="hljs-string">"/my/skills/"</span>, config);</pre>
+<pre class='hljs'><span class="hljs-comment">// skill-file.js</span>
+<span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">mailbot, config</span>) </span>{
+  <span class="hljs-comment">// All of your handlers can go here</span>
+};</pre>
+<p>Grouping your handlers into skills is a great way to keep your project organized. The down-side is that the skill owns each request from beginning to end – not very flexible.</p>
+<p>The next section covers a more granular and composable technique for sharing functionality across multiple handlers or multiple MailBots.</p>
+<h2>The "one-bot function"</h2>
+<p>A "one-bot function" is a function that takes a single <code>bot</code> object (an instance of BotRequest) which, itself, contains the request / response state and utilities to alter the request. It is one instance of a bot request, hence, a one-bot function.</p>
+<p>One-bot functions are called within handlers, allowing for a top-level handler to compose multiple one-bot functions to get something done.</p>
+<pre class='hljs'><span class="hljs-comment">// sayHi.js</span>
+<span class="hljs-comment">// A simple "one-bot function"</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params">bot</span>) </span>{
+  bot.webhook.quickReply(<span class="hljs-string">"hi"</span>);
+}
+<span class="hljs-built_in">module</span>.exports = sayHi;</pre>
+<pre class='hljs'><span class="hljs-comment">// in main app.js</span>
+<span class="hljs-keyword">const</span> sayHi = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./sayHi.js"</span>);
+<span class="hljs-comment">//...</span>
+mailbots.onCommand(<span class="hljs-string">"hi"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  sayHi(bot);
+  bot.webhook.respond();
+});</pre>
+<p>You can, of course, use both the one-bot function and a handler within one skill:</p>
+<pre class='hljs'><span class="hljs-comment">// my-reminder-skill.js</span>
+<span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">mailbot</span>) </span>{
+  <span class="hljs-comment">// Handles all triggering for this MailBot (/.*/ matches anything)</span>
+  mailbot.onTrigger(<span class="hljs-regexp">/.*/</span>, funciton(bot) {
+    <span class="hljs-comment">// Do some useful things, send emails,etc.</span>
+    bot.webhook.respond();
+  });
+
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">remindTomorrow</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+        bot.webhook.setTriggerTime(<span class="hljs-string">"tomorrow"</span>);
+    }
+  };
+};</pre>
+<pre class='hljs'><span class="hljs-comment">// Use the reminder skill</span>
+<span class="hljs-keyword">const</span> { remindTomorrow } = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./my-reminder-skill"</span>)(mailbot);
+
+mailbot.onCommand(<span class="hljs-string">"whatever-custom-command"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// Set a reminder. When due, the skill automatically handles it.</span>
+  remindTomorrow(bot);
+  bot.webhook.respond();
+});</pre>
+<h3>Sharing UI Elements</h3>
+<p>Skills can use one-bot functions to share <a href="https://docs.mailbots.com/docs/email-ui-reference">UI elements</a>.</p>
+<p>By convention, UI functions that output UI start with <code>render</code>. For example, <code>renderMemorizationControls</code>.</p>
+<pre class='hljs'>  <span class="hljs-keyword">var</span> memorizeSkill = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots-memorize"</span>)(mailbot);
+  mailbot.onCommand(<span class="hljs-string">"remember"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+    bot.webhook.addEmail({
+      <span class="hljs-attr">to</span>: <span class="hljs-string">"you@email.com"</span>
+      <span class="hljs-keyword">from</span>: <span class="hljs-string">"MailBots"</span>,
+      <span class="hljs-attr">subject</span>: <span class="hljs-string">"Email Subject"</span>
+      body: [
+        {
+          <span class="hljs-attr">type</span>: <span class="hljs-string">'title'</span>,
+          <span class="hljs-attr">text</span>: <span class="hljs-string">'A Title'</span>
+        },
+
+        <span class="hljs-comment">// Render JSON UI</span>
+        memorizeSkill.renderMemorizationControls(bot)
+      ]
+    })
+    bot.webhook.respond();
+  }</pre>
+<h2>Handling Web Requests</h2>
+<p>The <code>mailbots</code> framework relies on Express.js for many of its internals. Your skill can access the internal Express <code>app</code> object at <code>mailbot.app</code>, allowing your skill to do anything that can be done with Express: authenticate other services, interact with APIs, respond to webhooks and render web pages.</p>
+<p>Just like in <a href="https://expressjs.com/en/guide/routing.html">handling routes in Express</a>:</p>
+<pre class='hljs'>mailbot.app.get(<span class="hljs-string">"/hi"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+  res.send(<span class="hljs-string">"&lt;h1&gt;Hi http request!&lt;/h1&gt;"</span>);
+});</pre>
+<h2>Middleware</h2>
+<p><a href="https://expressjs.com/en/guide/writing-middleware.html">Middlware</a> can be exported and "used" by other skills. This is useful for implementing common functionality across multiple handlers.</p>
+<pre class='hljs'><span class="hljs-comment">// Export middleware to log everything</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">logEverythingMiddleware</span>(<span class="hljs-params">req, res, next</span>) </span>{
+  <span class="hljs-keyword">const</span> bot = res.locals.bot; <span class="hljs-comment">// bot lives here</span>
+  <span class="hljs-keyword">const</span> emailSubject = bot.get(<span class="hljs-string">"source.subject"</span>);
+  <span class="hljs-built_in">require</span>(<span class="hljs-string">"my-great-logger"</span>).log(<span class="hljs-string">`Got an email about <span class="hljs-subst">${emailSubject}</span>`</span>);
+  next(); <span class="hljs-comment">// &lt;-- Don't forget this!</span>
+}
+<span class="hljs-built_in">module</span>.exports = logEverythingMiddleware;
+};</pre>
+<pre class='hljs'><span class="hljs-comment">// Using our middleware</span>
+<span class="hljs-keyword">const</span> logEverythingMiddleware = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./log-everything"</span>);
+
+<span class="hljs-comment">// Apply to all subsequent handlers</span>
+<span class="hljs-comment">// Note: It does not apply to earlier handlers</span>
+mailbot.app.use(logEverythingMiddleware);
+
+mailbot.onCommand(<span class="hljs-string">"command-one"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// everything is logged</span>
+});
+mailbot.onCommand(<span class="hljs-string">"command-two"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// everything is logged</span>
+});
+mailbot.onCommand(<span class="hljs-string">"command-three"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// everything is logged</span>
+});</pre>
+<h2>Namespacing Conventions</h2>
+<p>To prevent conflicts and facilitate debugging, it is helpful to follow these conventions. For examples below, our skill is <code>skill-name</code>.</p>
+<ul>
+<li>
+<p>The module name</p>
+<pre><code># Example module name
+npm install mailbots-skill-name
+</code></pre>
+</li>
+<li>
+<p>Store data against the task or bot in a subject with key of the skill name using underscores instead of dashes.</p>
+<pre class='hljs'>(task.stored_data = { "skill_name": { "key": "val" } })</pre>
+</li>
+<li>
+<p>Preface event names and actions with the skill name or an abbreviation (accounting for <a href="http://www.rfc-editor.org/errata/eid1690">character limitations</a>)</p>
+<pre class='hljs'>mailbots.onAction(<span class="hljs-string">"sn.do-action"</span>, bot =&gt; {});</pre>
+<h3>Use of "MailBot", "mailbot", "MailBots" and "bots"</h3>
+<p>For clarity and to reduce ambiguity, follow these conventions:</p>
+<ul>
+<li>User-Facing: The name of the platform (and company) is "MailBots". Always studly-cased. Always plural.</li>
+<li>User-Facing: One email-based bot is a "MailBot". Always studly-cased.</li>
+<li>Code: <code>mailbot</code> (all lowercased) is an acceptable variable name, but...</li>
+<li>Code: When the first "M" is capitalized, always capitalize the second. Ex: <code>createMailBot()</code>. <code>Mailbot</code> (lowercase "b") never exists.</li>
+<li>Code: <code>bot</code> is only used for the bot helper object passed to handler functions.</li>
+</ul>
+</li>
+</ul>
+<h1>Installing Skills From npm</h1>
+<p>Skills can be installed from npm.</p>
+<p>Here we will use <code>mailbots-memorize</code>, a skill that creates reminders for any <a href="https://docs.mailbots.com/reference">task</a> using <a href="https://www.wikiwand.com/en/Spaced_repetition">spaced repetition</a>, a memorization technique that increases the time between reminders as more reminders are sent.</p>
+<p>In your cli, run:</p>
+<p><code>npm install --save mailbots-memorize</code></p>
+<p>In our app.js file we will create a handler that uses our newly installed skill.</p>
+<pre class='hljs'><span class="hljs-comment">// In main app.js file</span>
+<span class="hljs-keyword">var</span> memorizeSkill = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots-memorize"</span>)(mailbot);
+
+mailbot.onCommand(<span class="hljs-string">"remember"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  memorizeSkill.memorizeTask(bot); <span class="hljs-comment">//  ⬅ Tell bot to memorize your task</span>
+  bot.webhook.quickResponse(<span class="hljs-string">"Memorizing!"</span>);
+  bot.webhook.respond();
+});
+
+<span class="hljs-comment">// Called each time the reminder is triggered</span>
+mailbot.onTrigger(<span class="hljs-string">"remember"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  memorizeSkill.memorizeTask(bot); <span class="hljs-comment">// ⬅ Invoke skill to continue memorizing</span>
+  bot.webhook.quickResponse(<span class="hljs-string">"An email with decreasing frequency"</span>);
+  bot.webhook.respond();
+});</pre>
+<h2>Skills With Side-Effects</h2>
+<p>Skills that accept the <code>mailbots</code> object may automatically alter requests, reply to webhooks or take other automatic action behind the scenes.</p>
+<pre class='hljs'><span class="hljs-comment">// May automatically handle requets (ex, render settings pages, send emails)</span>
+<span class="hljs-keyword">var</span> handleEverything = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots-handle-everything"</span>);
+handleEverything(mailbot);
+<span class="hljs-comment">// or</span>
+<span class="hljs-built_in">require</span>(<span class="hljs-string">"handleEverything"</span>)(mailbot);</pre>
+<p>Skills that are not passed the <code>mailbot</code> object will export components (middleware, one-bot functions, etc) for you to explicitly use in your handlers.</p>
+<pre class='hljs'><span class="hljs-comment">// These types of skills offer components to your handlers</span>
+<span class="hljs-keyword">var</span> {
+  someMiddleware,
+  renderSomething
+} = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots-provide-components"</span>);
+
+mailbots.app.use(someMiddleware);
+
+mailbots.onCommand(<span class="hljs-string">"foo"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  doSomething(bot);
+});</pre>
+<p>Skills will, themselves, document how they are used. Different approaches are right for different circumstances.</p>
+<h1>Welcoming New WebhookHelpers Users</h1>
+<p>When a new user installs your MailBot, they are directed to a settings page with the <code>welcome</code> namespace. Render a custom welcome message for your user by creating a settings page that targets this namespace.</p>
+<pre class='hljs'>mailbot.onSettingsViewed(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>)  </span>{
+    <span class="hljs-keyword">const</span> welcomeSettings = bot.webhook.settingsPage({
+      <span class="hljs-attr">namespace</span>: <span class="hljs-string">"welcome"</span>, <span class="hljs-comment">// MailBots sends new users to this namespace automatically</span>
+      menuTitle: <span class="hljs-string">"Welcome"</span>
+    });
+
+    welcomeSettings.text(<span class="hljs-string">`
+# Welcome To My MailBot
+_Markdown_ works here.`</span>);
+)}</pre>
+<p>Note: While in dev_mode, the MailBot owner is instead redirected to the sandbox.</p>
+<p>Your bot receives the <code>mailbot.installed</code> webhook which can be used to schedule a series of welcome emails to the user.</p>
+<h1>Testing</h1>
+<p>Export a testable instance of your MailBot by calling <code>mailbot.exportApp()</code> instead of calling <code>mailbot.listen()</code>. Below is an example of testing the exported app with <a href="https://www.npmjs.com/package/supertest">Supertest</a>.</p>
+<p>For a sample request (the <code>./_fixtures/task.created.json</code> file below), fire a request and go to the sandbox. Click the "copy" icon that appears when you over over the the top-level key the request JSON.</p>
+<p>Note: Set <code>NODE_ENV</code> to <code>testing</code> to disable webhook validation.</p>
+<pre class='hljs'><span class="hljs-keyword">const</span> request = <span class="hljs-built_in">require</span>(<span class="hljs-string">"supertest"</span>);
+<span class="hljs-keyword">const</span> mocha = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mocha"</span>);
+<span class="hljs-keyword">const</span> expect = <span class="hljs-built_in">require</span>(<span class="hljs-string">"chai"</span>).expect;
+<span class="hljs-keyword">const</span> MailBotsApp = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots"</span>);
+<span class="hljs-keyword">let</span> mailbot; <span class="hljs-comment">// re-instantiated before each test</span>
+
+<span class="hljs-comment">// Utility function to send webhook to our app</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sendWebhook</span>(<span class="hljs-params">{ exportedApp, webhookJson }</span>) </span>{
+  <span class="hljs-keyword">return</span> request(exportedApp)
+    .post(<span class="hljs-string">"/webhooks"</span>)
+    .set(<span class="hljs-string">"Accept"</span>, <span class="hljs-string">"application/json"</span>)
+    .send(webhookJson);
+}
+
+describe(<span class="hljs-string">"integration tests"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  beforeEach(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    mailbot = <span class="hljs-keyword">new</span> MailBotsApp({ <span class="hljs-attr">clientId</span>: <span class="hljs-string">"foo"</span>, <span class="hljs-attr">clientSecret</span>: <span class="hljs-string">"bar"</span> });
+  });
+
+  it(<span class="hljs-string">"responds correctly to a webhook"</span>, <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">const</span> mailbot = <span class="hljs-keyword">new</span> MailBotsApp({ <span class="hljs-attr">clientId</span>: <span class="hljs-string">"foo"</span>, <span class="hljs-attr">clientSecret</span>: <span class="hljs-string">"bar"</span> });
+
+    <span class="hljs-comment">// set up handlers</span>
+    mailbot.onCommand(<span class="hljs-string">"memorize"</span>, bot =&gt; {
+      bot.webhook.quickReply(<span class="hljs-string">"I dig email"</span>);
+      bot.webhook.respond();
+    });
+
+    <span class="hljs-keyword">const</span> exportedApp = mailbot.exportApp();
+    <span class="hljs-keyword">const</span> webhookJson = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./_fixtures/task.created.json"</span>); <span class="hljs-comment">// Copy request from Sandbox</span>
+    <span class="hljs-keyword">let</span> { body } = <span class="hljs-keyword">await</span> sendWebhook({ exportedApp, webhookJson });
+
+    <span class="hljs-comment">// Test our webhook response</span>
+    expect(body.send_messages[<span class="hljs-number">0</span>].subject).to.equal(<span class="hljs-string">"I dig email"</span>);
+  });
+});</pre>
+<h1>Installing</h1>
+<p>The setup process on mailbots.com creates a pre-installed instance of your MailBot using <a href="https://glitch.com/">Glitch</a>.</p>
+<p>For local development or production deployments:</p>
+<p><strong>1. Install</strong></p>
+<ul>
+<li><code>mkdir my-bot</code></li>
+<li><code>npm init -y</code></li>
+<li><code>npm install mailbots</code></li>
+<li><code>touch app.js</code></li>
+</ul>
+<p><strong>2. Add Setup Code</strong></p>
+<pre class='hljs'><span class="hljs-keyword">const</span> MailBot = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots"</span>);
+<span class="hljs-keyword">const</span> mailbot = <span class="hljs-keyword">new</span> MailBot({
+  <span class="hljs-attr">clientId</span>: <span class="hljs-string">"your_client_id"</span>,
+  <span class="hljs-attr">clientSecret</span>: <span class="hljs-string">"your_secret"</span>,
+  <span class="hljs-attr">mailbotUrl</span>: <span class="hljs-string">"http://your_bot_url"</span>
+});
+<span class="hljs-comment">// <span class="hljs-doctag">NOTE:</span> The recommended way to set up your MailBot is to set </span>
+<span class="hljs-comment">// CLIENT_ID, CLIENT_SECRET and MAILBOT_URL in env and use dotenv</span>
+
+mailbot.onCommand(<span class="hljs-string">"hello"</span>, bot =&gt; {
+  bot.webhook.quickReply(<span class="hljs-string">"world"</span>);
+  bot.webhook.respond();
+});
+
+mailbot.listen();</pre>
+<ol start="3">
+<li>
+<p>Use <a href="https://ngrok.com/">ngrok</a> to set up a public-facing url that MailBots.com can reach.</p>
+</li>
+<li>
+<p>Create a MailBot at mailbots.com. Click "Manual Setup" at the bottom and follow instructions from there.</p>
+</li>
+</ol>
+<h1>Contributions</h1>
+<p>Contributions are welcome in the form of PRs and / or Github tickets for issues, bugs, ideas and feature requests.
+Please follow the <a href="https://github.com/mailbots/mailbots#use-of-mailbot-mailbot-mailbots-and-bots">MailBot naming conventions</a>.
+We use ngrok to mock API requests, included in the test package here. This can be disabled to test against the live
+API (see package.json).</p>
+
+    
+  </section>
+</div>
+          
           <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='webhookhelpers'>
-      WebhookHelpers
+    <h3 class='fl m0' id='intro'>
+      intro
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="https://www.mailbots.com">MailBots</a> is a platform for creating bots, AIs and assistants that get things done right from your inbox. Read more at <a href="https://www.mailbots.com">mailbots.com</a>.</p>
+<h1>Quick Start</h1>
+<p>Go to mailbots.com and create a MailBot. The bot creation process sets up a working instance of this framework.</p>
+<p>Next, let's tell our MailBot what to do when it receives an email:</p>
+<pre class='hljs'><span class="hljs-keyword">var</span> MailBot = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots"</span>);
+<span class="hljs-keyword">var</span> mailbot = <span class="hljs-keyword">new</span> MailBot(); <span class="hljs-comment">// assuming .env is set</span>
+
+<span class="hljs-comment">// When someone emails: say-hi@my-bot.eml.bot, respond "Hello Human!"</span>
+mailbot.onCommand(<span class="hljs-string">"say-hi"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  bot.webhook.quickReply(<span class="hljs-string">"Hello Human!"</span>);
+  bot.webhook.respond();
+});
+
+mailbot.listen();</pre>
+<p><code>say-hi@my-bot.eml.bot</code> is an example of an "email command". Whatever is before the @ sign is a command to your bot to accomplish some task. <a href="https://docs.mailbots.com/reference#email-commands">Read more about email commands</a>.</p>
+<h1>Docs</h1>
+<p>Tip: Use our <a href="https://mailbots-app.mailbots.com">reference guide</a> to quickly look up helpers and method names.</p>
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<ul>
+<li>
+<p><a href="#how-mailbots-work">How MailBots Work</a></p>
+<ul>
+<li><a href="#tasks">Tasks</a></li>
+<li><a href="#commands">Commands</a></li>
+<li><a href="#triggering">Triggering</a></li>
+<li><a href="#architecture">Architecture</a></li>
+<li><a href="#handlers">Handlers</a></li>
+<li><a href="#skills">Skills</a></li>
+</ul>
+</li>
+<li>
+<p><a href="#examples">Examples:</a></p>
+<ul>
+<li><a href="#hello-world">Hello World</a></li>
+<li><a href="#set-a-reminder">Set a Reminder</a></li>
+<li><a href="#handle-action-emails">Handle Action-Emails</a></li>
+<li><a href="#install-a-skill">Install A Skill</a></li>
+</ul>
+</li>
+<li>
+<p><a href="#handler-reference">Handler Reference</a></p>
+<ul>
+<li><a href="#oncommand">onCommand</a></li>
+<li><a href="#ontrigger">onTrigger</a></li>
+<li><a href="#onaction">onAction</a></li>
+<li><a href="#ontaskviewed">onTaskViewed</a></li>
+<li><a href="#onevent">onEvent</a></li>
+<li><a href="#onsettingsviewed">onSettingsViewed</a></li>
+<li><a href="#beforesettingssaved">beforeSettingsSaved</a></li>
+<li><a href="#on">on</a></li>
+<li><a href="#handling-errors">Handling Errors</a></li>
+</ul>
+</li>
+<li><a href="#the-bot-object">The "bot" Object</a></li>
+<li>
+<p><a href="#building-skills">Building Skills</a></p>
+<ul>
+<li><a href="#using-handlers">Using Handlers</a></li>
+<li><a href="#the-one-bot-function">The "one-bot function"</a></li>
+<li><a href="#handling-web-requests">Handling Web Requests</a></li>
+<li><a href="#middleware">Middleware</a></li>
+<li><a href="#namespacing-conventions">Namespacing Conventions</a></li>
+</ul>
+</li>
+<li>
+<p><a href="#installing-skills%C2%A0from-npm">Installing Skills From npm</a></p>
+<ul>
+<li><a href="#skills-with-side-effects">Skills With Side-Effects</a></li>
+</ul>
+</li>
+<li><a href="#welcoming-new-bot-users">Welcoming New WebhookHelpers Users</a></li>
+<li><a href="#testing">Testing</a></li>
+<li><a href="#installing">Installing</a></li>
+<li><a href="#contributions">Contributions</a></li>
+</ul>
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<h1>How MailBots Work</h1>
+<p>A MailBot's purpose is to help someone get something done quickly, efficiently and without leaving their inbox.</p>
+<h2>Tasks</h2>
+<p>A unit of work accomplished by a MailBot is called a "task". Tasks can scheduled, edited or "completed". Tasks are always associated with a command.</p>
+<h2>Commands</h2>
+<p>MailBots always work in the context of commands while accomplishing tasks. A command can be thought of as the instruction for how to complete a particular task, or the purpose of the task. Email Commands (shown above) are one way to issue commands. Creating a task with the API also requires a command.</p>
+<h2>Triggering</h2>
+<p>A task (that carries out a command) can be created then wait for the perfect moment to notify a user. Timliness is a core feature of of a MailBot.</p>
+<h2>Architecture</h2>
+<p>When events happen in the MailBots platform (ex: an email is received), your MailBot receives webhooks. Your MailBot then gets some useful bit of work done (ex: enters data into a CRM) and responds with JSON that tells the MailBots platform what to do next (ex: send an email, store data, set a reminder, etc). JSON in, JSON out.</p>
+<p>This library simplifies much of the above architecture, allowing you to simply create handler functions for certain events.</p>
+<p>The webhook request and response can be viewed via the <a href="https://app.mailbots.com/sandbox">MailBots Sandbox</a>.</p>
+<h2>Handlers</h2>
+<p>MailBots are composed of handlers – functions that run when certain events occur. For example: <em>When the bot receives an email at this address, execute these actions</em></p>
+<h2>Skills</h2>
+<p>Handlers and other bot functionality can be packaged into "skills" – high-level abilities that can shared between bots. Here are some example skills:</p>
+<ul>
+<li>Interact with a CRM</li>
+<li>Parse natural language</li>
+<li>Send a text message or Slack message</li>
+<li>Render special UI elements</li>
+</ul>
+<p>You can publish, share and install new skills from npm.</p>
+<h1>Examples:</h1>
+<h2>Hello World</h2>
+<p>Create an <a href="https://docs.mailbots.com/reference#email-commands">email command</a> that says hi.</p>
+<pre class='hljs'><span class="hljs-keyword">var</span> MailBotsApp = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots"</span>);
+<span class="hljs-keyword">var</span> app = <span class="hljs-keyword">new</span> MailBotsApp();
+
+mailbot.onCommand(<span class="hljs-string">"hi"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  bot.webhook.quickReply(<span class="hljs-string">"Hi back!"</span>);
+  bot.webhook.respond();
+});
+
+mailbot.listen();</pre>
+<h2>Set a Reminder</h2>
+<p>The first handler creates the reminder. The second one handles the reminder when it becomes due.</p>
+<pre class='hljs'>mailbot.onCommand(<span class="hljs-string">"hi"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// Schedule the task to trigger in 1 minute</span>
+  bot.webhook.setTriggerTime(<span class="hljs-string">"1min"</span>);
+  bot.webhook.respond();
+});
+
+<span class="hljs-comment">// When a task with "hi" command triggers, run this</span>
+mailbot.onTrigger(<span class="hljs-string">"hi"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  bot.webhook.quickReply(<span class="hljs-string">"Hi 1 minute later!"</span>);
+  bot.webhook.respond();
+});</pre>
+<h2>Handle Action-Emails</h2>
+<p>MailBots can render quick-action buttons (mailto links that map to executable code) that let users get things done without leaving their inbox. Read more about <a href="https://docs.mailbots.com/reference#email-based-actions">action emails</a>.</p>
+<pre class='hljs'><span class="hljs-comment">// This first handler renders an email with an action-email button</span>
+ mailbot.onCommand(<span class="hljs-string">"send-buttons"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+    bot.webhook.addEmail({
+      <span class="hljs-attr">to</span>: bot.get(<span class="hljs-string">'source.from'</span>)
+      <span class="hljs-keyword">from</span>: <span class="hljs-string">"MyBot"</span>,
+      <span class="hljs-attr">subject</span>: bot.get(<span class="hljs-string">'source.subject'</span>),
+      <span class="hljs-attr">body</span>: [
+
+        <span class="hljs-comment">// 👇 An email-action</span>
+        {
+          <span class="hljs-attr">type</span>: <span class="hljs-string">"button"</span>,
+          <span class="hljs-attr">text</span>: <span class="hljs-string">"Press Me"</span>,
+          <span class="hljs-attr">action</span>: <span class="hljs-string">'say.hi'</span>,
+          <span class="hljs-attr">subject</span>: <span class="hljs-string">"Just hit 'send'"</span>,
+        }
+      ]
+    });
+    bot.webhook.respond();
+  };
+
+  <span class="hljs-comment">// This handler handles the email action</span>
+  mailbot.onAction(<span class="hljs-string">'say.hi'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+    bot.webhook.quickReply(<span class="hljs-string">'hi'</span>);
+    <span class="hljs-comment">// Lots of useful things can be done here. Completing a todo item, adding notes to a CRM, etc.</span>
+    bot.webhook.respond();
+  });
+
+  mailbot.listen();</pre>
+<h2>Install A Skill</h2>
+<p>Let's install a skill to that extracts the email message from previously quoted emails and signatures.</p>
+<pre class='hljs'><span class="hljs-keyword">var</span> mailbotsTalon = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots-talon"</span>);
+mailbot.onCommand(<span class="hljs-string">"hi"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-keyword">const</span> emailWithoutSignature = mailbotsTalon.getEmail(bot);
+  bot.quickReply(
+    <span class="hljs-string">"Here is the email without the signature:"</span> + emailWithoutSignature
+  );
+  bot.webhook.respond();
+});</pre>
+<h1>Handler Reference</h1>
+<p>Note: The first matching event handler ends the request, even if subsequent handlers also match, except where otherwise noted.</p>
+<h2>onCommand</h2>
+<pre><code>mailbot.onCommand(command, handlerFn)
+</code></pre>
+<p>Handle when an <a href="https://docs.mailbots.com/reference">email command</a> is received. This also fires when a new task is created via the API (All tasks have a command to define their purpose or reason for existence.)</p>
+<pre class='hljs'>mailbot.onCommand(<span class="hljs-string">"todo"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">//handle when a task is created with this command string</span>
+});</pre>
+<p>Regular expressions work with all handlers.</p>
+<pre class='hljs'>mailbot.onCommand(<span class="hljs-regexp">/todo.*/</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">//Handle todo.me@my-ext.eml.bot, todo.you@my-ext.eml.bot, todo.everyone@my-ext.eml.bot</span>
+});</pre>
+<h2>onTrigger</h2>
+<pre><code>mailbot.onTrigger(command, handlerFn)
+</code></pre>
+<p>Timeliness is a MailBot superpower. A user can schedule a task, then days, months or years later your bot can follow up at the exact right moment – scheduled by the user, or by another event. Read more about <a href="https://docs.mailbots.com/reference#perfect-timing">triggering</a>.</p>
+<p>Tasks with different commands may trigger differently. For example:</p>
+<pre class='hljs'>mailbot.onTrigger(<span class="hljs-string">"todo.me"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// Assigned to myself, so only remind me</span>
+});</pre>
+<pre class='hljs'>mailbot.onTrigger(<span class="hljs-string">"todo.assign"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// Assigned to the person in the 'to' field, so remind them</span>
+});</pre>
+<pre class='hljs'>mailbot.onTrigger(<span class="hljs-string">"todo.crm"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// Query CRM API, populate email followup with contact data</span>
+});</pre>
+<h2>onAction</h2>
+<pre><code>mailbot.onAction(action, handlerFn)
+</code></pre>
+<p>Handle when a user performs an action that relates to a task.</p>
+<p>For example a user can send an <a href="https://docs.mailbots.com/reference#email-based-actions">action-email</a> to accomplish an action without leaving their inbox (postponing a reminder, completing a todo item, logging a call, etc).</p>
+<pre class='hljs'>mailbot.onAction(<span class="hljs-string">"complete"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// Complete the related todo</span>
+});</pre>
+<p><strong>MailBot Conversations</strong></p>
+<p>Set the reply-to address of a MailBot email to an action email to carry out a conversation with the user.</p>
+<pre class='hljs'>mailbot.onAction(<span class="hljs-string">"assistant"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// Use luis-ai middlweare to dtermine intent</span>
+  <span class="hljs-comment">// Store conversation state</span>
+  <span class="hljs-comment">// send-email whose reply-to is also "assistant"</span>
+});</pre>
+<h2>onTaskViewed</h2>
+<pre><code>mailbot.onTaskViewed(command, handlerFn)
+</code></pre>
+<p>Handle when a task is viewed in the MailBots Web UI, allowing a user to view and interact with a future MailBots email.</p>
+<pre class='hljs'>mailbot.onTaskViewed(<span class="hljs-string">"todo.me"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// Show a preview of the future email</span>
+});</pre>
+<p>Different task commands may render differently. For example a task with command <code>todo.crm</code> may query and render current CRM data within the preview.</p>
+<h2>onEvent</h2>
+<pre><code>mailbot.onEvent(event, handlerFn)
+</code></pre>
+<p>Handle when the MailBot receives an inbound webhok from a 3rd party system about an external event. For example, a support ticket is created or a lead is added to a CRM.</p>
+<p>Note: This action does not automatically create a MailBots Task. One can be created with <a href="https://www.npmjs.com/package/@mailbots/mailbots-sdk">mailbots-sdk</a></p>
+<pre class='hljs'>mailbot.onEvent(<span class="hljs-string">"issue.created"</span>, <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// Handle event, for example, create a MailBots Task.</span>
+  <span class="hljs-keyword">const</span> mailBotsClient = MailBotsClient.fromBot(bot);
+  <span class="hljs-keyword">await</span> mailBotsClient.createTask({
+    <span class="hljs-comment">// Pre-authenticated API client</span>
+  });
+  bot.webhook.respond({ <span class="hljs-attr">webhook</span>: { <span class="hljs-attr">status</span>: <span class="hljs-string">"success"</span> } });
+});</pre>
+<h2>onSettingsViewed</h2>
+<pre><code>mailbot.onSettingsViewed(handlerFn)
+</code></pre>
+<p>Handle when a user views this MailBot's settings.</p>
+<p>Bots can build custom settings pages. These are rendered when a user views bot settings on the MailBots.com admin UI.</p>
+<p>See the <a href="https://mailbots-app.mailbots.com/#settingspage">settings page reference</a>.</p>
+<p>The handler's only parameter is a callback function that responds with JSON to to render a settings form. The callback function is passed the <code>bot</code> object as usual.</p>
+<p>Settings form JSON can be easily built using the <a href="https://mailbots-app.mailbots.com/#settingspage">settings helper functions</a>.</p>
+<p>Unlike the other handlers, every instance of this handler is called. (ie, all settings pages from all settings handlers are rendered).</p>
+<p>NOTE: Do not call <code>bot.webhook.respond()</code> at the end of this particular request. MailBots' internals take care of compiling the JSON and responding.</p>
+<pre class='hljs'><span class="hljs-comment">// Render a settings field for the user to enter their first name</span>
+mailbot.onSettingsViewed(<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-keyword">const</span> todoSettings = bot.webhook.settingsPage({
+    <span class="hljs-attr">namespace</span>: <span class="hljs-string">"todo"</span>,
+    <span class="hljs-attr">title</span>: <span class="hljs-string">"Todo Settings"</span>, <span class="hljs-comment">// Page title</span>
+    menuTitle: <span class="hljs-string">"Todo"</span> <span class="hljs-comment">// Name of menu item</span>
+  });
+  todoSettings.input({ <span class="hljs-attr">name</span>: <span class="hljs-string">"first_name"</span>, <span class="hljs-attr">title</span>: <span class="hljs-string">"First name"</span> });
+  todoSettings.submitButton();
+
+  <span class="hljs-comment">// Populate form values</span>
+  todoSettings.populate(bot.get(<span class="hljs-string">"mailbot.stored_data.todo"</span>));
+  <span class="hljs-comment">// Note bot.webhook.respond() is NOT called</span>
+});</pre>
+<p>URL parameters are passed through to the settings webhook. Use this to pass data into your settings when linking to it.</p>
+<pre class='hljs'>mailbot.onSettingsViewed(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-keyword">const</span> settingsPage = bot.webhook.settingsPage({ <span class="hljs-attr">namespace</span>: <span class="hljs-string">"todo"</span> });
+
+  <span class="hljs-keyword">if</span> (bot.get(<span class="hljs-string">"url_params.linkInstructions"</span>, <span class="hljs-literal">false</span>)) {
+    settings.text(<span class="hljs-string">`# Instructions to link your account!`</span>);
+  }
+  <span class="hljs-comment">// Note that there is no submit button. It's just an informational page.</span>
+});</pre>
+<p>If you wish to use URL params in your <code>beforeSettingsSaved</code> handler (below), pass them via the <code>urlParams</code> key in the <code>submit</code> form element.</p>
+<pre class='hljs'><span class="hljs-comment">// within a onSettingsViewed form as shown above</span>
+settings.submitButton({
+  <span class="hljs-attr">submitText</span>: <span class="hljs-string">"Save Notification Settings"</span>,
+  <span class="hljs-attr">urlParams</span>: { <span class="hljs-attr">saveSettings</span>: <span class="hljs-number">1</span> }
+  <span class="hljs-comment">// Tip: Pass through all URL current params, but use caution! (see note)</span>
+  <span class="hljs-comment">// urlParams: {saveSettings: 1, ...bot.get("url_params", {})}</span>
+});</pre>
+<p>NOTE: URL parameters are an easy way to pass data into your bot settings, but <strong>keep this in mind while using URL params</strong>: Anyone can link a user to their settings page with <em>anything</em> in URL. Do not, for example, create a url like: <code>/settings?delete_everything=true</code> that deletes all their tasks. An unsuspecting user may arrive on their settings page from an external link, not see this in the URL and submit the form only find themselves without any data. <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)">Read more</a>.</p>
+<h2>beforeSettingsSaved</h2>
+<pre><code>mailbot.beforeSettingsSaved(handlerFn)
+</code></pre>
+<p>Handle when the user saves their settings. Called before settings are actually saved.</p>
+<p>Similar to the above <code>onSettingsViewed</code> handler, every instance of this handler is called when settings are saved.</p>
+<p>Validate user data, perform API calls to keep other systems in sync. Return an error
+to abort saving the settings.</p>
+<pre class='hljs'>  mailbot.beforeSettingsSaved(<span class="hljs-function"><span class="hljs-params">bot</span> =&gt;</span> {
+
+    <span class="hljs-comment">// assuming the same "todo" namespace as shown in the above examples</span>
+    <span class="hljs-keyword">const</span> data = bot.get(<span class="hljs-string">"settings.todo"</span>);
+
+    <span class="hljs-comment">// handler is fired any times settings are saved, even if its not our form</span>
+    <span class="hljs-keyword">if</span>(!data) <span class="hljs-keyword">return</span>;
+
+    <span class="hljs-comment">// perform API calls, update external systems, etc. If something goes wrong...</span>
+    <span class="hljs-keyword">if</span>(error) {
+      <span class="hljs-comment">// abort the saving process</span>
+      <span class="hljs-keyword">return</span> bot.webhook.respond({
+        <span class="hljs-attr">webhook</span>: {
+          <span class="hljs-attr">status</span>: <span class="hljs-string">"error"</span>,
+          <span class="hljs-attr">message</span>: <span class="hljs-string">"This is  a warning message"</span>
+        }
+      });
+    }
+
+    <span class="hljs-comment">// Othwise, it implicitly returns success, and the saving process continues</span>
+  });</pre>
+<h2>on</h2>
+<pre><code>mailbot.on(webhookEvent, handlerFn)
+</code></pre>
+<p>This is a generic handler for any webhook. It can be used to handle any inbound webhook – mainly ones that are not covered by the handlers above. (Of note: The handlers above are simply wrappers for this lower-level handler).</p>
+<p>Example:</p>
+<pre class='hljs'>mailbot.on(<span class="hljs-string">"mailbot.installed"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// Handle when a MailBot is installed</span>
+  <span class="hljs-comment">// Create task with MailBots SDK</span>
+  <span class="hljs-comment">// bot.webhook.respond();</span>
+});</pre>
+<p>The first paramater can be:</p>
+<ul>
+<li>A string that matches the webhook <code>type</code>. (ie. <a href="https://docs.mailbots.com/reference#mailbotinstalled"><code>mailbot.installed</code></a>)</li>
+<li>A regular expression that matches on webhook <code>type</code></li>
+<li>A function that takes the incoming webhook as the only parameter and returns a boolean value indicating whether or not that webhook should be handled by that function handler.</li>
+</ul>
+<p>The second parameter is the function handler that runs only if the matching condition (the first parameter) is met.</p>
+<pre class='hljs'>mailbot.on(<span class="hljs-string">"mailbot.installed"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// Handle when a MailBot is installed</span>
+  <span class="hljs-comment">// Create a task from mailbots sdk</span>
+  <span class="hljs-comment">// bot.webhook.respond();</span>
+});</pre>
+<h2>Handling Errors</h2>
+<p>Ideally, error conditions are handled within the normal application flow. If something unexpected happens you can set up a custom error handler for adding logs, alerting or providing error messaging to users.</p>
+<p>If you want to send the user your own error email, use the <a href="https://mailbots-sdk-js.mailbots.com/#sendemaill">sendEmail</a> method from the MailBots SDK. (Not all webhook responses send emails).</p>
+<pre class='hljs'><span class="hljs-comment">// define a custom error handler</span>
+app.setErrorHandler(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">error, bot</span>) </span>{
+  <span class="hljs-comment">// myCustomLogger.log(error);</span>
+  <span class="hljs-comment">// send email with mailbots sdk</span>
+  <span class="hljs-comment">// send a custom error email to user</span>
+  <span class="hljs-comment">// Respond with 5xx status code to send the generic MailBots error email to the user</span>
+  <span class="hljs-comment">// bot.response.status(500);</span>
+
+  bot.webhook.respond({
+    <span class="hljs-attr">status</span>: <span class="hljs-string">"error"</span>,
+    <span class="hljs-attr">message</span>: <span class="hljs-string">"A custom error message"</span> <span class="hljs-comment">// Shown to user if in the web UI.</span>
+  }); <span class="hljs-comment">// A webhook response must be sent</span>
+});</pre>
+<h1>The "bot" Object</h1>
+<p>The <code>bot</code> object passed to the handlers above contains useful helpers that make it easy to handle bot requests. See <a href="https://mailbots-app.mailbots.com/#webhookhelpers">webhook helpers reference docs</a>.</p>
+<p><strong>Setting Data Works By Shallow Merging</strong>
+Data is set by shallow merging. For example.</p>
+<pre class='hljs'>bot.webhook.setTaskData(<span class="hljs-string">"my_namespace"</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">"Joe"</span> });
+bot.webhook.setTaskData(<span class="hljs-string">"my_namespace"</span>, { <span class="hljs-attr">key</span>: <span class="hljs-string">"123"</span> });
+<span class="hljs-comment">// task data is now</span>
+<span class="hljs-built_in">console</span>.log(bot.webhook.responseJson);
+<span class="hljs-comment">// {my_namespace: { name: "Joe", key: "123" }}</span></pre>
+<pre class='hljs'>bot.webhook.setTaskData(<span class="hljs-string">"my_namespace"</span>, {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">"Joe"</span>,
+  <span class="hljs-attr">data</span>: { <span class="hljs-attr">value</span>: <span class="hljs-string">"here"</span> } <span class="hljs-comment">// ⚠️ Overwritten (shallow merge)</span>
+});
+bot.webhook.setTaskData(<span class="hljs-string">"my_namespace"</span>, {
+  <span class="hljs-attr">data</span>: { <span class="hljs-attr">value2</span>: <span class="hljs-string">"there"</span> }
+});
+<span class="hljs-comment">// task data is now</span>
+<span class="hljs-built_in">console</span>.log(bot.webhook.responseJson);
+<span class="hljs-comment">// {my_namespace: { data: { value2: "there" } }}</span></pre>
+<h1>Building Skills</h1>
+<p>"Skills" are sharable pieces of bot functionality. Skills can encapsulate everything they need (handlers, settings panels helper funcitons and UI elements) into a package that "just works" when installed. They are great for keeping your code organized and for sharing functionality with others.</p>
+<p>A skill can share functionality in several ways:</p>
+<h2>Using Handlers</h2>
+<p>We could better organize our handlers in the above examples by grouping them into different files. For example:</p>
+<pre class='hljs'><span class="hljs-comment">// my-new-reminder-skill.js</span>
+<span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">mailbot</span>) </span>{
+  <span class="hljs-comment">// Handlers can go here</span>
+  <span class="hljs-comment">// mailbot.onCommand...</span>
+};</pre>
+<p>It can be loaded like this:</p>
+<pre class='hljs'><span class="hljs-comment">// In top-level app.js</span>
+<span class="hljs-built_in">require</span>(<span class="hljs-string">"./my-new-skill"</span>)(mailbot);</pre>
+<p>Once loaded, all handlers within the file become active.</p>
+<p>A directory of skill files (like the one above) can be loaded using the <code>loadSkill</code> helper:</p>
+<pre class='hljs'><span class="hljs-comment">// Load all skill files in a directory</span>
+mailbot.loadSkill(__dirname + <span class="hljs-string">"/my/skill/"</span>);</pre>
+<p><code>loadSkill</code> only looks for skill files in the top-level directory. This allows a skill to hide its implementation details in subdirectories.</p>
+<p>A config object can optionally be passed.</p>
+<pre class='hljs'><span class="hljs-comment">// app.js</span>
+mailbot.loadSkill(__dirname + <span class="hljs-string">"/my/skills/"</span>, config);</pre>
+<pre class='hljs'><span class="hljs-comment">// skill-file.js</span>
+<span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">mailbot, config</span>) </span>{
+  <span class="hljs-comment">// All of your handlers can go here</span>
+};</pre>
+<p>Grouping your handlers into skills is a great way to keep your project organized. The down-side is that the skill owns each request from beginning to end – not very flexible.</p>
+<p>The next section covers a more granular and composable technique for sharing functionality across multiple handlers or multiple MailBots.</p>
+<h2>The "one-bot function"</h2>
+<p>A "one-bot function" is a function that takes a single <code>bot</code> object (an instance of BotRequest) which, itself, contains the request / response state and utilities to alter the request. It is one instance of a bot request, hence, a one-bot function.</p>
+<p>One-bot functions are called within handlers, allowing for a top-level handler to compose multiple one-bot functions to get something done.</p>
+<pre class='hljs'><span class="hljs-comment">// sayHi.js</span>
+<span class="hljs-comment">// A simple "one-bot function"</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params">bot</span>) </span>{
+  bot.webhook.quickReply(<span class="hljs-string">"hi"</span>);
+}
+<span class="hljs-built_in">module</span>.exports = sayHi;</pre>
+<pre class='hljs'><span class="hljs-comment">// in main app.js</span>
+<span class="hljs-keyword">const</span> sayHi = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./sayHi.js"</span>);
+<span class="hljs-comment">//...</span>
+mailbots.onCommand(<span class="hljs-string">"hi"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  sayHi(bot);
+  bot.webhook.respond();
+});</pre>
+<p>You can, of course, use both the one-bot function and a handler within one skill:</p>
+<pre class='hljs'><span class="hljs-comment">// my-reminder-skill.js</span>
+<span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">mailbot</span>) </span>{
+  <span class="hljs-comment">// Handles all triggering for this MailBot (/.*/ matches anything)</span>
+  mailbot.onTrigger(<span class="hljs-regexp">/.*/</span>, funciton(bot) {
+    <span class="hljs-comment">// Do some useful things, send emails,etc.</span>
+    bot.webhook.respond();
+  });
+
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">remindTomorrow</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+        bot.webhook.setTriggerTime(<span class="hljs-string">"tomorrow"</span>);
+    }
+  };
+};</pre>
+<pre class='hljs'><span class="hljs-comment">// Use the reminder skill</span>
+<span class="hljs-keyword">const</span> { remindTomorrow } = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./my-reminder-skill"</span>)(mailbot);
+
+mailbot.onCommand(<span class="hljs-string">"whatever-custom-command"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// Set a reminder. When due, the skill automatically handles it.</span>
+  remindTomorrow(bot);
+  bot.webhook.respond();
+});</pre>
+<h3>Sharing UI Elements</h3>
+<p>Skills can use one-bot functions to share <a href="https://docs.mailbots.com/docs/email-ui-reference">UI elements</a>.</p>
+<p>By convention, UI functions that output UI start with <code>render</code>. For example, <code>renderMemorizationControls</code>.</p>
+<pre class='hljs'>  <span class="hljs-keyword">var</span> memorizeSkill = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots-memorize"</span>)(mailbot);
+  mailbot.onCommand(<span class="hljs-string">"remember"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+    bot.webhook.addEmail({
+      <span class="hljs-attr">to</span>: <span class="hljs-string">"you@email.com"</span>
+      <span class="hljs-keyword">from</span>: <span class="hljs-string">"MailBots"</span>,
+      <span class="hljs-attr">subject</span>: <span class="hljs-string">"Email Subject"</span>
+      body: [
+        {
+          <span class="hljs-attr">type</span>: <span class="hljs-string">'title'</span>,
+          <span class="hljs-attr">text</span>: <span class="hljs-string">'A Title'</span>
+        },
+
+        <span class="hljs-comment">// Render JSON UI</span>
+        memorizeSkill.renderMemorizationControls(bot)
+      ]
+    })
+    bot.webhook.respond();
+  }</pre>
+<h2>Handling Web Requests</h2>
+<p>The <code>mailbots</code> framework relies on Express.js for many of its internals. Your skill can access the internal Express <code>app</code> object at <code>mailbot.app</code>, allowing your skill to do anything that can be done with Express: authenticate other services, interact with APIs, respond to webhooks and render web pages.</p>
+<p>Just like in <a href="https://expressjs.com/en/guide/routing.html">handling routes in Express</a>:</p>
+<pre class='hljs'>mailbot.app.get(<span class="hljs-string">"/hi"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+  res.send(<span class="hljs-string">"&lt;h1&gt;Hi http request!&lt;/h1&gt;"</span>);
+});</pre>
+<h2>Middleware</h2>
+<p><a href="https://expressjs.com/en/guide/writing-middleware.html">Middlware</a> can be exported and "used" by other skills. This is useful for implementing common functionality across multiple handlers.</p>
+<pre class='hljs'><span class="hljs-comment">// Export middleware to log everything</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">logEverythingMiddleware</span>(<span class="hljs-params">req, res, next</span>) </span>{
+  <span class="hljs-keyword">const</span> bot = res.locals.bot; <span class="hljs-comment">// bot lives here</span>
+  <span class="hljs-keyword">const</span> emailSubject = bot.get(<span class="hljs-string">"source.subject"</span>);
+  <span class="hljs-built_in">require</span>(<span class="hljs-string">"my-great-logger"</span>).log(<span class="hljs-string">`Got an email about <span class="hljs-subst">${emailSubject}</span>`</span>);
+  next(); <span class="hljs-comment">// &lt;-- Don't forget this!</span>
+}
+<span class="hljs-built_in">module</span>.exports = logEverythingMiddleware;
+};</pre>
+<pre class='hljs'><span class="hljs-comment">// Using our middleware</span>
+<span class="hljs-keyword">const</span> logEverythingMiddleware = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./log-everything"</span>);
+
+<span class="hljs-comment">// Apply to all subsequent handlers</span>
+<span class="hljs-comment">// Note: It does not apply to earlier handlers</span>
+mailbot.app.use(logEverythingMiddleware);
+
+mailbot.onCommand(<span class="hljs-string">"command-one"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// everything is logged</span>
+});
+mailbot.onCommand(<span class="hljs-string">"command-two"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// everything is logged</span>
+});
+mailbot.onCommand(<span class="hljs-string">"command-three"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  <span class="hljs-comment">// everything is logged</span>
+});</pre>
+<h2>Namespacing Conventions</h2>
+<p>To prevent conflicts and facilitate debugging, it is helpful to follow these conventions. For examples below, our skill is <code>skill-name</code>.</p>
+<ul>
+<li>
+<p>The module name</p>
+<pre><code># Example module name
+npm install mailbots-skill-name
+</code></pre>
+</li>
+<li>
+<p>Store data against the task or bot in a subject with key of the skill name using underscores instead of dashes.</p>
+<pre class='hljs'>(task.stored_data = { "skill_name": { "key": "val" } })</pre>
+</li>
+<li>
+<p>Preface event names and actions with the skill name or an abbreviation (accounting for <a href="http://www.rfc-editor.org/errata/eid1690">character limitations</a>)</p>
+<pre class='hljs'>mailbots.onAction(<span class="hljs-string">"sn.do-action"</span>, bot =&gt; {});</pre>
+<h3>Use of "MailBot", "mailbot", "MailBots" and "bots"</h3>
+<p>For clarity and to reduce ambiguity, follow these conventions:</p>
+<ul>
+<li>User-Facing: The name of the platform (and company) is "MailBots". Always studly-cased. Always plural.</li>
+<li>User-Facing: One email-based bot is a "MailBot". Always studly-cased.</li>
+<li>Code: <code>mailbot</code> (all lowercased) is an acceptable variable name, but...</li>
+<li>Code: When the first "M" is capitalized, always capitalize the second. Ex: <code>createMailBot()</code>. <code>Mailbot</code> (lowercase "b") never exists.</li>
+<li>Code: <code>bot</code> is only used for the bot helper object passed to handler functions.</li>
+</ul>
+</li>
+</ul>
+<h1>Installing Skills From npm</h1>
+<p>Skills can be installed from npm.</p>
+<p>Here we will use <code>mailbots-memorize</code>, a skill that creates reminders for any <a href="https://docs.mailbots.com/reference">task</a> using <a href="https://www.wikiwand.com/en/Spaced_repetition">spaced repetition</a>, a memorization technique that increases the time between reminders as more reminders are sent.</p>
+<p>In your cli, run:</p>
+<p><code>npm install --save mailbots-memorize</code></p>
+<p>In our app.js file we will create a handler that uses our newly installed skill.</p>
+<pre class='hljs'><span class="hljs-comment">// In main app.js file</span>
+<span class="hljs-keyword">var</span> memorizeSkill = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots-memorize"</span>)(mailbot);
+
+mailbot.onCommand(<span class="hljs-string">"remember"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  memorizeSkill.memorizeTask(bot); <span class="hljs-comment">//  ⬅ Tell bot to memorize your task</span>
+  bot.webhook.quickResponse(<span class="hljs-string">"Memorizing!"</span>);
+  bot.webhook.respond();
+});
+
+<span class="hljs-comment">// Called each time the reminder is triggered</span>
+mailbot.onTrigger(<span class="hljs-string">"remember"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  memorizeSkill.memorizeTask(bot); <span class="hljs-comment">// ⬅ Invoke skill to continue memorizing</span>
+  bot.webhook.quickResponse(<span class="hljs-string">"An email with decreasing frequency"</span>);
+  bot.webhook.respond();
+});</pre>
+<h2>Skills With Side-Effects</h2>
+<p>Skills that accept the <code>mailbots</code> object may automatically alter requests, reply to webhooks or take other automatic action behind the scenes.</p>
+<pre class='hljs'><span class="hljs-comment">// May automatically handle requets (ex, render settings pages, send emails)</span>
+<span class="hljs-keyword">var</span> handleEverything = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots-handle-everything"</span>);
+handleEverything(mailbot);
+<span class="hljs-comment">// or</span>
+<span class="hljs-built_in">require</span>(<span class="hljs-string">"handleEverything"</span>)(mailbot);</pre>
+<p>Skills that are not passed the <code>mailbot</code> object will export components (middleware, one-bot functions, etc) for you to explicitly use in your handlers.</p>
+<pre class='hljs'><span class="hljs-comment">// These types of skills offer components to your handlers</span>
+<span class="hljs-keyword">var</span> {
+  someMiddleware,
+  renderSomething
+} = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots-provide-components"</span>);
+
+mailbots.app.use(someMiddleware);
+
+mailbots.onCommand(<span class="hljs-string">"foo"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+  doSomething(bot);
+});</pre>
+<p>Skills will, themselves, document how they are used. Different approaches are right for different circumstances.</p>
+<h1>Welcoming New WebhookHelpers Users</h1>
+<p>When a new user installs your MailBot, they are directed to a settings page with the <code>welcome</code> namespace. Render a custom welcome message for your user by creating a settings page that targets this namespace.</p>
+<pre class='hljs'>mailbot.onSettingsViewed(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>)  </span>{
+    <span class="hljs-keyword">const</span> welcomeSettings = bot.webhook.settingsPage({
+      <span class="hljs-attr">namespace</span>: <span class="hljs-string">"welcome"</span>, <span class="hljs-comment">// MailBots sends new users to this namespace automatically</span>
+      menuTitle: <span class="hljs-string">"Welcome"</span>
+    });
+
+    welcomeSettings.text(<span class="hljs-string">`
+# Welcome To My MailBot
+_Markdown_ works here.`</span>);
+)}</pre>
+<p>Note: While in dev_mode, the MailBot owner is instead redirected to the sandbox.</p>
+<p>Your bot receives the <code>mailbot.installed</code> webhook which can be used to schedule a series of welcome emails to the user.</p>
+<h1>Testing</h1>
+<p>Export a testable instance of your MailBot by calling <code>mailbot.exportApp()</code> instead of calling <code>mailbot.listen()</code>. Below is an example of testing the exported app with <a href="https://www.npmjs.com/package/supertest">Supertest</a>.</p>
+<p>For a sample request (the <code>./_fixtures/task.created.json</code> file below), fire a request and go to the sandbox. Click the "copy" icon that appears when you over over the the top-level key the request JSON.</p>
+<p>Note: Set <code>NODE_ENV</code> to <code>testing</code> to disable webhook validation.</p>
+<pre class='hljs'><span class="hljs-keyword">const</span> request = <span class="hljs-built_in">require</span>(<span class="hljs-string">"supertest"</span>);
+<span class="hljs-keyword">const</span> mocha = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mocha"</span>);
+<span class="hljs-keyword">const</span> expect = <span class="hljs-built_in">require</span>(<span class="hljs-string">"chai"</span>).expect;
+<span class="hljs-keyword">const</span> MailBotsApp = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots"</span>);
+<span class="hljs-keyword">let</span> mailbot; <span class="hljs-comment">// re-instantiated before each test</span>
+
+<span class="hljs-comment">// Utility function to send webhook to our app</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sendWebhook</span>(<span class="hljs-params">{ exportedApp, webhookJson }</span>) </span>{
+  <span class="hljs-keyword">return</span> request(exportedApp)
+    .post(<span class="hljs-string">"/webhooks"</span>)
+    .set(<span class="hljs-string">"Accept"</span>, <span class="hljs-string">"application/json"</span>)
+    .send(webhookJson);
+}
+
+describe(<span class="hljs-string">"integration tests"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  beforeEach(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    mailbot = <span class="hljs-keyword">new</span> MailBotsApp({ <span class="hljs-attr">clientId</span>: <span class="hljs-string">"foo"</span>, <span class="hljs-attr">clientSecret</span>: <span class="hljs-string">"bar"</span> });
+  });
+
+  it(<span class="hljs-string">"responds correctly to a webhook"</span>, <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">const</span> mailbot = <span class="hljs-keyword">new</span> MailBotsApp({ <span class="hljs-attr">clientId</span>: <span class="hljs-string">"foo"</span>, <span class="hljs-attr">clientSecret</span>: <span class="hljs-string">"bar"</span> });
+
+    <span class="hljs-comment">// set up handlers</span>
+    mailbot.onCommand(<span class="hljs-string">"memorize"</span>, bot =&gt; {
+      bot.webhook.quickReply(<span class="hljs-string">"I dig email"</span>);
+      bot.webhook.respond();
+    });
+
+    <span class="hljs-keyword">const</span> exportedApp = mailbot.exportApp();
+    <span class="hljs-keyword">const</span> webhookJson = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./_fixtures/task.created.json"</span>); <span class="hljs-comment">// Copy request from Sandbox</span>
+    <span class="hljs-keyword">let</span> { body } = <span class="hljs-keyword">await</span> sendWebhook({ exportedApp, webhookJson });
+
+    <span class="hljs-comment">// Test our webhook response</span>
+    expect(body.send_messages[<span class="hljs-number">0</span>].subject).to.equal(<span class="hljs-string">"I dig email"</span>);
+  });
+});</pre>
+<h1>Installing</h1>
+<p>The setup process on mailbots.com creates a pre-installed instance of your MailBot using <a href="https://glitch.com/">Glitch</a>.</p>
+<p>For local development or production deployments:</p>
+<p><strong>1. Install</strong></p>
+<ul>
+<li><code>mkdir my-bot</code></li>
+<li><code>npm init -y</code></li>
+<li><code>npm install mailbots</code></li>
+<li><code>touch app.js</code></li>
+</ul>
+<p><strong>2. Add Setup Code</strong></p>
+<pre class='hljs'><span class="hljs-keyword">const</span> MailBot = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots"</span>);
+<span class="hljs-keyword">const</span> mailbot = <span class="hljs-keyword">new</span> MailBot({
+  <span class="hljs-attr">clientId</span>: <span class="hljs-string">"your_client_id"</span>,
+  <span class="hljs-attr">clientSecret</span>: <span class="hljs-string">"your_secret"</span>,
+  <span class="hljs-attr">mailbotUrl</span>: <span class="hljs-string">"http://your_bot_url"</span>
+});
+<span class="hljs-comment">// <span class="hljs-doctag">NOTE:</span> The recommended way to set up your MailBot is to set </span>
+<span class="hljs-comment">// CLIENT_ID, CLIENT_SECRET and MAILBOT_URL in env and use dotenv</span>
+
+mailbot.onCommand(<span class="hljs-string">"hello"</span>, bot =&gt; {
+  bot.webhook.quickReply(<span class="hljs-string">"world"</span>);
+  bot.webhook.respond();
+});
+
+mailbot.listen();</pre>
+<ol start="3">
+<li>
+<p>Use <a href="https://ngrok.com/">ngrok</a> to set up a public-facing url that MailBots.com can reach.</p>
+</li>
+<li>
+<p>Create a MailBot at mailbots.com. Click "Manual Setup" at the bottom and follow instructions from there.</p>
+</li>
+</ol>
+<h1>Contributions</h1>
+<p>Contributions are welcome in the form of PRs and / or Github tickets for issues, bugs, ideas and feature requests.
+Please follow the <a href="https://github.com/mailbots/mailbots#use-of-mailbot-mailbot-mailbots-and-bots">MailBot naming conventions</a>.
+We use ngrok to mock API requests, included in the test package here. This can be disabled to test against the live
+API (see package.json).</p>
+
+ 
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+            <div class='keyline-top-not py2'>
+  <section class='py2 clearfix'>
+
+    <h2 id='bot' class='mt0'>
+      bot
+    </h2>
+
+    
+      <p>"Bot" is the helpful object that are given to event handlers. It contains information about the
+request and lots helpful methods to complete the request.</p>
+<p>Bots have utilities to handle webhooks <strong>WebHookHelpers</strong></p>
+<pre class='hljs'>mailbot.onCommand(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{ <span class="hljs-comment">// &lt;-- This is the "bot"</span>
+  bot.webhook.quickReply(<span class="hljs-string">"hi"</span>);
+  bot.webhook.respond();
+});</pre>
+<p>One of the webhook helpers lets you create a settings form. This is its own class: <strong>SettingsPage</strong></p>
+<pre class='hljs'>  <span class="hljs-keyword">const</span> mySettingsPage = bot.webhook.settingsPage({
+  <span class="hljs-attr">namespace</span>: <span class="hljs-string">"todo"</span>,
+  <span class="hljs-attr">title</span>: <span class="hljs-string">"ToDo Settings"</span>,
+  <span class="hljs-attr">menuTitle</span>: <span class="hljs-string">"To Do"</span>
+  });</pre>
+
+    
+  </section>
+</div>
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='bot'>
+      bot
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>"Bot" is the helpful object that are given to event handlers. It contains information about the
+request and lots helpful methods to complete the request.</p>
+<p>Bots have utilities to handle webhooks <strong>WebHookHelpers</strong></p>
+<pre class='hljs'>mailbot.onCommand(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{ <span class="hljs-comment">// &lt;-- This is the "bot"</span>
+  bot.webhook.quickReply(<span class="hljs-string">"hi"</span>);
+  bot.webhook.respond();
+});</pre>
+<p>One of the webhook helpers lets you create a settings form. This is its own class: <strong>SettingsPage</strong></p>
+<pre class='hljs'>  <span class="hljs-keyword">const</span> mySettingsPage = bot.webhook.settingsPage({
+  <span class="hljs-attr">namespace</span>: <span class="hljs-string">"todo"</span>,
+  <span class="hljs-attr">title</span>: <span class="hljs-string">"ToDo Settings"</span>,
+  <span class="hljs-attr">menuTitle</span>: <span class="hljs-string">"To Do"</span>
+  });</pre>
+
+ 
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+            <div class='keyline-top-not py2'>
+  <section class='py2 clearfix'>
+
+    <h2 id='mailbots' class='mt0'>
+      mailbots
+    </h2>
+
+    
+      <p>A MailBot is an instance of the <strong>MailBots</strong> class. This class exposes handlers
+that are used to respond to specific events. (See readme.md for more). </p>
+<pre class='hljs'>  <span class="hljs-keyword">var</span> MailBots = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots"</span>);
+  <span class="hljs-keyword">var</span> mailbot = <span class="hljs-keyword">new</span> MailBots({
+    <span class="hljs-attr">clientId</span>: <span class="hljs-string">"foo"</span>,
+    <span class="hljs-attr">clientSecret</span>: <span class="hljs-string">"bar"</span>
+  });
+
+  mailbot.onCommand(<span class="hljs-string">"hi"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+    bot.webhook.quickReply(<span class="hljs-string">"Hi back!"</span>);
+    bot.webhook.respond();
+  });
+
+  mailbot.listen();</pre>
+
+    
+  </section>
+</div>
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='mailbots'>
+      mailbots
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>A MailBot is an instance of the <strong>MailBots</strong> class. This class exposes handlers
+that are used to respond to specific events. (See readme.md for more). </p>
+<pre class='hljs'>  <span class="hljs-keyword">var</span> MailBots = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots"</span>);
+  <span class="hljs-keyword">var</span> mailbot = <span class="hljs-keyword">new</span> MailBots({
+    <span class="hljs-attr">clientId</span>: <span class="hljs-string">"foo"</span>,
+    <span class="hljs-attr">clientSecret</span>: <span class="hljs-string">"bar"</span>
+  });
+
+  mailbot.onCommand(<span class="hljs-string">"hi"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
+    bot.webhook.quickReply(<span class="hljs-string">"Hi back!"</span>);
+    bot.webhook.respond();
+  });
+
+  mailbot.listen();</pre>
+
+ 
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='mailbots'>
+      MailBots
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Create a new MailBot</p>
+<p>Optionally instantiate with config. Pass any key shown in config.js.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>new MailBots(instanceConfig: any, config: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>instanceConfig</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>config</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='mailbotslisten'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>listen()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Loads final skills and start http server.
+Anything posted to /webhooks route is automatically handled.
+Other routes must be created as usual with the Express App object.
+For example: mailbots.app.get("my-route/", (req, res) => {});</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>listen()</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='mailbotsexportapp'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>exportApp()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Export app for automated testing</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>exportApp()</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='mailbotsloadskill'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>loadSkill(skill, config, skillPath)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Load MailBots skills from a directory, non-recursively.
+This can be called more than once to load skills in order. Skills loaded
+this method are preceeded by loadFirstCoreSkills, succeeded by loadLastCoreSkills.
+This can also receive a path to a file.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>loadSkill(skill: any, config: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>, skillPath: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>skill</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>config</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+	    optional skill configuration object
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>skillPath</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    path to skills directory
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='mailbotson'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>on(triggerCondition, cb, opts, event)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Add handler for a given webhook event. Executes only the first handler
+for a matching event. The first parameter can be either a string
+(the named webhook event) or a function that is passed the webhook and
+returns true or false to indicate if the handler should be run.
+Example: controller.on('task.created', (bot, req, res) => { });
+Example: controller.on((webhook) => webhook.event === 'task.created', cb)</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>on(triggerCondition: any, cb: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>, opts: any, event: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>))</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>triggerCondition</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>cb</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+	    Handler function
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>opts</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>event</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>))</code>
+	    A webhook event string (ex: task.created). Or
+a function receives the webhook as a param, which returns a boolean value.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='mailbotsoncommand'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>onCommand(commandSearch, cb)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Captures only 'task.created' events where the command string matches</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>onCommand(commandSearch: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | RexExp), cb: any)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>commandSearch</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | RexExp))</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>cb</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='mailbotsontrigger'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>onTrigger(commandSearch, cb)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Captures only 'task.triggered' events where the command string matches</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>onTrigger(commandSearch: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | RexExp), cb: any)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>commandSearch</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | RexExp))</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>cb</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='mailbotsonevent'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>onEvent(eventSearch, cb)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Captures only 'mailbot.event_received' events
+Note: This "Event" refers to the 3rd party webhooks
+that are posted to the MailBot.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>onEvent(eventSearch: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | RexExp), cb: any)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>eventSearch</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | RexExp))</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>cb</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='mailbotsonaction'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>onAction(actionSearch, cb)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Captures only 'task.action_received' events where the action string matches</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>onAction(actionSearch: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a>), cb: any)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>actionSearch</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a>))</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>cb</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='mailbotsontaskviewed'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>onTaskViewed(commandSearch, cb)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Captures only 'task.viewed' events where the command string matches</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>onTaskViewed(commandSearch: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | RexExp), cb: any)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>commandSearch</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | RexExp))</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>cb</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='mailbotsonsettingsviewed'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>onSettingsViewed(cb)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Handle webhook that fires when user is viewing MailBot.
+ALL onSettingsViewed handlers fire when this webhook arrives. Each
+handler can add and read data to and from its own namespace.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>onSettingsViewed(cb: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>cb</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+	    Callback function that receives the bot object
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='mailbotsbeforesettingssaved'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>beforeSettingsSaved(cb)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Handle webhook that fires after a user hits "save" on their MailBot settings.
+Newly saved settings arrive at the top-level settings object.
+Existing settings are still in mailbot.stored_data.
+Return webhook { status: "fail", message: "" } to abort the saving process.
+Return extenesion and user data to update to save data as with other webhooks.
+ALL beforeSettingsSaved handlers fire.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>beforeSettingsSaved(cb: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>cb</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+	    Callback function that receives the bot object
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='botwebhook'>
+      bot.webhook
     </h3>
     
     
@@ -398,7 +2820,7 @@ of BotRequest and made available under bot.webhook.</p>
 
  
   
-    <div class='pre p1 fill-light mt0'>new WebhookHelpers(botRequest: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</div>
+    <div class='pre p1 fill-light mt0'>bot.webhook</div>
    
   
   
@@ -420,30 +2842,6 @@ of BotRequest and made available under bot.webhook.</p>
 	    An instnace of BotRequest
 
           </div>
-          
-          <table class='mt1 mb2 fixed-table h5 col-12'>
-            <colgroup>
-              <col width='30%' />
-              <col width='70%' />
-            </colgroup>
-            <thead>
-              <tr class='bold fill-light'>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody class='mt1'>
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>botRequest.botRequest</span> <code class='quiet'>any</code>
-  </td>
-  <td class='break-word'><span></span></td>
-</tr>
-
-
-              
-            </tbody>
-          </table>
           
         </div>
       
@@ -467,19 +2865,23 @@ of BotRequest and made available under bot.webhook.</p>
   
 
   
-    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
-    <div class="clearfix">
-  
-    <div class='border-bottom' id='webhookhelpersget'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>get(key, defaultValue)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='get'>
+      get
+    </h3>
+    
+    
+  </div>
   
 
   <p>Get the current value of a key.
@@ -550,19 +2952,19 @@ otherwise it returns the value in the request object.</p>
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='webhookhelpersset'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>set(key, value, merge)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='set'>
+      set
+    </h3>
+    
+    
+  </div>
   
 
   <p>Set attributes on the this.responseJson object. If existing value and
@@ -643,19 +3045,19 @@ false to force the replacement of an object.
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='webhookhelpersgettaskdata'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getTaskData(key, defaultValue)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='gettaskdata'>
+      getTaskData
+    </h3>
+    
+    
+  </div>
   
 
   <p>Get data for current task</p>
@@ -714,19 +3116,19 @@ false to force the replacement of an object.
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='webhookhelperssettaskdata'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>setTaskData(args)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='settaskdata'>
+      setTaskData
+    </h3>
+    
+    
+  </div>
   
 
   <p>Set data for current task
@@ -784,19 +3186,19 @@ if new and old data are objects. (Arrays and other types are replaced).</p>
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='webhookhelpersgetmailbotdata'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getMailBotData(key, defaultValue)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getmailbotdata'>
+      getMailBotData
+    </h3>
+    
+    
+  </div>
   
 
   <p>Get data stored in mailbot.private_data</p>
@@ -861,19 +3263,19 @@ if new and old data are objects. (Arrays and other types are replaced).</p>
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='webhookhelperssetmailbotdata'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>setMailBotData(args, param, value?)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='setmailbotdata'>
+      setMailBotData
+    </h3>
+    
+    
+  </div>
   
 
   <p>Set data stored in mailbot.private_data. Objects are shallow merged if
@@ -956,19 +3358,19 @@ param, this is the value.
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='webhookhelpersgetreferenceemail'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getReferenceEmail()</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getreferenceemail'>
+      getReferenceEmail
+    </h3>
+    
+    
+  </div>
   
 
   <p>Get the reference email – the abstract, user-editable instance
@@ -1012,19 +3414,19 @@ as the source email (which is the exact email received).</p>
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='webhookhelperssetreferenceemail'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>setReferenceEmail(referenceEmail)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='setreferenceemail'>
+      setReferenceEmail
+    </h3>
+    
+    
+  </div>
   
 
   <p>Set reference email
@@ -1164,19 +3566,19 @@ for easy partial updates</p>
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='webhookhelpersgetreplyto'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getReplyTo()</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getreplyto'>
+      getReplyTo
+    </h3>
+    
+    
+  </div>
   
 
   <p>Get replyto email, taking into this value being edited
@@ -1219,19 +3621,19 @@ after the original email was sent.</p>
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='webhookhelpersaddemail'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>addEmail(email)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='addemail'>
+      addEmail
+    </h3>
+    
+    
+  </div>
   
 
   <p>Adds another email message to the "send_messages" array, causing
@@ -1372,7 +3774,7 @@ the core API to send an email. Multiple emails can be sent.</p>
   {
    <span class="hljs-attr">type</span>: <span class="hljs-string">'html'</span>,
    <span class="hljs-attr">text</span>: <span class="hljs-string">'&lt;h1&gt;An email&lt;/h1&gt;'</span>
-  }]);
+  }];
 })
 
 email.from = <span class="hljs-string">"New Sender"</span>; <span class="hljs-comment">// still updatable</span></pre>
@@ -1386,19 +3788,19 @@ email.from = <span class="hljs-string">"New Sender"</span>; <span class="hljs-co
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='webhookhelpersquickreply'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>quickReply(text)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='quickreply'>
+      quickReply
+    </h3>
+    
+    
+  </div>
   
 
   <p>Shorthand method to send a quick reply back to the "from" address
@@ -1455,19 +3857,19 @@ of the incoming email. The subject and body share the same text.</p>
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='webhookhelperssettriggertime'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>setTriggerTime(time)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='settriggertime'>
+      setTriggerTime
+    </h3>
+    
+    
+  </div>
   
 
   <p>Set trigger time for a task using natural language</p>
@@ -1529,19 +3931,19 @@ of the incoming email. The subject and body share the same text.</p>
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='webhookhelperssettriggertimestamp'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>setTriggerTimestamp(timestamp)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='settriggertimestamp'>
+      setTriggerTimestamp
+    </h3>
+    
+    
+  </div>
   
 
   <p>Set trigger time for a task using a unix timestamp</p>
@@ -1597,19 +3999,19 @@ of the incoming email. The subject and body share the same text.</p>
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='webhookhelpersinvite'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>invite(invitees)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='invite'>
+      invite
+    </h3>
+    
+    
+  </div>
   
 
   <p>Trigger MailBots to invite the given email address(es) to use a bot</p>
@@ -1665,19 +4067,19 @@ of the incoming email. The subject and body share the same text.</p>
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='webhookhelperscompletetask'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>completeTask()</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='completetask'>
+      completeTask
+    </h3>
+    
+    
+  </div>
   
 
   <p>Mark task a completed. The task will be archived until permenantly deleted.</p>
@@ -1719,19 +4121,19 @@ of the incoming email. The subject and body share the same text.</p>
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='webhookhelpersgetallcontacts'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getAllContacts()</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getallcontacts'>
+      getAllContacts
+    </h3>
+    
+    
+  </div>
   
 
   <p>Fetch all contacts associated with the task's reference_email. User's
@@ -1784,19 +4186,19 @@ or remove additional recipients from the task.</p>
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='webhookhelpersrespond'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>respond(json)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='respond'>
+      respond
+    </h3>
+    
+    
+  </div>
   
 
   <p>Respond to (and end) the webhook response with the JSON provided.
@@ -1856,22 +4258,22 @@ second time. Provided JSON is shallowly merged into response object.</p>
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='webhookhelperssettingspage'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>settingsPage(params)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='settingspage'>
+      settingsPage
+    </h3>
+    
+    
+  </div>
+  
 
-  <p>Creates a new settings page, rendered in the Bot Settings section
+  <p>Creates a new settings page, rendered in the WebhookHelpers Settings section
 of the Admin UI. See SettingsPage docs for details</p>
 
  
@@ -1973,16 +4375,6 @@ of the Admin UI. See SettingsPage docs for details</p>
   
 </section>
 
-      </div>
-    </div>
-  
-</div>
-
-  
-
-  
-</section>
-
         
           
           <section class='p2 mb2 clearfix bg-white minishadow'>
@@ -1990,16 +4382,16 @@ of the Admin UI. See SettingsPage docs for details</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='settingspage'>
-      SettingsPage
+    <h3 class='fl m0' id='botwebooksettingspage'>
+      bot.webook.settingsPage
     </h3>
     
     
   </div>
   
 
-  <p>Create a new settings page</p>
-<p>Bots and bot skills can create settings settings pages which live
+  <p>Reference for <code>bot.webhook.settingsPage()</code> </p>
+<p> Bots and bot skills can create settings settings pages which live
 in <code>responseJson.settings[namespace]</code>. This class represents one
 such settings form. Each settings form lives in its own namespace.
 Instantiating a new SettingsPage adds a new namespace to
@@ -2011,7 +4403,7 @@ settings pages and form fields.</p>
 
  
   
-    <div class='pre p1 fill-light mt0'>new SettingsPage(params: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</div>
+    <div class='pre p1 fill-light mt0'>bot.webook.settingsPage</div>
    
   
   
@@ -2058,8 +4450,6 @@ settings pages and form fields.</p>
               
                 <tr>
   <td class='break-word'><span class='code bold'>params.title</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
-  
-    (default <code>&quot;&quot;</code>)
   </td>
   <td class='break-word'><span>Display title of settings page
 </span></td>
@@ -2072,14 +4462,6 @@ settings pages and form fields.</p>
   </td>
   <td class='break-word'><span>Menu name
 </span></td>
-</tr>
-
-
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>params.namespace</span> <code class='quiet'>any</code>
-  </td>
-  <td class='break-word'><span></span></td>
 </tr>
 
 
@@ -2102,7 +4484,7 @@ settings pages and form fields.</p>
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> mySettingsPage = mailbots.webhook.settingsPage({
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> mySettingsPage = bot.webhook.settingsPage({
  <span class="hljs-attr">namespace</span>: <span class="hljs-string">"memorize"</span>,
  <span class="hljs-attr">title</span>: <span class="hljs-string">"Memorization Settings"</span>,
  <span class="hljs-attr">menuTitle</span>: <span class="hljs-string">"Memorization"</span>
@@ -2116,19 +4498,23 @@ mySettingsPage.input({ <span class="hljs-attr">name</span>: <span class="hljs-st
   
 
   
-    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
-    <div class="clearfix">
-  
-    <div class='border-bottom' id='settingspagegetsettingsformjson'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getSettingsFormJSON()</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getsettingsformjson'>
+      getSettingsFormJSON
+    </h3>
+    
+    
+  </div>
   
 
   <p>Retrieve the JSON Form Schema for this form</p>
@@ -2178,19 +4564,19 @@ mySettingsPage.input({ <span class="hljs-attr">name</span>: <span class="hljs-st
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='settingspageinsert'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>insert(params)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='insert'>
+      insert
+    </h3>
+    
+    
+  </div>
   
 
   <p>Low-level function to insert raw JSONSchema and uiSchema to
@@ -2298,19 +4684,19 @@ uiSchema: { <span class="hljs-string">"ui:autofocus"</span>: <span class="hljs-l
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='settingspageinput'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>input(params)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='input'>
+      input
+    </h3>
+    
+    
+  </div>
   
 
   <p>Add text input field</p>
@@ -2436,19 +4822,19 @@ uiSchema: { <span class="hljs-string">"ui:autofocus"</span>: <span class="hljs-l
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='settingspagetextarea'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>textarea(params)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='textarea'>
+      textarea
+    </h3>
+    
+    
+  </div>
   
 
   <p>Add textarea input</p>
@@ -2574,19 +4960,19 @@ uiSchema: { <span class="hljs-string">"ui:autofocus"</span>: <span class="hljs-l
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='settingspagecheckbox'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>checkbox(params)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='checkbox'>
+      checkbox
+    </h3>
+    
+    
+  </div>
   
 
   <p>Add checkbox field</p>
@@ -2686,7 +5072,7 @@ uiSchema: { <span class="hljs-string">"ui:autofocus"</span>: <span class="hljs-l
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'>formPage.checkbox({ <span class="hljs-attr">name</span>:<span class="hljs-string">"confirmation_emails"</span>, <span class="hljs-attr">name</span>:<span class="hljs-string">"Confirmation Emails"</span>});</pre>
+      <pre class='p1 overflow-auto round fill-light'>formPage.checkbox({ <span class="hljs-attr">name</span>:<span class="hljs-string">"confirmation_emails"</span>, <span class="hljs-attr">title</span>:<span class="hljs-string">"Confirmation Emails"</span>});</pre>
     
   
 
@@ -2697,19 +5083,19 @@ uiSchema: { <span class="hljs-string">"ui:autofocus"</span>: <span class="hljs-l
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='settingspageselect'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>select(params)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='select'>
+      select
+    </h3>
+    
+    
+  </div>
   
 
   <p>Add select dropdown</p>
@@ -2846,19 +5232,19 @@ uiSchema: { <span class="hljs-string">"ui:autofocus"</span>: <span class="hljs-l
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='settingspagealert'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>alert(params)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='alert'>
+      alert
+    </h3>
+    
+    
+  </div>
   
 
   <p>Adds a custom dialog at the top of the display form that can be used
@@ -2971,19 +5357,19 @@ for interrupt-messaging.</p>
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='settingspagevideo'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>video(params)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='video'>
+      video
+    </h3>
+    
+    
+  </div>
   
 
   <p>Insert Video. Only YouTube supported for now.</p>
@@ -3078,19 +5464,19 @@ for interrupt-messaging.</p>
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='settingspagetext'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>text(text)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='text'>
+      text
+    </h3>
+    
+    
+  </div>
   
 
   <p>Add a text block. Markdown supported!</p>
@@ -3156,19 +5542,19 @@ And this is a new line.
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='settingspagehiddeninput'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>hiddenInput(params)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='hiddeninput'>
+      hiddenInput
+    </h3>
+    
+    
+  </div>
   
 
   <p>Render a hidden input field. Useful for submitting
@@ -3269,19 +5655,19 @@ values behind the scenes.</p>
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='settingspagesubmitbutton'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>submitButton(params)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='submitbutton'>
+      submitButton
+    </h3>
+    
+    
+  </div>
   
 
   <p>Render a submit button for the form. (Submit button is not included
@@ -3375,19 +5761,19 @@ them available to the next handler. Make sure to validate URL input.</p>
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='settingspagepopulate'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>populate(formData)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='populate'>
+      populate
+    </h3>
+    
+    
+  </div>
   
 
   <p>Populate form data, overwriting default values with those newly passed.
@@ -3437,816 +5823,6 @@ method to populate the form values.</p>
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> storedData = mailbots.webhook.getMailBotData(<span class="hljs-string">"mem"</span>, {});
 formPage.populate(storedData);</pre>
     
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-</div>
-
-  
-
-  
-</section>
-
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='listen'>
-      listen
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Loads final skills and start http server.
-Anything posted to /webhooks route is automatically handled.
-Other routes must be created as usual with the Express App object.
-For example: mailbots.app.get("my-route/", (req, res) => {});</p>
-
- 
-  
-    <div class='pre p1 fill-light mt0'>listen()</div>
-   
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='exportapp'>
-      exportApp
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Export app for automated testing</p>
-
- 
-  
-    <div class='pre p1 fill-light mt0'>exportApp()</div>
-   
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='loadskill'>
-      loadSkill
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Load MailBots skills from a directory, non-recursively.
-This can be called more than once to load skills in order. Skills loaded
-this method are preceeded by loadFirstCoreSkills, succeeded by loadLastCoreSkills.
-This can also receive a path to a file.</p>
-
- 
-  
-    <div class='pre p1 fill-light mt0'>loadSkill(skill: any, config: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>, skillPath: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</div>
-   
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>skill</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>config</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
-	    optional skill configuration object
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>skillPath</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-	    path to skills directory
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='on'>
-      on
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Add handler for a given webhook event. Executes only the first handler
-for a matching event. The first parameter can be either a string
-(the named webhook event) or a function that is passed the webhook and
-returns true or false to indicate if the handler should be run.
-Example: controller.on('task.created', (bot, req, res) => { });
-Example: controller.on((webhook) => webhook.event === 'task.created', cb)</p>
-
- 
-  
-    <div class='pre p1 fill-light mt0'>on(triggerCondition: any, cb: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>, opts: any, event: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>))</div>
-   
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>triggerCondition</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>cb</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
-	    Handler function
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>opts</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>event</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>))</code>
-	    A webhook event string (ex: task.created). Or
-a function receives the webhook as a param, which returns a boolean value.
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='oncommand'>
-      onCommand
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Captures only 'task.created' events where the command string matches</p>
-
- 
-  
-    <div class='pre p1 fill-light mt0'>onCommand(commandSearch: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | RexExp), cb: any)</div>
-   
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>commandSearch</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | RexExp))</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>cb</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='ontrigger'>
-      onTrigger
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Captures only 'task.triggered' events where the command string matches</p>
-
- 
-  
-    <div class='pre p1 fill-light mt0'>onTrigger(commandSearch: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | RexExp), cb: any)</div>
-   
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>commandSearch</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | RexExp))</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>cb</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='onevent'>
-      onEvent
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Captures only 'mailbot.event_received' events
-Note: This "Event" refers to the 3rd party webhooks
-that are posted to the MailBot.</p>
-
- 
-  
-    <div class='pre p1 fill-light mt0'>onEvent(eventSearch: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | RexExp), cb: any)</div>
-   
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>eventSearch</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | RexExp))</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>cb</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='onaction'>
-      onAction
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Captures only 'task.action_received' events where the action string matches</p>
-
- 
-  
-    <div class='pre p1 fill-light mt0'>onAction(actionSearch: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a>), cb: any)</div>
-   
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>actionSearch</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a>))</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>cb</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='ontaskviewed'>
-      onTaskViewed
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Captures only 'task.viewed' events where the command string matches</p>
-
- 
-  
-    <div class='pre p1 fill-light mt0'>onTaskViewed(commandSearch: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | RexExp), cb: any)</div>
-   
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>commandSearch</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | RexExp))</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>cb</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='onsettingsviewed'>
-      onSettingsViewed
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Handle webhook that fires when user is viewing MailBot.
-ALL onSettingsViewed handlers fire when this webhook arrives. Each
-handler can add and read data to and from its own namespace.</p>
-
- 
-  
-    <div class='pre p1 fill-light mt0'>onSettingsViewed(cb: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</div>
-   
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>cb</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
-	    Callback function that receives the bot object
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='beforesettingssaved'>
-      beforeSettingsSaved
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Handle webhook that fires after a user hits "save" on their MailBot settings.
-Newly saved settings arrive at the top-level settings object.
-Existing settings are still in mailbot.stored_data.
-Return webhook { status: "fail", message: "" } to abort the saving process.
-Return extenesion and user data to update to save data as with other webhooks.
-ALL beforeSettingsSaved handlers fire.</p>
-
- 
-  
-    <div class='pre p1 fill-light mt0'>beforeSettingsSaved(cb: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</div>
-   
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>cb</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
-	    Callback function that receives the bot object
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='on'>
-      on
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Default webhook response for unhandled webhook events</p>
-
- 
-  
-    <div class='pre p1 fill-light mt0'>on</div>
-   
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
   
 
   

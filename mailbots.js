@@ -3,12 +3,13 @@ const express = require("express");
 const getConfig = require("./lib/config-defaults");
 const debug = require("debug")("mailbots");
 
+/**
+ * Create a new MailBot
+ * 
+ * Optionally instantiate with config. Pass any key shown in config.js.
+ * @param {object} config
+ */
 class MailBots {
-  /**
-   * @private
-   * Optionally instantiate with config. Pass any key shown in config.js.
-   * @param {object} config
-   */
   constructor(instanceConfig) {
     const config = getConfig(instanceConfig);
     debug("instantiating MailBots instance with config:", config);

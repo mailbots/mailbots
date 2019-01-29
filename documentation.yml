@@ -1,3 +1,43 @@
 toc:
-  - WebhookHelpers
-  - SettingsPage
+  - name: intro
+    file: README.md
+  - name: bot
+    description: |
+      "Bot" is the helpful object that are given to event handlers. It contains information about the 
+      request and lots helpful methods to complete the request.
+      
+      Bots have utilities to handle webhooks **WebHookHelpers**
+      ```javascript
+      mailbot.onCommand(function(bot) { // <-- This is the "bot"
+        bot.webhook.quickReply("hi");
+        bot.webhook.respond();
+      });
+      ```
+
+      One of the webhook helpers lets you create a settings form. This is its own class: **SettingsPage**
+      ```javascript
+        const mySettingsPage = bot.webhook.settingsPage({
+        namespace: "todo",
+        title: "ToDo Settings",
+        menuTitle: "To Do"
+        });
+      ```
+  - name: mailbots
+    description: |
+      A MailBot is an instance of the **MailBots** class. This class exposes handlers
+      that are used to respond to specific events. (See readme.md for more). 
+
+      ```javascript
+        var MailBots = require("mailbots");
+        var mailbot = new MailBots({
+          clientId: "foo",
+          clientSecret: "bar"
+        });
+
+        mailbot.onCommand("hi", function(bot) {
+          bot.webhook.quickReply("Hi back!");
+          bot.webhook.respond();
+        });
+
+        mailbot.listen();
+      ```

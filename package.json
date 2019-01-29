@@ -1,6 +1,6 @@
 {
   "name": "mailbots",
-  "version": "0.1.12-beta",
+  "version": "0.1.13-beta",
   "description": "An open source bot framework for creating email-based bots using MailBots.com",
   "main": "mailbots.js",
   "directories": {
@@ -11,7 +11,7 @@
     "test": "NODE_ENV=test mocha test -w --full-trace",
     "test:inspect": "NODE_ENV=test mocha test --full-trace --inspect-brk -w",
     "docs:build": "doctoc . --maxlevel 2",
-    "dev:docs": "documentation -c documentation.yml serve",
+    "dev:docs": "documentation -c documentation.yml serve -w",
     "dev:docs:build": "documentation -c documentation.yml -f html build -o docs-html && documentation -c documentation.yml build -f md -o docs.md && cd docs-html && now --static && echo '\n Run: \n\n now alias mailbots-app.mailbots.com\n'",
     "publish:prod": "git push && git push --tags && npm publish"
   },
@@ -20,7 +20,7 @@
     "url": "https://github.com/mailbots/mailbots"
   },
   "author": "Reilly Sweetland <esweetland@gmail.com> (https://reillysweetland.com/)",
-  "license": "(c) 2018 (unpublished).",
+  "license": "MIT",
   "devDependencies": {
     "chai": "4.1.2",
     "doctoc": "1.3.1",
