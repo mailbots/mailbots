@@ -60,7 +60,7 @@ Tip: Use our [reference guide](https://mailbots-app.mailbots.com) to quickly loo
   - [Namespacing Conventions](#namespacing-conventions)
 - [Installing Skills From npm](#installing-skills%C2%A0from-npm)
   - [Skills With Side-Effects](#skills-with-side-effects)
-- [Welcoming New WebhookHelpers Users](#welcoming-new-bot-users)
+- [Welcoming New Users](#welcoming-new-users)
 - [Testing](#testing)
 - [Installing](#installing)
 - [Contributions](#contributions)
@@ -150,7 +150,7 @@ MailBots can render quick-action buttons (mailto links that map to executable co
 
 // This first handler renders an email with an action-email button
  mailbot.onCommand("send-buttons", function(bot) {
-    bot.webhook.addEmail({
+    bot.webhook.sendEmail({
       to: bot.get('source.from')
       from: "MyBot",
       subject: bot.get('source.subject'),
@@ -615,7 +615,7 @@ By convention, UI functions that output UI start with `render`. For example, `re
 ```javascript
   var memorizeSkill = require("mailbots-memorize")(mailbot);
   mailbot.onCommand("remember", function(bot) {
-    bot.webhook.addEmail({
+    bot.webhook.sendEmail({
       to: "you@email.com"
       from: "MailBots",
       subject: "Email Subject"
@@ -766,7 +766,7 @@ mailbots.onCommand("foo", function(bot) {
 
 Skills will, themselves, document how they are used. Different approaches are right for different circumstances.
 
-# Welcoming New WebhookHelpers Users
+# Welcoming New Users
 
 When a new user installs your MailBot, they are directed to a settings page with the `welcome` namespace. Render a custom welcome message for your user by creating a settings page that targets this namespace.
 

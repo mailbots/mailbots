@@ -54,7 +54,7 @@
     -   [Examples][50]
 -   [getReplyTo][51]
     -   [Examples][52]
--   [addEmail][53]
+-   [sendEmail][53]
     -   [Parameters][54]
     -   [Examples][55]
 -   [quickReply][56]
@@ -182,7 +182,7 @@ Tip: Use our [reference guide][118] to quickly look up helpers and method names.
     -   [Namespacing Conventions][138]
 -   [Installing Skills From npm][139]
     -   [Skills With Side-Effects][140]
--   [Welcoming New WebhookHelpers Users][141]
+-   [Welcoming New Users][141]
 -   [Testing][142]
 -   [Installing][143]
 -   [Contributions][144]
@@ -271,7 +271,7 @@ MailBots can render quick-action buttons (mailto links that map to executable co
 ```javascript
 // This first handler renders an email with an action-email button
  mailbot.onCommand("send-buttons", function(bot) {
-    bot.webhook.addEmail({
+    bot.webhook.sendEmail({
       to: bot.get('source.from')
       from: "MyBot",
       subject: bot.get('source.subject'),
@@ -720,7 +720,7 @@ By convention, UI functions that output UI start with `render`. For example, `re
 ```javascript
   var memorizeSkill = require("mailbots-memorize")(mailbot);
   mailbot.onCommand("remember", function(bot) {
-    bot.webhook.addEmail({
+    bot.webhook.sendEmail({
       to: "you@email.com"
       from: "MailBots",
       subject: "Email Subject"
@@ -872,7 +872,7 @@ mailbots.onCommand("foo", function(bot) {
 
 Skills will, themselves, document how they are used. Different approaches are right for different circumstances.
 
-# Welcoming New WebhookHelpers Users
+# Welcoming New Users
 
 When a new user installs your MailBot, they are directed to a settings page with the `welcome` namespace. Render a custom welcome message for your user by creating a settings page that targets this namespace.
 
@@ -1337,10 +1337,10 @@ after the original email was sent.
 bot.webhook.getReplyTo();
 ```
 
-## addEmail
+## sendEmail
 
-Adds another email message to the "send_messages" array, causing
-the core API to send an email. Multiple emails can be sent.
+Sends an email by adding an email message object to the "send_messages" array. 
+Multiple emails can be sent.
 
 ### Parameters
 
@@ -1356,7 +1356,7 @@ the core API to send an email. Multiple emails can be sent.
 ### Examples
 
 ```javascript
-const email = bot.webhook.addEmail({
+const email = bot.webhook.sendEmail({
   to: bot.get('source.from'),
   subject: "A Subject",
   body: [
@@ -1374,16 +1374,36 @@ Returns **[object][164]** A reference to the email object for additional changes
 ## quickReply
 
 Shorthand method to send a quick reply back to the "from" address
-of the incoming email. The subject and body share the same text.
+of the incoming email. This accepts either a string or object. 
+If passing a strong only, the subject and body share the same 
+text. Pass and object iwth `{subject, body}` to explicitly set 
+the subject and body
 
 ### Parameters
 
--   `text` **[string][165]** Content
+-   `message` **([string][165] \| [object][164])** Content
+    -   `message.subject` **[string][165]?** passing an object
+    -   `message.body` **[string][165]?** If passing an object
 
 ### Examples
 
 ```javascript
 bot.webhook.quickReply("Got it!");
+```
+
+```javascript
+botRequest.webhook.quickReply({
+   subject: "Quick reply subject",
+   body: [{
+     type: "title",
+     text: "Welcome",
+   },
+   {
+     type: "button",
+     text: "Press Me",
+     url: "google.com"
+   }]
+ });
 ```
 
 ## setTriggerTime
@@ -1906,7 +1926,7 @@ formPage.populate(storedData);
 
 [52]: #examples-8
 
-[53]: #addemail
+[53]: #sendemail
 
 [54]: #parameters-18
 
@@ -2082,7 +2102,7 @@ formPage.populate(storedData);
 
 [140]: #skills-with-side-effects
 
-[141]: #welcoming-new-bot-users
+[141]: #welcoming-new-users
 
 [142]: #testing
 

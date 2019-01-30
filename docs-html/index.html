@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>mailbots 0.1.13-beta | Documentation</title>
+  <title>mailbots 0.2.0-beta | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>mailbots</h3>
-          <div class='mb1'><code>0.1.13-beta</code></div>
+          <div class='mb1'><code>0.2.0-beta</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -244,9 +244,9 @@
               
                 
                 <li><a
-                  href='#addemail'
+                  href='#sendemail'
                   class="">
-                  addEmail
+                  sendEmail
                   
                 </a>
                 
@@ -551,7 +551,7 @@ mailbot.listen();</pre>
 <li><a href="#skills-with-side-effects">Skills With Side-Effects</a></li>
 </ul>
 </li>
-<li><a href="#welcoming-new-bot-users">Welcoming New WebhookHelpers Users</a></li>
+<li><a href="#welcoming-new-users">Welcoming New Users</a></li>
 <li><a href="#testing">Testing</a></li>
 <li><a href="#installing">Installing</a></li>
 <li><a href="#contributions">Contributions</a></li>
@@ -609,7 +609,7 @@ mailbot.onTrigger(<span class="hljs-string">"hi"</span>, <span class="hljs-funct
 <p>MailBots can render quick-action buttons (mailto links that map to executable code) that let users get things done without leaving their inbox. Read more about <a href="https://docs.mailbots.com/reference#email-based-actions">action emails</a>.</p>
 <pre class='hljs'><span class="hljs-comment">// This first handler renders an email with an action-email button</span>
  mailbot.onCommand(<span class="hljs-string">"send-buttons"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
-    bot.webhook.addEmail({
+    bot.webhook.sendEmail({
       <span class="hljs-attr">to</span>: bot.get(<span class="hljs-string">'source.from'</span>)
       <span class="hljs-keyword">from</span>: <span class="hljs-string">"MyBot"</span>,
       <span class="hljs-attr">subject</span>: bot.get(<span class="hljs-string">'source.subject'</span>),
@@ -906,7 +906,7 @@ mailbot.onCommand(<span class="hljs-string">"whatever-custom-command"</span>, <s
 <p>By convention, UI functions that output UI start with <code>render</code>. For example, <code>renderMemorizationControls</code>.</p>
 <pre class='hljs'>  <span class="hljs-keyword">var</span> memorizeSkill = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots-memorize"</span>)(mailbot);
   mailbot.onCommand(<span class="hljs-string">"remember"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
-    bot.webhook.addEmail({
+    bot.webhook.sendEmail({
       <span class="hljs-attr">to</span>: <span class="hljs-string">"you@email.com"</span>
       <span class="hljs-keyword">from</span>: <span class="hljs-string">"MailBots"</span>,
       <span class="hljs-attr">subject</span>: <span class="hljs-string">"Email Subject"</span>
@@ -1023,7 +1023,7 @@ mailbots.onCommand(<span class="hljs-string">"foo"</span>, <span class="hljs-fun
   doSomething(bot);
 });</pre>
 <p>Skills will, themselves, document how they are used. Different approaches are right for different circumstances.</p>
-<h1>Welcoming New WebhookHelpers Users</h1>
+<h1>Welcoming New Users</h1>
 <p>When a new user installs your MailBot, they are directed to a settings page with the <code>welcome</code> namespace. Render a custom welcome message for your user by creating a settings page that targets this namespace.</p>
 <pre class='hljs'>mailbot.onSettingsViewed(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>)  </span>{
     <span class="hljs-keyword">const</span> welcomeSettings = bot.webhook.settingsPage({
@@ -1205,7 +1205,7 @@ mailbot.listen();</pre>
 <li><a href="#skills-with-side-effects">Skills With Side-Effects</a></li>
 </ul>
 </li>
-<li><a href="#welcoming-new-bot-users">Welcoming New WebhookHelpers Users</a></li>
+<li><a href="#welcoming-new-users">Welcoming New Users</a></li>
 <li><a href="#testing">Testing</a></li>
 <li><a href="#installing">Installing</a></li>
 <li><a href="#contributions">Contributions</a></li>
@@ -1263,7 +1263,7 @@ mailbot.onTrigger(<span class="hljs-string">"hi"</span>, <span class="hljs-funct
 <p>MailBots can render quick-action buttons (mailto links that map to executable code) that let users get things done without leaving their inbox. Read more about <a href="https://docs.mailbots.com/reference#email-based-actions">action emails</a>.</p>
 <pre class='hljs'><span class="hljs-comment">// This first handler renders an email with an action-email button</span>
  mailbot.onCommand(<span class="hljs-string">"send-buttons"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
-    bot.webhook.addEmail({
+    bot.webhook.sendEmail({
       <span class="hljs-attr">to</span>: bot.get(<span class="hljs-string">'source.from'</span>)
       <span class="hljs-keyword">from</span>: <span class="hljs-string">"MyBot"</span>,
       <span class="hljs-attr">subject</span>: bot.get(<span class="hljs-string">'source.subject'</span>),
@@ -1560,7 +1560,7 @@ mailbot.onCommand(<span class="hljs-string">"whatever-custom-command"</span>, <s
 <p>By convention, UI functions that output UI start with <code>render</code>. For example, <code>renderMemorizationControls</code>.</p>
 <pre class='hljs'>  <span class="hljs-keyword">var</span> memorizeSkill = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots-memorize"</span>)(mailbot);
   mailbot.onCommand(<span class="hljs-string">"remember"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
-    bot.webhook.addEmail({
+    bot.webhook.sendEmail({
       <span class="hljs-attr">to</span>: <span class="hljs-string">"you@email.com"</span>
       <span class="hljs-keyword">from</span>: <span class="hljs-string">"MailBots"</span>,
       <span class="hljs-attr">subject</span>: <span class="hljs-string">"Email Subject"</span>
@@ -1677,7 +1677,7 @@ mailbots.onCommand(<span class="hljs-string">"foo"</span>, <span class="hljs-fun
   doSomething(bot);
 });</pre>
 <p>Skills will, themselves, document how they are used. Different approaches are right for different circumstances.</p>
-<h1>Welcoming New WebhookHelpers Users</h1>
+<h1>Welcoming New Users</h1>
 <p>When a new user installs your MailBot, they are directed to a settings page with the <code>welcome</code> namespace. Render a custom welcome message for your user by creating a settings page that targets this namespace.</p>
 <pre class='hljs'>mailbot.onSettingsViewed(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>)  </span>{
     <span class="hljs-keyword">const</span> welcomeSettings = bot.webhook.settingsPage({
@@ -3628,20 +3628,20 @@ after the original email was sent.</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='addemail'>
-      addEmail
+    <h3 class='fl m0' id='sendemail'>
+      sendEmail
     </h3>
     
     
   </div>
   
 
-  <p>Adds another email message to the "send_messages" array, causing
-the core API to send an email. Multiple emails can be sent.</p>
+  <p>Sends an email by adding an email message object to the "send_messages" array.
+Multiple emails can be sent.</p>
 
  
   
-    <div class='pre p1 fill-light mt0'>addEmail(email: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></div>
+    <div class='pre p1 fill-light mt0'>sendEmail(email: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></div>
    
   
   
@@ -3767,7 +3767,7 @@ the core API to send an email. Multiple emails can be sent.</p>
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> email = bot.webhook.addEmail({
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> email = bot.webhook.sendEmail({
   <span class="hljs-attr">to</span>: bot.get(<span class="hljs-string">'source.from'</span>),
   <span class="hljs-attr">subject</span>: <span class="hljs-string">"A Subject"</span>,
   <span class="hljs-attr">body</span>: [
@@ -3804,11 +3804,14 @@ email.from = <span class="hljs-string">"New Sender"</span>; <span class="hljs-co
   
 
   <p>Shorthand method to send a quick reply back to the "from" address
-of the incoming email. The subject and body share the same text.</p>
+of the incoming email. This accepts either a string or object.
+If passing a strong only, the subject and body share the same
+text. Pass and object iwth <code>{subject, body}</code> to explicitly set
+the subject and body</p>
 
  
   
-    <div class='pre p1 fill-light mt0'>quickReply(text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</div>
+    <div class='pre p1 fill-light mt0'>quickReply(message: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>))</div>
    
   
   
@@ -3826,10 +3829,44 @@ of the incoming email. The subject and body share the same text.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+            <span class='code bold'>message</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>))</code>
 	    Content
 
           </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>message.subject</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
+  </td>
+  <td class='break-word'><span>passing an object
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>message.body</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
+  </td>
+  <td class='break-word'><span>If passing an object
+</span></td>
+</tr>
+
+
+              
+            </tbody>
+          </table>
           
         </div>
       
@@ -3847,6 +3884,20 @@ of the incoming email. The subject and body share the same text.</p>
     
       
       <pre class='p1 overflow-auto round fill-light'>bot.webhook.quickReply(<span class="hljs-string">"Got it!"</span>);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>botRequest.webhook.quickReply({
+   <span class="hljs-attr">subject</span>: <span class="hljs-string">"Quick reply subject"</span>,
+   <span class="hljs-attr">body</span>: [{
+     <span class="hljs-attr">type</span>: <span class="hljs-string">"title"</span>,
+     <span class="hljs-attr">text</span>: <span class="hljs-string">"Welcome"</span>,
+   },
+   {
+     <span class="hljs-attr">type</span>: <span class="hljs-string">"button"</span>,
+     <span class="hljs-attr">text</span>: <span class="hljs-string">"Press Me"</span>,
+     <span class="hljs-attr">url</span>: <span class="hljs-string">"google.com"</span>
+   }]
+ });</pre>
     
   
 

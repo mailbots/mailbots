@@ -521,7 +521,7 @@ describe("Bot Request Helper", function() {
 
   describe("sending email", function() {
     it("adds outbound email to response", done => {
-      botRequest.webhook.addEmail({
+      botRequest.webhook.sendEmail({
         to: "fdas@fdsa.com",
         subject: "testing",
         body: [
@@ -551,8 +551,34 @@ describe("Bot Request Helper", function() {
       done();
     });
 
+    it("uses quickReply with complete body elements", done => {
+      botRequest.webhook.quickReply({
+        subject: "Quick reply subject",
+        body: [{
+          type: "title",
+          text: "Welcome",
+        },
+        {
+          type: "button",
+          text: "Press Me",
+          url: "google.com"
+        }]
+      });
+      expect(botRequest.responseJson).to.haveOwnProperty("send_messages");
+      expect(botRequest.responseJson.send_messages[0].body[0].text).to.equal(
+        "Welcome"
+      );
+      expect(botRequest.responseJson.send_messages[0].body[1].type).to.equal(
+        "button"
+      );
+      expect(botRequest.responseJson.send_messages[0].subject).to.equal(
+        "Quick reply subject"
+      );
+      done();
+    });
+
     it("returns a mutable reference to the new email", done => {
-      const email = botRequest.webhook.addEmail({
+      const email = botRequest.webhook.sendEmail({
         to: "fdas@fdsa.com",
         subject: "testing",
         body: [
