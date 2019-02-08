@@ -559,6 +559,7 @@ describe("MailBots App", function() {
     const mailbotSettingsViewed = require("./fixtures/mailbot-settings-viewed-webhook.json");
 
     it("uses the default error handler", async function() {
+      process.env.SILENCE_DEFAULT_ERROR_HANDLER = "true";
       mailbot.onCommand("memorize", bot => {
         throw new Error("An error!");
         bot.webhook.respond(); // isnt' called
@@ -568,9 +569,11 @@ describe("MailBots App", function() {
       expect(result.body.webhook.message).to.contain(
         "Your MailBot caught an unhandled error"
       );
+      delete process.env.SILENCE_DEFAULT_ERROR_HANDLER;
     });
 
     it("uses the default error handler in async requests", async function() {
+      process.env.SILENCE_DEFAULT_ERROR_HANDLER = "true";
       mailbot.onCommand("memorize", async bot => {
         await getAsyncThing(20);
         throw new Error("An error!");
@@ -580,9 +583,11 @@ describe("MailBots App", function() {
       expect(result.body.webhook.message).to.contain(
         "Your MailBot caught an unhandled error"
       );
+      delete process.env.SILENCE_DEFAULT_ERROR_HANDLER;
     });
 
     it("uses the default error handler in multi-fire handlers", async function() {
+      process.env.SILENCE_DEFAULT_ERROR_HANDLER = "true";
       mailbot.onSettingsViewed(bot => {
         throw new Error("An error!");
         bot.webhook.respond(); // isnt' called
@@ -591,9 +596,11 @@ describe("MailBots App", function() {
       expect(result.body.webhook.message).to.contain(
         "Your MailBot caught an unhandled error"
       );
+      delete process.env.SILENCE_DEFAULT_ERROR_HANDLER;
     });
 
     it("uses the default error handler in in async multi-fire handlers", async function() {
+      process.env.SILENCE_DEFAULT_ERROR_HANDLER = "true";
       mailbot.onSettingsViewed(async bot => {
         await getAsyncThing(20);
         throw new Error("An error!");
@@ -603,6 +610,7 @@ describe("MailBots App", function() {
       expect(result.body.webhook.message).to.contain(
         "Your MailBot caught an unhandled error"
       );
+      delete process.env.SILENCE_DEFAULT_ERROR_HANDLER;
     });
 
     it("uses a custom error handler in async one-time handlers", async function() {

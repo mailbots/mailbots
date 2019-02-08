@@ -5,7 +5,7 @@ const debug = require("debug")("mailbots");
 
 /**
  * Create a new MailBot
- * 
+ *
  * Optionally instantiate with config. Pass any key shown in config.js.
  * @param {object} config
  */
@@ -37,7 +37,7 @@ class MailBots {
     this.aggregateSettingsResponse = {};
 
     // Developer-defined function to handle errors
-    this.errorHandler = () => {};
+    this.errorHandler = null;
 
     // Set up base skills
     this.loadFirstCoreSkills();
@@ -359,8 +359,11 @@ class MailBots {
             const ret = await listener.cb(bot, request, response);
             return ret;
           } catch (e) {
-            if (process.env.NODE_ENV !== "test") console.error(e);
-            this.errorHandler(e, bot);
+            if (typeof this.errorHandler === "function") {
+              this.errorHandler(e, bot);
+            } else {
+              throw e;
+            }
           }
         }
       }
@@ -385,9 +388,11 @@ class MailBots {
         try {
           const res = await listener.cb(bot); // awaits for possible error
         } catch (e) {
-          if (process.env.NODE_ENV !== "test") console.error(e);
-          bot.error = e;
-          this.errorHandler(e, bot);
+          if (typeof this.errorHandler === "function") {
+            this.errorHandler(e, bot);
+          } else {
+            throw e;
+          }
         }
         break;
       }
