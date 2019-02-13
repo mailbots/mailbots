@@ -159,6 +159,7 @@ MailBots can render quick-action buttons (mailto links that map to executable co
         // 👇 An email-action
         {
           type: "button",
+          behavior: "action",
           text: "Press Me",
           action: 'say.hi',
           subject: "Just hit 'send'",
@@ -390,27 +391,26 @@ Validate user data, perform API calls to keep other systems in sync. Return an e
 to abort saving the settings.
 
 ```javascript
-  mailbot.beforeSettingsSaved(bot => {
+mailbot.beforeSettingsSaved(bot => {
+  // assuming the same "todo" namespace as shown in the above examples
+  const data = bot.get("settings.todo");
 
-    // assuming the same "todo" namespace as shown in the above examples
-    const data = bot.get("settings.todo");
+  // handler is fired any times settings are saved, even if its not our form
+  if (!data) return;
 
-    // handler is fired any times settings are saved, even if its not our form
-    if(!data) return;
+  // perform API calls, update external systems, etc. If something goes wrong...
+  if (error) {
+    // abort the saving process
+    return bot.webhook.respond({
+      webhook: {
+        status: "error",
+        message: "This is  a warning message"
+      }
+    });
+  }
 
-    // perform API calls, update external systems, etc. If something goes wrong...
-    if(error) {
-      // abort the saving process
-      return bot.webhook.respond({
-        webhook: {
-          status: "error",
-          message: "This is  a warning message"
-        }
-      });
-    }
-
-    // Othwise, it implicitly returns success, and the saving process continues
-  });
+  // Othwise, it implicitly returns success, and the saving process continues
+});
 ```
 
 ## on
@@ -694,17 +694,20 @@ To prevent conflicts and facilitate debugging, it is helpful to follow these con
   (task.stored_data = { "skill_name": { "key": "val" } })
   ```
 - Preface event names and actions with the skill name or an abbreviation (accounting for [character limitations](http://www.rfc-editor.org/errata/eid1690))
+
   ```javascript
   mailbots.onAction("sn.do-action", bot => {});
   ```
 
   ### Use of "MailBot", "mailbot", "MailBots" and "bots"
+
   For clarity and to reduce ambiguity, follow these conventions:
-   * User-Facing: The name of the platform (and company) is "MailBots". Always studly-cased. Always plural.
-   * User-Facing: One email-based bot is a "MailBot". Always studly-cased.
-   * Code: `mailbot` (all lowercased) is an acceptable variable name, but...
-   * Code: When the first "M" is capitalized, always capitalize the second. Ex: `createMailBot()`. `Mailbot` (lowercase "b") never exists.
-   * Code: `bot` is only used for the bot helper object passed to handler functions.
+
+  - User-Facing: The name of the platform (and company) is "MailBots". Always studly-cased. Always plural.
+  - User-Facing: One email-based bot is a "MailBot". Always studly-cased.
+  - Code: `mailbot` (all lowercased) is an acceptable variable name, but...
+  - Code: When the first "M" is capitalized, always capitalize the second. Ex: `createMailBot()`. `Mailbot` (lowercase "b") never exists.
+  - Code: `bot` is only used for the bot helper object passed to handler functions.
 
 # Installing Skills From npm
 
@@ -857,7 +860,7 @@ const mailbot = new MailBot({
   clientSecret: "your_secret",
   mailbotUrl: "http://your_bot_url"
 });
-// NOTE: The recommended way to set up your MailBot is to set 
+// NOTE: The recommended way to set up your MailBot is to set
 // CLIENT_ID, CLIENT_SECRET and MAILBOT_URL in env and use dotenv
 
 mailbot.onCommand("hello", bot => {
@@ -874,7 +877,7 @@ mailbot.listen();
 
 # Contributions
 
-Contributions are welcome in the form of PRs and / or Github tickets for issues, bugs, ideas and feature requests. 
+Contributions are welcome in the form of PRs and / or Github tickets for issues, bugs, ideas and feature requests.
 Please follow the [MailBot naming conventions](https://github.com/mailbots/mailbots#use-of-mailbot-mailbot-mailbots-and-bots).
 We use ngrok to mock API requests, included in the test package here. This can be disabled to test against the live
 API (see package.json).

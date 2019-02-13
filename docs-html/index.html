@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>mailbots 0.2.1-beta | Documentation</title>
+  <title>mailbots 0.2.3-beta | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>mailbots</h3>
-          <div class='mb1'><code>0.2.1-beta</code></div>
+          <div class='mb1'><code>0.2.3-beta</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -237,6 +237,16 @@
                   href='#getreplyto'
                   class="">
                   getReplyTo
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getemailmethod'
+                  class="">
+                  getEmailMethod
                   
                 </a>
                 
@@ -618,6 +628,7 @@ mailbot.onTrigger(<span class="hljs-string">"hi"</span>, <span class="hljs-funct
         <span class="hljs-comment">// 👇 An email-action</span>
         {
           <span class="hljs-attr">type</span>: <span class="hljs-string">"button"</span>,
+          <span class="hljs-attr">behavior</span>: <span class="hljs-string">"action"</span>,
           <span class="hljs-attr">text</span>: <span class="hljs-string">"Press Me"</span>,
           <span class="hljs-attr">action</span>: <span class="hljs-string">'say.hi'</span>,
           <span class="hljs-attr">subject</span>: <span class="hljs-string">"Just hit 'send'"</span>,
@@ -757,27 +768,26 @@ settings.submitButton({
 <p>Similar to the above <code>onSettingsViewed</code> handler, every instance of this handler is called when settings are saved.</p>
 <p>Validate user data, perform API calls to keep other systems in sync. Return an error
 to abort saving the settings.</p>
-<pre class='hljs'>  mailbot.beforeSettingsSaved(<span class="hljs-function"><span class="hljs-params">bot</span> =&gt;</span> {
+<pre class='hljs'>mailbot.beforeSettingsSaved(<span class="hljs-function"><span class="hljs-params">bot</span> =&gt;</span> {
+  <span class="hljs-comment">// assuming the same "todo" namespace as shown in the above examples</span>
+  <span class="hljs-keyword">const</span> data = bot.get(<span class="hljs-string">"settings.todo"</span>);
 
-    <span class="hljs-comment">// assuming the same "todo" namespace as shown in the above examples</span>
-    <span class="hljs-keyword">const</span> data = bot.get(<span class="hljs-string">"settings.todo"</span>);
+  <span class="hljs-comment">// handler is fired any times settings are saved, even if its not our form</span>
+  <span class="hljs-keyword">if</span> (!data) <span class="hljs-keyword">return</span>;
 
-    <span class="hljs-comment">// handler is fired any times settings are saved, even if its not our form</span>
-    <span class="hljs-keyword">if</span>(!data) <span class="hljs-keyword">return</span>;
+  <span class="hljs-comment">// perform API calls, update external systems, etc. If something goes wrong...</span>
+  <span class="hljs-keyword">if</span> (error) {
+    <span class="hljs-comment">// abort the saving process</span>
+    <span class="hljs-keyword">return</span> bot.webhook.respond({
+      <span class="hljs-attr">webhook</span>: {
+        <span class="hljs-attr">status</span>: <span class="hljs-string">"error"</span>,
+        <span class="hljs-attr">message</span>: <span class="hljs-string">"This is  a warning message"</span>
+      }
+    });
+  }
 
-    <span class="hljs-comment">// perform API calls, update external systems, etc. If something goes wrong...</span>
-    <span class="hljs-keyword">if</span>(error) {
-      <span class="hljs-comment">// abort the saving process</span>
-      <span class="hljs-keyword">return</span> bot.webhook.respond({
-        <span class="hljs-attr">webhook</span>: {
-          <span class="hljs-attr">status</span>: <span class="hljs-string">"error"</span>,
-          <span class="hljs-attr">message</span>: <span class="hljs-string">"This is  a warning message"</span>
-        }
-      });
-    }
-
-    <span class="hljs-comment">// Othwise, it implicitly returns success, and the saving process continues</span>
-  });</pre>
+  <span class="hljs-comment">// Othwise, it implicitly returns success, and the saving process continues</span>
+});</pre>
 <h2>on</h2>
 <pre><code>mailbot.on(webhookEvent, handlerFn)
 </code></pre>
@@ -1094,7 +1104,7 @@ describe(<span class="hljs-string">"integration tests"</span>, <span class="hljs
   <span class="hljs-attr">clientSecret</span>: <span class="hljs-string">"your_secret"</span>,
   <span class="hljs-attr">mailbotUrl</span>: <span class="hljs-string">"http://your_bot_url"</span>
 });
-<span class="hljs-comment">// <span class="hljs-doctag">NOTE:</span> The recommended way to set up your MailBot is to set </span>
+<span class="hljs-comment">// <span class="hljs-doctag">NOTE:</span> The recommended way to set up your MailBot is to set</span>
 <span class="hljs-comment">// CLIENT_ID, CLIENT_SECRET and MAILBOT_URL in env and use dotenv</span>
 
 mailbot.onCommand(<span class="hljs-string">"hello"</span>, bot =&gt; {
@@ -1272,6 +1282,7 @@ mailbot.onTrigger(<span class="hljs-string">"hi"</span>, <span class="hljs-funct
         <span class="hljs-comment">// 👇 An email-action</span>
         {
           <span class="hljs-attr">type</span>: <span class="hljs-string">"button"</span>,
+          <span class="hljs-attr">behavior</span>: <span class="hljs-string">"action"</span>,
           <span class="hljs-attr">text</span>: <span class="hljs-string">"Press Me"</span>,
           <span class="hljs-attr">action</span>: <span class="hljs-string">'say.hi'</span>,
           <span class="hljs-attr">subject</span>: <span class="hljs-string">"Just hit 'send'"</span>,
@@ -1411,27 +1422,26 @@ settings.submitButton({
 <p>Similar to the above <code>onSettingsViewed</code> handler, every instance of this handler is called when settings are saved.</p>
 <p>Validate user data, perform API calls to keep other systems in sync. Return an error
 to abort saving the settings.</p>
-<pre class='hljs'>  mailbot.beforeSettingsSaved(<span class="hljs-function"><span class="hljs-params">bot</span> =&gt;</span> {
+<pre class='hljs'>mailbot.beforeSettingsSaved(<span class="hljs-function"><span class="hljs-params">bot</span> =&gt;</span> {
+  <span class="hljs-comment">// assuming the same "todo" namespace as shown in the above examples</span>
+  <span class="hljs-keyword">const</span> data = bot.get(<span class="hljs-string">"settings.todo"</span>);
 
-    <span class="hljs-comment">// assuming the same "todo" namespace as shown in the above examples</span>
-    <span class="hljs-keyword">const</span> data = bot.get(<span class="hljs-string">"settings.todo"</span>);
+  <span class="hljs-comment">// handler is fired any times settings are saved, even if its not our form</span>
+  <span class="hljs-keyword">if</span> (!data) <span class="hljs-keyword">return</span>;
 
-    <span class="hljs-comment">// handler is fired any times settings are saved, even if its not our form</span>
-    <span class="hljs-keyword">if</span>(!data) <span class="hljs-keyword">return</span>;
+  <span class="hljs-comment">// perform API calls, update external systems, etc. If something goes wrong...</span>
+  <span class="hljs-keyword">if</span> (error) {
+    <span class="hljs-comment">// abort the saving process</span>
+    <span class="hljs-keyword">return</span> bot.webhook.respond({
+      <span class="hljs-attr">webhook</span>: {
+        <span class="hljs-attr">status</span>: <span class="hljs-string">"error"</span>,
+        <span class="hljs-attr">message</span>: <span class="hljs-string">"This is  a warning message"</span>
+      }
+    });
+  }
 
-    <span class="hljs-comment">// perform API calls, update external systems, etc. If something goes wrong...</span>
-    <span class="hljs-keyword">if</span>(error) {
-      <span class="hljs-comment">// abort the saving process</span>
-      <span class="hljs-keyword">return</span> bot.webhook.respond({
-        <span class="hljs-attr">webhook</span>: {
-          <span class="hljs-attr">status</span>: <span class="hljs-string">"error"</span>,
-          <span class="hljs-attr">message</span>: <span class="hljs-string">"This is  a warning message"</span>
-        }
-      });
-    }
-
-    <span class="hljs-comment">// Othwise, it implicitly returns success, and the saving process continues</span>
-  });</pre>
+  <span class="hljs-comment">// Othwise, it implicitly returns success, and the saving process continues</span>
+});</pre>
 <h2>on</h2>
 <pre><code>mailbot.on(webhookEvent, handlerFn)
 </code></pre>
@@ -1748,7 +1758,7 @@ describe(<span class="hljs-string">"integration tests"</span>, <span class="hljs
   <span class="hljs-attr">clientSecret</span>: <span class="hljs-string">"your_secret"</span>,
   <span class="hljs-attr">mailbotUrl</span>: <span class="hljs-string">"http://your_bot_url"</span>
 });
-<span class="hljs-comment">// <span class="hljs-doctag">NOTE:</span> The recommended way to set up your MailBot is to set </span>
+<span class="hljs-comment">// <span class="hljs-doctag">NOTE:</span> The recommended way to set up your MailBot is to set</span>
 <span class="hljs-comment">// CLIENT_ID, CLIENT_SECRET and MAILBOT_URL in env and use dotenv</span>
 
 mailbot.onCommand(<span class="hljs-string">"hello"</span>, bot =&gt; {
@@ -3628,6 +3638,58 @@ after the original email was sent.</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='getemailmethod'>
+      getEmailMethod
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Determine if the email command for the current task was placed in the 'to', 'cc' or 'bcc'
+fields. This is done by comparing the email command with the email address in the  and 'to', 'cc'
+fields. The 'bcc' is hidden from the message envelope but still present in the command.</p>
+<p>Note that if the identical email command is in both 'to', 'cc' and 'bcc' it will
+only show up as the 'to' method.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>getEmailMethod()</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='sendemail'>
       sendEmail
     </h3>
@@ -3894,6 +3956,7 @@ the subject and body</p>
    },
    {
      <span class="hljs-attr">type</span>: <span class="hljs-string">"button"</span>,
+     <span class="hljs-attr">behavior</span>: <span class="hljs-string">"url"</span>,
      <span class="hljs-attr">text</span>: <span class="hljs-string">"Press Me"</span>,
      <span class="hljs-attr">url</span>: <span class="hljs-string">"google.com"</span>
    }]

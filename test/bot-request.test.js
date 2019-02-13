@@ -308,6 +308,33 @@ describe("Bot Request Helper", function() {
       done();
     });
 
+    it("determines the to / cc / bcc email methods", done => {
+      // email command is memorize@mailbots-memorize.eml.bot
+      // webhook uses "to"
+      let emailMethod;
+      emailMethod = botRequest.webhook.getEmailMethod();
+      expect(emailMethod).to.equal("to");
+
+      // cc
+      botRequest.webhook.set(
+        "task.reference_email.cc",
+        "memorize@mailbots-memorize.eml.bot"
+      );
+      botRequest.webhook.set("task.reference_email.to", "foo@email.com");
+      emailMethod = botRequest.webhook.getEmailMethod();
+      expect(emailMethod).to.equal("cc");
+
+      // bcc (nowhere in the message envelope in an email env)
+      // botRequest.webhook.set("task.reference_email.bc", "memorize@mailbots-memorize.eml.bot");
+      botRequest.webhook.set("task.reference_email.cc", "bar@gmail.com");
+      botRequest.webhook.set("task.reference_email.to", "foo@email.com");
+      emailMethod = botRequest.webhook.getEmailMethod();
+      expect(emailMethod).to.equal("bcc");
+      // email = botRequest.webhook.getReplyTo();
+      // expect(email).to.equal("fdas@fdsa.com");
+      done();
+    });
+
     it("sets the trigger time nautally", done => {
       botRequest.webhook.setTriggerTime("1day");
       expect(botRequest.responseJson.task.trigger_timeformat).to.eq("1day");
@@ -554,15 +581,18 @@ describe("Bot Request Helper", function() {
     it("uses quickReply with complete body elements", done => {
       botRequest.webhook.quickReply({
         subject: "Quick reply subject",
-        body: [{
-          type: "title",
-          text: "Welcome",
-        },
-        {
-          type: "button",
-          text: "Press Me",
-          url: "google.com"
-        }]
+        body: [
+          {
+            type: "title",
+            text: "Welcome"
+          },
+          {
+            type: "button",
+            behavior: "url",
+            text: "Press Me",
+            url: "google.com"
+          }
+        ]
       });
       expect(botRequest.responseJson).to.haveOwnProperty("send_messages");
       expect(botRequest.responseJson.send_messages[0].body[0].text).to.equal(
