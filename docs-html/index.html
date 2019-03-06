@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>mailbots 0.2.3-beta | Documentation</title>
+  <title>mailbots 1.0.0 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>mailbots</h3>
-          <div class='mb1'><code>0.2.3-beta</code></div>
+          <div class='mb1'><code>1.0.0</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -1014,13 +1014,19 @@ mailbot.onTrigger(<span class="hljs-string">"remember"</span>, <span class="hljs
   bot.webhook.respond();
 });</pre>
 <h2>Skills With Side-Effects</h2>
-<p>Skills that accept the <code>mailbots</code> object may automatically alter requests, reply to webhooks or take other automatic action behind the scenes.</p>
+<p>Skills that accept the <code>mailbots</code> object may automatically alter requests, reply to webhooks or take other action automatically behind the scenes.</p>
+<blockquote>
+<p>⚠️ When building sharable skills, use this "automatic" method with caution. Invoking functionality with one line can be both magical and confusingly opaque. The second example below shows an alternative that keeps code more self-documenting and testable.</p>
+</blockquote>
 <pre class='hljs'><span class="hljs-comment">// May automatically handle requets (ex, render settings pages, send emails)</span>
 <span class="hljs-keyword">var</span> handleEverything = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots-handle-everything"</span>);
 handleEverything(mailbot);
 <span class="hljs-comment">// or</span>
 <span class="hljs-built_in">require</span>(<span class="hljs-string">"handleEverything"</span>)(mailbot);</pre>
-<p>Skills that are not passed the <code>mailbot</code> object will export components (middleware, one-bot functions, etc) for you to explicitly use in your handlers.</p>
+<p>Alternatively, skills can export components (middleware, one-bot functions, etc) for you to explicitly use in your handlers.</p>
+<blockquote>
+<p>👍 A more self-documenting and testable method.</p>
+</blockquote>
 <pre class='hljs'><span class="hljs-comment">// These types of skills offer components to your handlers</span>
 <span class="hljs-keyword">var</span> {
   someMiddleware,
@@ -1032,7 +1038,7 @@ mailbots.app.use(someMiddleware);
 mailbots.onCommand(<span class="hljs-string">"foo"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
   doSomething(bot);
 });</pre>
-<p>Skills will, themselves, document how they are used. Different approaches are right for different circumstances.</p>
+<p>Different approaches work well for different circumstances. For example, a bot analytics system would be well suited for automatic activation. A toolkit for integrating with a CRM, on the other hand, might make sense as an exported collection of useful middleware and functions.</p>
 <h1>Welcoming New Users</h1>
 <p>When a new user installs your MailBot, they are directed to a settings page with the <code>welcome</code> namespace. Render a custom welcome message for your user by creating a settings page that targets this namespace.</p>
 <pre class='hljs'>mailbot.onSettingsViewed(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>)  </span>{
@@ -1668,13 +1674,19 @@ mailbot.onTrigger(<span class="hljs-string">"remember"</span>, <span class="hljs
   bot.webhook.respond();
 });</pre>
 <h2>Skills With Side-Effects</h2>
-<p>Skills that accept the <code>mailbots</code> object may automatically alter requests, reply to webhooks or take other automatic action behind the scenes.</p>
+<p>Skills that accept the <code>mailbots</code> object may automatically alter requests, reply to webhooks or take other action automatically behind the scenes.</p>
+<blockquote>
+<p>⚠️ When building sharable skills, use this "automatic" method with caution. Invoking functionality with one line can be both magical and confusingly opaque. The second example below shows an alternative that keeps code more self-documenting and testable.</p>
+</blockquote>
 <pre class='hljs'><span class="hljs-comment">// May automatically handle requets (ex, render settings pages, send emails)</span>
 <span class="hljs-keyword">var</span> handleEverything = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots-handle-everything"</span>);
 handleEverything(mailbot);
 <span class="hljs-comment">// or</span>
 <span class="hljs-built_in">require</span>(<span class="hljs-string">"handleEverything"</span>)(mailbot);</pre>
-<p>Skills that are not passed the <code>mailbot</code> object will export components (middleware, one-bot functions, etc) for you to explicitly use in your handlers.</p>
+<p>Alternatively, skills can export components (middleware, one-bot functions, etc) for you to explicitly use in your handlers.</p>
+<blockquote>
+<p>👍 A more self-documenting and testable method.</p>
+</blockquote>
 <pre class='hljs'><span class="hljs-comment">// These types of skills offer components to your handlers</span>
 <span class="hljs-keyword">var</span> {
   someMiddleware,
@@ -1686,7 +1698,7 @@ mailbots.app.use(someMiddleware);
 mailbots.onCommand(<span class="hljs-string">"foo"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
   doSomething(bot);
 });</pre>
-<p>Skills will, themselves, document how they are used. Different approaches are right for different circumstances.</p>
+<p>Different approaches work well for different circumstances. For example, a bot analytics system would be well suited for automatic activation. A toolkit for integrating with a CRM, on the other hand, might make sense as an exported collection of useful middleware and functions.</p>
 <h1>Welcoming New Users</h1>
 <p>When a new user installs your MailBot, they are directed to a settings page with the <code>welcome</code> namespace. Render a custom welcome message for your user by creating a settings page that targets this namespace.</p>
 <pre class='hljs'>mailbot.onSettingsViewed(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>)  </span>{

@@ -741,7 +741,9 @@ mailbot.onTrigger("remember", function(bot) {
 
 ## Skills With Side-Effects
 
-Skills that accept the `mailbots` object may automatically alter requests, reply to webhooks or take other automatic action behind the scenes.
+Skills that accept the `mailbots` object may automatically alter requests, reply to webhooks or take other action automatically behind the scenes.
+
+> ⚠️ When building sharable skills, use this "automatic" method with caution. Invoking functionality with one line can be both magical and confusingly opaque. The second example below shows an alternative that keeps code more self-documenting and testable.
 
 ```javascript
 // May automatically handle requets (ex, render settings pages, send emails)
@@ -751,7 +753,9 @@ handleEverything(mailbot);
 require("handleEverything")(mailbot);
 ```
 
-Skills that are not passed the `mailbot` object will export components (middleware, one-bot functions, etc) for you to explicitly use in your handlers.
+Alternatively, skills can export components (middleware, one-bot functions, etc) for you to explicitly use in your handlers.
+
+> 👍 A more self-documenting and testable method.
 
 ```javascript
 // These types of skills offer components to your handlers
@@ -767,7 +771,7 @@ mailbots.onCommand("foo", function(bot) {
 });
 ```
 
-Skills will, themselves, document how they are used. Different approaches are right for different circumstances.
+Different approaches work well for different circumstances. For example, a bot analytics system would be well suited for automatic activation. A toolkit for integrating with a CRM, on the other hand, might make sense as an exported collection of useful middleware and functions.
 
 # Welcoming New Users
 

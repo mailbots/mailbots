@@ -390,6 +390,23 @@ describe("MailBots App", function() {
         done();
       });
     });
+
+    it("resets existing mailbot settings", function(done) {
+      mailbot.beforeSettingsSaved(bot => {
+        bot.webhook.setMailBotData("github.foo", "bar");
+      });
+      mailbot.beforeSettingsSaved(bot => {
+        expect(bot.webhook.getMailBotData("github.foo")).to.equal("bar");
+        bot.webhook.setMailBotData("github.shoe", "far");
+      });
+      fireWebhookRequest(mailbotSettingsBeforeSaved, {
+        errOnFallthrough: false
+      }).then(res => {
+        expect(res.body.mailbot.stored_data.github.foo).to.equal("bar");
+        expect(res.body.mailbot.stored_data.github.shoe).to.equal("far");
+        done();
+      });
+    });
   });
 
   describe("middleware", function() {
