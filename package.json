@@ -1,6 +1,6 @@
 {
   "name": "mailbots",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An open source bot framework for creating email-based bots using MailBots.com",
   "main": "mailbots.js",
   "directories": {
@@ -29,11 +29,11 @@
     "supertest": "3.1.0"
   },
   "dependencies": {
-    "@mailbots/mailbots-sdk": "0.1.4-beta",
+    "@mailbots/mailbots-sdk": "1.0.1",
     "body-parser": "1.18.3",
     "cookie-parser": "1.4.3",
     "express": "4.16.3",
-    "lodash": "4.17.10",
+    "lodash": "4.17.11",
     "request": "2.87.0",
     "url-join": "4.0.0",
     "uuid": "3.3.2"
