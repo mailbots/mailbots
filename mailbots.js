@@ -124,7 +124,15 @@ class MailBots {
       skillFiles.sort().forEach(file => {
         const fullPath = path.join(skill, file);
         if (!this.isDirectory(fullPath)) {
-          require(fullPath)(this, config);
+          const skill = require(fullPath);
+          if (typeof skill === "function") {
+            skill(this, config);
+          } else {
+            console.warn(
+              fullPath +
+                " was was not loaded because it did not export a function that accepts `mailbot`."
+            );
+          }
         }
       });
 
