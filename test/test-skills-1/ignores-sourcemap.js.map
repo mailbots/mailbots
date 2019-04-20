@@ -1,0 +1,2 @@
+// This is not included.
+throw new Error("loadSkill is not supposed to load this file");

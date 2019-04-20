@@ -123,7 +123,8 @@ class MailBots {
       const skillFiles = fs.readdirSync(skill);
       skillFiles.sort().forEach(file => {
         const fullPath = path.join(skill, file);
-        if (!this.isDirectory(fullPath)) {
+        // ignore directories and source map files
+        if (!this.isDirectory(fullPath) && fullPath.search(/.*map$/) === -1) {
           const skill = require(fullPath);
           if (typeof skill === "function") {
             skill(this, config);
