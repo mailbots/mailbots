@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>mailbots 1.0.1 | Documentation</title>
+  <title>mailbots 1.0.5 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>mailbots</h3>
-          <div class='mb1'><code>1.0.1</code></div>
+          <div class='mb1'><code>1.0.5</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -562,6 +562,12 @@ mailbot.listen();</pre>
 </ul>
 </li>
 <li><a href="#welcoming-new-users">Welcoming New Users</a></li>
+<li>
+<p><a href="#connecting-3rd-party-services">Connecting 3rd Party Services</a></p>
+<ul>
+<li><a href="#oauth">OAuth</a></li>
+</ul>
+</li>
 <li><a href="#testing">Testing</a></li>
 <li><a href="#installing">Installing</a></li>
 <li><a href="#contributions">Contributions</a></li>
@@ -1053,6 +1059,33 @@ _Markdown_ works here.`</span>);
 )}</pre>
 <p>Note: While in dev_mode, the MailBot owner is instead redirected to the sandbox.</p>
 <p>Your bot receives the <code>mailbot.installed</code> webhook which can be used to schedule a series of welcome emails to the user.</p>
+<h1>Connecting 3rd Party Services</h1>
+<p>Connecting a 3rd party system ( CRMs, todo lists, etc) usually requires an access token or similar information from the 3rd party. The easiest way to connect is to ask the user to copy / paste some generated key, token or URL into their <a href="#onsettingsviewed">settings page</a>. A more friendly user experience is to use OAuth.</p>
+<h2>OAuth</h2>
+<p>Use MailBot's internal Express app to provide begin the OAuth process and receive the OAuth callback. Save information on the user's account using the <a href="#">setMailBotData</a> method (as shown below).</p>
+<p>Note: The user's Bearer token is <a href="https://github.com/mailbots/mailbots/blob/56396fb3d6c00b1895533f9aee3193ae96ac9b45/lib/core-skills-first.js#L104">saved as a cookie on your bot's URL</a> when the user first authorizes your MailBot. This allows you to use the <a href="https://www.npmjs.com/package/@mailbots/mailbots-sdk">MailBots SDK</a> when you send a user to a specific URL. (Keep in mind security <a href="https://www.wikiwand.com/en/Cross-site_request_forgery">XSRF implications</a> if you are doing something sensitve here, like deleting an account). For example:</p>
+<pre class='hljs'>mailbot.app.get(<span class="hljs-string">"/do-something-for-user"</span>, (req, res) =&gt; {
+  <span class="hljs-comment">// user's cookies, bearer token, etc are available here</span>
+  <span class="hljs-comment">// redirect elsewhere</span>
+});</pre>
+<h3>OAuth Example</h3>
+<p>Here is is an example OAuth flow, minus the provider-specific logic:</p>
+<pre class='hljs'><span class="hljs-comment">// 1. start OAuth handshake, set OAuth state, etc</span>
+mailbot.app.get(<span class="hljs-string">"/connect_provider"</span>, (req, res) =&gt; {
+  res.redirect(providerRedirectUri);
+});</pre>
+<p>After the user authorizes with the 3rd party service (todo list, repo, CRM, etc) they are redirected to a callback URL, which does most the work, saves the access token, then redirects the user to their settings page with a success message.</p>
+<pre class='hljs'><span class="hljs-comment">// 2. Handle callback after user authorizes on 3rd party site</span>
+mailbot.app.get(<span class="hljs-string">"/provider_callback"</span>, <span class="hljs-keyword">async</span> (req, res) =&gt; {
+  <span class="hljs-comment">// verify state</span>
+  <span class="hljs-comment">// exchange auth code for token from provider</span>
+  <span class="hljs-comment">// authorize the client SDK and save user's new auth code</span>
+  <span class="hljs-keyword">const</span> MailBotsClient = <span class="hljs-built_in">require</span>(<span class="hljs-string">"@mailbots/mailbots-sdk"</span>);
+  <span class="hljs-keyword">const</span> mbClient = <span class="hljs-keyword">new</span> MailBotsClient();
+  <span class="hljs-keyword">await</span> mbClient.setAccessToken(res.cookies.access_token);
+  res.redirect(<span class="hljs-string">`<span class="hljs-subst">${res.locals.bot.config.mailbotSettingsUrl}</span>/success`</span>);
+});</pre>
+<p>The work is performed only on your MailBot's url, but to a user, they just click an "Authorize" button on their MailBots settings, connect a 3rd party account and ended up back on their settings page. Service connected, minimal hassle.</p>
 <h1>Testing</h1>
 <p>Export a testable instance of your MailBot by calling <code>mailbot.exportApp()</code> instead of calling <code>mailbot.listen()</code>. Below is an example of testing the exported app with <a href="https://www.npmjs.com/package/supertest">Supertest</a>.</p>
 <p>For a sample request (the <code>./_fixtures/task.created.json</code> file below), fire a request and go to the sandbox. Click the "copy" icon that appears when you over over the the top-level key the request JSON.</p>
@@ -1222,6 +1255,12 @@ mailbot.listen();</pre>
 </ul>
 </li>
 <li><a href="#welcoming-new-users">Welcoming New Users</a></li>
+<li>
+<p><a href="#connecting-3rd-party-services">Connecting 3rd Party Services</a></p>
+<ul>
+<li><a href="#oauth">OAuth</a></li>
+</ul>
+</li>
 <li><a href="#testing">Testing</a></li>
 <li><a href="#installing">Installing</a></li>
 <li><a href="#contributions">Contributions</a></li>
@@ -1713,6 +1752,33 @@ _Markdown_ works here.`</span>);
 )}</pre>
 <p>Note: While in dev_mode, the MailBot owner is instead redirected to the sandbox.</p>
 <p>Your bot receives the <code>mailbot.installed</code> webhook which can be used to schedule a series of welcome emails to the user.</p>
+<h1>Connecting 3rd Party Services</h1>
+<p>Connecting a 3rd party system ( CRMs, todo lists, etc) usually requires an access token or similar information from the 3rd party. The easiest way to connect is to ask the user to copy / paste some generated key, token or URL into their <a href="#onsettingsviewed">settings page</a>. A more friendly user experience is to use OAuth.</p>
+<h2>OAuth</h2>
+<p>Use MailBot's internal Express app to provide begin the OAuth process and receive the OAuth callback. Save information on the user's account using the <a href="#">setMailBotData</a> method (as shown below).</p>
+<p>Note: The user's Bearer token is <a href="https://github.com/mailbots/mailbots/blob/56396fb3d6c00b1895533f9aee3193ae96ac9b45/lib/core-skills-first.js#L104">saved as a cookie on your bot's URL</a> when the user first authorizes your MailBot. This allows you to use the <a href="https://www.npmjs.com/package/@mailbots/mailbots-sdk">MailBots SDK</a> when you send a user to a specific URL. (Keep in mind security <a href="https://www.wikiwand.com/en/Cross-site_request_forgery">XSRF implications</a> if you are doing something sensitve here, like deleting an account). For example:</p>
+<pre class='hljs'>mailbot.app.get(<span class="hljs-string">"/do-something-for-user"</span>, (req, res) =&gt; {
+  <span class="hljs-comment">// user's cookies, bearer token, etc are available here</span>
+  <span class="hljs-comment">// redirect elsewhere</span>
+});</pre>
+<h3>OAuth Example</h3>
+<p>Here is is an example OAuth flow, minus the provider-specific logic:</p>
+<pre class='hljs'><span class="hljs-comment">// 1. start OAuth handshake, set OAuth state, etc</span>
+mailbot.app.get(<span class="hljs-string">"/connect_provider"</span>, (req, res) =&gt; {
+  res.redirect(providerRedirectUri);
+});</pre>
+<p>After the user authorizes with the 3rd party service (todo list, repo, CRM, etc) they are redirected to a callback URL, which does most the work, saves the access token, then redirects the user to their settings page with a success message.</p>
+<pre class='hljs'><span class="hljs-comment">// 2. Handle callback after user authorizes on 3rd party site</span>
+mailbot.app.get(<span class="hljs-string">"/provider_callback"</span>, <span class="hljs-keyword">async</span> (req, res) =&gt; {
+  <span class="hljs-comment">// verify state</span>
+  <span class="hljs-comment">// exchange auth code for token from provider</span>
+  <span class="hljs-comment">// authorize the client SDK and save user's new auth code</span>
+  <span class="hljs-keyword">const</span> MailBotsClient = <span class="hljs-built_in">require</span>(<span class="hljs-string">"@mailbots/mailbots-sdk"</span>);
+  <span class="hljs-keyword">const</span> mbClient = <span class="hljs-keyword">new</span> MailBotsClient();
+  <span class="hljs-keyword">await</span> mbClient.setAccessToken(res.cookies.access_token);
+  res.redirect(<span class="hljs-string">`<span class="hljs-subst">${res.locals.bot.config.mailbotSettingsUrl}</span>/success`</span>);
+});</pre>
+<p>The work is performed only on your MailBot's url, but to a user, they just click an "Authorize" button on their MailBots settings, connect a 3rd party account and ended up back on their settings page. Service connected, minimal hassle.</p>
 <h1>Testing</h1>
 <p>Export a testable instance of your MailBot by calling <code>mailbot.exportApp()</code> instead of calling <code>mailbot.listen()</code>. Below is an example of testing the exported app with <a href="https://www.npmjs.com/package/supertest">Supertest</a>.</p>
 <p>For a sample request (the <code>./_fixtures/task.created.json</code> file below), fire a request and go to the sandbox. Click the "copy" icon that appears when you over over the the top-level key the request JSON.</p>

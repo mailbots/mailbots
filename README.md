@@ -61,6 +61,8 @@ Tip: Use our [reference guide](https://mailbots-app.mailbots.com) to quickly loo
 - [Installing Skills From npm](#installing-skills%C2%A0from-npm)
   - [Skills With Side-Effects](#skills-with-side-effects)
 - [Welcoming New Users](#welcoming-new-users)
+- [Connecting 3rd Party Services](#connecting-3rd-party-services)
+  - [OAuth](#oauth)
 - [Testing](#testing)
 - [Installing](#installing)
 - [Contributions](#contributions)
@@ -794,6 +796,51 @@ _Markdown_ works here.`);
 Note: While in dev_mode, the MailBot owner is instead redirected to the sandbox.
 
 Your bot receives the `mailbot.installed` webhook which can be used to schedule a series of welcome emails to the user.
+
+# Connecting 3rd Party Services
+
+Connecting a 3rd party system ( CRMs, todo lists, etc) usually requires an access token or similar information from the 3rd party. The easiest way to connect is to ask the user to copy / paste some generated key, token or URL into their [settings page](#onsettingsviewed). A more friendly user experience is to use OAuth.
+
+## OAuth
+
+Use MailBot's internal Express app to provide begin the OAuth process and receive the OAuth callback. Save information on the user's account using the [setMailBotData](#) method (as shown below).
+
+Note: The user's Bearer token is [saved as a cookie on your bot's URL](https://github.com/mailbots/mailbots/blob/56396fb3d6c00b1895533f9aee3193ae96ac9b45/lib/core-skills-first.js#L104) when the user first authorizes your MailBot. This allows you to use the [MailBots SDK](https://www.npmjs.com/package/@mailbots/mailbots-sdk) when you send a user to a specific URL. (Keep in mind security [XSRF implications](https://www.wikiwand.com/en/Cross-site_request_forgery) if you are doing something sensitve here, like deleting an account). For example:
+
+```javascript
+mailbot.app.get("/do-something-for-user", (req, res) => {
+  // user's cookies, bearer token, etc are available here
+  // redirect elsewhere
+});
+```
+
+### OAuth Example
+
+Here is is an example OAuth flow, minus the provider-specific logic:
+
+```javascript
+// 1. start OAuth handshake, set OAuth state, etc
+mailbot.app.get("/connect_provider", (req, res) => {
+  res.redirect(providerRedirectUri);
+});
+```
+
+After the user authorizes with the 3rd party service (todo list, repo, CRM, etc) they are redirected to a callback URL, which does most the work, saves the access token, then redirects the user to their settings page with a success message.
+
+```javascript
+// 2. Handle callback after user authorizes on 3rd party site
+mailbot.app.get("/provider_callback", async (req, res) => {
+  // verify state
+  // exchange auth code for token from provider
+  // authorize the client SDK and save user's new auth code
+  const MailBotsClient = require("@mailbots/mailbots-sdk");
+  const mbClient = new MailBotsClient();
+  await mbClient.setAccessToken(res.cookies.access_token);
+  res.redirect(`${res.locals.bot.config.mailbotSettingsUrl}/success`);
+});
+```
+
+The work is performed only on your MailBot's url, but to a user, they just click an "Authorize" button on their MailBots settings, connect a 3rd party account and ended up back on their settings page. Service connected, minimal hassle.
 
 # Testing
 
