@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>mailbots 1.0.5 | Documentation</title>
+  <title>mailbots 2.0.0 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>mailbots</h3>
-          <div class='mb1'><code>1.0.5</code></div>
+          <div class='mb1'><code>2.0.0</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -548,8 +548,8 @@ mailbot.listen();</pre>
 <li>
 <p><a href="#building-skills">Building Skills</a></p>
 <ul>
-<li><a href="#using-handlers">Using Handlers</a></li>
-<li><a href="#the-one-bot-function">The "one-bot function"</a></li>
+<li><a href="#sharing-handlers">Sharing Handlers</a></li>
+<li><a href="#sharing-the-one-bot-function">Sharing the "one-bot function"</a></li>
 <li><a href="#handling-web-requests">Handling Web Requests</a></li>
 <li><a href="#middleware">Middleware</a></li>
 <li><a href="#namespacing-conventions">Namespacing Conventions</a></li>
@@ -852,33 +852,21 @@ bot.webhook.setTaskData(<span class="hljs-string">"my_namespace"</span>, {
 <span class="hljs-built_in">console</span>.log(bot.webhook.responseJson);
 <span class="hljs-comment">// {my_namespace: { data: { value2: "there" } }}</span></pre>
 <h1>Building Skills</h1>
-<p>"Skills" are sharable pieces of bot functionality. Skills can encapsulate everything they need (handlers, settings panels helper funcitons and UI elements) into a package that "just works" when installed. They are great for keeping your code organized and for sharing functionality with others.</p>
-<p>A skill can share functionality in several ways:</p>
-<h2>Using Handlers</h2>
+<p>"Skills" are sharable pieces of bot functionality. Skills can encapsulate everything they need (handlers, settings panels helper funcitons and UI elements) so they are ready for use installed. They are great for keeping your code organized and for sharing functionality with others.</p>
+<h2>Sharing Handlers</h2>
 <p>We could better organize our handlers in the above examples by grouping them into different files. For example:</p>
 <pre class='hljs'><span class="hljs-comment">// my-new-reminder-skill.js</span>
-<span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">mailbot</span>) </span>{
+<span class="hljs-built_in">module</span>.exports.activate = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">mailbot</span>) </span>{
   <span class="hljs-comment">// Handlers can go here</span>
   <span class="hljs-comment">// mailbot.onCommand...</span>
 };</pre>
-<p>It can be loaded like this:</p>
+<p>Activate the skill's handlers like this (normally done in the top-level to ensure the skill is activated only once):</p>
 <pre class='hljs'><span class="hljs-comment">// In top-level app.js</span>
-<span class="hljs-built_in">require</span>(<span class="hljs-string">"./my-new-skill"</span>)(mailbot);</pre>
-<p>Once loaded, all handlers within the file become active.</p>
-<p>A directory of skill files (like the one above) can be loaded using the <code>loadSkill</code> helper:</p>
-<pre class='hljs'><span class="hljs-comment">// Load all skill files in a directory</span>
-mailbot.loadSkill(__dirname + <span class="hljs-string">"/my/skill/"</span>);</pre>
-<p><code>loadSkill</code> only looks for skill files in the top-level directory. This allows a skill to hide its implementation details in subdirectories.</p>
-<p>A config object can optionally be passed.</p>
-<pre class='hljs'><span class="hljs-comment">// app.js</span>
-mailbot.loadSkill(__dirname + <span class="hljs-string">"/my/skills/"</span>, config);</pre>
-<pre class='hljs'><span class="hljs-comment">// skill-file.js</span>
-<span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">mailbot, config</span>) </span>{
-  <span class="hljs-comment">// All of your handlers can go here</span>
-};</pre>
-<p>Grouping your handlers into skills is a great way to keep your project organized. The down-side is that the skill owns each request from beginning to end – not very flexible.</p>
-<p>The next section covers a more granular and composable technique for sharing functionality across multiple handlers or multiple MailBots.</p>
-<h2>The "one-bot function"</h2>
+<span class="hljs-keyword">const</span> myNewReminderSkill = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./my-new-skill"</span>)(mailbot);
+myNewReminderSkill.activate(mailbot);</pre>
+<p>Isolating your handlers within skills is a great way to keep your project organized. The down-side is that the skill owns each request from beginning to end – not very flexible.</p>
+<p>The next sections cover more granular and composable technique. for sharing functionality across multiple handlers or multiple MailBots.</p>
+<h2>Sharing the "one-bot function"</h2>
 <p>A "one-bot function" is a function that takes a single <code>bot</code> object (an instance of BotRequest) which, itself, contains the request / response state and utilities to alter the request. It is one instance of a bot request, hence, a one-bot function.</p>
 <p>One-bot functions are called within handlers, allowing for a top-level handler to compose multiple one-bot functions to get something done.</p>
 <pre class='hljs'><span class="hljs-comment">// sayHi.js</span>
@@ -894,33 +882,12 @@ mailbots.onCommand(<span class="hljs-string">"hi"</span>, <span class="hljs-func
   sayHi(bot);
   bot.webhook.respond();
 });</pre>
-<p>You can, of course, use both the one-bot function and a handler within one skill:</p>
-<pre class='hljs'><span class="hljs-comment">// my-reminder-skill.js</span>
-<span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">mailbot</span>) </span>{
-  <span class="hljs-comment">// Handles all triggering for this MailBot (/.*/ matches anything)</span>
-  mailbot.onTrigger(<span class="hljs-regexp">/.*/</span>, funciton(bot) {
-    <span class="hljs-comment">// Do some useful things, send emails,etc.</span>
-    bot.webhook.respond();
-  });
-
-  <span class="hljs-keyword">return</span> {
-    <span class="hljs-attr">remindTomorrow</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
-        bot.webhook.setTriggerTime(<span class="hljs-string">"tomorrow"</span>);
-    }
-  };
-};</pre>
-<pre class='hljs'><span class="hljs-comment">// Use the reminder skill</span>
-<span class="hljs-keyword">const</span> { remindTomorrow } = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./my-reminder-skill"</span>)(mailbot);
-
-mailbot.onCommand(<span class="hljs-string">"whatever-custom-command"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
-  <span class="hljs-comment">// Set a reminder. When due, the skill automatically handles it.</span>
-  remindTomorrow(bot);
-  bot.webhook.respond();
-});</pre>
 <h3>Sharing UI Elements</h3>
-<p>Skills can use one-bot functions to share <a href="https://docs.mailbots.com/docs/email-ui-reference">UI elements</a>.</p>
+<p>Skills can also share <a href="https://docs.mailbots.com/docs/email-ui-reference">UI elements</a>.</p>
 <p>By convention, UI functions that output UI start with <code>render</code>. For example, <code>renderMemorizationControls</code>.</p>
-<pre class='hljs'>  <span class="hljs-keyword">var</span> memorizeSkill = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots-memorize"</span>)(mailbot);
+<pre class='hljs'>  <span class="hljs-keyword">var</span> memorizeSkill = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots-memorize"</span>);
+  memorizeSkill.activate(mailbot); <span class="hljs-comment">// activate handlers</span>
+
   mailbot.onCommand(<span class="hljs-string">"remember"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
     bot.webhook.sendEmail({
       <span class="hljs-attr">to</span>: <span class="hljs-string">"you@email.com"</span>
@@ -1082,7 +1049,7 @@ mailbot.app.get(<span class="hljs-string">"/provider_callback"</span>, <span cla
   <span class="hljs-comment">// authorize the client SDK and save user's new auth code</span>
   <span class="hljs-keyword">const</span> MailBotsClient = <span class="hljs-built_in">require</span>(<span class="hljs-string">"@mailbots/mailbots-sdk"</span>);
   <span class="hljs-keyword">const</span> mbClient = <span class="hljs-keyword">new</span> MailBotsClient();
-  <span class="hljs-keyword">await</span> mbClient.setAccessToken(res.cookies.access_token);
+  <span class="hljs-keyword">await</span> mbClient.setAccessToken(req.cookies.access_token);
   res.redirect(<span class="hljs-string">`<span class="hljs-subst">${res.locals.bot.config.mailbotSettingsUrl}</span>/success`</span>);
 });</pre>
 <p>The work is performed only on your MailBot's url, but to a user, they just click an "Authorize" button on their MailBots settings, connect a 3rd party account and ended up back on their settings page. Service connected, minimal hassle.</p>
@@ -1241,8 +1208,8 @@ mailbot.listen();</pre>
 <li>
 <p><a href="#building-skills">Building Skills</a></p>
 <ul>
-<li><a href="#using-handlers">Using Handlers</a></li>
-<li><a href="#the-one-bot-function">The "one-bot function"</a></li>
+<li><a href="#sharing-handlers">Sharing Handlers</a></li>
+<li><a href="#sharing-the-one-bot-function">Sharing the "one-bot function"</a></li>
 <li><a href="#handling-web-requests">Handling Web Requests</a></li>
 <li><a href="#middleware">Middleware</a></li>
 <li><a href="#namespacing-conventions">Namespacing Conventions</a></li>
@@ -1545,33 +1512,21 @@ bot.webhook.setTaskData(<span class="hljs-string">"my_namespace"</span>, {
 <span class="hljs-built_in">console</span>.log(bot.webhook.responseJson);
 <span class="hljs-comment">// {my_namespace: { data: { value2: "there" } }}</span></pre>
 <h1>Building Skills</h1>
-<p>"Skills" are sharable pieces of bot functionality. Skills can encapsulate everything they need (handlers, settings panels helper funcitons and UI elements) into a package that "just works" when installed. They are great for keeping your code organized and for sharing functionality with others.</p>
-<p>A skill can share functionality in several ways:</p>
-<h2>Using Handlers</h2>
+<p>"Skills" are sharable pieces of bot functionality. Skills can encapsulate everything they need (handlers, settings panels helper funcitons and UI elements) so they are ready for use installed. They are great for keeping your code organized and for sharing functionality with others.</p>
+<h2>Sharing Handlers</h2>
 <p>We could better organize our handlers in the above examples by grouping them into different files. For example:</p>
 <pre class='hljs'><span class="hljs-comment">// my-new-reminder-skill.js</span>
-<span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">mailbot</span>) </span>{
+<span class="hljs-built_in">module</span>.exports.activate = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">mailbot</span>) </span>{
   <span class="hljs-comment">// Handlers can go here</span>
   <span class="hljs-comment">// mailbot.onCommand...</span>
 };</pre>
-<p>It can be loaded like this:</p>
+<p>Activate the skill's handlers like this (normally done in the top-level to ensure the skill is activated only once):</p>
 <pre class='hljs'><span class="hljs-comment">// In top-level app.js</span>
-<span class="hljs-built_in">require</span>(<span class="hljs-string">"./my-new-skill"</span>)(mailbot);</pre>
-<p>Once loaded, all handlers within the file become active.</p>
-<p>A directory of skill files (like the one above) can be loaded using the <code>loadSkill</code> helper:</p>
-<pre class='hljs'><span class="hljs-comment">// Load all skill files in a directory</span>
-mailbot.loadSkill(__dirname + <span class="hljs-string">"/my/skill/"</span>);</pre>
-<p><code>loadSkill</code> only looks for skill files in the top-level directory. This allows a skill to hide its implementation details in subdirectories.</p>
-<p>A config object can optionally be passed.</p>
-<pre class='hljs'><span class="hljs-comment">// app.js</span>
-mailbot.loadSkill(__dirname + <span class="hljs-string">"/my/skills/"</span>, config);</pre>
-<pre class='hljs'><span class="hljs-comment">// skill-file.js</span>
-<span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">mailbot, config</span>) </span>{
-  <span class="hljs-comment">// All of your handlers can go here</span>
-};</pre>
-<p>Grouping your handlers into skills is a great way to keep your project organized. The down-side is that the skill owns each request from beginning to end – not very flexible.</p>
-<p>The next section covers a more granular and composable technique for sharing functionality across multiple handlers or multiple MailBots.</p>
-<h2>The "one-bot function"</h2>
+<span class="hljs-keyword">const</span> myNewReminderSkill = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./my-new-skill"</span>)(mailbot);
+myNewReminderSkill.activate(mailbot);</pre>
+<p>Isolating your handlers within skills is a great way to keep your project organized. The down-side is that the skill owns each request from beginning to end – not very flexible.</p>
+<p>The next sections cover more granular and composable technique. for sharing functionality across multiple handlers or multiple MailBots.</p>
+<h2>Sharing the "one-bot function"</h2>
 <p>A "one-bot function" is a function that takes a single <code>bot</code> object (an instance of BotRequest) which, itself, contains the request / response state and utilities to alter the request. It is one instance of a bot request, hence, a one-bot function.</p>
 <p>One-bot functions are called within handlers, allowing for a top-level handler to compose multiple one-bot functions to get something done.</p>
 <pre class='hljs'><span class="hljs-comment">// sayHi.js</span>
@@ -1587,33 +1542,12 @@ mailbots.onCommand(<span class="hljs-string">"hi"</span>, <span class="hljs-func
   sayHi(bot);
   bot.webhook.respond();
 });</pre>
-<p>You can, of course, use both the one-bot function and a handler within one skill:</p>
-<pre class='hljs'><span class="hljs-comment">// my-reminder-skill.js</span>
-<span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">mailbot</span>) </span>{
-  <span class="hljs-comment">// Handles all triggering for this MailBot (/.*/ matches anything)</span>
-  mailbot.onTrigger(<span class="hljs-regexp">/.*/</span>, funciton(bot) {
-    <span class="hljs-comment">// Do some useful things, send emails,etc.</span>
-    bot.webhook.respond();
-  });
-
-  <span class="hljs-keyword">return</span> {
-    <span class="hljs-attr">remindTomorrow</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
-        bot.webhook.setTriggerTime(<span class="hljs-string">"tomorrow"</span>);
-    }
-  };
-};</pre>
-<pre class='hljs'><span class="hljs-comment">// Use the reminder skill</span>
-<span class="hljs-keyword">const</span> { remindTomorrow } = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./my-reminder-skill"</span>)(mailbot);
-
-mailbot.onCommand(<span class="hljs-string">"whatever-custom-command"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
-  <span class="hljs-comment">// Set a reminder. When due, the skill automatically handles it.</span>
-  remindTomorrow(bot);
-  bot.webhook.respond();
-});</pre>
 <h3>Sharing UI Elements</h3>
-<p>Skills can use one-bot functions to share <a href="https://docs.mailbots.com/docs/email-ui-reference">UI elements</a>.</p>
+<p>Skills can also share <a href="https://docs.mailbots.com/docs/email-ui-reference">UI elements</a>.</p>
 <p>By convention, UI functions that output UI start with <code>render</code>. For example, <code>renderMemorizationControls</code>.</p>
-<pre class='hljs'>  <span class="hljs-keyword">var</span> memorizeSkill = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots-memorize"</span>)(mailbot);
+<pre class='hljs'>  <span class="hljs-keyword">var</span> memorizeSkill = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mailbots-memorize"</span>);
+  memorizeSkill.activate(mailbot); <span class="hljs-comment">// activate handlers</span>
+
   mailbot.onCommand(<span class="hljs-string">"remember"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
     bot.webhook.sendEmail({
       <span class="hljs-attr">to</span>: <span class="hljs-string">"you@email.com"</span>
@@ -1775,7 +1709,7 @@ mailbot.app.get(<span class="hljs-string">"/provider_callback"</span>, <span cla
   <span class="hljs-comment">// authorize the client SDK and save user's new auth code</span>
   <span class="hljs-keyword">const</span> MailBotsClient = <span class="hljs-built_in">require</span>(<span class="hljs-string">"@mailbots/mailbots-sdk"</span>);
   <span class="hljs-keyword">const</span> mbClient = <span class="hljs-keyword">new</span> MailBotsClient();
-  <span class="hljs-keyword">await</span> mbClient.setAccessToken(res.cookies.access_token);
+  <span class="hljs-keyword">await</span> mbClient.setAccessToken(req.cookies.access_token);
   res.redirect(<span class="hljs-string">`<span class="hljs-subst">${res.locals.bot.config.mailbotSettingsUrl}</span>/success`</span>);
 });</pre>
 <p>The work is performed only on your MailBot's url, but to a user, they just click an "Authorize" button on their MailBots settings, connect a 3rd party account and ended up back on their settings page. Service connected, minimal hassle.</p>
@@ -2250,7 +2184,8 @@ This can also receive a path to a file.</p>
   
   
 
-  
+  <div>Deprecated: This is deprecated.
+</div>
   
   
   

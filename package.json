@@ -1,6 +1,6 @@
 {
   "name": "mailbots",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "description": "An open source bot framework for creating email-based bots using MailBots.com",
   "main": "mailbots.js",
   "directories": {

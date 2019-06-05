@@ -176,8 +176,8 @@ Tip: Use our [reference guide][119] to quickly look up helpers and method names.
     -   [Handling Errors][132]
 -   [The "bot" Object][133]
 -   [Building Skills][134]
-    -   [Using Handlers][135]
-    -   [The "one-bot function"][136]
+    -   [Sharing Handlers][135]
+    -   [Sharing the "one-bot function"][136]
     -   [Handling Web Requests][137]
     -   [Middleware][138]
     -   [Namespacing Conventions][139]
@@ -607,59 +607,33 @@ console.log(bot.webhook.responseJson);
 
 # Building Skills
 
-"Skills" are sharable pieces of bot functionality. Skills can encapsulate everything they need (handlers, settings panels helper funcitons and UI elements) into a package that "just works" when installed. They are great for keeping your code organized and for sharing functionality with others.
+"Skills" are sharable pieces of bot functionality. Skills can encapsulate everything they need (handlers, settings panels helper funcitons and UI elements) so they are ready for use installed. They are great for keeping your code organized and for sharing functionality with others.
 
-A skill can share functionality in several ways:
-
-## Using Handlers
+## Sharing Handlers
 
 We could better organize our handlers in the above examples by grouping them into different files. For example:
 
 ```javascript
 // my-new-reminder-skill.js
-module.exports = function(mailbot) {
+module.exports.activate = function(mailbot) {
   // Handlers can go here
   // mailbot.onCommand...
 };
 ```
 
-It can be loaded like this:
+Activate the skill's handlers like this (normally done in the top-level to ensure the skill is activated only once):
 
 ```javascript
 // In top-level app.js
-require("./my-new-skill")(mailbot);
+const myNewReminderSkill = require("./my-new-skill")(mailbot);
+myNewReminderSkill.activate(mailbot);
 ```
 
-Once loaded, all handlers within the file become active.
+Isolating your handlers within skills is a great way to keep your project organized. The down-side is that the skill owns each request from beginning to end – not very flexible.
 
-A directory of skill files (like the one above) can be loaded using the `loadSkill` helper:
+The next sections cover more granular and composable technique. for sharing functionality across multiple handlers or multiple MailBots.
 
-```javascript
-// Load all skill files in a directory
-mailbot.loadSkill(__dirname + "/my/skill/");
-```
-
-`loadSkill` only looks for skill files in the top-level directory. This allows a skill to hide its implementation details in subdirectories.
-
-A config object can optionally be passed.
-
-```javascript
-// app.js
-mailbot.loadSkill(__dirname + "/my/skills/", config);
-```
-
-```javascript
-// skill-file.js
-module.exports = function(mailbot, config) {
-  // All of your handlers can go here
-};
-```
-
-Grouping your handlers into skills is a great way to keep your project organized. The down-side is that the skill owns each request from beginning to end – not very flexible.
-
-The next section covers a more granular and composable technique for sharing functionality across multiple handlers or multiple MailBots.
-
-## The "one-bot function"
+## Sharing the "one-bot function"
 
 A "one-bot function" is a function that takes a single `bot` object (an instance of BotRequest) which, itself, contains the request / response state and utilities to alter the request. It is one instance of a bot request, hence, a one-bot function.
 
@@ -684,44 +658,16 @@ mailbots.onCommand("hi", function(bot) {
 });
 ```
 
-You can, of course, use both the one-bot function and a handler within one skill:
-
-```javascript
-// my-reminder-skill.js
-module.exports = function(mailbot) {
-  // Handles all triggering for this MailBot (/.*/ matches anything)
-  mailbot.onTrigger(/.*/, funciton(bot) {
-    // Do some useful things, send emails,etc.
-    bot.webhook.respond();
-  });
-
-  return {
-    remindTomorrow: function(bot) {
-        bot.webhook.setTriggerTime("tomorrow");
-    }
-  };
-};
-```
-
-```javascript
-// Use the reminder skill
-const { remindTomorrow } = require("./my-reminder-skill")(mailbot);
-
-mailbot.onCommand("whatever-custom-command", function(bot) {
-  // Set a reminder. When due, the skill automatically handles it.
-  remindTomorrow(bot);
-  bot.webhook.respond();
-});
-```
-
 ### Sharing UI Elements
 
-Skills can use one-bot functions to share [UI elements][158].
+Skills can also share [UI elements][158].
 
 By convention, UI functions that output UI start with `render`. For example, `renderMemorizationControls`.
 
 ```javascript
-  var memorizeSkill = require("mailbots-memorize")(mailbot);
+  var memorizeSkill = require("mailbots-memorize");
+  memorizeSkill.activate(mailbot); // activate handlers
+
   mailbot.onCommand("remember", function(bot) {
     bot.webhook.sendEmail({
       to: "you@email.com"
@@ -938,7 +884,7 @@ mailbot.app.get("/provider_callback", async (req, res) => {
   // authorize the client SDK and save user's new auth code
   const MailBotsClient = require("@mailbots/mailbots-sdk");
   const mbClient = new MailBotsClient();
-  await mbClient.setAccessToken(res.cookies.access_token);
+  await mbClient.setAccessToken(req.cookies.access_token);
   res.redirect(`${res.locals.bot.config.mailbotSettingsUrl}/success`);
 });
 ```
@@ -1117,6 +1063,11 @@ This can also receive a path to a file.
 -   `skill`  
 -   `config` **[object][170]** optional skill configuration object
 -   `skillPath` **[string][171]** path to skills directory
+
+**Meta**
+
+-   **deprecated**: This is deprecated.
+
 
 ### on
 
@@ -2152,9 +2103,9 @@ formPage.populate(storedData);
 
 [134]: #building-skills
 
-[135]: #using-handlers
+[135]: #sharing-handlers
 
-[136]: #the-one-bot-function
+[136]: #sharing-the-one-bot-function
 
 [137]: #handling-web-requests
 

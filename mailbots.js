@@ -104,8 +104,11 @@ class MailBots {
    * This can also receive a path to a file.
    * @param {string} skillPath path to skills directory
    * @param {object} config optional skill configuration object
+   * @deprecated
    */
   loadSkill(skill, config) {
+    //prettier-ignore
+    console.warn("mailbot.loadSkill method has been deprecated in favor of directly requiring and invoking skills.");
     debug("loading skill");
     const fs = require("fs");
     const path = require("path");
@@ -166,45 +169,11 @@ class MailBots {
    * @param {function} cb Handler function
    */
   on(triggerCondition, cb, opts) {
-    if (this._listenerAlreadyAdded({ triggerCondition, cb, opts })) {
-      debug("ignoring duplicate listener");
-      return;
-    }
     debug("adding listener");
     if (opts && opts.multiFire) {
       this.multiFireListeners.push({ triggerCondition, cb });
     } else {
       this.listeners.push({ triggerCondition, cb });
-    }
-  }
-
-  /**
-   * @private
-   * Prevent adding duplicate listener functions
-   * @param {function} params.triggerCondition - see "on" function.
-   * @param {function} params.cb - same as "on" function
-   * @param {opts} params.opts - same as "on" function
-   */
-  _listenerAlreadyAdded({ triggerCondition, cb, opts }) {
-    function duplicateExists(listnersArray) {
-      return listnersArray.some(listener => {
-        const dupTriggerCondition = _.isEqual(
-          listener.triggerCondition.toString(),
-          triggerCondition.toString()
-        );
-
-        // TMP: Equality check these pointing to exact same instance of function
-        const trulyDuplicateFunction = listener.cb === cb;
-
-        const dupCb = _.isEqual(listener.cb.toString(), cb.toString());
-        return dupTriggerCondition && dupCb && trulyDuplicateFunction;
-      });
-    }
-
-    if (opts && opts.multiFire) {
-      return duplicateExists(this.multiFireListeners);
-    } else {
-      return duplicateExists(this.listeners);
     }
   }
 
