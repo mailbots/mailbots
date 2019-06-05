@@ -182,7 +182,7 @@ class MailBots {
    * @private
    * Prevent adding duplicate listener functions
    * @param {function} params.triggerCondition - see "on" function.
-   * @param {function} params.db - same as "on" function
+   * @param {function} params.cb - same as "on" function
    * @param {opts} params.opts - same as "on" function
    */
   _listenerAlreadyAdded({ triggerCondition, cb, opts }) {
@@ -193,8 +193,11 @@ class MailBots {
           triggerCondition.toString()
         );
 
+        // TMP: Equality check these pointing to exact same instance of function
+        const trulyDuplicateFunction = listener.cb === cb;
+
         const dupCb = _.isEqual(listener.cb.toString(), cb.toString());
-        return dupTriggerCondition && dupCb;
+        return dupTriggerCondition && dupCb && trulyDuplicateFunction;
       });
     }
 

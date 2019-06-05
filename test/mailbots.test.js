@@ -483,8 +483,20 @@ describe("MailBots App", function() {
       done();
     });
 
-    it("_listenerAlreadyAdded detects identical one-time listeners", function(done) {
-      // Trigger condition function is what gets passed from mailbot.onCommand("foo")
+    /**
+     * These tests (soon to be removed) illustrate the shortcomings with the approach documented
+     * in README.md #the-one-bot-function section that show activating a listener and returning JSON
+     * elements (UI, etc) both within the same function. Since UI elements need to be used throughout the
+     * system, these functions need to be called multiple times. This would, of cousre, activate the
+     * listeners multiple times resulting in these methods to ignore duplicates.
+     *
+     * The advantage was a consistent skill activation method for novices.
+     * Ex: `const const elements = require("my-skill")(mailbot);` The disadvantages, however far outweigh
+     * this simple convenience. The
+     *
+     */
+    it.only("_listenerAlreadyAdded detects identical one-time listeners", function(done) {
+      // Trigger condit.onlyion function is what gets passed from mailbot.onCommand("foo")
       const triggerCondition = webhook =>
         webhook.event === "task.created" &&
         this.getTaskCommand(webhook) === "foo";
@@ -496,6 +508,49 @@ describe("MailBots App", function() {
         cb
       });
       expect(alreadyAdded).to.be.true;
+      done();
+    });
+
+    it.only("_listenerAlreadyAdded runs identical one-time listeners if they are separate instances", function(done) {
+      const triggerCondition = webhook =>
+        webhook.event === "task.created" &&
+        this.getTaskCommand(webhook) === "foo";
+
+      // returns a bot function
+      const cbGenerator = word => {
+        return function(bot) {
+          bot.webhook.quickReply(word);
+        };
+      };
+      mailbot.on(triggerCondition, cbGenerator("Hello world")); // bot function 1
+      const alreadyAdded = mailbot._listenerAlreadyAdded({
+        triggerCondition,
+        cb: cbGenerator("Same function, different instance")
+      });
+      expect(alreadyAdded).to.be.false;
+      done();
+    });
+
+    //
+    it.only("_listenerAlreadyAdded runs identical one-time listeners if they are separate instances", function(done) {
+      const triggerCondition = webhook =>
+        webhook.event === "task.created" &&
+        this.getTaskCommand(webhook) === "foo";
+
+      // similar to mailbot skill module
+      function invokeSkill(mailbot) {
+        mailbot.on(triggerCondition, bot => {
+          bot.webhook.quickReply("test");
+        });
+      }
+
+      invokeSkill(mailbot);
+      invokeSkill(mailbot);
+
+      // ERROR: Invoking the skill multiple times creates different instances of this function, defeating
+      // the purpose. The simple, consistent skill invocation method is not worth it!
+      expect(mailbot.listeners.length).to.eq(1);
+
       done();
     });
 
