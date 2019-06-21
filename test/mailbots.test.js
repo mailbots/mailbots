@@ -3,18 +3,18 @@
 const { expect } = require("chai");
 const request = require("supertest");
 const fs = require("fs");
-const MailBots = require("../dist/mailbots").default;
+const MailBots = require("../mailbots");
 const crypto = require("crypto");
 
 const clientId = "foo";
 const clientSecret = "bar";
 
-describe("MailBots App", function () {
+describe("MailBots App", function() {
   const taskCreatedWebhook = require("./fixtures/task-created-webhook.json");
   const actionReceivedWebhook = require("./fixtures/task-action-received-webhook.json");
 
   let mailbot = {}; // reinitialized before each test
-  beforeEach(function () {
+  beforeEach(function() {
     mailbot = new MailBots({
       clientId,
       clientSecret
@@ -59,24 +59,24 @@ describe("MailBots App", function () {
     });
   }
 
-  describe("configuration", function () {
-    it("should throw if instaniated without config", function (done) {
+  describe("configuration", function() {
+    it("should throw if instaniated without config", function(done) {
       expect(() => new MailBots()).to.throw();
       expect(() => new MailBots({ clientId, clientSecret })).to.not.throw();
       done();
     });
   });
 
-  describe("webhook validation", function () {
-    before(function () {
+  describe("webhook validation", function() {
+    before(function() {
       process.env.NODE_ENV = "production";
     });
 
-    after(function () {
+    after(function() {
       process.env.NODE_ENV = "test";
     });
 
-    it("should only accept validate webhooks", function (done) {
+    it("should only accept validate webhooks", function(done) {
       mailbot.on(/.*/, bot => {
         // Should fire and be valid
         expect(bot.requestJson.event).to.equal("task.created");
@@ -87,7 +87,7 @@ describe("MailBots App", function () {
       fireWebhookRequest(exampleJson);
     });
 
-    it("should fail webhook with an invalid secret", function (done) {
+    it("should fail webhook with an invalid secret", function(done) {
       mailbot.on(/.*/, bot => {
         done("An invalid webhook is executing");
         bot.webhook.respond();
@@ -122,9 +122,9 @@ describe("MailBots App", function () {
     });
   });
 
-  describe("event matching", function () {
+  describe("event matching", function() {
     // Request headers are missing..but how best to catch this error??
-    it("onCommand handler matches a command by regex", function (done) {
+    it("onCommand handler matches a command by regex", function(done) {
       mailbot.onCommand(/.*/, bot => {
         expect(bot.command).to.equal("memorize");
         bot.webhook.respond();
@@ -133,7 +133,7 @@ describe("MailBots App", function () {
       fireWebhookRequest(taskCreatedWebhook);
     });
 
-    it("onCommand handler matches a command by string", function (done) {
+    it("onCommand handler matches a command by string", function(done) {
       mailbot.onCommand("memorize", bot => {
         expect(bot.command).to.equal("memorize");
         done();
@@ -141,7 +141,7 @@ describe("MailBots App", function () {
       fireWebhookRequest(taskCreatedWebhook);
     });
 
-    it("onAction handler matches by regex", function (done) {
+    it("onAction handler matches by regex", function(done) {
       mailbot.onAction(/^freque.*/, bot => {
         expect(bot.action).to.equal("frequency.0-2");
         bot.webhook.respond();
@@ -150,7 +150,7 @@ describe("MailBots App", function () {
       fireWebhookRequest(actionReceivedWebhook);
     });
 
-    it("multiple handlers and requests can fire", async function () {
+    it("multiple handlers and requests can fire", async function() {
       mailbot.onCommand("memorize", function handleCmd(bot) {
         bot.webhook.quickReply("foo");
         expect(bot.command).to.equal("memorize");
@@ -167,7 +167,7 @@ describe("MailBots App", function () {
       const result2 = await fireWebhookRequest(actionReceivedWebhook);
     });
 
-    it("multiple async handlers and requests can fire", async function () {
+    it("multiple async handlers and requests can fire", async function() {
       mailbot.onCommand("memorize", async function handleCmd(bot) {
         await getAsyncThing(100);
         bot.webhook.quickReply("foo");
@@ -187,7 +187,7 @@ describe("MailBots App", function () {
     });
 
     const taskTriggeredWebhook = require("./fixtures/task-triggered-webhook.json");
-    it("onTrigger handler matches task command by regex", function (done) {
+    it("onTrigger handler matches task command by regex", function(done) {
       mailbot.onTrigger(/^mem.*/, bot => {
         expect(bot.get("task.command")).to.equal(
           "memorize@mailbots-memorize.eml.bot"
@@ -199,7 +199,7 @@ describe("MailBots App", function () {
     });
 
     const taskViewedWebhook = require("./fixtures/task-viewed-webhook.json");
-    it("onTaskViewed handler matches task command by regex", function (done) {
+    it("onTaskViewed handler matches task command by regex", function(done) {
       mailbot.onTaskViewed(/^memorize.*/, bot => {
         expect(bot.get("task.command")).to.equal(
           "memorize@mailbots-memorize.eml.bot"
@@ -210,7 +210,7 @@ describe("MailBots App", function () {
       fireWebhookRequest(taskViewedWebhook);
     });
 
-    it("mailbot.on method matches webhook types", function (done) {
+    it("mailbot.on method matches webhook types", function(done) {
       mailbot.on("task.created", bot => {
         expect(bot.command).to.equal("memorize");
         bot.webhook.respond();
@@ -219,7 +219,7 @@ describe("MailBots App", function () {
       fireWebhookRequest(taskCreatedWebhook);
     });
 
-    it("mailbot.on method matches webhook by function", function (done) {
+    it("mailbot.on method matches webhook by function", function(done) {
       function matchFunction(webhook) {
         if (webhook.event == "task.created") return true;
       }
@@ -231,7 +231,7 @@ describe("MailBots App", function () {
       fireWebhookRequest(taskCreatedWebhook);
     });
 
-    it("mailbot.on method matches webhook by regex", function (done) {
+    it("mailbot.on method matches webhook by regex", function(done) {
       mailbot.on(/task\..*/, bot => {
         expect(bot.command).to.equal("memorize");
         bot.webhook.respond();
@@ -240,7 +240,7 @@ describe("MailBots App", function () {
       fireWebhookRequest(taskCreatedWebhook);
     });
 
-    it("mailbot.on method matches webhook by regex", function (done) {
+    it("mailbot.on method matches webhook by regex", function(done) {
       mailbot.onEvent("intercom", bot => {
         bot.webhook.quickReply("test");
         bot.webhook.respond();
@@ -250,7 +250,7 @@ describe("MailBots App", function () {
       fireWebhookRequest(intercomEvent);
     });
 
-    it("mailbot.on method matches webhook by regex (async)", async function () {
+    it("mailbot.on method matches webhook by regex (async)", async function() {
       mailbot.onEvent("intercom", async bot => {
         let res = await getAsyncThing();
         bot.webhook.respond();
@@ -259,7 +259,7 @@ describe("MailBots App", function () {
       await fireWebhookRequest(intercomEvent);
     });
 
-    it("once a match is found, no future routes are matched", function (done) {
+    it("once a match is found, no future routes are matched", function(done) {
       mailbot.on("task.created", bot => {
         expect(bot.command).to.equal("memorize");
         bot.webhook.respond();
@@ -271,7 +271,7 @@ describe("MailBots App", function () {
       fireWebhookRequest(taskCreatedWebhook);
     });
 
-    it("gives a nice message when no handlers fire ", async function () {
+    it("gives a nice message when no handlers fire ", async function() {
       const res = await fireWebhookRequest(taskCreatedWebhook, {
         errOnFallthrough: false
       });
@@ -281,10 +281,10 @@ describe("MailBots App", function () {
     });
   });
 
-  describe("settings", function () {
+  describe("settings", function() {
     const mailbotSettingsViewed = require("./fixtures/mailbot-settings-viewed-webhook.json");
 
-    it("fires onSettingsViewed handler", function (done) {
+    it("fires onSettingsViewed handler", function(done) {
       mailbot.onSettingsViewed(bot => {
         done();
       });
@@ -293,7 +293,7 @@ describe("MailBots App", function () {
       });
     });
 
-    it("onSettingsViewed handler adds a json response", function (done) {
+    it("onSettingsViewed handler adds a json response", function(done) {
       mailbot.onSettingsViewed(bot => {
         bot.responseJson = {
           settings: {
@@ -309,7 +309,7 @@ describe("MailBots App", function () {
       });
     });
 
-    it("onSettingsViewed handler handles an async function", function (done) {
+    it("onSettingsViewed handler handles an async function", function(done) {
       mailbot.onSettingsViewed(async bot => {
         const settings = await getAsyncThing();
         bot.responseJson = settings;
@@ -322,7 +322,7 @@ describe("MailBots App", function () {
       });
     });
 
-    it("multiple onSettingsViewed handlers fire", function (done) {
+    it("multiple onSettingsViewed handlers fire", function(done) {
       mailbot.onSettingsViewed(bot => {
         bot.responseJson = {
           settings: {
@@ -344,7 +344,7 @@ describe("MailBots App", function () {
       });
     });
 
-    it("passes data between onSettingsViewed handlers", function (done) {
+    it("passes data between onSettingsViewed handlers", function(done) {
       mailbot.onSettingsViewed(bot => {
         bot.responseJson = {
           settings: {
@@ -365,7 +365,7 @@ describe("MailBots App", function () {
 
     const mailbotSettingsBeforeSaved = require("./fixtures/mailbot-settings-pre-saved-webhook.json");
 
-    it("fires beforeSettingsSaved handler", function (done) {
+    it("fires beforeSettingsSaved handler", function(done) {
       mailbot.beforeSettingsSaved(bot => {
         done();
       });
@@ -374,7 +374,7 @@ describe("MailBots App", function () {
       });
     });
 
-    it("multiple beforeSettingsSaved handlers fire with data", function (done) {
+    it("multiple beforeSettingsSaved handlers fire with data", function(done) {
       mailbot.beforeSettingsSaved(bot => {
         bot.webhook.setMailBotData("github.foo", "bar");
       });
@@ -391,7 +391,7 @@ describe("MailBots App", function () {
       });
     });
 
-    it("resets existing mailbot settings", function (done) {
+    it("resets existing mailbot settings", function(done) {
       mailbot.beforeSettingsSaved(bot => {
         bot.webhook.setMailBotData("github.foo", "bar");
       });
@@ -409,10 +409,10 @@ describe("MailBots App", function () {
     });
   });
 
-  describe("middleware", function () {
-    it("uses middleware to add skills", function (done) {
+  describe("middleware", function() {
+    it("uses middleware to add skills", function(done) {
       mailbot.app.use((req, res, next) => {
-        res.locals.bot.skills.completeTest = function (done) {
+        res.locals.bot.skills.completeTest = function(done) {
           done();
         };
         next();
@@ -424,9 +424,9 @@ describe("MailBots App", function () {
       fireWebhookRequest(taskCreatedWebhook);
     });
 
-    it("uses async middleware to add skills", function (done) {
+    it("uses async middleware to add skills", function(done) {
       mailbot.app.use((req, res, next) => {
-        res.locals.bot.skills.completeTest = function (done) {
+        res.locals.bot.skills.completeTest = function(done) {
           done();
         };
         next();
@@ -438,7 +438,7 @@ describe("MailBots App", function () {
       fireWebhookRequest(taskCreatedWebhook);
     });
 
-    it("allows middleware to make itself run once per request", async function () {
+    it("allows middleware to make itself run once per request", async function() {
       let runCount = 0;
       function mw(req, res, next) {
         const bot = res.locals.bot;
@@ -466,8 +466,8 @@ describe("MailBots App", function () {
     });
   });
 
-  describe("loading skills", function () {
-    it("loads skills from a directory", function (done) {
+  describe("loading skills", function() {
+    it("loads skills from a directory", function(done) {
       mailbot.loadSkill(__dirname + "/test-skills-1");
       mailbot.onCommand("memorize", bot => {
         expect(bot.skills.testing1).to.be.true;
@@ -476,7 +476,7 @@ describe("MailBots App", function () {
       fireWebhookRequest(taskCreatedWebhook);
     });
 
-    it("loads skills from multiple directories", function (done) {
+    it("loads skills from multiple directories", function(done) {
       mailbot.loadSkill(__dirname + "/test-skills-1");
       mailbot.loadSkill(__dirname + "/test-skills-2/");
       mailbot.onCommand("memorize", bot => {
@@ -487,7 +487,7 @@ describe("MailBots App", function () {
       fireWebhookRequest(taskCreatedWebhook);
     });
 
-    it("loads skill files in alpha order by filename", function (done) {
+    it("loads skill files in alpha order by filename", function(done) {
       mailbot.loadSkill(__dirname + "/test-skills-1");
       mailbot.onCommand("memorize", bot => {
         expect(bot.skills.overwrite).to.equal("z-test-skill");
@@ -497,8 +497,8 @@ describe("MailBots App", function () {
     });
   });
 
-  describe("request information", function () {
-    it("checks if current request is a webhook or not", function () {
+  describe("request information", function() {
+    it("checks if current request is a webhook or not", function() {
       mailbot.app.use((req, res, next) => {
         expect(res.locals.bot.isWebhook).to.be.true;
         next();
@@ -506,7 +506,7 @@ describe("MailBots App", function () {
       fireWebhookRequest(taskCreatedWebhook, { errOnFallthrough: false });
     });
 
-    it("checks if current request is not a webhook", function (done) {
+    it("checks if current request is not a webhook", function(done) {
       mailbot.app.use((req, res, next) => {
         expect(res.locals.bot.isWebhook).to.be.false;
         done();
@@ -522,9 +522,9 @@ describe("MailBots App", function () {
     });
   });
 
-  describe("async handlers", function () {
-    it("handles an onCommand handler that returns a promise", async function () {
-      mailbot.onCommand("memorize", async function (bot) {
+  describe("async handlers", function() {
+    it("handles an onCommand handler that returns a promise", async function() {
+      mailbot.onCommand("memorize", async function(bot) {
         let res = await getAsyncThing();
         bot.set("task.stored_data", res);
         bot.webhook.respond();
@@ -540,10 +540,10 @@ describe("MailBots App", function () {
     it.skip("doesn't support async handlers that use callbacks");
   });
 
-  describe("error handling", function () {
+  describe("error handling", function() {
     const mailbotSettingsViewed = require("./fixtures/mailbot-settings-viewed-webhook.json");
 
-    it("uses the default error handler", async function () {
+    it("uses the default error handler", async function() {
       process.env.SILENCE_DEFAULT_ERROR_HANDLER = "true";
       mailbot.onCommand("memorize", bot => {
         throw new Error("An error!");
@@ -557,7 +557,7 @@ describe("MailBots App", function () {
       delete process.env.SILENCE_DEFAULT_ERROR_HANDLER;
     });
 
-    it("uses the default error handler in async requests", async function () {
+    it("uses the default error handler in async requests", async function() {
       process.env.SILENCE_DEFAULT_ERROR_HANDLER = "true";
       mailbot.onCommand("memorize", async bot => {
         await getAsyncThing(20);
@@ -571,7 +571,7 @@ describe("MailBots App", function () {
       delete process.env.SILENCE_DEFAULT_ERROR_HANDLER;
     });
 
-    it("uses the default error handler in multi-fire handlers", async function () {
+    it("uses the default error handler in multi-fire handlers", async function() {
       process.env.SILENCE_DEFAULT_ERROR_HANDLER = "true";
       mailbot.onSettingsViewed(bot => {
         throw new Error("An error!");
@@ -584,7 +584,7 @@ describe("MailBots App", function () {
       delete process.env.SILENCE_DEFAULT_ERROR_HANDLER;
     });
 
-    it("uses the default error handler in in async multi-fire handlers", async function () {
+    it("uses the default error handler in in async multi-fire handlers", async function() {
       process.env.SILENCE_DEFAULT_ERROR_HANDLER = "true";
       mailbot.onSettingsViewed(async bot => {
         await getAsyncThing(20);
@@ -598,7 +598,7 @@ describe("MailBots App", function () {
       delete process.env.SILENCE_DEFAULT_ERROR_HANDLER;
     });
 
-    it("uses a custom error handler in async one-time handlers", async function () {
+    it("uses a custom error handler in async one-time handlers", async function() {
       mailbot.setErrorHandler((err, bot) => {
         expect(err.message).to.equal("An error!");
         return bot.webhook.respond({
@@ -615,7 +615,7 @@ describe("MailBots App", function () {
       const result = await fireWebhookRequest(taskCreatedWebhook);
     });
 
-    it("handles an error and then more requets", async function () {
+    it("handles an error and then more requets", async function() {
       mailbot.setErrorHandler((err, bot) => {
         expect(err.message).to.equal("An error!");
         return bot.webhook.respond({
@@ -639,12 +639,12 @@ describe("MailBots App", function () {
       const result2 = await fireWebhookRequest(actionReceivedWebhook);
     });
 
-    it("uses a custom error handler with async multi-fire handlers (settings)", async function () {
+    it("uses a custom error handler with async multi-fire handlers (settings)", async function() {
       mailbot.setErrorHandler((err, bot) => {
         bot.webhook.respond({ webhook: { message: "foo!" } });
       });
 
-      mailbot.onSettingsViewed(function (bot) {
+      mailbot.onSettingsViewed(function(bot) {
         throw new Error("An error!");
         bot.webhook.respond();
       });
@@ -653,7 +653,7 @@ describe("MailBots App", function () {
       expect(result.body.webhook.message).to.contain("foo!");
     });
 
-    it("bubbles up Express middleware errors to MailBots App Error Handler", function (done) {
+    it("bubbles up Express middleware errors to MailBots App Error Handler", function(done) {
       mailbot.setErrorHandler((err, bot) => {
         expect(err.message).to.equal("Middleware Error");
         done();
@@ -673,8 +673,8 @@ describe("MailBots App", function () {
     });
   });
 
-  describe("problematic payloads", function () {
-    it("handles large files", async function () {
+  describe("problematic payloads", function() {
+    it("handles large files", async function() {
       mailbot.onCommand("memorize", bot => {
         bot.webhook.respond({
           webhook: {
