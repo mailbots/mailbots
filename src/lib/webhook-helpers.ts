@@ -380,7 +380,7 @@ export default class WebhookHelpers {
    * @example bot.webhook.invite(['user1@email.com','newUser2@gmail.com']);
    */
   invite(invitees: string[]) {
-    if (Array.isArray(invitees))
+    if (!Array.isArray(invitees))
       throw new Error("Invitees should accept an array of email addresses");
     this.set("mailbot.invite", invitees);
   }
