@@ -3,7 +3,7 @@
 const { expect } = require("chai");
 const request = require("supertest");
 const fs = require("fs");
-const MailBots = require("../mailbots");
+const MailBots = require("../dist/mailbots").default;
 const crypto = require("crypto");
 
 const clientId = "foo";

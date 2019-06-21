@@ -1,5 +1,5 @@
 const { expect } = require("chai");
-const BotRequest = require("../lib/bot-request");
+const BotRequest = require("../dist/lib/bot-request").default;
 const _ = require("lodash");
 
 let botRequest;
@@ -53,7 +53,8 @@ describe("Bot Request Helper", function() {
       expect(settings.memorize.JSONSchema.properties.first_name).to.deep.equal({
         type: "string",
         title: "First name",
-        description: undefined
+        description: undefined,
+        properties: {}
       });
       done();
     });
@@ -124,9 +125,9 @@ describe("Bot Request Helper", function() {
   ## ️⚠️ Connect Github
   This is a text block here. Leading spaces can break this.
   And this is a new line. Here is a new line
-  
+
   [Connect Github](http://www.google.com)
-  
+
   ------------------
   `);
 
