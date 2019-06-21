@@ -1,13 +1,13 @@
 const { expect } = require("chai");
-const BotRequest = require("../lib/bot-request");
+const BotRequest = require("../dist/lib/bot-request").default;
 const _ = require("lodash");
 
 let botRequest;
 let responseJson;
 let request = {};
 
-describe("Bot Request Helper", function() {
-  beforeEach(function() {
+describe("Bot Request Helper", function () {
+  beforeEach(function () {
     delete require
       .cache[require("path").join(__dirname, "./fixtures/task-created-webhook.json")];
     const webhookJson = require("./fixtures/task-created-webhook.json");
@@ -27,8 +27,8 @@ describe("Bot Request Helper", function() {
     // const ref = botRequest.webhook.getReferenceEmail();
   });
 
-  describe("settings helpers", function() {
-    it("creates an empty, namespaced settings form", function(done) {
+  describe("settings helpers", function () {
+    it("creates an empty, namespaced settings form", function (done) {
       const newForm = botRequest.webhook.settingsPage({
         namespace: "memorize",
         title: "Memorize Settings"
@@ -40,7 +40,7 @@ describe("Bot Request Helper", function() {
       done();
     });
 
-    it("adds a form input", function(done) {
+    it("adds a form input", function (done) {
       const newForm = botRequest.webhook.settingsPage({
         namespace: "memorize",
         title: "Memorize Settings"
@@ -53,12 +53,13 @@ describe("Bot Request Helper", function() {
       expect(settings.memorize.JSONSchema.properties.first_name).to.deep.equal({
         type: "string",
         title: "First name",
-        description: undefined
+        description: undefined,
+        properties: {}
       });
       done();
     });
 
-    it("adds a form input with a default value", function(done) {
+    it("adds a form input with a default value", function (done) {
       const newForm = botRequest.webhook.settingsPage({
         namespace: "memorize",
         title: "Memorize Settings"
@@ -73,7 +74,7 @@ describe("Bot Request Helper", function() {
       done();
     });
 
-    it("overwrites default input value when populating", function(done) {
+    it("overwrites default input value when populating", function (done) {
       const newForm = botRequest.webhook.settingsPage({
         namespace: "memorize",
         title: "Memorize Settings"
@@ -89,7 +90,7 @@ describe("Bot Request Helper", function() {
       done();
     });
 
-    it("adds a textarea input", function(done) {
+    it("adds a textarea input", function (done) {
       const newForm = botRequest.webhook.settingsPage({
         namespace: "memorize",
         title: "Memorize Settings"
@@ -102,7 +103,7 @@ describe("Bot Request Helper", function() {
       done();
     });
 
-    it("adds an alert dialog", function(done) {
+    it("adds an alert dialog", function (done) {
       const newForm = botRequest.webhook.settingsPage({
         namespace: "memorize",
         title: "Memorize Settings"
@@ -115,7 +116,7 @@ describe("Bot Request Helper", function() {
       done();
     });
 
-    it("adds a markdown text block", function(done) {
+    it("adds a markdown text block", function (done) {
       const newForm = botRequest.webhook.settingsPage({
         namespace: "memorize",
         title: "Memorize Settings"
@@ -124,9 +125,9 @@ describe("Bot Request Helper", function() {
   ## ️⚠️ Connect Github
   This is a text block here. Leading spaces can break this.
   And this is a new line. Here is a new line
-  
+
   [Connect Github](http://www.google.com)
-  
+
   ------------------
   `);
 
@@ -137,7 +138,7 @@ describe("Bot Request Helper", function() {
       done();
     });
 
-    it("Adds a checkbox", function(done) {
+    it("Adds a checkbox", function (done) {
       const newForm = botRequest.webhook.settingsPage({
         namespace: "memorize"
       });
@@ -149,7 +150,7 @@ describe("Bot Request Helper", function() {
       done();
     });
 
-    it("inserts custom schemas in the right locations", function(done) {
+    it("inserts custom schemas in the right locations", function (done) {
       const newForm = botRequest.webhook.settingsPage({
         namespace: "memorize"
       });
@@ -175,7 +176,7 @@ describe("Bot Request Helper", function() {
       done();
     });
 
-    it("Adds a select dropdown box", function(done) {
+    it("Adds a select dropdown box", function (done) {
       const newForm = botRequest.webhook.settingsPage({
         namespace: "memorize"
       });
@@ -200,7 +201,7 @@ describe("Bot Request Helper", function() {
       done();
     });
 
-    it("builds an array of separate JSON Schema forms", function(done) {
+    it("builds an array of separate JSON Schema forms", function (done) {
       const firstForm = botRequest.webhook.settingsPage({
         namespace: "github",
         title: "Github Settings"
@@ -230,7 +231,7 @@ describe("Bot Request Helper", function() {
     it("gets new and old settings from pre-save webhook");
     it("sets newly set data from mailbot.settings_pre_saved hook");
 
-    it("adds a custom submit button with url params", function(done) {
+    it("adds a custom submit button with url params", function (done) {
       const newForm = botRequest.webhook.settingsPage({
         namespace: "memorize",
         title: "Memorize Settings"
@@ -246,7 +247,7 @@ describe("Bot Request Helper", function() {
     });
   });
 
-  describe("task data", function() {
+  describe("task data", function () {
     // Dependent tests - TODO: Separate tests
     it("gets task data", done => {
       _.set(
@@ -376,7 +377,7 @@ describe("Bot Request Helper", function() {
     });
   });
 
-  describe("deeply gets and sets object data", function() {
+  describe("deeply gets and sets object data", function () {
     it("getting task data shallowly merges requestJson and response JSON", done => {
       _.set(botRequest, "webhook.requestJson.task.stored_data", {
         foo: "bar"
@@ -484,7 +485,7 @@ describe("Bot Request Helper", function() {
     });
   });
 
-  describe("mailbot", function() {
+  describe("mailbot", function () {
     it("sets mailbot data", done => {
       botRequest.webhook.setMailBotData({
         crm: {
@@ -546,7 +547,7 @@ describe("Bot Request Helper", function() {
     });
   });
 
-  describe("sending email", function() {
+  describe("sending email", function () {
     it("adds outbound email to response", done => {
       botRequest.webhook.sendEmail({
         to: "fdas@fdsa.com",
@@ -627,7 +628,7 @@ describe("Bot Request Helper", function() {
     });
   });
 
-  describe("helpers", function() {
+  describe("helpers", function () {
     it("makes webhook req / res JSON available", done => {
       expect(botRequest.webhook.requestJson).to.be.an("object");
       expect(botRequest.webhook.responseJson).to.be.an("object");
