@@ -424,7 +424,7 @@ export default class WebhookHelpers {
    * @param {object} json Response JSON
    * @example bot.webhook.respond();
    */
-  respond(json: object) {
+  respond(json?: object) {
     this.alreadyResponded = true;
     debug("Response JSON", this.responseJson);
     this.botRequest.response.send({ ...this.responseJson, ...json });

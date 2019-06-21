@@ -200,8 +200,8 @@ export default class SettingsPage {
     name: string;
     title: string;
     description?: string;
-    helpText: string;
-    placeholder: string;
+    helpText?: string;
+    placeholder?: string;
     defaultValue?: string;
   }) {
     if (this.JSONSchema.properties) {
@@ -251,10 +251,10 @@ export default class SettingsPage {
   }: {
     name: string;
     title: string;
-    description: string;
-    helpText: string;
-    placeholder: string;
-    defaultValue: string;
+    description?: string;
+    helpText?: string;
+    placeholder?: string;
+    defaultValue?: string;
   }) {
     if (this.JSONSchema.properties) {
       this.JSONSchema.properties[name] = {
@@ -295,8 +295,8 @@ export default class SettingsPage {
   }: {
     name: string;
     title: string;
-    description: string;
-    helpText: string;
+    description?: string;
+    helpText?: string;
     defaultValue?: string;
   }) {
     if (this.JSONSchema.properties) {
@@ -349,10 +349,10 @@ export default class SettingsPage {
   }: {
     name: string;
     title: string;
-    description: string;
-    helpText: string;
+    description?: string;
+    helpText?: string;
     options: string[];
-    placeholder: string;
+    placeholder?: string;
     defaultValue?: string;
   }) {
     if (!(options instanceof Array))
