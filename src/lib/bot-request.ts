@@ -2,6 +2,7 @@ import * as _ from "lodash";
 import * as crypto from "crypto";
 import * as uuid from "uuid/v1";
 import { Request, Response } from "express";
+import { MailBotsClient } from "@mailbots/mailbots-sdk";
 import WebhookHelpers from "./webhook-helpers";
 import { IBotConfig } from "./config-defaults";
 
@@ -26,6 +27,7 @@ export default class BotRequest {
   public action: string;
   public event: string;
   public config?: IBotConfig;
+  public api!: MailBotsClient;
 
   /**
    * Class constructor.

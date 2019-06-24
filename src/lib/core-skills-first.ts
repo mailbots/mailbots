@@ -2,7 +2,7 @@ import * as cookieParser from "cookie-parser";
 import * as bodyParser from "body-parser";
 import * as debugAs from "debug";
 import * as request from "request";
-const MailBotsClient = require("@mailbots/mailbots-sdk");
+import { MailBotsClient } from "@mailbots/mailbots-sdk";
 const urljoin = require("url-join");
 
 import MailBots from "../mailbots";
@@ -43,6 +43,8 @@ export default function(mailbot: MailBots) {
     // Validate webhooks
     mailbot.app.post("/webhooks", botUtils.validateWebhook);
   }
+
+  mailbot.app.use(botUtils.initSdkApiClient);
 
   // Make bot.isWebhook available on BotRequest for use in handler logic
   mailbot.app.use((req, res, next) => {
