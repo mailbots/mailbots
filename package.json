@@ -13,6 +13,7 @@
   ],
   "scripts": {
     "build": "npx tsc -p ./tsconfig.json",
+    "build:watch": "npm run build -- -w",
     "test": "NODE_ENV=test mocha test -w --full-trace",
     "test:inspect": "NODE_ENV=test mocha test --full-trace --inspect-brk -w",
     "docs:build": "npm run toc:build && documentation -c documentation.yml -f html build -o docs-html && documentation -c documentation.yml build -f md -o docs.md && cd docs-html && now --static && echo '\n Run: \n\n cd docs-html && now alias\n'",
@@ -31,6 +32,7 @@
     "@types/cookie-parser": "1.4.1",
     "@types/debug": "4.1.4",
     "@types/lodash": "4.14.134",
+    "@types/node": "^12.0.10",
     "@types/request": "2.48.1",
     "@types/url-join": "4.0.0",
     "@types/uuid": "3.4.4",
