@@ -5,6 +5,13 @@ import BotRequest from "./bot-request";
 import SettingsPage from "./settings-page";
 
 import { IReferenceEmail } from "./IReferenceEmail";
+import {
+  IWebhookSource,
+  IWebhookTrigger,
+  IWebhookUser,
+  IWebHookTask,
+  IWebHookMailBot
+} from "./IWebHook";
 
 const debug = debugAs("mailbots");
 const WEBHOOK_API_VERSION = "1";
@@ -469,5 +476,52 @@ export default class WebhookHelpers {
       title,
       menuTitle
     });
+  }
+
+  /**
+   * Get bot request source request object.
+   * @example const source = bot.webhook.getSource()
+   * @returns {IWebhookSource}
+   */
+  getSource(): IWebhookSource | undefined {
+    return this.get("source");
+  }
+
+  /**
+   * Get information about the event that
+   * triggered this webhook.
+   * @example const trigger = bot.webhook.getTrigger()
+   * @returns {IWebhookTrigger}
+   */
+  getTrigger(): IWebhookTrigger | undefined {
+    return this.get("trigger");
+  }
+
+  /**
+   * Get data about the user for which the webhook
+   * was posted.
+   * @example const user = bot.webhook.getUser()
+   * @returns {IWebhookUser}
+   */
+  getUser(): IWebhookUser | undefined {
+    return this.get("user");
+  }
+
+  /**
+   * Get task data associated with the webhook.
+   * @example const task = bot.webhook.getTask()
+   * @returns {IWebHookTask}
+   */
+  getTask(): IWebHookTask | undefined {
+    return this.get("task");
+  }
+
+  /**
+   * Get mailbot data sent over with each webhook.
+   * @example const mailbot = bot.webhook.getMailBot()
+   * @returns {IWebHookMailBot}
+   */
+  getMailBot(): IWebHookMailBot {
+    return this.get("mailbot");
   }
 }
