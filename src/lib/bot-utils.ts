@@ -65,7 +65,7 @@ export function initSdkApiClient(
   const bot: BotRequest = res.locals.bot;
   const config: IBotConfig = res.locals.bot.config;
   const api = new MailBotsClient(config);
-  (bot as any).api = api;
+  bot.api = api;
 
   const accessToken = bot.webhook.getMailBotData(
     config.accessTokenName || req.cookies[config.accessTokenName]
