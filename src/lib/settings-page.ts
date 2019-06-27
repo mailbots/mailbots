@@ -208,8 +208,7 @@ export default class SettingsPage {
       this.JSONSchema.properties[name] = {
         type: "string",
         title,
-        description,
-        properties: {}
+        description
       };
     }
     this.uiSchema[name] = {
@@ -260,8 +259,7 @@ export default class SettingsPage {
       this.JSONSchema.properties[name] = {
         type: "string",
         title,
-        description,
-        properties: {}
+        description
       };
     }
     this.uiSchema[name] = {
@@ -303,8 +301,7 @@ export default class SettingsPage {
       this.JSONSchema.properties[name] = {
         type: "boolean",
         title,
-        description,
-        properties: {}
+        description
       };
     }
 
@@ -362,8 +359,7 @@ export default class SettingsPage {
         type: "string",
         description,
         title,
-        enum: options,
-        properties: {}
+        enum: options
       };
     }
     this.uiSchema[name] = {
