@@ -11,7 +11,7 @@ interface IJSONSchema {
 interface IUISchema {}
 
 interface IFormData {
-  [key: string]: string;
+  [key: string]: any;
 }
 
 interface IFormMeta {
@@ -295,7 +295,7 @@ export default class SettingsPage {
     title: string;
     description?: string;
     helpText?: string;
-    defaultValue?: string;
+    defaultValue?: boolean;
   }) {
     if (this.JSONSchema.properties) {
       this.JSONSchema.properties[name] = {
