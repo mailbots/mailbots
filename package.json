@@ -1,6 +1,6 @@
 {
   "name": "mailbots",
-  "version": "2.0.0-alpha.0",
+  "version": "2.0.0-alpha.1",
   "description": "An open source bot framework for creating email-based bots using MailBots.com",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -44,7 +44,7 @@
     "typescript": "3.5.2"
   },
   "dependencies": {
-    "@mailbots/mailbots-sdk": "^2.0.0-alpha.1",
+    "@mailbots/mailbots-sdk": "^2.0.0-alpha.2",
     "@types/express": "4.17.0",
     "body-parser": "1.18.3",
     "cookie-parser": "1.4.3",
