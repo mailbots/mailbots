@@ -177,14 +177,15 @@ export default class WebhookHelpers {
    * @param  {string|object} param Either a lodash set param or an
    * object to be shallowly merged into mailbot.private_data
    * @param {*} [value] When passing lodash set path string as first
-   * param, this is the value.
+   * @param {*} [merge] When passing lodash set path string as first
+   * param, this specifies if the data should be shallowly merged or replaced (defaults to true).
    */
   setMailBotData(...args: any[]) {
     this._initMailBotData();
     if (typeof args[0] === "object") {
       return this.set("mailbot.stored_data", args[0]);
     } else if (typeof args[0] === "string") {
-      return this.set("mailbot.stored_data." + args[0], args[1]);
+      return this.set("mailbot.stored_data." + args[0], args[1], args[2]);
     } else {
       throw new Error("setMailBotData() unhandled type: " + typeof args[0]);
     }
