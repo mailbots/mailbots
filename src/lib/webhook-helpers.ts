@@ -83,7 +83,7 @@ export default class WebhookHelpers {
    * @example bot.set('task.reference_email', { subject: "New Subject!"}); // Same effect as above
    */
   set(key: string, value: any, merge?: boolean) {
-    merge = merge || true;
+    if (merge === undefined) merge = true;
     debug(`set: ${key}`);
     const existingValue = this.get(key);
     // If we're setting an object field, shallow merge it
