@@ -53,8 +53,7 @@ describe("Bot Request Helper", function() {
       expect(settings.memorize.JSONSchema.properties.first_name).to.deep.equal({
         type: "string",
         title: "First name",
-        description: undefined,
-        properties: {}
+        description: undefined
       });
       done();
     });
