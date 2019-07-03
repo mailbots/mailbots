@@ -1,6 +1,7 @@
 import * as _ from "lodash";
 import * as crypto from "crypto";
 import * as uuid from "uuid/v1";
+import * as moment from "moment-timezone";
 import { Request, Response } from "express";
 import { MailBotsClient } from "@mailbots/mailbots-sdk";
 import WebhookHelpers from "./webhook-helpers";
@@ -103,6 +104,41 @@ export default class BotRequest {
       }
       return false;
     }
+  }
+
+  /**
+   * Transform a unix timestamp into user friendly output.
+   *
+   * @param  {number} unixTime
+   * @param  {string} timezone Standard tz abbreviation (ex: America/Los_Angeles)
+   * @param  {string} format Moment.js time formatting (default: "MMMM Do YYYY, h:mma z")
+   * @return {object} An object of user-friendly versions of the date
+   */
+  getFriendlyDates({
+    unixTime,
+    userTimezone,
+    format = "MMMM Do YYYY, h:mma z"
+  }: {
+    unixTime: number;
+    userTimezone: string;
+    format?: string;
+  }) {
+    const secondsFromNow = Math.round(unixTime - Date.now() / 1000);
+    const daysInFuture = Math.round(secondsFromNow / 60 / 60 / 24);
+    const hoursInFuture = Math.round(secondsFromNow / 60 / 60);
+    const howFarInFuture = daysInFuture
+      ? `${daysInFuture} ${daysInFuture === 1 ? "day" : "days"}`
+      : `${hoursInFuture} ${hoursInFuture === 1 ? "hour" : "hours"}`;
+    userTimezone = userTimezone || "GMT";
+    const friendlyDate = moment(unixTime * 1000)
+      .tz(userTimezone)
+      .format(format);
+    return {
+      friendlyDate,
+      daysInFuture,
+      hoursInFuture,
+      howFarInFuture
+    };
   }
 
   /**
