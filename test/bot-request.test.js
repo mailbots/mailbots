@@ -662,5 +662,29 @@ describe("Bot Request Helper", function() {
       expect(botRequest.action).to.equal("frequency.0-2");
       done();
     });
+
+    it("provides a method for working with user friendly dates", done => {
+      let date = new Date();
+      date.setMinutes(date.getMinutes() + 60 * 4); // 4 hours in the future
+      let parsed = botRequest.getFriendlyDates({
+        unixTime: date.getTime() / 1000,
+        userTimezone: "America/Los_Angeles"
+      });
+
+      expect(parsed.daysInFuture).to.be.equal(0);
+      expect(parsed.hoursInFuture).to.be.equal(4);
+      expect(parsed.howFarInFuture).to.be.equal("4 hours");
+
+      date.setHours(date.getHours() + 24 * 6); // 6 days in the future
+      parsed = botRequest.getFriendlyDates({
+        unixTime: date.getTime() / 1000,
+        userTimezone: "America/Los_Angeles"
+      });
+
+      expect(parsed.daysInFuture).to.be.equal(6);
+      expect(parsed.howFarInFuture).to.be.equal("6 days");
+
+      done();
+    });
   });
 });
