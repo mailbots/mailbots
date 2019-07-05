@@ -466,6 +466,37 @@ export default class SettingsPage {
   }
 
   /**
+   * Insert custom button
+   * @param {object} params
+   * @param {string}  params.url URL of video
+   * @example formPage.button({
+   *   text: "Google"
+   *   href: "https://www.google.com"
+   * });
+   */
+  button({ text, href = "" }: { text: string; href: string }) {
+    if (!href) throw new Error("A href is required");
+    const name = `_md_${Math.random()
+      .toString()
+      .substr(2, 10)}`;
+    if (this.JSONSchema.properties) {
+      this.JSONSchema.properties[name] = {
+        type: "string"
+      };
+    }
+
+    this.uiSchema[name] = {
+      "ui:widget": "customButtonWidget",
+      "ui:options": {
+        text,
+        href,
+        label: false
+      },
+      "ui:emptyValue": ""
+    };
+  }
+
+  /**
    * Add a text block. Markdown supported!
    * @param {string} text – Text with optional markdown
    *
