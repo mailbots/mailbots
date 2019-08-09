@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>mailbots 2.0.0 | Documentation</title>
+  <title>mailbots 3.0.0-alpha | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>mailbots</h3>
-          <div class='mb1'><code>2.0.0</code></div>
+          <div class='mb1'><code>3.0.0-alpha</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -56,89 +56,131 @@
               
                 
                 <li><a
-                  href='#mailbots'
-                  class=" toggle-sibling">
-                  MailBots
-                  <span class='icon'>▸</span>
+                  href='#constructor'
+                  class="">
+                  constructor
+                  
                 </a>
                 
-                <div class='toggle-target display-none'>
+                </li>
+              
+                
+                <li><a
+                  href='#listen'
+                  class="">
+                  listen
                   
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#exportapp'
+                  class="">
+                  exportApp
                   
-                    <ul class='list-reset py1-ul pl1'>
-                      <li class='h5'><span>Instance members</span></li>
-                      
-                      <li><a
-                        href='#mailbotslisten'
-                        class='regular pre-open'>
-                        #listen
-                      </a></li>
-                      
-                      <li><a
-                        href='#mailbotsexportapp'
-                        class='regular pre-open'>
-                        #exportApp
-                      </a></li>
-                      
-                      <li><a
-                        href='#mailbotsloadskill'
-                        class='regular pre-open'>
-                        #loadSkill
-                      </a></li>
-                      
-                      <li><a
-                        href='#mailbotson'
-                        class='regular pre-open'>
-                        #on
-                      </a></li>
-                      
-                      <li><a
-                        href='#mailbotsoncommand'
-                        class='regular pre-open'>
-                        #onCommand
-                      </a></li>
-                      
-                      <li><a
-                        href='#mailbotsontrigger'
-                        class='regular pre-open'>
-                        #onTrigger
-                      </a></li>
-                      
-                      <li><a
-                        href='#mailbotsonevent'
-                        class='regular pre-open'>
-                        #onEvent
-                      </a></li>
-                      
-                      <li><a
-                        href='#mailbotsonaction'
-                        class='regular pre-open'>
-                        #onAction
-                      </a></li>
-                      
-                      <li><a
-                        href='#mailbotsontaskviewed'
-                        class='regular pre-open'>
-                        #onTaskViewed
-                      </a></li>
-                      
-                      <li><a
-                        href='#mailbotsonsettingsviewed'
-                        class='regular pre-open'>
-                        #onSettingsViewed
-                      </a></li>
-                      
-                      <li><a
-                        href='#mailbotsbeforesettingssaved'
-                        class='regular pre-open'>
-                        #beforeSettingsSaved
-                      </a></li>
-                      
-                    </ul>
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#loadskill'
+                  class="">
+                  loadSkill
                   
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#on'
+                  class="">
+                  on
                   
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#oncommand'
+                  class="">
+                  onCommand
                   
-                </div>
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#ontrigger'
+                  class="">
+                  onTrigger
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#onevent'
+                  class="">
+                  onEvent
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#onaction'
+                  class="">
+                  onAction
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#ontaskviewed'
+                  class="">
+                  onTaskViewed
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#onsettingsviewed'
+                  class="">
+                  onSettingsViewed
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#onsettingssubmit'
+                  class="">
+                  onSettingsSubmit
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#initsdkapiclient'
+                  class="">
+                  initSdkApiClient
+                  
+                </a>
                 
                 </li>
               
@@ -344,6 +386,66 @@
               
                 
                 <li><a
+                  href='#getsource'
+                  class="">
+                  getSource
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#gettrigger'
+                  class="">
+                  getTrigger
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getuser'
+                  class="">
+                  getUser
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#gettask'
+                  class="">
+                  getTask
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getmailbot'
+                  class="">
+                  getMailBot
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#setwebhookstatus'
+                  class="">
+                  setWebhookStatus
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#botwebooksettingspage'
                   class="">
                   bot.webook.settingsPage
@@ -427,6 +529,26 @@
                   href='#video'
                   class="">
                   video
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#button'
+                  class="">
+                  button
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#seturlparams'
+                  class="">
+                  setUrlParams
                   
                 </a>
                 
@@ -539,7 +661,7 @@ mailbot.listen();</pre>
 <li><a href="#ontaskviewed">onTaskViewed</a></li>
 <li><a href="#onevent">onEvent</a></li>
 <li><a href="#onsettingsviewed">onSettingsViewed</a></li>
-<li><a href="#beforesettingssaved">beforeSettingsSaved</a></li>
+<li><a href="#onsettingssubmit">onSettingsSubmit</a></li>
 <li><a href="#on">on</a></li>
 <li><a href="#handling-errors">Handling Errors</a></li>
 </ul>
@@ -742,58 +864,96 @@ mailbot.onSettingsViewed(<span class="hljs-keyword">async</span> <span class="hl
     <span class="hljs-attr">title</span>: <span class="hljs-string">"Todo Settings"</span>, <span class="hljs-comment">// Page title</span>
     menuTitle: <span class="hljs-string">"Todo"</span> <span class="hljs-comment">// Name of menu item</span>
   });
+  todoSettings.setUrlParams({ <span class="hljs-attr">foo</span>: <span class="hljs-string">"bar"</span> }); <span class="hljs-comment">// send a URL param (useful for showing dialogs)</span>
+  <span class="hljs-keyword">const</span> urlParams = bot.get(<span class="hljs-string">"url_params"</span>); <span class="hljs-comment">// retrieve URL params (see below)</span>
   todoSettings.input({ <span class="hljs-attr">name</span>: <span class="hljs-string">"first_name"</span>, <span class="hljs-attr">title</span>: <span class="hljs-string">"First name"</span> });
-  todoSettings.submitButton();
+  todoSettings.buton({ <span class="hljs-attr">type</span>: <span class="hljs-string">"submit"</span> });
 
   <span class="hljs-comment">// Populate form values</span>
   todoSettings.populate(bot.get(<span class="hljs-string">"mailbot.stored_data.todo"</span>));
   <span class="hljs-comment">// Note bot.webhook.respond() is NOT called</span>
 });</pre>
-<p>URL parameters are passed through to the settings webhook. Use this to pass data into your settings when linking to it.</p>
+<p>URL parameters are passed through to the settings webhook. Use this to pass data into your settings when linking to it or displaying dialogs to the users (see above handler)</p>
 <pre class='hljs'>mailbot.onSettingsViewed(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
   <span class="hljs-keyword">const</span> settingsPage = bot.webhook.settingsPage({ <span class="hljs-attr">namespace</span>: <span class="hljs-string">"todo"</span> });
+  <span class="hljs-keyword">const</span> urlParams = bot.get(<span class="hljs-string">"url_params"</span>, {}); <span class="hljs-comment">//defualts to empty object</span>
 
-  <span class="hljs-keyword">if</span> (bot.get(<span class="hljs-string">"url_params.linkInstructions"</span>, <span class="hljs-literal">false</span>)) {
+  <span class="hljs-keyword">if</span> (urlParams.linkInstructions)) {
     settings.text(<span class="hljs-string">`# Instructions to link your account!`</span>);
   }
   <span class="hljs-comment">// Note that there is no submit button. It's just an informational page.</span>
 });</pre>
-<p>If you wish to use URL params in your <code>beforeSettingsSaved</code> handler (below), pass them via the <code>urlParams</code> key in the <code>submit</code> form element.</p>
+<p>You can also pass URL params via the <code>urlParams</code> key in the <code>button</code> form element (it must be type:<code>submit</code>);</p>
 <pre class='hljs'><span class="hljs-comment">// within a onSettingsViewed form as shown above</span>
-settings.submitButton({
+settings.button({
   <span class="hljs-attr">submitText</span>: <span class="hljs-string">"Save Notification Settings"</span>,
+  <span class="hljs-attr">type</span>: <span class="hljs-string">"submit"</span>,
   <span class="hljs-attr">urlParams</span>: { <span class="hljs-attr">saveSettings</span>: <span class="hljs-number">1</span> }
   <span class="hljs-comment">// Tip: Pass through all URL current params, but use caution! (see note)</span>
   <span class="hljs-comment">// urlParams: {saveSettings: 1, ...bot.get("url_params", {})}</span>
 });</pre>
 <p>NOTE: URL parameters are an easy way to pass data into your bot settings, but <strong>keep this in mind while using URL params</strong>: Anyone can link a user to their settings page with <em>anything</em> in URL. Do not, for example, create a url like: <code>/settings?delete_everything=true</code> that deletes all their tasks. An unsuspecting user may arrive on their settings page from an external link, not see this in the URL and submit the form only find themselves without any data. <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)">Read more</a>.</p>
-<h2>beforeSettingsSaved</h2>
-<pre><code>mailbot.beforeSettingsSaved(handlerFn)
+<h2>onSettingsSubmit</h2>
+<pre><code>mailbot.onSettingsSubmit(handlerFn)
 </code></pre>
-<p>Handle when the user saves their settings. Called before settings are actually saved.</p>
-<p>Similar to the above <code>onSettingsViewed</code> handler, every instance of this handler is called when settings are saved.</p>
-<p>Validate user data, perform API calls to keep other systems in sync. Return an error
-to abort saving the settings.</p>
-<pre class='hljs'>mailbot.beforeSettingsSaved(<span class="hljs-function"><span class="hljs-params">bot</span> =&gt;</span> {
+<p>Handle when the user submits their settings.</p>
+<p>To persist the newly saved data, it must be explicitly saved. Use <code>bot.webhook.saveMailBotData()</code> or
+<code>bot.set("mailbot.stored_data")</code> or API calls to do this.</p>
+<p>Newly submitted values are available under <code>settings</code>.</p>
+<p>Previously saved values are available under the <code>mailbot.stored_data</code>.</p>
+<p>Every instance of this handler is called when any settings form is saved (similar to the above <code>onSettingsViewed</code> handler)</p>
+<p>This handler is a good place begin an oauth handshake, set up data in other system or perform API calls to
+other systems.</p>
+<pre class='hljs'>mailbot.onSettingsSubmit(<span class="hljs-function"><span class="hljs-params">bot</span> =&gt;</span> {
   <span class="hljs-comment">// assuming the same "todo" namespace as shown in the above examples</span>
   <span class="hljs-keyword">const</span> data = bot.get(<span class="hljs-string">"settings.todo"</span>);
 
   <span class="hljs-comment">// handler is fired any times settings are saved, even if its not our form</span>
   <span class="hljs-keyword">if</span> (!data) <span class="hljs-keyword">return</span>;
 
-  <span class="hljs-comment">// perform API calls, update external systems, etc. If something goes wrong...</span>
+  <span class="hljs-comment">// perform API calls, validate connections, update external systems here</span>
+
+  <span class="hljs-comment">// validate or modify data, then save it.</span>
+  bot.set(<span class="hljs-string">"mailbot.store_data.todo"</span>, data);
+
+  <span class="hljs-comment">// This error would show to the user</span>
   <span class="hljs-keyword">if</span> (error) {
-    <span class="hljs-comment">// abort the saving process</span>
-    <span class="hljs-keyword">return</span> bot.webhook.respond({
+    bot.webhook.respond({
       <span class="hljs-attr">webhook</span>: {
         <span class="hljs-attr">status</span>: <span class="hljs-string">"error"</span>,
         <span class="hljs-attr">message</span>: <span class="hljs-string">"This is  a warning message"</span>
       }
     });
   }
-
-  <span class="hljs-comment">// Othwise, it implicitly returns success, and the saving process continues</span>
+  <span class="hljs-keyword">return</span>;
 });</pre>
+<h3>URL Params</h3>
+<p>URL params are useful for passing data into settings handlers, showing dialogs and more. We tried to preserve the mental model of URL parameters while working with settings forms, but but it does not always apply exactly.</p>
+<p>In the onSettingsSubmit handler, you need to pass <code>url_params</code> parameters through the webhoook response:</p>
+<pre class='hljs'><span class="hljs-comment">// in onSettingsSubmit handler</span>
+bot.set(<span class="hljs-string">"url_params"</span>, { <span class="hljs-attr">show_success_dialog</span>: <span class="hljs-string">"true"</span> });</pre>
+<p>This is now accessible as a "url_param" in your <code>onSettingsViewed</code> handler. You will also see it as a URL
+param in the settings UI:</p>
+<pre class='hljs'><span class="hljs-comment">// in the onSettingsViewed handler, render a dialog with a button that dismisses the dialog</span>
+<span class="hljs-comment">// const settingsForm set up earlier</span>
+<span class="hljs-keyword">const</span> urlParams = bot.get(<span class="hljs-string">"url_params"</span>, {});
+<span class="hljs-keyword">if</span> (urlParams.show_success_dialog) {
+  settingsForm.text(<span class="hljs-string">"# Success \nYour todo list has been set up!"</span>);
+  settingsForm.button({ <span class="hljs-attr">type</span>: <span class="hljs-string">"submit"</span>,  <span class="hljs-attr">text</span>: <span class="hljs-string">"dismiss"</span>, urlParams({ <span class="hljs-attr">dismissSuccess</span>: <span class="hljs-literal">true</span> }) });
+};</pre>
+<p>You can also set URL parameters using the <code>button</code> element which can trigger different actions based on the URL
+(Note the CSR caution above).</p>
+<pre class='hljs'><span class="hljs-comment">// back ino onSettingsSubmit handler.</span>
+<span class="hljs-keyword">if</span> (bot.get(<span class="hljs-string">"url_params.dissmissSuccess"</span>)) {
+  bot.saveMailBotData(<span class="hljs-string">"todo.show_success_dialog"</span>, <span class="hljs-literal">null</span>); <span class="hljs-comment">// set to null to clear the value</span>
+}</pre>
+<p>Setting URL parameters in the <code>onSettingsViewed</code> hook requires a different method:</p>
+<pre class='hljs'><span class="hljs-comment">// onSettingsViewed</span>
+<span class="hljs-comment">// Force the page to have specific URL params</span>
+settingsPage.setUrlParams({ <span class="hljs-attr">key</span>: <span class="hljs-string">"value"</span> });
+
+<span class="hljs-comment">// Force the settings page to have no URL params</span>
+settingsPage.setUrlParams({});</pre>
 <h2>on</h2>
 <pre><code>mailbot.on(webhookEvent, handlerFn)
 </code></pre>
@@ -1199,7 +1359,7 @@ mailbot.listen();</pre>
 <li><a href="#ontaskviewed">onTaskViewed</a></li>
 <li><a href="#onevent">onEvent</a></li>
 <li><a href="#onsettingsviewed">onSettingsViewed</a></li>
-<li><a href="#beforesettingssaved">beforeSettingsSaved</a></li>
+<li><a href="#onsettingssubmit">onSettingsSubmit</a></li>
 <li><a href="#on">on</a></li>
 <li><a href="#handling-errors">Handling Errors</a></li>
 </ul>
@@ -1402,58 +1562,96 @@ mailbot.onSettingsViewed(<span class="hljs-keyword">async</span> <span class="hl
     <span class="hljs-attr">title</span>: <span class="hljs-string">"Todo Settings"</span>, <span class="hljs-comment">// Page title</span>
     menuTitle: <span class="hljs-string">"Todo"</span> <span class="hljs-comment">// Name of menu item</span>
   });
+  todoSettings.setUrlParams({ <span class="hljs-attr">foo</span>: <span class="hljs-string">"bar"</span> }); <span class="hljs-comment">// send a URL param (useful for showing dialogs)</span>
+  <span class="hljs-keyword">const</span> urlParams = bot.get(<span class="hljs-string">"url_params"</span>); <span class="hljs-comment">// retrieve URL params (see below)</span>
   todoSettings.input({ <span class="hljs-attr">name</span>: <span class="hljs-string">"first_name"</span>, <span class="hljs-attr">title</span>: <span class="hljs-string">"First name"</span> });
-  todoSettings.submitButton();
+  todoSettings.buton({ <span class="hljs-attr">type</span>: <span class="hljs-string">"submit"</span> });
 
   <span class="hljs-comment">// Populate form values</span>
   todoSettings.populate(bot.get(<span class="hljs-string">"mailbot.stored_data.todo"</span>));
   <span class="hljs-comment">// Note bot.webhook.respond() is NOT called</span>
 });</pre>
-<p>URL parameters are passed through to the settings webhook. Use this to pass data into your settings when linking to it.</p>
+<p>URL parameters are passed through to the settings webhook. Use this to pass data into your settings when linking to it or displaying dialogs to the users (see above handler)</p>
 <pre class='hljs'>mailbot.onSettingsViewed(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">bot</span>) </span>{
   <span class="hljs-keyword">const</span> settingsPage = bot.webhook.settingsPage({ <span class="hljs-attr">namespace</span>: <span class="hljs-string">"todo"</span> });
+  <span class="hljs-keyword">const</span> urlParams = bot.get(<span class="hljs-string">"url_params"</span>, {}); <span class="hljs-comment">//defualts to empty object</span>
 
-  <span class="hljs-keyword">if</span> (bot.get(<span class="hljs-string">"url_params.linkInstructions"</span>, <span class="hljs-literal">false</span>)) {
+  <span class="hljs-keyword">if</span> (urlParams.linkInstructions)) {
     settings.text(<span class="hljs-string">`# Instructions to link your account!`</span>);
   }
   <span class="hljs-comment">// Note that there is no submit button. It's just an informational page.</span>
 });</pre>
-<p>If you wish to use URL params in your <code>beforeSettingsSaved</code> handler (below), pass them via the <code>urlParams</code> key in the <code>submit</code> form element.</p>
+<p>You can also pass URL params via the <code>urlParams</code> key in the <code>button</code> form element (it must be type:<code>submit</code>);</p>
 <pre class='hljs'><span class="hljs-comment">// within a onSettingsViewed form as shown above</span>
-settings.submitButton({
+settings.button({
   <span class="hljs-attr">submitText</span>: <span class="hljs-string">"Save Notification Settings"</span>,
+  <span class="hljs-attr">type</span>: <span class="hljs-string">"submit"</span>,
   <span class="hljs-attr">urlParams</span>: { <span class="hljs-attr">saveSettings</span>: <span class="hljs-number">1</span> }
   <span class="hljs-comment">// Tip: Pass through all URL current params, but use caution! (see note)</span>
   <span class="hljs-comment">// urlParams: {saveSettings: 1, ...bot.get("url_params", {})}</span>
 });</pre>
 <p>NOTE: URL parameters are an easy way to pass data into your bot settings, but <strong>keep this in mind while using URL params</strong>: Anyone can link a user to their settings page with <em>anything</em> in URL. Do not, for example, create a url like: <code>/settings?delete_everything=true</code> that deletes all their tasks. An unsuspecting user may arrive on their settings page from an external link, not see this in the URL and submit the form only find themselves without any data. <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)">Read more</a>.</p>
-<h2>beforeSettingsSaved</h2>
-<pre><code>mailbot.beforeSettingsSaved(handlerFn)
+<h2>onSettingsSubmit</h2>
+<pre><code>mailbot.onSettingsSubmit(handlerFn)
 </code></pre>
-<p>Handle when the user saves their settings. Called before settings are actually saved.</p>
-<p>Similar to the above <code>onSettingsViewed</code> handler, every instance of this handler is called when settings are saved.</p>
-<p>Validate user data, perform API calls to keep other systems in sync. Return an error
-to abort saving the settings.</p>
-<pre class='hljs'>mailbot.beforeSettingsSaved(<span class="hljs-function"><span class="hljs-params">bot</span> =&gt;</span> {
+<p>Handle when the user submits their settings.</p>
+<p>To persist the newly saved data, it must be explicitly saved. Use <code>bot.webhook.saveMailBotData()</code> or
+<code>bot.set("mailbot.stored_data")</code> or API calls to do this.</p>
+<p>Newly submitted values are available under <code>settings</code>.</p>
+<p>Previously saved values are available under the <code>mailbot.stored_data</code>.</p>
+<p>Every instance of this handler is called when any settings form is saved (similar to the above <code>onSettingsViewed</code> handler)</p>
+<p>This handler is a good place begin an oauth handshake, set up data in other system or perform API calls to
+other systems.</p>
+<pre class='hljs'>mailbot.onSettingsSubmit(<span class="hljs-function"><span class="hljs-params">bot</span> =&gt;</span> {
   <span class="hljs-comment">// assuming the same "todo" namespace as shown in the above examples</span>
   <span class="hljs-keyword">const</span> data = bot.get(<span class="hljs-string">"settings.todo"</span>);
 
   <span class="hljs-comment">// handler is fired any times settings are saved, even if its not our form</span>
   <span class="hljs-keyword">if</span> (!data) <span class="hljs-keyword">return</span>;
 
-  <span class="hljs-comment">// perform API calls, update external systems, etc. If something goes wrong...</span>
+  <span class="hljs-comment">// perform API calls, validate connections, update external systems here</span>
+
+  <span class="hljs-comment">// validate or modify data, then save it.</span>
+  bot.set(<span class="hljs-string">"mailbot.store_data.todo"</span>, data);
+
+  <span class="hljs-comment">// This error would show to the user</span>
   <span class="hljs-keyword">if</span> (error) {
-    <span class="hljs-comment">// abort the saving process</span>
-    <span class="hljs-keyword">return</span> bot.webhook.respond({
+    bot.webhook.respond({
       <span class="hljs-attr">webhook</span>: {
         <span class="hljs-attr">status</span>: <span class="hljs-string">"error"</span>,
         <span class="hljs-attr">message</span>: <span class="hljs-string">"This is  a warning message"</span>
       }
     });
   }
-
-  <span class="hljs-comment">// Othwise, it implicitly returns success, and the saving process continues</span>
+  <span class="hljs-keyword">return</span>;
 });</pre>
+<h3>URL Params</h3>
+<p>URL params are useful for passing data into settings handlers, showing dialogs and more. We tried to preserve the mental model of URL parameters while working with settings forms, but but it does not always apply exactly.</p>
+<p>In the onSettingsSubmit handler, you need to pass <code>url_params</code> parameters through the webhoook response:</p>
+<pre class='hljs'><span class="hljs-comment">// in onSettingsSubmit handler</span>
+bot.set(<span class="hljs-string">"url_params"</span>, { <span class="hljs-attr">show_success_dialog</span>: <span class="hljs-string">"true"</span> });</pre>
+<p>This is now accessible as a "url_param" in your <code>onSettingsViewed</code> handler. You will also see it as a URL
+param in the settings UI:</p>
+<pre class='hljs'><span class="hljs-comment">// in the onSettingsViewed handler, render a dialog with a button that dismisses the dialog</span>
+<span class="hljs-comment">// const settingsForm set up earlier</span>
+<span class="hljs-keyword">const</span> urlParams = bot.get(<span class="hljs-string">"url_params"</span>, {});
+<span class="hljs-keyword">if</span> (urlParams.show_success_dialog) {
+  settingsForm.text(<span class="hljs-string">"# Success \nYour todo list has been set up!"</span>);
+  settingsForm.button({ <span class="hljs-attr">type</span>: <span class="hljs-string">"submit"</span>,  <span class="hljs-attr">text</span>: <span class="hljs-string">"dismiss"</span>, urlParams({ <span class="hljs-attr">dismissSuccess</span>: <span class="hljs-literal">true</span> }) });
+};</pre>
+<p>You can also set URL parameters using the <code>button</code> element which can trigger different actions based on the URL
+(Note the CSR caution above).</p>
+<pre class='hljs'><span class="hljs-comment">// back ino onSettingsSubmit handler.</span>
+<span class="hljs-keyword">if</span> (bot.get(<span class="hljs-string">"url_params.dissmissSuccess"</span>)) {
+  bot.saveMailBotData(<span class="hljs-string">"todo.show_success_dialog"</span>, <span class="hljs-literal">null</span>); <span class="hljs-comment">// set to null to clear the value</span>
+}</pre>
+<p>Setting URL parameters in the <code>onSettingsViewed</code> hook requires a different method:</p>
+<pre class='hljs'><span class="hljs-comment">// onSettingsViewed</span>
+<span class="hljs-comment">// Force the page to have specific URL params</span>
+settingsPage.setUrlParams({ <span class="hljs-attr">key</span>: <span class="hljs-string">"value"</span> });
+
+<span class="hljs-comment">// Force the settings page to have no URL params</span>
+settingsPage.setUrlParams({});</pre>
 <h2>on</h2>
 <pre><code>mailbot.on(webhookEvent, handlerFn)
 </code></pre>
@@ -1999,20 +2197,19 @@ that are used to respond to specific events. (See readme.md for more). </p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='mailbots'>
-      MailBots
+    <h3 class='fl m0' id='constructor'>
+      constructor
     </h3>
     
     
   </div>
   
 
-  <p>Create a new MailBot</p>
-<p>Optionally instantiate with config. Pass any key shown in config.js.</p>
+  <p>Class constructor.</p>
 
  
   
-    <div class='pre p1 fill-light mt0'>new MailBots(instanceConfig: any, config: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</div>
+    <div class='pre p1 fill-light mt0'>constructor(instanceConfig: any)</div>
    
   
   
@@ -2036,14 +2233,6 @@ that are used to respond to specific events. (See readme.md for more). </p>
           
         </div>
       
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>config</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
     </div>
   
 
@@ -2058,19 +2247,23 @@ that are used to respond to specific events. (See readme.md for more). </p>
   
 
   
-    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
-    <div class="clearfix">
-  
-    <div class='border-bottom' id='mailbotslisten'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>listen()</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='listen'>
+      listen
+    </h3>
+    
+    
+  </div>
   
 
   <p>Loads final skills and start http server.
@@ -2109,19 +2302,19 @@ For example: mailbots.app.get("my-route/", (req, res) => {});</p>
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='mailbotsexportapp'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>exportApp()</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='exportapp'>
+      exportApp
+    </h3>
+    
+    
+  </div>
   
 
   <p>Export app for automated testing</p>
@@ -2157,19 +2350,19 @@ For example: mailbots.app.get("my-route/", (req, res) => {});</p>
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='mailbotsloadskill'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>loadSkill(skill, config, skillPath)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='loadskill'>
+      loadSkill
+    </h3>
+    
+    
+  </div>
   
 
   <p>Load MailBots skills from a directory, non-recursively.
@@ -2240,19 +2433,19 @@ This can also receive a path to a file.</p>
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='mailbotson'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>on(triggerCondition, cb, opts, event)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='on'>
+      on
+    </h3>
+    
+    
+  </div>
   
 
   <p>Add handler for a given webhook event. Executes only the first handler
@@ -2264,7 +2457,7 @@ Example: controller.on((webhook) => webhook.event === 'task.created', cb)</p>
 
  
   
-    <div class='pre p1 fill-light mt0'>on(triggerCondition: any, cb: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>, opts: any, event: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>))</div>
+    <div class='pre p1 fill-light mt0'>on(triggerCondition: any, cb: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>, opts: any, event: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a>))</div>
    
   
   
@@ -2307,7 +2500,7 @@ Example: controller.on((webhook) => webhook.event === 'task.created', cb)</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>event</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>))</code>
+            <span class='code bold'>event</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a>))</code>
 	    A webhook event string (ex: task.created). Or
 a function receives the webhook as a param, which returns a boolean value.
 
@@ -2333,26 +2526,26 @@ a function receives the webhook as a param, which returns a boolean value.
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='mailbotsoncommand'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>onCommand(commandSearch, cb)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='oncommand'>
+      onCommand
+    </h3>
+    
+    
+  </div>
   
 
   <p>Captures only 'task.created' events where the command string matches</p>
 
  
   
-    <div class='pre p1 fill-light mt0'>onCommand(commandSearch: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | RexExp), cb: any)</div>
+    <div class='pre p1 fill-light mt0'>onCommand(commandSearch: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a>), cb: any)</div>
    
   
   
@@ -2370,7 +2563,7 @@ a function receives the webhook as a param, which returns a boolean value.
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>commandSearch</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | RexExp))</code>
+            <span class='code bold'>commandSearch</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a>))</code>
 	    
           </div>
           
@@ -2402,26 +2595,26 @@ a function receives the webhook as a param, which returns a boolean value.
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='mailbotsontrigger'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>onTrigger(commandSearch, cb)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='ontrigger'>
+      onTrigger
+    </h3>
+    
+    
+  </div>
   
 
   <p>Captures only 'task.triggered' events where the command string matches</p>
 
  
   
-    <div class='pre p1 fill-light mt0'>onTrigger(commandSearch: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | RexExp), cb: any)</div>
+    <div class='pre p1 fill-light mt0'>onTrigger(commandSearch: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a>), cb: any)</div>
    
   
   
@@ -2439,7 +2632,7 @@ a function receives the webhook as a param, which returns a boolean value.
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>commandSearch</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | RexExp))</code>
+            <span class='code bold'>commandSearch</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a>))</code>
 	    
           </div>
           
@@ -2471,19 +2664,19 @@ a function receives the webhook as a param, which returns a boolean value.
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='mailbotsonevent'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>onEvent(eventSearch, cb)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='onevent'>
+      onEvent
+    </h3>
+    
+    
+  </div>
   
 
   <p>Captures only 'mailbot.event_received' events
@@ -2492,7 +2685,7 @@ that are posted to the MailBot.</p>
 
  
   
-    <div class='pre p1 fill-light mt0'>onEvent(eventSearch: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | RexExp), cb: any)</div>
+    <div class='pre p1 fill-light mt0'>onEvent(eventSearch: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a>), cb: any)</div>
    
   
   
@@ -2510,7 +2703,7 @@ that are posted to the MailBot.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>eventSearch</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | RexExp))</code>
+            <span class='code bold'>eventSearch</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a>))</code>
 	    
           </div>
           
@@ -2542,19 +2735,19 @@ that are posted to the MailBot.</p>
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='mailbotsonaction'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>onAction(actionSearch, cb)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='onaction'>
+      onAction
+    </h3>
+    
+    
+  </div>
   
 
   <p>Captures only 'task.action_received' events where the action string matches</p>
@@ -2611,19 +2804,19 @@ that are posted to the MailBot.</p>
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='mailbotsontaskviewed'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>onTaskViewed(commandSearch, cb)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='ontaskviewed'>
+      onTaskViewed
+    </h3>
+    
+    
+  </div>
   
 
   <p>Captures only 'task.viewed' events where the command string matches</p>
@@ -2680,19 +2873,19 @@ that are posted to the MailBot.</p>
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='mailbotsonsettingsviewed'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>onSettingsViewed(cb)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='onsettingsviewed'>
+      onSettingsViewed
+    </h3>
+    
+    
+  </div>
   
 
   <p>Handle webhook that fires when user is viewing MailBot.
@@ -2744,31 +2937,30 @@ handler can add and read data to and from its own namespace.</p>
   
 </section>
 
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='mailbotsbeforesettingssaved'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>beforeSettingsSaved(cb)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='onsettingssubmit'>
+      onSettingsSubmit
+    </h3>
+    
+    
+  </div>
   
 
   <p>Handle webhook that fires after a user hits "save" on their MailBot settings.
 Newly saved settings arrive at the top-level settings object.
 Existing settings are still in mailbot.stored_data.
-Return webhook { status: "fail", message: "" } to abort the saving process.
-Return extenesion and user data to update to save data as with other webhooks.
-ALL beforeSettingsSaved handlers fire.</p>
+Return mailbot and user data to save data (as with other webhooks).
+ALL onSettingsSubmit handlers fire.</p>
 
  
   
-    <div class='pre p1 fill-light mt0'>beforeSettingsSaved(cb: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</div>
+    <div class='pre p1 fill-light mt0'>onSettingsSubmit(cb: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</div>
    
   
   
@@ -2811,10 +3003,79 @@ ALL beforeSettingsSaved handlers fire.</p>
   
 </section>
 
-      </div>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='initsdkapiclient'>
+      initSdkApiClient
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Sets an authenticated insteance of MailBots SDK client
+<a href="https://github.com/mailbots/mailbots-sdk-js">https://github.com/mailbots/mailbots-sdk-js</a> for use in events
+and middleware under bot.api. Works both with webhook + web request</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>initSdkApiClient(req: any, res: any, next: any)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>req</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>res</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>next</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
     </div>
   
-</div>
+
+  
+
+  
+
+  
+
+  
+
+  
 
   
 
@@ -3106,7 +3367,7 @@ false to force the replacement of an object.
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>key</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-	    JSON Path to key within task.private_data
+	    JSON Path to key within task.stored_data
 
           </div>
           
@@ -3310,7 +3571,7 @@ as the second.</p>
 
  
   
-    <div class='pre p1 fill-light mt0'>setMailBotData(args: ...any, param: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>), value: any?)</div>
+    <div class='pre p1 fill-light mt0'>setMailBotData(args: ...any, param: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>), value: any?, merge: any?)</div>
    
   
   
@@ -3348,7 +3609,16 @@ object to be shallowly merged into mailbot.private_data
           <div>
             <span class='code bold'>value</span> <code class='quiet'>(any?)</code>
 	    When passing lodash set path string as first
-param, this is the value.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>merge</span> <code class='quiet'>(any?)</code>
+	    When passing lodash set path string as first
+param, this specifies if the data should be shallowly merged or replaced (defaults to true).
 
           </div>
           
@@ -3609,7 +3879,7 @@ after the original email was sent.</p>
 
  
   
-    <div class='pre p1 fill-light mt0'>getReplyTo()</div>
+    <div class='pre p1 fill-light mt0'>getReplyTo(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></div>
    
   
   
@@ -3625,6 +3895,14 @@ after the original email was sent.</p>
 
   
 
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>:
+        
+
+      
+    
   
 
   
@@ -4509,6 +4787,428 @@ of the Admin UI. See SettingsPage docs for details</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='getsource'>
+      getSource
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Get bot request source request object.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>getSource(): IWebhookSource</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>IWebhookSource</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> source = bot.webhook.getSource()</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='gettrigger'>
+      getTrigger
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Get information about the event that
+triggered this webhook.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>getTrigger(): IWebhookTrigger</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>IWebhookTrigger</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> trigger = bot.webhook.getTrigger()</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getuser'>
+      getUser
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Get data about the user for which the webhook
+was posted.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>getUser(): IWebhookUser</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>IWebhookUser</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> user = bot.webhook.getUser()</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='gettask'>
+      getTask
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Get task data associated with the webhook.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>getTask(): IWebHookTask</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>IWebHookTask</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> task = bot.webhook.getTask()</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getmailbot'>
+      getMailBot
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Get mailbot data sent over with each webhook.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>getMailBot(): IWebHookMailBot</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>IWebHookMailBot</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> mailbot = bot.webhook.getMailBot()</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='setwebhookstatus'>
+      setWebhookStatus
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Set webhook status message. If the user is on the web ui, this message flashes
+ont eh screen. It also appears in the extension logs.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>setWebhookStatus($0: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): void</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>$0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>$0.level</span> <code class='quiet'>any</code>
+  
+    (default <code>&quot;info&quot;</code>)
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>$0.message</span> <code class='quiet'>any</code>
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>void</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>setWebhookStatus({<span class="hljs-attr">message</span>: <span class="hljs-string">"Something worked!"</span>});</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='botwebooksettingspage'>
       bot.webook.settingsPage
     </h3>
@@ -4517,7 +5217,7 @@ of the Admin UI. See SettingsPage docs for details</p>
   </div>
   
 
-  <p>Reference for <code>bot.webhook.settingsPage()</code> </p>
+  <p>Reference for <code>bot.webhook.settingsPage()</code></p>
 <p> Bots and bot skills can create settings settings pages which live
 in <code>responseJson.settings[namespace]</code>. This class represents one
 such settings form. Each settings form lives in its own namespace.
@@ -4542,63 +5242,6 @@ settings pages and form fields.</p>
   
   
 
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>params</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
-	    Object params
-
-          </div>
-          
-          <table class='mt1 mb2 fixed-table h5 col-12'>
-            <colgroup>
-              <col width='30%' />
-              <col width='70%' />
-            </colgroup>
-            <thead>
-              <tr class='bold fill-light'>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody class='mt1'>
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>params.responseJson</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></code>
-  </td>
-  <td class='break-word'><span>Reference to MailBots responseJson obj
-</span></td>
-</tr>
-
-
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>params.title</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
-  </td>
-  <td class='break-word'><span>Display title of settings page
-</span></td>
-</tr>
-
-
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>params.menuTitle</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
-  </td>
-  <td class='break-word'><span>Menu name
-</span></td>
-</tr>
-
-
-              
-            </tbody>
-          </table>
-          
-        </div>
-      
-    </div>
   
 
   
@@ -5582,6 +6225,217 @@ for interrupt-messaging.</p>
   <span class="hljs-attr">type</span>: <span class="hljs-string">"youtube"</span>
 })</pre>
     
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='button'>
+      button
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Insert custom button</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>button(params: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>params</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+	    
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>params.url</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
+  </td>
+  <td class='break-word'><span>URL of video
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>params.text</span> <code class='quiet'>any</code>
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>params.href</span> <code class='quiet'>any</code>
+  
+    (default <code>&quot;&quot;</code>)
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>params.urlParams</span> <code class='quiet'>any</code>
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>params.className</span> <code class='quiet'>any</code>
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>params.type</span> <code class='quiet'>any</code>
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>formPage.button({
+  <span class="hljs-attr">text</span>: <span class="hljs-string">"Google"</span>
+  href: <span class="hljs-string">"https://www.google.com"</span>
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='seturlparams'>
+      setUrlParams
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Set URL params in the onSettingsSubmit webhook and onSettingsViewed hook
+(ex: ?success=true to show a success dialog)
+This provides for an accurate mental model, but internally jumps through a number
+of hoops to get this URL to appear in the admin UI.
+NOTE: To get current URL params, use bot.get("url_params")</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>setUrlParams(urlParams: any, params: any)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>urlParams</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>params</span> <code class='quiet'>(any)</code>
+	    key value url params
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
   
 
   

@@ -308,7 +308,7 @@ describe("Bot Request Helper", function() {
       done();
     });
 
-    it("determines the to / cc / bcc email methods", done => {
+    it.only("determines the to / cc / bcc email methods", done => {
       // email command is memorize@mailbots-memorize.eml.bot
       // webhook uses "to"
       let emailMethod;

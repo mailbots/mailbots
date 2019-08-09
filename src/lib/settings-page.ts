@@ -65,6 +65,7 @@ export default class SettingsPage {
   };
   public formData: IFormData;
   public formMeta: IFormMeta;
+  public namespace: string;
 
   /**
    * Class constructor.
@@ -89,6 +90,7 @@ export default class SettingsPage {
     menuTitle?: string;
   }) {
     if (!namespace) throw new Error("A namespace is required");
+    this.namespace = namespace;
 
     // Schema describing a single settings page
     this.settingsFormJSON = {
@@ -474,8 +476,19 @@ export default class SettingsPage {
    *   href: "https://www.google.com"
    * });
    */
-  button({ text, href = "" }: { text: string; href: string }) {
-    if (!href) throw new Error("A href is required");
+  button({
+    text,
+    href = "",
+    urlParams,
+    className,
+    type
+  }: {
+    text: string;
+    href?: string;
+    urlParams?: { [key: string]: string };
+    className?: string;
+    type?: "submit";
+  }) {
     const name = `_md_${Math.random()
       .toString()
       .substr(2, 10)}`;
@@ -490,10 +503,26 @@ export default class SettingsPage {
       "ui:options": {
         text,
         href,
-        label: false
+        label: false,
+        className,
+        urlParams,
+        type,
+        namespace: this.namespace // submit buttons point to an instance of a form
       },
       "ui:emptyValue": ""
     };
+  }
+
+  /**
+   * Set URL params in the onSettingsSubmit webhook and onSettingsViewed hook
+   * (ex: ?success=true to show a success dialog)
+   * This provides for an accurate mental model, but internally jumps through a number
+   * of hoops to get this URL to appear in the admin UI.
+   * NOTE: To get current URL params, use bot.get("url_params")
+   * @param params key value url params
+   */
+  setUrlParams(urlParams: { [key: string]: string }) {
+    this.formMeta.urlParams = urlParams;
   }
 
   /**

@@ -525,4 +525,21 @@ export default class WebhookHelpers {
   getMailBot(): IWebHookMailBot {
     return this.get("mailbot");
   }
+
+  /**
+   * Set webhook status message. If the user is on the web ui, this message flashes
+   * ont eh screen. It also appears in the extension logs.
+   * @example setWebhookStatus({message: "Something worked!"});
+   * @returns {void}
+   */
+  setWebhookStatus({
+    level = "info",
+    message
+  }: {
+    level?: "info" | "warn" | "error";
+    message: string;
+  }): void {
+    this.set("webhook.status", level);
+    this.set("webhook.message", message);
+  }
 }

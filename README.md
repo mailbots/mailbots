@@ -28,7 +28,6 @@ Tip: Use our [reference guide](https://mailbots-app.mailbots.com) to quickly loo
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [How MailBots Work](#how-mailbots-work)
   - [Tasks](#tasks)
   - [Commands](#commands)
@@ -344,7 +343,7 @@ mailbot.onSettingsViewed(async function(bot) {
     menuTitle: "Todo" // Name of menu item
   });
   todoSettings.input({ name: "first_name", title: "First name" });
-  todoSettings.submitButton();
+  todoSettings.buton({ type: "submit" });
 
   // Populate form values
   todoSettings.populate(bot.get("mailbot.stored_data.todo"));
@@ -365,12 +364,13 @@ mailbot.onSettingsViewed(function(bot) {
 });
 ```
 
-If you wish to use URL params in your `beforeSettingsSaved` handler (below), pass them via the `urlParams` key in the `submit` form element.
+If you wish to use URL params in your `onSettingsSubmit` handler (below), pass them via the `urlParams` key in the `submit` form element.
 
 ```javascript
 // within a onSettingsViewed form as shown above
-settings.submitButton({
+settings.button({
   submitText: "Save Notification Settings",
+  type: "submit",
   urlParams: { saveSettings: 1 }
   // Tip: Pass through all URL current params, but use caution! (see note)
   // urlParams: {saveSettings: 1, ...bot.get("url_params", {})}
@@ -379,40 +379,79 @@ settings.submitButton({
 
 NOTE: URL parameters are an easy way to pass data into your bot settings, but **keep this in mind while using URL params**: Anyone can link a user to their settings page with _anything_ in URL. Do not, for example, create a url like: `/settings?delete_everything=true` that deletes all their tasks. An unsuspecting user may arrive on their settings page from an external link, not see this in the URL and submit the form only find themselves without any data. [Read more](<https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)>).
 
-## beforeSettingsSaved
+## onSettingsSubmit
 
 ```
-mailbot.beforeSettingsSaved(handlerFn)
+mailbot.onSettingsSubmit(handlerFn)
 ```
 
-Handle when the user saves their settings. Called before settings are actually saved.
+Handle when the user submits their settings.
 
-Similar to the above `onSettingsViewed` handler, every instance of this handler is called when settings are saved.
+To persist the newly saved data, it must be explicitly saved. Use `bot.webhook.saveMailBotData()` or
+`bot.set("mailbot.stored_data")` or API calls to do this.
 
-Validate user data, perform API calls to keep other systems in sync. Return an error
-to abort saving the settings.
+Newly submitted values are available under `settings`.
+
+Previously saved values are available under the `mailbot.stored_data`.
+
+Every instance of this handler is called when any settings form is saved (similar to the above `onSettingsViewed` handler)
+
+This handler is a good place begin an oauth handshake, set up data in other system or perform API calls to
+other systems.
 
 ```javascript
-mailbot.beforeSettingsSaved(bot => {
+mailbot.onSettingsSubmit(bot => {
   // assuming the same "todo" namespace as shown in the above examples
   const data = bot.get("settings.todo");
 
   // handler is fired any times settings are saved, even if its not our form
   if (!data) return;
 
-  // perform API calls, update external systems, etc. If something goes wrong...
+  // perform API calls, validate connections, update external systems here
+
+  // validate or modify data, then save it.
+  bot.set("mailbot.store_data.todo", data);
+
+  // This error would show to the user
   if (error) {
-    // abort the saving process
-    return bot.webhook.respond({
+    bot.webhook.respond({
       webhook: {
         status: "error",
         message: "This is  a warning message"
       }
     });
   }
-
-  // Othwise, it implicitly returns success, and the saving process continues
+  return;
 });
+```
+
+### Dialogs and Alerts
+
+To show a dismissable dialog or other call to action use a temporary variable. For example:
+
+```javascript
+// in onSettingsSubmit handler
+bot.saveMailBotData("todo.show_success_dialog", true);
+```
+
+This variable will be immediately set and the`onSettingsViewed` handler will be called again before page is loaded.
+
+```javascript
+// in the onSettingsViewed handler, render a dialog with a button that dismisses the dialog
+// const settingsForm set up earlier
+if (bot.getMailBotData("todo.show_success_dialog")) {
+  settingsForm.text("# Success \nYour todo list has been set up!");
+  settingsForm.button({ type: "submit",  text: "Ok!", urlParams({ dismissSuccess: true }) });
+};
+```
+
+Logic to dismiss the dialog also lives in the onSettingsSubmit handler where you can listen for the proper url param and unset the temporary variable.
+
+```javascript
+// back ino onSettingsSubmit handler.
+if (bot.get("url_params.dissmissSuccess")) {
+  bot.saveMailBotData("todo.show_success_dialog", null); // set to null to clear the value
+}
 ```
 
 ## on
