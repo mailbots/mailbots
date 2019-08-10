@@ -31,6 +31,13 @@ interface ISettingsForm {
   formData: IFormData;
   formMeta: IFormMeta;
 }
+interface IButton {
+  text: string;
+  href?: string;
+  urlParams?: { [key: string]: string };
+  className?: string;
+  type?: "submit";
+}
 
 /**
  * Reference for `bot.webhook.settingsPage()`
@@ -387,49 +394,46 @@ export default class SettingsPage {
    * @param {object} params
    * @param {string} params.title Alert box title
    * @param {string} params.text Alert box text
-   * @param {string} params.linkText Action button link text
-   * @param {string} params.linkHref URL of button
+   * @param {array} params.buttons Array of Button objects
    * @example formPage.alert({
    *   title: "Connect",
    *   text: "Connect GitHub",
-   *   linkText: "Connect",
-   *   linkHref: "https://www.github.com"
+   *   buttons: [{ text: "Submit", type: "Submit "}]
    * })
    *
    */
   alert({
     title,
     text,
-    linkText,
-    linkHref
+    buttons = []
   }: {
-    title: string;
-    text: string;
-    linkText: string;
-    linkHref: string;
+    title?: string;
+    text?: string;
+    buttons?: IButton[];
   }) {
-    if (this.JSONSchema.properties && this.JSONSchema.properties.alert) {
-      console.warn(
-        `A settings form can only have one alert. The "${title}" alert will not be shown. `
-      );
-      return;
-    }
+    const name = `_alert_${Math.random()
+      .toString()
+      .substr(2, 10)}`;
     if (this.JSONSchema.properties) {
-      this.JSONSchema.properties.alert = {
+      this.JSONSchema.properties[name] = {
         type: "string"
       };
     }
-    this.uiSchema.alert = {
+
+    if (this.JSONSchema.properties) {
+      this.JSONSchema.properties[name] = {
+        type: "string"
+      };
+    }
+
+    this.uiSchema[name] = {
       "ui:widget": "customAlertWidget",
       "ui:options": {
         title,
         text,
-        linkText,
-        linkHref,
+        buttons,
         label: false
-      }
-    };
-    this.uiSchema.alert = {
+      },
       "ui:emptyValue": ""
     };
   }
@@ -476,19 +480,7 @@ export default class SettingsPage {
    *   href: "https://www.google.com"
    * });
    */
-  button({
-    text,
-    href = "",
-    urlParams,
-    className,
-    type
-  }: {
-    text: string;
-    href?: string;
-    urlParams?: { [key: string]: string };
-    className?: string;
-    type?: "submit";
-  }) {
+  button({ text, href = "", urlParams, className, type }: IButton) {
     const name = `_md_${Math.random()
       .toString()
       .substr(2, 10)}`;

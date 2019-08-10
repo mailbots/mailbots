@@ -28,6 +28,7 @@ Tip: Use our [reference guide](https://mailbots-app.mailbots.com) to quickly loo
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+
 - [How MailBots Work](#how-mailbots-work)
   - [Tasks](#tasks)
   - [Commands](#commands)
@@ -47,7 +48,7 @@ Tip: Use our [reference guide](https://mailbots-app.mailbots.com) to quickly loo
   - [onTaskViewed](#ontaskviewed)
   - [onEvent](#onevent)
   - [onSettingsViewed](#onsettingsviewed)
-  - [beforeSettingsSaved](#beforesettingssaved)
+  - [onSettingsSubmit](#onsettingssubmit)
   - [on](#on)
   - [Handling Errors](#handling-errors)
 - [The "bot" Object](#the-bot-object)
@@ -342,6 +343,8 @@ mailbot.onSettingsViewed(async function(bot) {
     title: "Todo Settings", // Page title
     menuTitle: "Todo" // Name of menu item
   });
+  todoSettings.setUrlParams({ foo: "bar" }); // send a URL param (useful for showing dialogs)
+  const urlParams = bot.get("url_params"); // retrieve URL params (see below)
   todoSettings.input({ name: "first_name", title: "First name" });
   todoSettings.buton({ type: "submit" });
 
@@ -351,20 +354,21 @@ mailbot.onSettingsViewed(async function(bot) {
 });
 ```
 
-URL parameters are passed through to the settings webhook. Use this to pass data into your settings when linking to it.
+URL parameters are passed through to the settings webhook. Use this to pass data into your settings when linking to it or displaying dialogs to the users (see above handler)
 
 ```javascript
 mailbot.onSettingsViewed(function(bot) {
   const settingsPage = bot.webhook.settingsPage({ namespace: "todo" });
+  const urlParams = bot.get("url_params", {}); //defualts to empty object
 
-  if (bot.get("url_params.linkInstructions", false)) {
+  if (urlParams.linkInstructions)) {
     settings.text(`# Instructions to link your account!`);
   }
   // Note that there is no submit button. It's just an informational page.
 });
 ```
 
-If you wish to use URL params in your `onSettingsSubmit` handler (below), pass them via the `urlParams` key in the `submit` form element.
+You can also pass URL params via the `urlParams` key in the `button` form element (it must be type:`submit`);
 
 ```javascript
 // within a onSettingsViewed form as shown above
@@ -425,33 +429,49 @@ mailbot.onSettingsSubmit(bot => {
 });
 ```
 
-### Dialogs and Alerts
+### URL Params
 
-To show a dismissable dialog or other call to action use a temporary variable. For example:
+URL params are useful for passing data into settings handlers, showing dialogs and more. We tried to preserve the mental model of URL parameters while working with settings forms, but but it does not always apply exactly.
+
+In the onSettingsSubmit handler, you need to pass `url_params` parameters through the webhoook response:
 
 ```javascript
 // in onSettingsSubmit handler
-bot.saveMailBotData("todo.show_success_dialog", true);
+bot.set("url_params", { show_success_dialog: "true" });
 ```
 
-This variable will be immediately set and the`onSettingsViewed` handler will be called again before page is loaded.
+This is now accessible as a "url_param" in your `onSettingsViewed` handler. You will also see it as a URL
+param in the settings UI:
 
 ```javascript
 // in the onSettingsViewed handler, render a dialog with a button that dismisses the dialog
 // const settingsForm set up earlier
-if (bot.getMailBotData("todo.show_success_dialog")) {
+const urlParams = bot.get("url_params", {});
+if (urlParams.show_success_dialog) {
   settingsForm.text("# Success \nYour todo list has been set up!");
-  settingsForm.button({ type: "submit",  text: "Ok!", urlParams({ dismissSuccess: true }) });
+  settingsForm.button({ type: "submit",  text: "dismiss", urlParams({ dismissSuccess: true }) });
 };
 ```
 
-Logic to dismiss the dialog also lives in the onSettingsSubmit handler where you can listen for the proper url param and unset the temporary variable.
+You can also set URL parameters using the `button` element which can trigger different actions based on the URL
+(Note the CSR caution above).
 
 ```javascript
 // back ino onSettingsSubmit handler.
 if (bot.get("url_params.dissmissSuccess")) {
   bot.saveMailBotData("todo.show_success_dialog", null); // set to null to clear the value
 }
+```
+
+Setting URL parameters in the `onSettingsViewed` hook requires a different method:
+
+```javascript
+// onSettingsViewed
+// Force the page to have specific URL params
+settingsPage.setUrlParams({ key: "value" });
+
+// Force the settings page to have no URL params
+settingsPage.setUrlParams({});
 ```
 
 ## on

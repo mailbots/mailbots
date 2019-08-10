@@ -340,7 +340,7 @@ export default class MailBots {
    * Newly saved settings arrive at the top-level settings object.
    * Existing settings are still in mailbot.stored_data.
    * Return mailbot and user data to save data (as with other webhooks).
-   * ALL beforeSettingsSaved handlers fire.
+   * ALL onSettingsSubmit handlers fire.
    * @param {function} cb Callback function that receives the bot object
    */
   onSettingsSubmit(cb: BotCallback) {

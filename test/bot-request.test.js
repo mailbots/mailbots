@@ -109,9 +109,10 @@ describe("Bot Request Helper", function() {
       });
       newForm.alert({ name: "dialog", title: "An Alert Dialog" });
       const settings = botRequest.webhook.responseJson.settings;
-      expect(settings.memorize.JSONSchema.properties).to.haveOwnProperty(
-        "alert"
-      );
+      const fields =
+        botRequest.webhook.responseJson.settings.memorize.JSONSchema.properties;
+      const hasAlert = Object.keys(fields).some(key => key.includes("_alert_"));
+      expect(hasAlert).to.be.true;
       done();
     });
 
@@ -308,7 +309,7 @@ describe("Bot Request Helper", function() {
       done();
     });
 
-    it.only("determines the to / cc / bcc email methods", done => {
+    it("determines the to / cc / bcc email methods", done => {
       // email command is memorize@mailbots-memorize.eml.bot
       // webhook uses "to"
       let emailMethod;

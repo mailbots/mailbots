@@ -5,7 +5,7 @@
       "lastName": "Flabberson"
     }
   },
-  "event": "mailbot.settings_pre_save",
+  "event": "mailbot.settings_onsubmit",
   "version": "1",
   "mailbot": {
     "id": 84,

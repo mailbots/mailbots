@@ -365,8 +365,8 @@ describe("MailBots App", function() {
 
     const mailbotSettingsBeforeSaved = require("./fixtures/mailbot-settings-pre-saved-webhook.json");
 
-    it("fires beforeSettingsSaved handler", function(done) {
-      mailbot.beforeSettingsSaved(bot => {
+    it("fires onSettingsSubmit handler", function(done) {
+      mailbot.onSettingsSubmit(bot => {
         done();
       });
       fireWebhookRequest(mailbotSettingsBeforeSaved, {
@@ -374,11 +374,11 @@ describe("MailBots App", function() {
       });
     });
 
-    it("multiple beforeSettingsSaved handlers fire with data", function(done) {
-      mailbot.beforeSettingsSaved(bot => {
+    it("multiple onSettingsSubmit handlers fire with data", function(done) {
+      mailbot.onSettingsSubmit(bot => {
         bot.webhook.setMailBotData("github.foo", "bar");
       });
-      mailbot.beforeSettingsSaved(bot => {
+      mailbot.onSettingsSubmit(bot => {
         expect(bot.webhook.getMailBotData("github.foo")).to.equal("bar");
         bot.webhook.setMailBotData("github.shoe", "far");
       });
@@ -392,10 +392,10 @@ describe("MailBots App", function() {
     });
 
     it("resets existing mailbot settings", function(done) {
-      mailbot.beforeSettingsSaved(bot => {
+      mailbot.onSettingsSubmit(bot => {
         bot.webhook.setMailBotData("github.foo", "bar");
       });
-      mailbot.beforeSettingsSaved(bot => {
+      mailbot.onSettingsSubmit(bot => {
         expect(bot.webhook.getMailBotData("github.foo")).to.equal("bar");
         bot.webhook.setMailBotData("github.shoe", "far");
       });
