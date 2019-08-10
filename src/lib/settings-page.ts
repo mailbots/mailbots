@@ -432,6 +432,7 @@ export default class SettingsPage {
         title,
         text,
         buttons,
+        namespace: this.namespace,
         label: false
       },
       "ui:emptyValue": ""
