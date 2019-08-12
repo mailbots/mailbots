@@ -67,6 +67,7 @@ export interface IWebHookTask {
   stored_data: {
     [key: string]: any;
   };
+  discard: number;
 }
 
 export interface IWebHookMailBot {

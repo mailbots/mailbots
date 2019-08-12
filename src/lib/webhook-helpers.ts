@@ -402,6 +402,16 @@ export default class WebhookHelpers {
   }
 
   /**
+   * By default, MailBots creates a task for every command that is visible to the user in their Tasks
+   * list. When this is not desireable (for example, a simple one-time email command) you can use this
+   * method to immediately discard the task.
+   * @example bot.webhook.discardTask();
+   */
+  discardTask() {
+    this.set("task.discard", 1);
+  }
+
+  /**
    * Fetch all contacts associated with the task's reference_email. User's
    * address and MailBots addresses are excluded.
    *

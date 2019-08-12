@@ -354,6 +354,12 @@ describe("Bot Request Helper", function() {
       done();
     });
 
+    it("marks a task as discarded", done => {
+      botRequest.webhook.discardTask();
+      expect(botRequest.responseJson.task.discard).to.equal(1);
+      done();
+    });
+
     it("lets data accumulate with requestJson values and added data", done => {
       _.set(botRequest.webhook, "requestJson.task.stored_data", null);
       _.set(botRequest.webhook, "responseJson.task.stored_data", null);

@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>mailbots 3.0.0-alpha | Documentation</title>
+  <title>mailbots 3.2.0-alpha | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>mailbots</h3>
-          <div class='mb1'><code>3.0.0-alpha</code></div>
+          <div class='mb1'><code>3.2.0-alpha</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -349,6 +349,16 @@
                   href='#completetask'
                   class="">
                   completeTask
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#discardtask'
+                  class="">
+                  discardTask
                   
                 </a>
                 
@@ -4533,6 +4543,62 @@ the subject and body</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='discardtask'>
+      discardTask
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>By default, MailBots creates a task for every command that is visible to the user in their Tasks
+list. When this is not desireable (for example, a simple one-time email command) you can use this
+method to immediately discard the task.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>discardTask()</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>bot.webhook.discardTask();</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='getallcontacts'>
       getAllContacts
     </h3>
@@ -6076,18 +6142,11 @@ for interrupt-messaging.</p>
 
               
                 <tr>
-  <td class='break-word'><span class='code bold'>params.linkText</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
+  <td class='break-word'><span class='code bold'>params.buttons</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a></code>
+  
+    (default <code>[]</code>)
   </td>
-  <td class='break-word'><span>Action button link text
-</span></td>
-</tr>
-
-
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>params.linkHref</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
-  </td>
-  <td class='break-word'><span>URL of button
+  <td class='break-word'><span>Array of Button objects
 </span></td>
 </tr>
 
@@ -6114,8 +6173,7 @@ for interrupt-messaging.</p>
       <pre class='p1 overflow-auto round fill-light'>formPage.alert({
   <span class="hljs-attr">title</span>: <span class="hljs-string">"Connect"</span>,
   <span class="hljs-attr">text</span>: <span class="hljs-string">"Connect GitHub"</span>,
-  <span class="hljs-attr">linkText</span>: <span class="hljs-string">"Connect"</span>,
-  <span class="hljs-attr">linkHref</span>: <span class="hljs-string">"https://www.github.com"</span>
+  <span class="hljs-attr">buttons</span>: [{ <span class="hljs-attr">text</span>: <span class="hljs-string">"Submit"</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">"Submit "</span>}]
 })</pre>
     
   
