@@ -310,7 +310,7 @@ describe("Bot Request Helper", function() {
     });
 
     it("determines the to / cc / bcc email methods", done => {
-      // email command is memorize@mailbots-memorize.eml.bot
+      // email "to" recipient, set within text fixture (set in beforeEach) is memorize@mailbots-memorize.eml.bot
       // webhook uses "to"
       let emailMethod;
       emailMethod = botRequest.webhook.getEmailMethod();
@@ -333,6 +333,21 @@ describe("Bot Request Helper", function() {
       expect(emailMethod).to.equal("bcc");
       // email = botRequest.webhook.getReplyTo();
       // expect(email).to.equal("fdas@fdsa.com");
+      done();
+    });
+
+    it("determines the to / cc / bcc email method case-insensitively", done => {
+      let emailMethod;
+      botRequest.webhook.set(
+        "task.reference_email.to",
+        "MEMorize@mailbots-memorize.eml.bot"
+      );
+      botRequest.webhook.set(
+        "task.command",
+        "memoriZE@mailbots-memorize.eml.bot"
+      );
+      emailMethod = botRequest.webhook.getEmailMethod();
+      expect(emailMethod).to.equal("to");
       done();
     });
 

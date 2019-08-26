@@ -253,16 +253,31 @@ export default class WebhookHelpers {
    * only show up as the 'to' method.
    */
   getEmailMethod(): "to" | "cc" | "bcc" {
-    const thisCommand = this.get("task.command");
-    if (this.get("task.reference_email.to", "").includes(thisCommand)) {
+    const thisCommand = this.get("task.command", "").toLowerCase();
+
+    // defensive
+    function addressFieldToArray(field: any): Array<string> {
+      if (field instanceof Array) return field;
+      if (typeof field === "string") return field.split(",");
+      else return [];
+    }
+
+    let to = this.get("task.reference_email.to", []);
+    to = addressFieldToArray(to);
+    to = to.map((to: string) => to.toLowerCase());
+
+    let cc = this.get("task.reference_email.cc", []);
+    cc = addressFieldToArray(cc);
+    cc = cc.map((cc: string) => cc.toLowerCase());
+
+    if (to.includes(thisCommand)) {
       return "to";
-    } else if (this.get("task.reference_email.cc", "").includes(thisCommand)) {
+    } else if (cc.includes(thisCommand)) {
       return "cc";
     } else {
       return "bcc";
     }
   }
-
   /**
    * Sends an email by adding an email message object to the "send_messages" array.
    * Multiple emails can be sent.
