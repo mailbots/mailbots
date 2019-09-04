@@ -10,4 +10,5 @@ export interface IReferenceEmail {
   reply_to: string;
   html: string;
   text: string;
+  attachments: any[];
 }

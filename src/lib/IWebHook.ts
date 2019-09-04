@@ -1,3 +1,5 @@
+import { IReferenceEmail } from "./IReferenceEmail";
+
 export interface IWebhookSource {
   type: string;
   recipient: string;
@@ -46,27 +48,19 @@ export interface IWebhookUser {
 
 export interface IWebHookTask {
   created: number;
+  invisible: boolean;
   completed: boolean;
   completed_on: string;
   hash: string;
   id: number;
   trigger_time: number;
   trigger_timeformat: string;
-  reference_email: {
-    to: string[];
-    cc: string[];
-    bcc: string[];
-    from: string;
-    reply_to: string;
-    subject: string;
-    html: string;
-    text: string;
-    attachments: any[];
-  };
+  reference_email: IReferenceEmail;
   command: string;
   stored_data: {
     [key: string]: any;
   };
+  search_keys?: string[];
   discard: number;
 }
 
