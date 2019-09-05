@@ -9,4 +9,4 @@ export {
   ISkillInfo,
   ISkillHandlerReturnValue
 } from "./skills/ISkillHandler";
-export { RemoteEventDispatcher } from "./skills/remoteEventDispatcher";
+export { InterbotEventHandler } from "./skills/interbotEventHandler ";

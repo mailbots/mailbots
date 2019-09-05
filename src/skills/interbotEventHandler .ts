@@ -7,13 +7,16 @@ import BotRequest from "../lib/bot-request";
  * to the skill sent via interbot
  * events from FUT mailbot.
  */
-export class RemoteEventDispatcher {
+export class InterbotEventHandler {
   /**
    * Class constructor.
    */
   constructor(private _skill: ISkillHandler) {}
 
-  async handle(mailbot: MailBots) {
+  /**
+   * Setup interbot event hook on mailbot object.
+   */
+  async addHook(mailbot: MailBots) {
     mailbot.on("mailbot.interbot_event", async (bot: BotRequest) => {
       const eventMethod = bot.get("payload.action");
 
