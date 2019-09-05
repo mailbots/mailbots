@@ -7,8 +7,10 @@ export interface IUiBlock {
   text?: string;
   html?: string;
   behavior?: string;
+  action?: string;
   subject?: string;
   body?: string;
   url?: string;
   style?: string;
+  className?: string;
 }
