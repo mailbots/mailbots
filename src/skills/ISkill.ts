@@ -32,15 +32,33 @@ export interface ISkill {
   /**
    * Event handler methods
    */
-  onCreate?(bot: BotRequest): ISkillReturnValue;
-  onTriggerUser?(bot: BotRequest): ISkillReturnValue;
-  onTriggerNonUser?(bot: BotRequest): ISkillReturnValue;
-  onAction?(bot: BotRequest): ISkillReturnValue;
-  onTaskUpdate?(bot: BotRequest): ISkillReturnValue;
-  onSettingsSubmit?(bot: BotRequest): ISkillReturnValue;
-  onSettingsViewed?(bot: BotRequest): ISkillReturnValue;
-  onPreviewUser?(bot: BotRequest): ISkillReturnValue;
-  onPreviewNonUser?(bot: BotRequest): ISkillReturnValue;
+  onCreate?(
+    bot: BotRequest
+  ): ISkillReturnValue | void | Promise<ISkillReturnValue | void>;
+  onTriggerUser?(
+    bot: BotRequest
+  ): ISkillReturnValue | void | Promise<ISkillReturnValue | void>;
+  onTriggerNonUser?(
+    bot: BotRequest
+  ): ISkillReturnValue | void | Promise<ISkillReturnValue | void>;
+  onAction?(
+    bot: BotRequest
+  ): ISkillReturnValue | void | Promise<ISkillReturnValue | void>;
+  onTaskUpdate?(
+    bot: BotRequest
+  ): ISkillReturnValue | void | Promise<ISkillReturnValue | void>;
+  onSettingsSubmit?(
+    bot: BotRequest
+  ): ISkillReturnValue | void | Promise<ISkillReturnValue | void>;
+  onSettingsViewed?(
+    bot: BotRequest
+  ): ISkillReturnValue | void | Promise<ISkillReturnValue | void>;
+  onPreviewUser?(
+    bot: BotRequest
+  ): ISkillReturnValue | void | Promise<ISkillReturnValue | void>;
+  onPreviewNonUser?(
+    bot: BotRequest
+  ): ISkillReturnValue | void | Promise<ISkillReturnValue | void>;
 }
 
 /**
