@@ -5,8 +5,10 @@ export { default as BotRequest } from "./lib/bot-request";
 export { IUiBlock } from "./skills/IUiBlock";
 export { ISkillFactory } from "./skills/ISkillFactory";
 export {
-  ISkillHandler,
+  ISkill,
   ISkillInfo,
-  ISkillHandlerReturnValue
-} from "./skills/ISkillHandler";
+  ISkillReturnValue,
+  IAction,
+  ITrigger
+} from "./skills/ISkill";
 export { InterbotEventHandler } from "./skills/interbotEventHandler ";

@@ -1,7 +1,8 @@
 import { IUiBlock } from "./IUiBlock";
 import { IWebHookTask } from "../lib/IWebHook";
+import { BotRequest } from "..";
 
-export interface ISkillHandlerReturnValue {
+export interface ISkillReturnValue {
   title?: string;
   futUiAddition?: IUiBlock[];
   futUiAdditionBehavior?: "append" | "prepend" | "exclusive";
@@ -27,9 +28,33 @@ export interface ISkillInfo {
 /**
  * Interface for an skill handler class.
  */
-export interface ISkillHandler {
+export interface ISkill {
   /**
    * Event handler methods
    */
+  onCreate?(bot: BotRequest): ISkillReturnValue;
+  onTriggerUser?(bot: BotRequest): ISkillReturnValue;
+  onTriggerNonUser?(bot: BotRequest): ISkillReturnValue;
+  onAction?(bot: BotRequest): ISkillReturnValue;
+  onTaskUpdate?(bot: BotRequest): ISkillReturnValue;
+  onSettingsSubmit?(bot: BotRequest): ISkillReturnValue;
+  onSettingsViewed?(bot: BotRequest): ISkillReturnValue;
+  onPreviewUser?(bot: BotRequest): ISkillReturnValue;
+  onPreviewNonUser?(bot: BotRequest): ISkillReturnValue;
+}
+
+/**
+ * Actions are classes that handle
+ * incoming interbot events.
+ */
+export interface IAction {
+  [key: string]: any | Promise<any>;
+}
+
+/**
+ * Triggers are classes user to
+ * send interbot events to other skills.
+ */
+export interface ITrigger {
   [key: string]: any;
 }

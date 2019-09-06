@@ -1,5 +1,5 @@
 import BotRequest from "../lib/bot-request";
-import { ISkillHandler, ISkillInfo } from "./ISkillHandler";
+import { ISkill, ISkillInfo } from "./ISkill";
 
 /**
  * Interface for skill factory.
@@ -14,7 +14,7 @@ export interface ISkillFactory {
   /**
    * Get an instance of the skill.
    */
-  create(bot: BotRequest): ISkillHandler;
+  create(bot: BotRequest): ISkill;
 
   /**
    * Get skill information.
