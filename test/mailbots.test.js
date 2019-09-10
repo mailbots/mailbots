@@ -540,6 +540,26 @@ describe("MailBots App", function() {
     it.skip("doesn't support async handlers that use callbacks");
   });
 
+  describe.only("followupthen lifecycle hooks", function() {
+    it("mailbot.onFutUserCreate method matches interbot_event payload", function(done) {
+      mailbot.onFutView(bot => {
+        const ui = [
+          {
+            type: "text",
+            text: "An SMS notification will also be sent with this reminder."
+          }
+        ];
+        return {
+          futUiAddition: ui
+        };
+      });
+
+      const futViewedInterbotEvent = require("./fixtures/mailbot-interbot-event-fut-task-viewed.json");
+      fireWebhookRequest(futViewedInterbotEvent);
+      done();
+    });
+  });
+
   describe("error handling", function() {
     const mailbotSettingsViewed = require("./fixtures/mailbot-settings-viewed-webhook.json");
 

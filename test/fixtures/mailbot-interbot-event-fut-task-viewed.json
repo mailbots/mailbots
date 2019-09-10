@@ -1,0 +1,162 @@
+{
+  "source": {
+    "mailbot": "mb-fut"
+  },
+  "payload": {
+    "version": "1",
+    "task": {
+      "created": 1566007603,
+      "invisible": false,
+      "completed": false,
+      "completed_on": "",
+      "hash": "3c85a0d5447cda6b43e1fa78fa08eba2",
+      "id": 86,
+      "trigger_time": null,
+      "trigger_timeformat": "4days-c",
+      "reference_email": {
+        "to": ["4days-sms@mb-fut.eml.bot"],
+        "cc": [],
+        "bcc": [],
+        "from": "esweetland@gmail.com",
+        "reply_to": "",
+        "subject": "A Subject",
+        "html": "<p>Testing subject...</p>",
+        "text": " Testing subject... ",
+        "forwarded_message": [],
+        "attachments": []
+      },
+      "command": "4days-sms-c@mb-fut.eml.bot",
+      "stored_data": [],
+      "search_keys": ["with_others"]
+    },
+    "action": "futHook:onViewUser"
+  },
+  "event": "mailbot.interbot_event",
+  "version": "1",
+  "user": {
+    "id": 2,
+    "name": "Reilly Sweetland",
+    "primary_email": "esweetland@gmail.com",
+    "emails": [
+      "reilly@isimple.net",
+      "test@testing.com",
+      "davids@wenetwork.com",
+      "esweetland@gmail.com"
+    ],
+    "is_validated": true,
+    "timezone": "America/Los_Angeles",
+    "preferred_date_format": "D, F jS Y g:ia T",
+    "preferred_date_format_js": "ddd, D MMMM YYYY h:mma",
+    "postpone_times": "(none)",
+    "flagged": 0,
+    "sender_validation": "none",
+    "send_dev_errors": true,
+    "accepted_terms": true,
+    "feature_usage_monthly": {
+      "email_opens_nonuser": "89",
+      "email_opens_self": "27",
+      "gopher_task_created": "52"
+    },
+    "billing_plan": "company",
+    "billing_status": "",
+    "email_addresses": [
+      {
+        "email": "reilly@isimple.net",
+        "sender_validation": "warn",
+        "is_validated": true,
+        "status": "verified",
+        "primary": false
+      },
+      {
+        "email": "foo@foo.com",
+        "sender_validation": "none",
+        "is_validated": false,
+        "status": "unverified",
+        "primary": false
+      },
+      {
+        "email": "test@testing.com",
+        "sender_validation": "none",
+        "is_validated": true,
+        "status": "verified",
+        "primary": false
+      },
+      {
+        "email": "another@address.com",
+        "sender_validation": "none",
+        "is_validated": false,
+        "status": "unverified",
+        "primary": false
+      },
+      {
+        "email": "someotheraddress@fdsa.com",
+        "sender_validation": "none",
+        "is_validated": false,
+        "status": "unverified",
+        "primary": false
+      },
+      {
+        "email": "davids@wenetwork.com",
+        "sender_validation": "none",
+        "is_validated": true,
+        "status": "verified",
+        "primary": false
+      },
+      {
+        "email": "esweetland@gmail.com",
+        "sender_validation": "none",
+        "is_validated": true,
+        "status": "verified",
+        "primary": true
+      }
+    ],
+    "email": "esweetland@gmail.com",
+    "gopher_dev": true,
+    "user_hash": "b18d08c0edce4c685e6350dbc9047470ff331da5428499ab5a5c0f9a2d81134e",
+    "opt_into_fut_mailbot": true,
+    "privacy_mode": false,
+    "last_payment_failed": false,
+    "next_payment_attempt": null,
+    "accepted_terms_at": 1543044171,
+    "mute_fut_tips": false,
+    "default_daily_reminder_time": 8,
+    "unverified_emails": [
+      "foo@foo.com",
+      "another@address.com",
+      "someotheraddress@fdsa.com"
+    ]
+  },
+  "mailbot": {
+    "name": "SMS",
+    "subdomain": "sms",
+    "stored_data": {
+      "access_token": "9t3fds",
+      "sms": {
+        "mobile_phone": "14085156995"
+      }
+    },
+    "installed": true,
+    "event_url": "http://localhost/api/v1/mailbot_event/249/62387b0a8c022546/",
+    "id": 95,
+    "owner": {
+      "email": "esweetland@gmail.com"
+    },
+    "description": "Remote SMS MailBots skill",
+    "icon": "",
+    "autocomplete_examples": "",
+    "tags": "",
+    "published": false,
+    "devmode": true,
+    "enabled": true,
+    "install_url": "https://localhost:3012/auth/login",
+    "settings_url": "",
+    "base_url": "https://localhost:3012",
+    "developer_name": "",
+    "help_url": "",
+    "learn_more_url": "",
+    "privacy_policy_url": "",
+    "oauth2_client_id": "ext_e617b984ee7ee3b6405629ab17d0e072",
+    "oauth2_scope": "get_user_info mailbot_manage_self read_own_tasks manage_own_tasks",
+    "oauth2_redirect_uri": "https://localhost:3012/auth/callback"
+  }
+}

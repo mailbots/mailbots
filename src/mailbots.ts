@@ -9,6 +9,7 @@ import coreSkillsFirstLoader from "./lib/core-skills-first";
 import coreSkillsLastLoader from "./lib/core-skills-last";
 import BotRequest from "./lib/bot-request";
 import { IWebHook } from "./lib/IWebHook";
+import { ISkillReturnValue } from "./skills/ISkill";
 
 const debug = debugAs("mailbots");
 
@@ -17,6 +18,13 @@ type BotCallback = (
   request?: express.Request,
   response?: express.Response
 ) => void;
+
+type FutHookCallback = (
+  bot: BotRequest,
+  request?: express.Request,
+  response?: express.Response
+) => ISkillReturnValue;
+
 type TriggerConditionFunction = (webhook: IWebHook) => boolean;
 interface IListener {
   triggerCondition: string | TriggerConditionFunction | RegExp;
@@ -346,6 +354,57 @@ export default class MailBots {
   onSettingsSubmit(cb: BotCallback) {
     this.on("mailbot.settings_onsubmit", cb, { multiFire: true });
   }
+
+  /******************************
+   * FollowUpThen Event Handlers
+   * MailBots version 4+ is tighly coupled with FollowUpThen. FollowUpThen lifecycle hooks allow
+   * a developer to add value to FollowUpThen by modifying behavior or adding additional value
+   * during different lifecycle events.
+   * @todo separate these into their own file and, eventually, their own repository.
+   *****************************/
+
+  /**
+   * Modify the FUT User's view of the followup confirmation email
+   * @param {BotCallback} cb - callback both function that returns
+   */
+  onFutCreate(cb: FutHookCallback) {
+    const matchFunction = (webhook: any) =>
+      webhook.event === "mailbot.interbot_event" &&
+      webhook.payload.action === "futHook:onCreate";
+    this.on(matchFunction, cb, { multiFire: true });
+  }
+
+  onFutPreview(cb: FutHookCallback) {
+    const matchFunction = (webhook: any) =>
+      webhook.event === "mailbot.interbot_event" &&
+      webhook.payload.action === "futHook:onPreview";
+    this.on(matchFunction, cb, { multiFire: true });
+  }
+
+  onFutView(cb: FutHookCallback) {
+    const matchFunction = (webhook: any) =>
+      webhook.event === "mailbot.interbot_event" &&
+      webhook.payload.action === "futHook:onViewUser";
+    this.on(matchFunction, cb, { multiFire: true });
+  }
+
+  onFutTriggerUser(cb: FutHookCallback) {
+    const matchFunction = (webhook: any) =>
+      webhook.event === "mailbot.interbot_event" &&
+      webhook.payload.action === "futHook:onTriggerUser";
+    this.on(matchFunction, cb, { multiFire: true });
+  }
+
+  onFutTriggerNonUser(cb: FutHookCallback) {
+    const matchFunction = (webhook: any) =>
+      webhook.event === "mailbot.interbot_event" &&
+      webhook.payload.action === "futHook:onTriggerNonUser";
+    this.on(matchFunction, cb, { multiFire: true });
+  }
+
+  /******************************
+   * Utility methods
+   *****************************/
 
   /**
    * @private

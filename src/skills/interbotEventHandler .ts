@@ -18,9 +18,10 @@ export class InterbotEventHandler {
    */
   async addHook(mailbot: MailBots) {
     mailbot.on("mailbot.interbot_event", async (bot: BotRequest) => {
-      const eventMethod: string = bot.get("payload.action");
-
-      const handlerFn: Function = (this._handler as any)[eventMethod];
+      const action = bot.get("payload.action");
+      if (!action.includes("futHook:")) return;
+      const hookMethod: string = action.split(":")[1]; // ex: futHook:onCreate
+      const handlerFn: Function = (this._handler as any)[hookMethod];
       if (typeof handlerFn !== "function") return; // skills can leave event handlers undefined. It's 👌
       const mayBeAPromise = handlerFn.call(this._handler, bot); // ex observer.onCreate();
       let result = mayBeAPromise;
