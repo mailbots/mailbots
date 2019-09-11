@@ -1,11 +1,8 @@
-**Note** MailBots version 4+ is tightly coupled with FollowUpThen through the addition of FollowUpThen
-lifecycle hooks. These allows a developer to add value to FollowUpThen (the original, proto-MailBot)
-by modifying behavior or injecting UI elements at different points in the followup lifecycle.
+**Note** MailBots version 4+ is tightly coupled with FollowUpThen to reflect our (and our user's!) priorities.
+FollowUpThen lifecycle hooks (ex: `mailbot.onFutTriggerUser`) allow a developer to add value to FollowUpThen (the original, proto-MailBot) by modifying behavior or injecting UI elements at different points in the followup lifecycle.
 
-MailBots (once an open framework for creating bots on email) now exists as an internal platform upon which
-the new FollowUpThen exists.
-
-We may re-release it in the future. If you'd like to see that happen, or have any feedback in general, feel free to email help@humans.fut.io.
+MailBots still exists a platform to extend FollowUpThen. We may re-release it as an independent system in the future.
+If you'd like to see that happen, or have any feedback in general, feel free to email help@humans.fut.io.
 
 [MailBots](https://www.mailbots.com) is a platform for creating bots, AIs and assistants that get things done right from your inbox. Read more at [mailbots.com](https://www.mailbots.com).
 
