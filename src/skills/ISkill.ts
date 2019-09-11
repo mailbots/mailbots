@@ -1,4 +1,4 @@
-import { IUiBlock } from "./IUiBlock";
+import { IUiBlock } from "../lib/IUiBlock";
 import { IWebHookTask } from "../lib/IWebHook";
 import { BotRequest } from "..";
 
@@ -20,7 +20,9 @@ export interface ISkillInfo {
   data_namespace?: string; // Data saved agains the mailbot is stored under this namespace (ex: github.token)
   icon_url?: string;
   more_info_url?: string;
+  remote?: boolean; // Managed within fut-mailbot? Or send interbot-events to the remote skill?
   mailbotid?: number; // If it's a MailBot we can link to its directory page, etc.
+  subdomain?: string; // Where to send Interbot Event
   show_as_search_filter?: boolean; // Search futs by this skill?
   show_as_scheduling_option?: boolean; // Show while scheduling?
 }

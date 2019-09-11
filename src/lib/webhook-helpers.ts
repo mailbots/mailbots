@@ -12,6 +12,7 @@ import {
   IWebHookTask,
   IWebHookMailBot
 } from "./IWebHook";
+import { IUiBlock } from "./IUiBlock";
 
 const debug = debugAs("mailbots");
 const WEBHOOK_API_VERSION = "1";
@@ -85,6 +86,7 @@ export default class WebhookHelpers {
   set(key: string, value: any, merge?: boolean) {
     if (merge === undefined) merge = true;
     debug(`set: ${key}`);
+    this._allowedToSet(key, this.requestJson);
     const existingValue = this.get(key);
     // If we're setting an object field, shallow merge it
     // If either new or old value is array or other type, replace it.
@@ -104,6 +106,25 @@ export default class WebhookHelpers {
       _.set(this.responseJson, key, null); // lodash wants to merge..reset it first.
       return _.set(this.responseJson, key, value);
     }
+  }
+
+  _allowedToSet(key: string, requestJson: any) {
+    // interbot_event handlers that start with futHook JSON response must comply with ISkillReturnValue
+    const isFutHook =
+      requestJson.event === "mailbot.interbot_event" &&
+      requestJson.payload.action.startsWith("futHook:");
+    if (!isFutHook) return true; // only check this for now
+    if (
+      key === "futUiAddition" ||
+      key === "futUiAdditionBehavior" ||
+      key === "task" ||
+      key === "endRequest"
+    ) {
+      return true;
+    }
+    throw new Error(
+      `Setting ${key} is not allowed in this handler. futHook response must match ISkillHandlerReturnValue`
+    );
   }
 
   /**
@@ -566,5 +587,17 @@ export default class WebhookHelpers {
   }): void {
     this.set("webhook.status", level);
     this.set("webhook.message", message);
+  }
+
+  /**
+   * Add FUT Email UI Block
+   * Respond with a partial UI element to be injected into an email response. the response schema of
+   * responseJson is different than the other webhooks. It is sent via the Core API directly back
+   * to the fut mailbot, which merges it into its own response webhook response
+   */
+  addFutUiBlocks(uiBlocks: Array<IUiBlock>): void {
+    const existingFutUiAdditions = this.get("futUiAddition", []);
+    const newFutUiAddition = [...existingFutUiAdditions, ...uiBlocks];
+    this.set("futUiAddition", newFutUiAddition);
   }
 }

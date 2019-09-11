@@ -540,23 +540,88 @@ describe("MailBots App", function() {
     it.skip("doesn't support async handlers that use callbacks");
   });
 
-  describe.only("followupthen lifecycle hooks", function() {
-    it("mailbot.onFutUserCreate method matches interbot_event payload", function(done) {
-      mailbot.onFutView(bot => {
-        const ui = [
-          {
-            type: "text",
-            text: "An SMS notification will also be sent with this reminder."
-          }
-        ];
-        return {
-          futUiAddition: ui
+  describe("followupthen lifecycle hooks", function() {
+    it("mailbot.onFutViewUser method works with raw json", function(done) {
+      mailbot.onFutViewUser(bot => {
+        bot.responseJson = {
+          // must add response directly to responseJson
+          futUiAddition: [
+            {
+              type: "text",
+              text: "An SMS notification will also be sent with this reminder."
+            }
+          ]
         };
       });
 
       const futViewedInterbotEvent = require("./fixtures/mailbot-interbot-event-fut-task-viewed.json");
-      fireWebhookRequest(futViewedInterbotEvent);
+      fireWebhookRequest(futViewedInterbotEvent).then(res => {
+        expect(res.body.futUiAddition).to.be.an("array");
+        expect(res.body.futUiAddition[0]).to.haveOwnProperty("text");
+      });
       done();
+    });
+
+    it("bot.webhook.addFutUiBlocks helper methods add IUiBlock elements", function(done) {
+      mailbot.onFutViewUser(bot => {
+        bot.webhook.addFutUiBlocks([
+          {
+            type: "text",
+            text: "An SMS notification will also be sent with this reminder."
+          }
+        ]);
+      });
+
+      const futViewedInterbotEvent = require("./fixtures/mailbot-interbot-event-fut-task-viewed.json");
+      fireWebhookRequest(futViewedInterbotEvent).then(res => {
+        // console.log(res.body);
+        expect(res.body.futUiAddition).to.be.an("array");
+        expect(res.body.futUiAddition[0]).to.haveOwnProperty("text");
+      });
+      done();
+    });
+
+    it("bot.webhook.addFutUiBlocks accumulates IUiBlock elements", function(done) {
+      mailbot.onFutViewUser(bot => {
+        bot.webhook.addFutUiBlocks([
+          {
+            type: "text",
+            text: "An SMS notification will also be sent with this reminder."
+          }
+        ]);
+      });
+
+      mailbot.onFutViewUser(bot => {
+        bot.webhook.addFutUiBlocks([
+          {
+            type: "text",
+            text: "More UI Blocks"
+          }
+        ]);
+      });
+
+      const futViewedInterbotEvent = require("./fixtures/mailbot-interbot-event-fut-task-viewed.json");
+      fireWebhookRequest(futViewedInterbotEvent).then(res => {
+        // console.log(res.body);
+        expect(res.body.futUiAddition).to.be.an("array");
+        expect(res.body.futUiAddition.length).to.equal(2);
+      });
+      done();
+    });
+
+    it("bot.set gives error if a FUT handlers sets data outside ISkillResponse", function(done) {
+      mailbot.onFutViewUser(bot => {
+        try {
+          bot.set("mailbot.stored_data", "foo"); // Not allowed if handling a futHook!
+          bot.webhook.respond();
+          done("FUT Skill response handler did not throw error");
+        } catch (e) {
+          done();
+        }
+      });
+
+      const futViewedInterbotEvent = require("./fixtures/mailbot-interbot-event-fut-task-viewed.json");
+      fireWebhookRequest(futViewedInterbotEvent);
     });
   });
 

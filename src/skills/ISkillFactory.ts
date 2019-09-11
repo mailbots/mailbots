@@ -14,7 +14,7 @@ export interface ISkillFactory {
   /**
    * Get an instance of the skill.
    */
-  create(bot: BotRequest): ISkill;
+  create?(bot: BotRequest): ISkill;
 
   /**
    * Get skill information.

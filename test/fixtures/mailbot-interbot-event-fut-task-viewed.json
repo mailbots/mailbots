@@ -29,7 +29,7 @@
       "stored_data": [],
       "search_keys": ["with_others"]
     },
-    "action": "futHook:onViewUser"
+    "action": "futHook:onFutViewUser"
   },
   "event": "mailbot.interbot_event",
   "version": "1",

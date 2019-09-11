@@ -1,8 +1,8 @@
-export { default } from "./mailbots";
+export { default, FutHookCallback } from "./mailbots";
 export { default as BotRequest } from "./lib/bot-request";
 
 // skill exports
-export { IUiBlock } from "./skills/IUiBlock";
+export { IUiBlock } from "./lib/IUiBlock";
 export { ISkillFactory } from "./skills/ISkillFactory";
 export {
   ISkill,
@@ -11,4 +11,3 @@ export {
   IAction,
   ITrigger
 } from "./skills/ISkill";
-export { InterbotEventHandler } from "./skills/interbotEventHandler ";
