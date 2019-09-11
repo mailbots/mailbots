@@ -6,7 +6,7 @@ export interface ISkillReturnValue {
   title?: string;
   futUiAddition?: IUiBlock[];
   futUiAdditionBehavior?: "append" | "prepend" | "exclusive";
-  task?: IWebHookTask; // Use this? Or just use bot.webhook methods?
+  taskUpdates?: IWebHookTask; // Use this? Or just use bot.webhook methods?
   endRequest?: boolean;
   skillsLog?: Array<any>; // returned only from the global applySkills method. Cannot be passed by handlers.
 }

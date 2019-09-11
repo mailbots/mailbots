@@ -115,10 +115,10 @@ export default class WebhookHelpers {
       requestJson.payload.action.startsWith("futHook:");
     if (!isFutHook) return true; // only check this for now
     if (
-      key === "futUiAddition" ||
-      key === "futUiAdditionBehavior" ||
-      key === "task" ||
-      key === "endRequest"
+      key.startsWith("futUiAddition") ||
+      key.startsWith("futUiAdditionBehavior") ||
+      key.startsWith("task") ||
+      key.startsWith("endRequest")
     ) {
       return true;
     }
