@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>mailbots 3.2.0-alpha | Documentation</title>
+  <title>mailbots 4.1.0-alpha | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>mailbots</h3>
-          <div class='mb1'><code>3.2.0-alpha</code></div>
+          <div class='mb1'><code>4.1.0-alpha</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -456,6 +456,16 @@
               
                 
                 <li><a
+                  href='#addfutuiblocks'
+                  class="">
+                  addFutUiBlocks
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#botwebooksettingspage'
                   class="">
                   bot.webook.settingsPage
@@ -622,7 +632,11 @@
     </h2>
 
     
-      <p><a href="https://www.mailbots.com">MailBots</a> is a platform for creating bots, AIs and assistants that get things done right from your inbox. Read more at <a href="https://www.mailbots.com">mailbots.com</a>.</p>
+      <p><strong>Note</strong> MailBots version 4+ is tightly coupled with FollowUpThen to reflect our (and our user's!) priorities.
+FollowUpThen lifecycle hooks (ex: <code>mailbot.onFutTriggerUser</code>) allow a developer to add value to FollowUpThen (the original, proto-MailBot) by modifying behavior or injecting UI elements at different points in the followup lifecycle.</p>
+<p>MailBots still exists a platform to extend FollowUpThen. We may re-release it as an independent system in the future.
+If you'd like to see that happen, or have any feedback in general, feel free to email help@humans.fut.io.</p>
+<p><a href="https://www.mailbots.com">MailBots</a> is a platform for creating bots, AIs and assistants that get things done right from your inbox. Read more at <a href="https://www.mailbots.com">mailbots.com</a>.</p>
 <h1>Quick Start</h1>
 <p>Go to mailbots.com and create a MailBot. The bot creation process sets up a working instance of this framework.</p>
 <p>Next, let's tell our MailBot what to do when it receives an email:</p>
@@ -674,6 +688,21 @@ mailbot.listen();</pre>
 <li><a href="#onsettingssubmit">onSettingsSubmit</a></li>
 <li><a href="#on">on</a></li>
 <li><a href="#handling-errors">Handling Errors</a></li>
+</ul>
+</li>
+<li>
+<p><a href="#followupthen-lifecycle-hook-handlers">FollowUpThen Lifecycle Hook Handlers</a></p>
+<ul>
+<li><a href="#onfutcreateuser">onFutCreateUser</a></li>
+<li><a href="#onfutcreatenonuser">onFutCreateNonUser</a></li>
+<li><a href="#onfutpreviewuser">onFutPreviewUser</a></li>
+<li><a href="#onfutpreviewnonuser">onFutPreviewNonUser</a></li>
+<li><a href="#onfutviewuser">onFutViewUser</a></li>
+<li><a href="#onfutviewnonuser">onFutViewNonUser</a></li>
+<li><a href="#onfuttriggeruser">onFutTriggerUser</a></li>
+<li><a href="#onfuttriggernonuser">onFutTriggerNonUser</a></li>
+<li><a href="#onfuttaskupdate">onFutTaskUpdate</a></li>
+<li><a href="#onfutaction">onFutAction</a></li>
 </ul>
 </li>
 <li><a href="#the-bot-object">The "bot" Object</a></li>
@@ -1002,6 +1031,60 @@ app.setErrorHandler(<span class="hljs-function"><span class="hljs-keyword">funct
     <span class="hljs-attr">message</span>: <span class="hljs-string">"A custom error message"</span> <span class="hljs-comment">// Shown to user if in the web UI.</span>
   }); <span class="hljs-comment">// A webhook response must be sent</span>
 });</pre>
+<h1>FollowUpThen Lifecycle Hook Handlers</h1>
+<p>The below handlers are fired in response to FollowUpThen lifecycle events. Their response signature
+differs from the native MailBots handlers above since it is injecting UI elements and behavioral changes
+into the followup cycle.</p>
+<p>The response style for all FollowUpThen Lifecycle Hook handlers is shown in onFutCreateUser below.</p>
+<p>Available options for the response are described in the <code>ISkillReturnValue</code> interface within <code>ISkill.ts</code></p>
+<h2>onFutCreateUser</h2>
+<p>Modify the FollowUpThen user's confirmation email or modify the task object when a followup is created.</p>
+<pre class='hljs'>mailbot.onFutCreateUser(<span class="hljs-function"><span class="hljs-params">bot</span> =&gt;</span> {
+  bod.webhook.addFutUiBlocks([
+    {
+      <span class="hljs-attr">type</span>: <span class="hljs-string">"text"</span>,
+      <span class="hljs-attr">text</span>: <span class="hljs-string">"Text block"</span>
+    }
+  ]);
+});
+
+<span class="hljs-comment">// using native JSON response with TypeScript</span>
+mailbot.onFutCreateUser(<span class="hljs-function"><span class="hljs-params">bot</span> =&gt;</span> {
+  <span class="hljs-keyword">const</span> ISkillReturnValue: response = {
+    <span class="hljs-attr">futUiAddition</span>: [
+      {
+        <span class="hljs-attr">type</span>: <span class="hljs-string">"text"</span>,
+        <span class="hljs-attr">text</span>: <span class="hljs-string">"Text block"</span>
+      }
+    ]
+  };
+  bot.responseJson = response;
+  <span class="hljs-keyword">return</span>;
+});</pre>
+<h2>onFutCreateNonUser</h2>
+<p>In rare cases (currently only when a <a href="http://help.followupthen.com/knowledge-base/tasks/">task (-t)</a> type
+followup is being created, a non-FUT user receives an email which can be modified using the above hook.</p>
+<h2>onFutPreviewUser</h2>
+<p>Render of UI elements into the preview email. (Shown when when a FUT user clicks "preview"
+to see what a reminder format will do). These elements are usually identical to the ones shown in the
+<code>onFutViewUser</code> and <code>onFutTriggerUser</code> hooks.</p>
+<h2>onFutPreviewNonUser</h2>
+<p>If a preview will trigger the a followup to a non-FUT user (ie, when used in "cc"), this allows allows
+for a preview of what this will look like.</p>
+<h2>onFutViewUser</h2>
+<p>Render UI elements when a user is viewing a followup.</p>
+<h2>onFutViewNonUser</h2>
+<p>If a FUT has emails sent to non-users, use this to render UI elements for only the non-user email.</p>
+<h2>onFutTriggerUser</h2>
+<p>Render UI elements that are only visible to the FollowUpThen user when a followup becomes due.</p>
+<h2>onFutTriggerNonUser</h2>
+<p>Render UI elements that are only for the non-user when a followup becomes due (if the followup format has
+a non-user email component).</p>
+<h2>onFutTaskUpdate</h2>
+<p>Take action when a task is edited. This may involve creating, removing or unlinking a linked resource.</p>
+<h2>onFutAction</h2>
+<p>The UI elements above may trigger email-based actions (fired from email, or from the FUT UI). This handler
+allows for the handling of these actions.</p>
 <h1>The "bot" Object</h1>
 <p>The <code>bot</code> object passed to the handlers above contains useful helpers that make it easy to handle bot requests. See <a href="https://mailbots-app.mailbots.com/#webhookhelpers">webhook helpers reference docs</a>.</p>
 <p><strong>Setting Data Works By Shallow Merging</strong>
@@ -1320,7 +1403,11 @@ API (see package.json).</p>
   </div>
   
 
-  <p><a href="https://www.mailbots.com">MailBots</a> is a platform for creating bots, AIs and assistants that get things done right from your inbox. Read more at <a href="https://www.mailbots.com">mailbots.com</a>.</p>
+  <p><strong>Note</strong> MailBots version 4+ is tightly coupled with FollowUpThen to reflect our (and our user's!) priorities.
+FollowUpThen lifecycle hooks (ex: <code>mailbot.onFutTriggerUser</code>) allow a developer to add value to FollowUpThen (the original, proto-MailBot) by modifying behavior or injecting UI elements at different points in the followup lifecycle.</p>
+<p>MailBots still exists a platform to extend FollowUpThen. We may re-release it as an independent system in the future.
+If you'd like to see that happen, or have any feedback in general, feel free to email help@humans.fut.io.</p>
+<p><a href="https://www.mailbots.com">MailBots</a> is a platform for creating bots, AIs and assistants that get things done right from your inbox. Read more at <a href="https://www.mailbots.com">mailbots.com</a>.</p>
 <h1>Quick Start</h1>
 <p>Go to mailbots.com and create a MailBot. The bot creation process sets up a working instance of this framework.</p>
 <p>Next, let's tell our MailBot what to do when it receives an email:</p>
@@ -1372,6 +1459,21 @@ mailbot.listen();</pre>
 <li><a href="#onsettingssubmit">onSettingsSubmit</a></li>
 <li><a href="#on">on</a></li>
 <li><a href="#handling-errors">Handling Errors</a></li>
+</ul>
+</li>
+<li>
+<p><a href="#followupthen-lifecycle-hook-handlers">FollowUpThen Lifecycle Hook Handlers</a></p>
+<ul>
+<li><a href="#onfutcreateuser">onFutCreateUser</a></li>
+<li><a href="#onfutcreatenonuser">onFutCreateNonUser</a></li>
+<li><a href="#onfutpreviewuser">onFutPreviewUser</a></li>
+<li><a href="#onfutpreviewnonuser">onFutPreviewNonUser</a></li>
+<li><a href="#onfutviewuser">onFutViewUser</a></li>
+<li><a href="#onfutviewnonuser">onFutViewNonUser</a></li>
+<li><a href="#onfuttriggeruser">onFutTriggerUser</a></li>
+<li><a href="#onfuttriggernonuser">onFutTriggerNonUser</a></li>
+<li><a href="#onfuttaskupdate">onFutTaskUpdate</a></li>
+<li><a href="#onfutaction">onFutAction</a></li>
 </ul>
 </li>
 <li><a href="#the-bot-object">The "bot" Object</a></li>
@@ -1700,6 +1802,60 @@ app.setErrorHandler(<span class="hljs-function"><span class="hljs-keyword">funct
     <span class="hljs-attr">message</span>: <span class="hljs-string">"A custom error message"</span> <span class="hljs-comment">// Shown to user if in the web UI.</span>
   }); <span class="hljs-comment">// A webhook response must be sent</span>
 });</pre>
+<h1>FollowUpThen Lifecycle Hook Handlers</h1>
+<p>The below handlers are fired in response to FollowUpThen lifecycle events. Their response signature
+differs from the native MailBots handlers above since it is injecting UI elements and behavioral changes
+into the followup cycle.</p>
+<p>The response style for all FollowUpThen Lifecycle Hook handlers is shown in onFutCreateUser below.</p>
+<p>Available options for the response are described in the <code>ISkillReturnValue</code> interface within <code>ISkill.ts</code></p>
+<h2>onFutCreateUser</h2>
+<p>Modify the FollowUpThen user's confirmation email or modify the task object when a followup is created.</p>
+<pre class='hljs'>mailbot.onFutCreateUser(<span class="hljs-function"><span class="hljs-params">bot</span> =&gt;</span> {
+  bod.webhook.addFutUiBlocks([
+    {
+      <span class="hljs-attr">type</span>: <span class="hljs-string">"text"</span>,
+      <span class="hljs-attr">text</span>: <span class="hljs-string">"Text block"</span>
+    }
+  ]);
+});
+
+<span class="hljs-comment">// using native JSON response with TypeScript</span>
+mailbot.onFutCreateUser(<span class="hljs-function"><span class="hljs-params">bot</span> =&gt;</span> {
+  <span class="hljs-keyword">const</span> ISkillReturnValue: response = {
+    <span class="hljs-attr">futUiAddition</span>: [
+      {
+        <span class="hljs-attr">type</span>: <span class="hljs-string">"text"</span>,
+        <span class="hljs-attr">text</span>: <span class="hljs-string">"Text block"</span>
+      }
+    ]
+  };
+  bot.responseJson = response;
+  <span class="hljs-keyword">return</span>;
+});</pre>
+<h2>onFutCreateNonUser</h2>
+<p>In rare cases (currently only when a <a href="http://help.followupthen.com/knowledge-base/tasks/">task (-t)</a> type
+followup is being created, a non-FUT user receives an email which can be modified using the above hook.</p>
+<h2>onFutPreviewUser</h2>
+<p>Render of UI elements into the preview email. (Shown when when a FUT user clicks "preview"
+to see what a reminder format will do). These elements are usually identical to the ones shown in the
+<code>onFutViewUser</code> and <code>onFutTriggerUser</code> hooks.</p>
+<h2>onFutPreviewNonUser</h2>
+<p>If a preview will trigger the a followup to a non-FUT user (ie, when used in "cc"), this allows allows
+for a preview of what this will look like.</p>
+<h2>onFutViewUser</h2>
+<p>Render UI elements when a user is viewing a followup.</p>
+<h2>onFutViewNonUser</h2>
+<p>If a FUT has emails sent to non-users, use this to render UI elements for only the non-user email.</p>
+<h2>onFutTriggerUser</h2>
+<p>Render UI elements that are only visible to the FollowUpThen user when a followup becomes due.</p>
+<h2>onFutTriggerNonUser</h2>
+<p>Render UI elements that are only for the non-user when a followup becomes due (if the followup format has
+a non-user email component).</p>
+<h2>onFutTaskUpdate</h2>
+<p>Take action when a task is edited. This may involve creating, removing or unlinking a linked resource.</p>
+<h2>onFutAction</h2>
+<p>The UI elements above may trigger email-based actions (fired from email, or from the FUT UI). This handler
+allows for the handling of these actions.</p>
 <h1>The "bot" Object</h1>
 <p>The <code>bot</code> object passed to the handlers above contains useful helpers that make it easy to handle bot requests. See <a href="https://mailbots-app.mailbots.com/#webhookhelpers">webhook helpers reference docs</a>.</p>
 <p><strong>Setting Data Works By Shallow Merging</strong>
@@ -5259,6 +5415,70 @@ ont eh screen. It also appears in the extension logs.</p>
       
       <pre class='p1 overflow-auto round fill-light'>setWebhookStatus({<span class="hljs-attr">message</span>: <span class="hljs-string">"Something worked!"</span>});</pre>
     
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='addfutuiblocks'>
+      addFutUiBlocks
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Add FUT Email UI Block
+Respond with a partial UI element to be injected into an email response. the response schema of
+responseJson is different than the other webhooks. It is sent via the Core API directly back
+to the fut mailbot, which merges it into its own response webhook response</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>addFutUiBlocks(uiBlocks: any)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>uiBlocks</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
   
 
   

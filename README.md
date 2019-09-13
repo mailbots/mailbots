@@ -34,6 +34,7 @@ Tip: Use our [reference guide](https://mailbots-app.mailbots.com) to quickly loo
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+
 - [How MailBots Work](#how-mailbots-work)
   - [Tasks](#tasks)
   - [Commands](#commands)
@@ -56,6 +57,17 @@ Tip: Use our [reference guide](https://mailbots-app.mailbots.com) to quickly loo
   - [onSettingsSubmit](#onsettingssubmit)
   - [on](#on)
   - [Handling Errors](#handling-errors)
+- [FollowUpThen Lifecycle Hook Handlers](#followupthen-lifecycle-hook-handlers)
+  - [onFutCreateUser](#onfutcreateuser)
+  - [onFutCreateNonUser](#onfutcreatenonuser)
+  - [onFutPreviewUser](#onfutpreviewuser)
+  - [onFutPreviewNonUser](#onfutpreviewnonuser)
+  - [onFutViewUser](#onfutviewuser)
+  - [onFutViewNonUser](#onfutviewnonuser)
+  - [onFutTriggerUser](#onfuttriggeruser)
+  - [onFutTriggerNonUser](#onfuttriggernonuser)
+  - [onFutTaskUpdate](#onfuttaskupdate)
+  - [onFutAction](#onfutaction)
 - [The "bot" Object](#the-bot-object)
 - [Building Skills](#building-skills)
   - [Sharing Handlers](#sharing-handlers)
@@ -534,6 +546,87 @@ app.setErrorHandler(function(error, bot) {
   }); // A webhook response must be sent
 });
 ```
+
+# FollowUpThen Lifecycle Hook Handlers
+
+The below handlers are fired in response to FollowUpThen lifecycle events. Their response signature
+differs from the native MailBots handlers above since it is injecting UI elements and behavioral changes
+into the followup cycle.
+
+The response style for all FollowUpThen Lifecycle Hook handlers is shown in onFutCreateUser below.
+
+Available options for the response are described in the `ISkillReturnValue` interface within `ISkill.ts`
+
+## onFutCreateUser
+
+Modify the FollowUpThen user's confirmation email or modify the task object when a followup is created.
+
+```javascript
+mailbot.onFutCreateUser(bot => {
+  bod.webhook.addFutUiBlocks([
+    {
+      type: "text",
+      text: "Text block"
+    }
+  ]);
+});
+
+// using native JSON response with TypeScript
+mailbot.onFutCreateUser(bot => {
+  const ISkillReturnValue: response = {
+    futUiAddition: [
+      {
+        type: "text",
+        text: "Text block"
+      }
+    ]
+  };
+  bot.responseJson = response;
+  return;
+});
+```
+
+## onFutCreateNonUser
+
+In rare cases (currently only when a [task (-t)](http://help.followupthen.com/knowledge-base/tasks/) type
+followup is being created, a non-FUT user receives an email which can be modified using the above hook.
+
+## onFutPreviewUser
+
+Render of UI elements into the preview email. (Shown when when a FUT user clicks "preview"
+to see what a reminder format will do). These elements are usually identical to the ones shown in the
+`onFutViewUser` and `onFutTriggerUser` hooks.
+
+## onFutPreviewNonUser
+
+If a preview will trigger the a followup to a non-FUT user (ie, when used in "cc"), this allows allows
+for a preview of what this will look like.
+
+## onFutViewUser
+
+Render UI elements when a user is viewing a followup.
+
+## onFutViewNonUser
+
+If a FUT has emails sent to non-users, use this to render UI elements for only the non-user email.
+
+## onFutTriggerUser
+
+Render UI elements that are only visible to the FollowUpThen user when a followup becomes due.
+
+## onFutTriggerNonUser
+
+Render UI elements that are only for the non-user when a followup becomes due (if the followup format has
+a non-user email component).
+
+## onFutTaskUpdate
+
+Take action when a task is edited. This may involve creating, removing or unlinking a linked resource.
+
+## onFutAction
+
+The UI elements above may trigger email-based actions (fired from email, or from the FUT UI). This handler
+allows for the handling of these actions.
 
 # The "bot" Object
 
