@@ -363,25 +363,25 @@ export default class MailBots {
    * MailBots callbacks
    * @todo separate these into their own file and, eventually, their own repository.
    *****************************/
-  _buildFutHookSetter(action: string) {
+  _buildFutHookSetter(futHook: string) {
     return (cb: FutHookCallback) => {
       const matchFunction = (webhook: any) =>
         webhook.event === "mailbot.interbot_event" &&
-        webhook.payload.action === action;
+        webhook.payload.fut_hook === futHook;
       this.on(matchFunction, cb, { multiFire: true });
     };
   }
 
-  onFutCreateUser = this._buildFutHookSetter("futHook:onFutCreateUser");
-  onFutCreateNonUser = this._buildFutHookSetter("futHook:onFutCreateNonUser");
-  onFutPreviewUser = this._buildFutHookSetter("futHook:onFutPreviewUser");
-  onFutPreviewNonUser = this._buildFutHookSetter("futHook:onFutPreviewNonUser");
-  onFutViewUser = this._buildFutHookSetter("futHook:onFutViewUser");
-  onFutViewNonUser = this._buildFutHookSetter("futHook:onFutViewNonUser");
-  onFutTriggerUser = this._buildFutHookSetter("futHook:onFutTriggerUser");
-  onFutTriggerNonUser = this._buildFutHookSetter("futHook:onFutTriggerNonUser");
-  onFutTaskUpdate = this._buildFutHookSetter("futHook:onFutTaskUpdate");
-  onFutAction = this._buildFutHookSetter("futHook:onFutAction");
+  onFutCreateUser = this._buildFutHookSetter("onFutCreateUser");
+  onFutCreateNonUser = this._buildFutHookSetter("onFutCreateNonUser");
+  onFutPreviewUser = this._buildFutHookSetter("onFutPreviewUser");
+  onFutPreviewNonUser = this._buildFutHookSetter("onFutPreviewNonUser");
+  onFutViewUser = this._buildFutHookSetter("onFutViewUser");
+  onFutViewNonUser = this._buildFutHookSetter("onFutViewNonUser");
+  onFutTriggerUser = this._buildFutHookSetter("onFutTriggerUser");
+  onFutTriggerNonUser = this._buildFutHookSetter("onFutTriggerNonUser");
+  onFutTaskUpdate = this._buildFutHookSetter("onFutTaskUpdate");
+  onFutAction = this._buildFutHookSetter("onFutAction");
 
   /******************************
    * Utility methods

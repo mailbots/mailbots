@@ -112,7 +112,8 @@ export default class WebhookHelpers {
     // interbot_event handlers that start with futHook JSON response must comply with ISkillReturnValue
     const isFutHook =
       requestJson.event === "mailbot.interbot_event" &&
-      requestJson.payload.action.startsWith("futHook:");
+      typeof requestJson.payload === "object" &&
+      requestJson.payload.hasOwnProperty("fut_hook");
     if (!isFutHook) return true; // only check this for now
     if (
       key.startsWith("futUiAddition") ||
