@@ -363,11 +363,11 @@ export default class MailBots {
    * MailBots callbacks
    * @todo separate these into their own file and, eventually, their own repository.
    *****************************/
-  _buildFutHookSetter(action: string) {
+  _buildFutHookSetter(futHook: string) {
     return (cb: FutHookCallback) => {
       const matchFunction = (webhook: any) =>
         webhook.event === "mailbot.interbot_event" &&
-        webhook.payload.action === action;
+        webhook.payload.futHook === futHook;
       this.on(matchFunction, cb, { multiFire: true });
     };
   }
