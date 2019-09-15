@@ -555,7 +555,7 @@ into the followup cycle.
 
 The response style for all FollowUpThen Lifecycle Hook handlers is shown in onFutCreateUser below.
 
-Available options for the response are described in the `ISkillReturnValue` interface within `ISkill.ts`
+Available options for the response are described in the `ISkillReturnValue` interface within `types.ts`
 
 ## onFutCreateUser
 

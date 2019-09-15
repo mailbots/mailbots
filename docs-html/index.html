@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>mailbots 4.1.0-alpha | Documentation</title>
+  <title>mailbots 4.2.0-alpha | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>mailbots</h3>
-          <div class='mb1'><code>4.1.0-alpha</code></div>
+          <div class='mb1'><code>4.2.0-alpha</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -1036,7 +1036,7 @@ app.setErrorHandler(<span class="hljs-function"><span class="hljs-keyword">funct
 differs from the native MailBots handlers above since it is injecting UI elements and behavioral changes
 into the followup cycle.</p>
 <p>The response style for all FollowUpThen Lifecycle Hook handlers is shown in onFutCreateUser below.</p>
-<p>Available options for the response are described in the <code>ISkillReturnValue</code> interface within <code>ISkill.ts</code></p>
+<p>Available options for the response are described in the <code>ISkillReturnValue</code> interface within <code>types.ts</code></p>
 <h2>onFutCreateUser</h2>
 <p>Modify the FollowUpThen user's confirmation email or modify the task object when a followup is created.</p>
 <pre class='hljs'>mailbot.onFutCreateUser(<span class="hljs-function"><span class="hljs-params">bot</span> =&gt;</span> {
@@ -1807,7 +1807,7 @@ app.setErrorHandler(<span class="hljs-function"><span class="hljs-keyword">funct
 differs from the native MailBots handlers above since it is injecting UI elements and behavioral changes
 into the followup cycle.</p>
 <p>The response style for all FollowUpThen Lifecycle Hook handlers is shown in onFutCreateUser below.</p>
-<p>Available options for the response are described in the <code>ISkillReturnValue</code> interface within <code>ISkill.ts</code></p>
+<p>Available options for the response are described in the <code>ISkillReturnValue</code> interface within <code>types.ts</code></p>
 <h2>onFutCreateUser</h2>
 <p>Modify the FollowUpThen user's confirmation email or modify the task object when a followup is created.</p>
 <pre class='hljs'>mailbot.onFutCreateUser(<span class="hljs-function"><span class="hljs-params">bot</span> =&gt;</span> {
@@ -5017,11 +5017,11 @@ of the Admin UI. See SettingsPage docs for details</p>
   </div>
   
 
-  <p>Get bot request source request object.</p>
+  <p>Get bot request source request object. Usually this is an email. It can also be an API request.</p>
 
  
   
-    <div class='pre p1 fill-light mt0'>getSource(): IWebhookSource</div>
+    <div class='pre p1 fill-light mt0'>getSource(): IWebhookSourceEmail</div>
    
   
   
@@ -5040,7 +5040,7 @@ of the Admin UI. See SettingsPage docs for details</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>IWebhookSource</code>:
+      <code>IWebhookSourceEmail</code>:
         
 
       
@@ -5209,7 +5209,7 @@ was posted.</p>
 
  
   
-    <div class='pre p1 fill-light mt0'>getTask(): IWebHookTask</div>
+    <div class='pre p1 fill-light mt0'>getTask(): IWebhookTask</div>
    
   
   
@@ -5228,7 +5228,7 @@ was posted.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>IWebHookTask</code>:
+      <code>IWebhookTask</code>:
         
 
       

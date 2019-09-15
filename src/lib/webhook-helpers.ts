@@ -4,15 +4,15 @@ import * as debugAs from "debug";
 import BotRequest from "./bot-request";
 import SettingsPage from "./settings-page";
 
-import { IReferenceEmail } from "./IReferenceEmail";
 import {
-  IWebhookSource,
+  IReferenceEmail,
+  IWebhookSourceEmail,
   IWebhookTrigger,
   IWebhookUser,
-  IWebHookTask,
-  IWebHookMailBot
-} from "./IWebHook";
-import { IUiBlock } from "./IUiBlock";
+  IWebhookTask,
+  IWebHookMailBot,
+  IUiBlock
+} from "../types";
 
 const debug = debugAs("mailbots");
 const WEBHOOK_API_VERSION = "1";
@@ -332,7 +332,7 @@ export default class WebhookHelpers {
     from?: string;
     reply_to?: string;
     subject: string;
-    body: any[];
+    body?: IUiBlock[];
   }): any {
     Object.assign(email, { type: "email" });
     let allEmails = this.get("send_messages", []);
@@ -527,11 +527,11 @@ export default class WebhookHelpers {
   }
 
   /**
-   * Get bot request source request object.
+   * Get bot request source request object. Usually this is an email. It can also be an API request.
    * @example const source = bot.webhook.getSource()
-   * @returns {IWebhookSource}
+   * @returns {IWebhookSourceEmail}
    */
-  getSource(): IWebhookSource | undefined {
+  getSource(): IWebhookSourceEmail | any | undefined {
     return this.get("source");
   }
 
@@ -558,9 +558,9 @@ export default class WebhookHelpers {
   /**
    * Get task data associated with the webhook.
    * @example const task = bot.webhook.getTask()
-   * @returns {IWebHookTask}
+   * @returns {IWebhookTask}
    */
-  getTask(): IWebHookTask | undefined {
+  getTask(): IWebhookTask | undefined {
     return this.get("task");
   }
 

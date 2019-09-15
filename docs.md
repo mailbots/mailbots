@@ -684,7 +684,7 @@ into the followup cycle.
 
 The response style for all FollowUpThen Lifecycle Hook handlers is shown in onFutCreateUser below.
 
-Available options for the response are described in the `ISkillReturnValue` interface within `ISkill.ts`
+Available options for the response are described in the `ISkillReturnValue` interface within `types.ts`
 
 ## onFutCreateUser
 
@@ -1740,7 +1740,7 @@ const.settingsPage = bot.webhook.settingsPage({
 
 ## getSource
 
-Get bot request source request object.
+Get bot request source request object. Usually this is an email. It can also be an API request.
 
 ### Examples
 
@@ -1748,7 +1748,7 @@ Get bot request source request object.
 const source = bot.webhook.getSource()
 ```
 
-Returns **IWebhookSource** 
+Returns **IWebhookSourceEmail** 
 
 ## getTrigger
 
@@ -1786,7 +1786,7 @@ Get task data associated with the webhook.
 const task = bot.webhook.getTask()
 ```
 
-Returns **IWebHookTask** 
+Returns **IWebhookTask** 
 
 ## getMailBot
 

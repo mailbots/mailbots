@@ -8,8 +8,7 @@ import { IBotConfig, default as getConfig } from "./lib/config-defaults";
 import coreSkillsFirstLoader from "./lib/core-skills-first";
 import coreSkillsLastLoader from "./lib/core-skills-last";
 import BotRequest from "./lib/bot-request";
-import { IWebHook } from "./lib/IWebHook";
-import { ISkillReturnValue } from "./skills/ISkill";
+import { ISkillReturnValue, IWebHook } from "./types";
 
 const debug = debugAs("mailbots");
 
