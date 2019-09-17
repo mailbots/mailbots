@@ -157,6 +157,7 @@ export interface ISkillReturnValue {
   taskUpdates?: IWebhookTask; // Use this? Or just use bot.webhook methods?
   endRequest?: boolean;
   skillsLog?: Array<any>; // returned only from the global applySkills method. Cannot be passed by handlers.
+  template?: string; // which email template to use for sending an email
 }
 
 export interface ISkillInfo {
