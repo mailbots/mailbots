@@ -354,7 +354,7 @@ export default class SettingsPage {
     defaultValue
   }: {
     name: string;
-    title: string;
+    title?: string;
     description?: string;
     helpText?: string;
     options: string[];

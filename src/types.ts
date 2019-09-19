@@ -148,6 +148,7 @@ export interface IUiBlock {
   url?: string;
   style?: string;
   className?: string;
+  open?: boolean;
 }
 
 export interface ISkillReturnValue {
@@ -190,4 +191,14 @@ export interface IAction {
  */
 export interface ITrigger {
   [key: string]: any;
+}
+
+/**
+ * User friendly representation of a date
+ */
+export interface IFriendlyDate {
+  friendlyDate: string;
+  daysInFuture: number;
+  hoursInFuture: number;
+  howFarInFuture: string;
 }

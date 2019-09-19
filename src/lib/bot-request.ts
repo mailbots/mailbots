@@ -126,9 +126,20 @@ export default class BotRequest {
     const secondsFromNow = Math.round(unixTime - Date.now() / 1000);
     const daysInFuture = Math.round(secondsFromNow / 60 / 60 / 24);
     const hoursInFuture = Math.round(secondsFromNow / 60 / 60);
-    const howFarInFuture = daysInFuture
+    const minutesInFuture = Math.round(secondsFromNow / 60);
+
+    // build how far in future
+    const howFarInDays = daysInFuture
       ? `${daysInFuture} ${daysInFuture === 1 ? "day" : "days"}`
-      : `${hoursInFuture} ${hoursInFuture === 1 ? "hour" : "hours"}`;
+      : null;
+    const howFarInHours = hoursInFuture
+      ? `${hoursInFuture} ${hoursInFuture === 1 ? "hour" : "hours"}`
+      : null;
+    const howFarInMinutes = minutesInFuture
+      ? `${minutesInFuture} ${minutesInFuture === 1 ? "minute" : "minutes"}`
+      : null;
+    const howFarInFuture = howFarInDays || howFarInHours || howFarInMinutes;
+
     userTimezone = userTimezone || "GMT";
     const friendlyDate = moment(unixTime * 1000)
       .tz(userTimezone)
@@ -137,6 +148,7 @@ export default class BotRequest {
       friendlyDate,
       daysInFuture,
       hoursInFuture,
+      minutesInFuture,
       howFarInFuture
     };
   }

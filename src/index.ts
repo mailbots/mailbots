@@ -3,9 +3,12 @@ export { default as BotRequest } from "./lib/bot-request";
 
 // skill exports
 export {
+  IWebhookTask,
+  IWebhookUser,
   IUiBlock,
   ISkillInfo,
   ISkillReturnValue,
   IAction,
-  ITrigger
+  ITrigger,
+  IFriendlyDate
 } from "./types";
