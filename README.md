@@ -66,7 +66,7 @@ Tip: Use our [reference guide](https://mailbots-app.mailbots.com) to quickly loo
   - [onFutViewNonUser](#onfutviewnonuser)
   - [onFutTriggerUser](#onfuttriggeruser)
   - [onFutTriggerNonUser](#onfuttriggernonuser)
-  - [onFutTaskUpdate](#onfuttaskupdate)
+  - [onFutUpdate](#onfuttaskupdate)
   - [onFutAction](#onfutaction)
 - [The "bot" Object](#the-bot-object)
 - [Building Skills](#building-skills)
@@ -619,7 +619,7 @@ Render UI elements that are only visible to the FollowUpThen user when a followu
 Render UI elements that are only for the non-user when a followup becomes due (if the followup format has
 a non-user email component).
 
-## onFutTaskUpdate
+## onFutUpdate
 
 Take action when a task is edited. This may involve creating, removing or unlinking a linked resource.
 

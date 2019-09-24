@@ -212,7 +212,7 @@ Tip: Use our [reference guide][142] to quickly look up helpers and method names.
     -   [onFutViewNonUser][162]
     -   [onFutTriggerUser][163]
     -   [onFutTriggerNonUser][164]
-    -   [onFutTaskUpdate][165]
+    -   [onFutUpdate][165]
     -   [onFutAction][166]
 -   [The "bot" Object][167]
 -   [Building Skills][168]
@@ -748,7 +748,7 @@ Render UI elements that are only visible to the FollowUpThen user when a followu
 Render UI elements that are only for the non-user when a followup becomes due (if the followup format has
 a non-user email component).
 
-## onFutTaskUpdate
+## onFutUpdate
 
 Take action when a task is edited. This may involve creating, removing or unlinking a linked resource.
 

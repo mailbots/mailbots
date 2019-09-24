@@ -124,7 +124,7 @@ export default class WebhookHelpers {
       return true;
     }
     throw new Error(
-      `Setting ${key} is not allowed in this handler. futHook response must match ISkillHandlerReturnValue`
+      `Setting ${key} is not allowed in this handler. Did you mean to set 'taskUpdates'? futHook response must match ISkillHandlerReturnValue`
     );
   }
 
@@ -600,5 +600,38 @@ export default class WebhookHelpers {
     const existingFutUiAdditions = this.get("futUiAddition", []);
     const newFutUiAddition = [...existingFutUiAdditions, ...uiBlocks];
     this.set("futUiAddition", newFutUiAddition);
+  }
+
+  /**
+   * In the taskUpdated method, this method is used to check if this skill has been marked for removal
+   * so cleanup options can be optionally performed. It must reply
+   * @param bot
+   * @param data_namespace  data_namespace of this mailbot
+   */
+  skillMarkedForRemoval(data_namespace: string) {
+    return this.get(`payload.task.stored_data.${data_namespace}.remove_skill`);
+  }
+
+  /**
+   * Helper for a FUT skill to add a new search key. Idempotent.
+   */
+  addSearchKeys(keys: string[]) {
+    const existingKeys: string[] = this.get(`taskUpdates.search_keys`, []);
+    let newKeys: string[] = [...existingKeys];
+    function addKeyIfNotAlreadyThere(key: string) {
+      if (newKeys.includes(key)) return;
+      newKeys = newKeys.concat(key);
+    }
+
+    keys.forEach(key => addKeyIfNotAlreadyThere(key));
+    this.set("taskUpdates.search_keys", newKeys);
+  }
+
+  /**
+   * Helper for FUT Skill to Remove search keys from a task.
+   * Merging is taken care of at next level.
+   */
+  removeSearchKeys(keysToRemove: string[]) {
+    this.set("taskUpdates.remove_search_keys", keysToRemove);
   }
 }

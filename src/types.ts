@@ -17,7 +17,7 @@ export interface IReferenceEmail {
  * Core element of MailBots platform
  */
 export interface IWebhookTask {
-  command: string;
+  command?: string;
   created?: number;
   completed?: boolean;
   completed_on?: string;
@@ -30,6 +30,7 @@ export interface IWebhookTask {
     [key: string]: any;
   };
   search_keys?: string[];
+  remove_search_keys?: string[]; // only used within skill handlers dispatched from fut-mailbot via interbot_events
   invisible?: boolean; // hidden from user by default (good for background tasks)
   discard?: number; // immediately delete
 }

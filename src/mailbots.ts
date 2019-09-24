@@ -379,7 +379,7 @@ export default class MailBots {
   onFutViewNonUser = this._buildFutHookSetter("onFutViewNonUser");
   onFutTriggerUser = this._buildFutHookSetter("onFutTriggerUser");
   onFutTriggerNonUser = this._buildFutHookSetter("onFutTriggerNonUser");
-  onFutTaskUpdate = this._buildFutHookSetter("onFutTaskUpdate");
+  onFutUpdate = this._buildFutHookSetter("onFutUpdate");
   onFutAction = this._buildFutHookSetter("onFutAction");
 
   /******************************
