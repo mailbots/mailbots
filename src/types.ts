@@ -2,10 +2,24 @@
  * Abstract, user editable instance of the email
  * associated with a task.
  */
+export interface IReferenceEmail {
+  to: string[];
+  cc?: string[];
+  bcc?: string[];
+  subject: string;
+  reply_to?: string;
+  html?: string;
+  text?: string;
+  attachments?: any[];
+}
+/**
+ * @todo Core API should merge IEmail and IReferenceEmail types. IEmail (more flexible) is used while
+ * sending new messages with IUiBlocks to render the body. IReferenceEmail is static text / html based emails
+ */
 export interface IEmail {
-  to: string | string[]; // @todo fix in core API. In reference_email is array, other times it's a string
-  cc?: string | string[];
-  bcc?: string | string[];
+  to: string;
+  cc?: string;
+  bcc?: string;
   subject: string;
   html?: string; // has either html or array of body elements
   body?: IUiBlock[];
@@ -27,7 +41,7 @@ export interface IWebhookTask {
   id?: number;
   trigger_time?: number;
   trigger_timeformat?: string;
-  reference_email?: IEmail;
+  reference_email?: IReferenceEmail;
   stored_data?: {
     [key: string]: any;
   };

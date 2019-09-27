@@ -12,5 +12,6 @@ export {
   ITrigger,
   IFriendlyDate,
   ITemplateOptions,
+  IReferenceEmail,
   IEmail
 } from "./types";

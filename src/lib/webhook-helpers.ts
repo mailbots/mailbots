@@ -5,13 +5,13 @@ import BotRequest from "./bot-request";
 import SettingsPage from "./settings-page";
 
 import {
-  IEmail,
   IWebhookSourceEmail,
   IWebhookTrigger,
   IWebhookUser,
   IWebhookTask,
   IWebHookMailBot,
-  IUiBlock
+  IUiBlock,
+  IReferenceEmail
 } from "../types";
 
 const debug = debugAs("mailbots");
@@ -230,7 +230,7 @@ export default class WebhookHelpers {
    * as the source email (which is the exact email received).
    * @example bot.webhook.getReferenceEmail();
    */
-  getReferenceEmail(): IEmail {
+  getReferenceEmail(): IReferenceEmail {
     return this.get("task.reference_email");
   }
 
@@ -252,7 +252,7 @@ export default class WebhookHelpers {
    *   html: "This new content replaces the old"
    * });
    */
-  setReferenceEmail(referenceEmail: Partial<IEmail>) {
+  setReferenceEmail(referenceEmail: Partial<IReferenceEmail>) {
     return this.set("task.reference_email", referenceEmail);
   }
 
