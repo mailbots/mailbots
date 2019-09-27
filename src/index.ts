@@ -10,5 +10,7 @@ export {
   ISkillReturnValue,
   IAction,
   ITrigger,
-  IFriendlyDate
+  IFriendlyDate,
+  ITemplateOptions,
+  IEmail
 } from "./types";

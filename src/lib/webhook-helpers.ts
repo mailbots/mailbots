@@ -5,7 +5,7 @@ import BotRequest from "./bot-request";
 import SettingsPage from "./settings-page";
 
 import {
-  IReferenceEmail,
+  IEmail,
   IWebhookSourceEmail,
   IWebhookTrigger,
   IWebhookUser,
@@ -230,7 +230,7 @@ export default class WebhookHelpers {
    * as the source email (which is the exact email received).
    * @example bot.webhook.getReferenceEmail();
    */
-  getReferenceEmail(): IReferenceEmail {
+  getReferenceEmail(): IEmail {
     return this.get("task.reference_email");
   }
 
@@ -252,7 +252,7 @@ export default class WebhookHelpers {
    *   html: "This new content replaces the old"
    * });
    */
-  setReferenceEmail(referenceEmail: Partial<IReferenceEmail>) {
+  setReferenceEmail(referenceEmail: Partial<IEmail>) {
     return this.set("task.reference_email", referenceEmail);
   }
 
@@ -333,6 +333,7 @@ export default class WebhookHelpers {
     reply_to?: string;
     subject: string;
     body?: IUiBlock[];
+    headers?: { [key: string]: string };
   }): any {
     Object.assign(email, { type: "email" });
     let allEmails = this.get("send_messages", []);
@@ -633,5 +634,13 @@ export default class WebhookHelpers {
    */
   removeSearchKeys(keysToRemove: string[]) {
     this.set("taskUpdates.remove_search_keys", keysToRemove);
+  }
+
+  /**
+   * Check if current task has a search key
+   */
+  hasSearchKey(key: string) {
+    const searchKeys = this.get("task.search_keys", []);
+    return searchKeys.includes(key);
   }
 }

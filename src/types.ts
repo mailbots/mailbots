@@ -2,14 +2,16 @@
  * Abstract, user editable instance of the email
  * associated with a task.
  */
-export interface IReferenceEmail {
-  to: string[];
-  cc?: string[];
-  bcc?: string[];
+export interface IEmail {
+  to: string | string[]; // @todo fix in core API. In reference_email is array, other times it's a string
+  cc?: string | string[];
+  bcc?: string | string[];
   subject: string;
+  html?: string; // has either html or array of body elements
+  body?: IUiBlock[];
+  from?: string;
   reply_to?: string;
-  html?: string;
-  text?: string;
+  headers?: any;
   attachments?: any[];
 }
 
@@ -25,7 +27,7 @@ export interface IWebhookTask {
   id?: number;
   trigger_time?: number;
   trigger_timeformat?: string;
-  reference_email?: IReferenceEmail;
+  reference_email?: IEmail;
   stored_data?: {
     [key: string]: any;
   };
@@ -152,6 +154,12 @@ export interface IUiBlock {
   open?: boolean;
 }
 
+export interface ITemplateOptions {
+  renderPostpone?: boolean;
+  includeEmailThread?: boolean;
+  suppressDefault?: boolean; // prevent the normal message or email from sending
+}
+
 export interface ISkillReturnValue {
   title?: string;
   futUiAddition?: IUiBlock[];
@@ -159,7 +167,7 @@ export interface ISkillReturnValue {
   taskUpdates?: IWebhookTask; // Use this? Or just use bot.webhook methods?
   endRequest?: boolean;
   skillsLog?: Array<any>; // returned only from the global applySkills method. Cannot be passed by handlers.
-  template?: string; // which email template to use for sending an email
+  templateOptions?: ITemplateOptions; // enable / disable email UI features. (Not all opts are available on all templates)
 }
 
 export interface ISkillInfo {
