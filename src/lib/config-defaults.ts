@@ -44,7 +44,7 @@ export default function(config: Partial<IBotConfig> = {}): IBotConfig {
   const mailbotsAdmin =
     config.mailbotsAdmin ||
     process.env.MAILBOTS_ADMIN ||
-    "https://app.mailbots.com/";
+    "https://app.followupthen.com/";
   const tokenHost = config.tokenHost || apiHost;
   const tokenPath =
     config.tokenPath || urljoin(apiHost, "api/v1/oauth2/access_token");
