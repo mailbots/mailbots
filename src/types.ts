@@ -171,7 +171,6 @@ export interface IUiBlock {
 export interface ITemplateOptions {
   renderPostpone?: boolean;
   includeEmailThread?: boolean;
-  suppressDefault?: boolean; // prevent the normal message or email from sending
 }
 
 export interface ISkillReturnValue {
@@ -223,5 +222,6 @@ export interface IFriendlyDate {
   friendlyDate: string;
   daysInFuture: number;
   hoursInFuture: number;
+  minutesInFuture: number;
   howFarInFuture: string;
 }

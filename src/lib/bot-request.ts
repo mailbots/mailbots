@@ -6,6 +6,7 @@ import { Request, Response } from "express";
 import { MailBotsClient } from "@mailbots/mailbots-sdk";
 import WebhookHelpers from "./webhook-helpers";
 import { IBotConfig } from "./config-defaults";
+import { IFriendlyDate } from "../types";
 
 const WEBHOOK_API_VERSION = "1";
 
@@ -122,7 +123,7 @@ export default class BotRequest {
     unixTime: number;
     userTimezone: string;
     format?: string;
-  }) {
+  }): IFriendlyDate {
     const secondsFromNow = Math.round(unixTime - Date.now() / 1000);
     const daysInFuture = Math.round(secondsFromNow / 60 / 60 / 24);
     const hoursInFuture = Math.round(secondsFromNow / 60 / 60);
@@ -138,7 +139,8 @@ export default class BotRequest {
     const howFarInMinutes = minutesInFuture
       ? `${minutesInFuture} ${minutesInFuture === 1 ? "minute" : "minutes"}`
       : null;
-    const howFarInFuture = howFarInDays || howFarInHours || howFarInMinutes;
+    const howFarInFuture =
+      howFarInDays || howFarInHours || howFarInMinutes || "Date error";
 
     userTimezone = userTimezone || "GMT";
     const friendlyDate = moment(unixTime * 1000)
