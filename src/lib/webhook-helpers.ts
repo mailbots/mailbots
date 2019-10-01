@@ -277,6 +277,9 @@ export default class WebhookHelpers {
   getEmailMethod(): "to" | "cc" | "bcc" {
     const thisCommand = this.get("task.command", "").toLowerCase();
 
+    // edge case that applies only to FollowUpThen, where there are two domains that point to the same mailbot
+    const thisAltCommand = thisCommand.replace("followupthen.com", "fut.io");
+
     // defensive
     function addressFieldToArray(field: any): Array<string> {
       if (field instanceof Array) return field;
@@ -292,9 +295,9 @@ export default class WebhookHelpers {
     cc = addressFieldToArray(cc);
     cc = cc.map((cc: string) => cc.toLowerCase());
 
-    if (to.includes(thisCommand)) {
+    if (to.includes(thisCommand) || to.includes(thisAltCommand)) {
       return "to";
-    } else if (cc.includes(thisCommand)) {
+    } else if (cc.includes(thisCommand) || to.includes(thisAltCommand)) {
       return "cc";
     } else {
       return "bcc";
@@ -642,5 +645,20 @@ export default class WebhookHelpers {
   hasSearchKey(key: string) {
     const searchKeys = this.get("task.search_keys", []);
     return searchKeys.includes(key);
+  }
+
+  /**
+   * Check if current task has a search key
+   * Add this
+   * Finish SMS page messaging.
+   * Deploy SMS to prod with description, final working version.
+   *
+   */
+  getSettingsUrl() {
+    if (this.botRequest.config) {
+      return this.botRequest.config.mailbotSettingsUrl;
+    } else {
+      return "mailbots framework not configured";
+    }
   }
 }

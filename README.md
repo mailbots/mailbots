@@ -66,7 +66,7 @@ Tip: Use our [reference guide](https://mailbots-app.mailbots.com) to quickly loo
   - [onFutViewNonUser](#onfutviewnonuser)
   - [onFutTriggerUser](#onfuttriggeruser)
   - [onFutTriggerNonUser](#onfuttriggernonuser)
-  - [onFutUpdate](#onfuttaskupdate)
+  - [onFutUpdate](#onfutupdate)
   - [onFutAction](#onfutaction)
 - [The "bot" Object](#the-bot-object)
 - [Building Skills](#building-skills)

@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>mailbots 4.2.0-alpha | Documentation</title>
+  <title>mailbots 4.5.1-alpha | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>mailbots</h3>
-          <div class='mb1'><code>4.2.0-alpha</code></div>
+          <div class='mb1'><code>4.5.1-alpha</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -466,6 +466,56 @@
               
                 
                 <li><a
+                  href='#skillmarkedforremoval'
+                  class="">
+                  skillMarkedForRemoval
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#addsearchkeys'
+                  class="">
+                  addSearchKeys
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#removesearchkeys'
+                  class="">
+                  removeSearchKeys
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#hassearchkey'
+                  class="">
+                  hasSearchKey
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getsettingsurl'
+                  class="">
+                  getSettingsUrl
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#botwebooksettingspage'
                   class="">
                   bot.webook.settingsPage
@@ -701,7 +751,7 @@ mailbot.listen();</pre>
 <li><a href="#onfutviewnonuser">onFutViewNonUser</a></li>
 <li><a href="#onfuttriggeruser">onFutTriggerUser</a></li>
 <li><a href="#onfuttriggernonuser">onFutTriggerNonUser</a></li>
-<li><a href="#onfuttaskupdate">onFutUpdate</a></li>
+<li><a href="#onfutupdate">onFutUpdate</a></li>
 <li><a href="#onfutaction">onFutAction</a></li>
 </ul>
 </li>
@@ -1472,7 +1522,7 @@ mailbot.listen();</pre>
 <li><a href="#onfutviewnonuser">onFutViewNonUser</a></li>
 <li><a href="#onfuttriggeruser">onFutTriggerUser</a></li>
 <li><a href="#onfuttriggernonuser">onFutTriggerNonUser</a></li>
-<li><a href="#onfuttaskupdate">onFutUpdate</a></li>
+<li><a href="#onfutupdate">onFutUpdate</a></li>
 <li><a href="#onfutaction">onFutAction</a></li>
 </ul>
 </li>
@@ -5471,6 +5521,312 @@ to the fut mailbot, which merges it into its own response webhook response</p>
         </div>
       
     </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='skillmarkedforremoval'>
+      skillMarkedForRemoval
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>In the taskUpdated method, this method is used to check if this skill has been marked for removal
+so cleanup options can be optionally performed. It must reply</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>skillMarkedForRemoval(data_namespace: any, bot: any)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>data_namespace</span> <code class='quiet'>(any)</code>
+	    data_namespace of this mailbot
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>bot</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='addsearchkeys'>
+      addSearchKeys
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Helper for a FUT skill to add a new search key. Idempotent.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>addSearchKeys(keys: any)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>keys</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='removesearchkeys'>
+      removeSearchKeys
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Helper for FUT Skill to Remove search keys from a task.
+Merging is taken care of at next level.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>removeSearchKeys(keysToRemove: any)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>keysToRemove</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='hassearchkey'>
+      hasSearchKey
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Check if current task has a search key</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>hasSearchKey(key: any)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>key</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getsettingsurl'>
+      getSettingsUrl
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Check if current task has a search key
+Add this
+Finish SMS page messaging.
+Deploy SMS to prod with description, final working version.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>getSettingsUrl()</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
   
 
   

@@ -351,6 +351,18 @@ describe("Bot Request Helper", function() {
       done();
     });
 
+    it("determines the to / cc / bcc email method for @fut.io and @followupthen.com", done => {
+      let emailMethod;
+      botRequest.webhook.set("task.reference_email.to", "3days@fut.io");
+      botRequest.webhook.set(
+        "task.command",
+        "3days@followupthen.com" // migrated tasks always have @followupthen.com
+      );
+      emailMethod = botRequest.webhook.getEmailMethod();
+      expect(emailMethod).to.equal("to");
+      done();
+    });
+
     it("sets the trigger time nautally", done => {
       botRequest.webhook.setTriggerTime("1day");
       expect(botRequest.responseJson.task.trigger_timeformat).to.eq("1day");
