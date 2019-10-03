@@ -533,7 +533,9 @@ describe("MailBots App", function() {
       const webhookResponse = await fireWebhookRequest(exampleJson);
       expect(webhookResponse.body).to.deep.eq({
         version: "1",
-        task: { stored_data: { frequency_pref: "1.5", my: "async settings" } }
+        // We are longer initializing responseJson with requestJson data: https://github.com/mailbots/mailbots/issues/4
+        // task: { stored_data: { frequency_pref: "1.5", my: "async settings" } }
+        task: { stored_data: { my: "async settings" } }
       });
     });
 

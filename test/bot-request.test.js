@@ -681,6 +681,81 @@ describe("Bot Request Helper", function() {
       done();
     });
 
+    it("bot.get() optionally retrieves only values from responseJson", done => {
+      _.set(botRequest.webhook, "requestJson.task.trigger_time", "1234");
+      // _.set(botRequest.webhook, "responseJson.task.stored_data.baz", "buzz");
+      // forcees it to only get from responseJson, not requestJson
+      expect(botRequest.webhook.get("task.trigger_time", null, true)).to.equal(
+        null
+      );
+      expect(botRequest.webhook.get("task.trigger_time", null, false)).to.equal(
+        "1234"
+      );
+      done();
+    });
+
+    it("bot.get() finds values when set responseJson", done => {
+      _.set(botRequest.webhook, "responseJson.task.trigger_time", "1234");
+      // _.set(botRequest.webhook, "responseJson.task.stored_data.baz", "buzz");
+      // forcees it to only get from responseJson, not requestJson
+      expect(botRequest.webhook.get("task.trigger_time", null, true)).to.equal(
+        "1234"
+      );
+      done();
+    });
+
+    it("bot.get() finds default values properly in responseJson only mode", done => {
+      _.set(botRequest.webhook, "requestJson.task.trigger_time", "1234");
+      expect(botRequest.webhook.get("task.trigger_time", "foo", true)).to.equal(
+        "foo"
+      );
+      done();
+    });
+
+    it("bot.set() only merges data from responseJson, not requestJson", done => {
+      _.set(botRequest.webhook, "requestJson.task.trigger_time", "1234");
+      _.set(botRequest.webhook, "responseJson.task.stored_data.foo", "bar");
+      botRequest.set("task.stored_data.baz", "buzz");
+
+      // this is the actual JSON response payload sent back
+      expect(botRequest.webhook.responseJson).to.deep.equal({
+        version: "1",
+        task: {
+          stored_data: {
+            foo: "bar",
+            baz: "buzz"
+          }
+        }
+      });
+
+      // Observe the bot.get() method appropriately merges the newly set data from responseJson with original requestJson
+      expect(botRequest.get("task")).to.deep.equal({
+        stored_data: {
+          foo: "bar",
+          baz: "buzz"
+        },
+        command: "memorize@mailbots-memorize.eml.bot",
+        completed: false,
+        completed_on: "",
+        created: 1531875456,
+        id: 196,
+        reference_email: {
+          attachments: [],
+          bcc: [],
+          cc: [],
+          from: "esweetland@gmail.com",
+          html: "",
+          reply_to: "",
+          subject: "fdsafdsa",
+          text: "",
+          to: ["memorize@mailbots-memorize.eml.bot"]
+        },
+        trigger_time: "1234",
+        trigger_timeformat: ""
+      });
+      done();
+    });
+
     // TODO: This fails when running action_received webhook
     it("exposes command as bot.command", done => {
       expect(botRequest.command).to.equal("memorize");

@@ -57,24 +57,24 @@ export default class WebhookHelpers {
    * otherwise it returns the value in the request object.
    * @param {string} key JSON path to key
    * @param  {mixed} defaultValue Default if key is falsy
+   * @param  {boolean} responseJsonOnly Only get values that are set on the responseJson object
    * @example bot.webhook.get('source.from'); // sender's email address
    * @example bot.get('source.from'); // this method is also aliased directly on bot
    */
-  get(key: string, defaultValue?: any) {
+  get(key: string, defaultValue?: any, responseJsonOnly?: boolean) {
     debug(`get: ${key}`);
     const newlySetValue = _.get(this.responseJson, key);
-    const originalValue = _.get(this.requestJson, key, defaultValue);
+    let originalValue = _.get(this.requestJson, key);
+    if (responseJsonOnly) originalValue = undefined; // ignore originalValue
     if (this._isMergable(originalValue) && this._isMergable(newlySetValue)) {
       return Object.assign({}, originalValue, newlySetValue);
     } else {
-      return newlySetValue || originalValue;
+      return newlySetValue || originalValue || defaultValue;
     }
   }
 
   /**
-   * Set attributes on the this.responseJson object. Before a value is set, it
-   * is merged the existing value of that key with this.responseJson (if present) or
-   * this.requestJson (if responseJson is not yet present for that key).
+   * Set attributes on the this.responseJson object.
    * If existing value and new value are both objects (not Arrays) they are shallow-merged.
    * If new or old data are not objects, the value of the key is replaced entirely.
    * @param {string} key - JSON Path to object within responseJson object
@@ -89,9 +89,8 @@ export default class WebhookHelpers {
     debug(`set: ${key}`);
     this._allowedToSet(key, this.requestJson);
 
-    // this.get retrieves the most current value of the key. If it is now set in this.responseJson it is
-    // pulled from this.requestJson. We may want set() to only merge with responseJson data, not requestJson
-    const existingValue = this.get(key);
+    // only merge with data set on responseJson, not requestJson
+    const existingValue = this.get(key, undefined, true);
 
     // If we're setting an object field, shallow merge it
     // If either new or old value is array or other type, replace it.
