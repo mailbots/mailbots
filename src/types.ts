@@ -171,6 +171,7 @@ export interface IUiBlock {
 export interface ITemplateOptions {
   renderPostpone?: boolean;
   includeEmailThread?: boolean;
+  hideFollowUpActions?: boolean;
 }
 
 export interface ISkillReturnValue {
