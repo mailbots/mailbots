@@ -168,10 +168,12 @@ export interface IUiBlock {
   open?: boolean;
 }
 
+// Include or exclude UI elements. These are always worded in the positive even if their
+// default value is "false". For example, instead of "doNotShowButtons: false", it's "buttons: true"
 export interface ITemplateOptions {
-  renderPostpone?: boolean;
-  includeEmailThread?: boolean;
-  hideFollowUpActions?: boolean;
+  postponeButtons?: boolean;
+  emailThread?: boolean;
+  followupActions?: boolean;
 }
 
 export interface ISkillReturnValue {
