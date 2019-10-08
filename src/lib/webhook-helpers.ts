@@ -69,7 +69,9 @@ export default class WebhookHelpers {
     if (this._isMergable(originalValue) && this._isMergable(newlySetValue)) {
       return Object.assign({}, originalValue, newlySetValue);
     } else {
-      return newlySetValue || originalValue || defaultValue;
+      if (newlySetValue !== undefined) return newlySetValue;
+      if (originalValue !== undefined) return originalValue;
+      return defaultValue;
     }
   }
 
@@ -652,15 +654,22 @@ export default class WebhookHelpers {
   }
 
   /**
-   * Check if current task has a search key
-   * Add this
-   * Finish SMS page messaging.
-   * Deploy SMS to prod with description, final working version.
-   *
+   * Get this mailbot's settings URL
    */
   getSettingsUrl() {
     if (this.botRequest.config) {
       return this.botRequest.config.mailbotSettingsUrl;
+    } else {
+      return "mailbots framework not configured";
+    }
+  }
+
+  /**
+   * Get this mailbot's settings URL
+   */
+  getWebAppUrl() {
+    if (this.botRequest.config) {
+      return this.botRequest.config.mailbotsAdmin;
     } else {
       return "mailbots framework not configured";
     }

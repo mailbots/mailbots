@@ -712,6 +712,21 @@ describe("Bot Request Helper", function() {
       done();
     });
 
+    it("bot.get() properly returns explicitly set falsy values", done => {
+      _.set(
+        botRequest.webhook,
+        "responseJson.mailbot.stored_data.purposefully_falsy",
+        false
+      );
+      expect(
+        botRequest.webhook.get(
+          "mailbot.stored_data.purposefully_falsy",
+          "default!"
+        )
+      ).to.equal(false);
+      done();
+    });
+
     it("bot.set() only merges data from responseJson, not requestJson", done => {
       _.set(botRequest.webhook, "requestJson.task.trigger_time", "1234");
       _.set(botRequest.webhook, "responseJson.task.stored_data.foo", "bar");
