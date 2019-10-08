@@ -108,48 +108,49 @@
 -   [hasSearchKey][104]
     -   [Parameters][105]
 -   [getSettingsUrl][106]
--   [bot.webook.settingsPage][107]
-    -   [Examples][108]
--   [getSettingsFormJSON][109]
-    -   [Examples][110]
--   [insert][111]
-    -   [Parameters][112]
-    -   [Examples][113]
--   [input][114]
-    -   [Parameters][115]
-    -   [Examples][116]
--   [textarea][117]
-    -   [Parameters][118]
-    -   [Examples][119]
--   [checkbox][120]
-    -   [Parameters][121]
-    -   [Examples][122]
--   [select][123]
-    -   [Parameters][124]
-    -   [Examples][125]
--   [alert][126]
-    -   [Parameters][127]
-    -   [Examples][128]
--   [video][129]
-    -   [Parameters][130]
-    -   [Examples][131]
--   [button][132]
-    -   [Parameters][133]
-    -   [Examples][134]
--   [setUrlParams][135]
-    -   [Parameters][136]
--   [text][137]
-    -   [Parameters][138]
-    -   [Examples][139]
--   [hiddenInput][140]
-    -   [Parameters][141]
-    -   [Examples][142]
--   [submitButton][143]
-    -   [Parameters][144]
-    -   [Examples][145]
--   [populate][146]
-    -   [Parameters][147]
-    -   [Examples][148]
+-   [getWebAppUrl][107]
+-   [bot.webook.settingsPage][108]
+    -   [Examples][109]
+-   [getSettingsFormJSON][110]
+    -   [Examples][111]
+-   [insert][112]
+    -   [Parameters][113]
+    -   [Examples][114]
+-   [input][115]
+    -   [Parameters][116]
+    -   [Examples][117]
+-   [textarea][118]
+    -   [Parameters][119]
+    -   [Examples][120]
+-   [checkbox][121]
+    -   [Parameters][122]
+    -   [Examples][123]
+-   [select][124]
+    -   [Parameters][125]
+    -   [Examples][126]
+-   [alert][127]
+    -   [Parameters][128]
+    -   [Examples][129]
+-   [video][130]
+    -   [Parameters][131]
+    -   [Examples][132]
+-   [button][133]
+    -   [Parameters][134]
+    -   [Examples][135]
+-   [setUrlParams][136]
+    -   [Parameters][137]
+-   [text][138]
+    -   [Parameters][139]
+    -   [Examples][140]
+-   [hiddenInput][141]
+    -   [Parameters][142]
+    -   [Examples][143]
+-   [submitButton][144]
+    -   [Parameters][145]
+    -   [Examples][146]
+-   [populate][147]
+    -   [Parameters][148]
+    -   [Examples][149]
 
 ## intro
 
@@ -159,7 +160,7 @@ FollowUpThen lifecycle hooks (ex: `mailbot.onFutTriggerUser`) allow a developer 
 MailBots still exists a platform to extend FollowUpThen. We may re-release it as an independent system in the future.
 If you'd like to see that happen, or have any feedback in general, feel free to email help@humans.fut.io.
 
-[MailBots][149] is a platform for creating bots, AIs and assistants that get things done right from your inbox. Read more at [mailbots.com][149].
+[MailBots][150] is a platform for creating bots, AIs and assistants that get things done right from your inbox. Read more at [mailbots.com][150].
 
 # Quick Start
 
@@ -180,29 +181,29 @@ mailbot.onCommand("say-hi", function(bot) {
 mailbot.listen();
 ```
 
-`say-hi@my-bot.eml.bot` is an example of an "email command". Whatever is before the @ sign is a command to your bot to accomplish some task. [Read more about email commands][150].
+`say-hi@my-bot.eml.bot` is an example of an "email command". Whatever is before the @ sign is a command to your bot to accomplish some task. [Read more about email commands][151].
 
 # Docs
 
-Tip: Use our [reference guide][151] to quickly look up helpers and method names.
+Tip: Use our [reference guide][152] to quickly look up helpers and method names.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
--   [How MailBots Work][152]
-    -   [Tasks][153]
-    -   [Commands][154]
-    -   [Triggering][155]
-    -   [Architecture][156]
-    -   [Handlers][157]
-    -   [Skills][158]
+-   [How MailBots Work][153]
+    -   [Tasks][154]
+    -   [Commands][155]
+    -   [Triggering][156]
+    -   [Architecture][157]
+    -   [Handlers][158]
+    -   [Skills][159]
 -   [Examples:][30]
-    -   [Hello World][159]
-    -   [Set a Reminder][160]
-    -   [Handle Action-Emails][161]
-    -   [Install A Skill][162]
--   [Handler Reference][163]
+    -   [Hello World][160]
+    -   [Set a Reminder][161]
+    -   [Handle Action-Emails][162]
+    -   [Install A Skill][163]
+-   [Handler Reference][164]
     -   [onCommand][12]
     -   [onTrigger][14]
     -   [onAction][18]
@@ -211,33 +212,33 @@ Tip: Use our [reference guide][151] to quickly look up helpers and method names.
     -   [onSettingsViewed][22]
     -   [onSettingsSubmit][24]
     -   [on][10]
-    -   [Handling Errors][164]
--   [FollowUpThen Lifecycle Hook Handlers][165]
-    -   [onFutCreateUser][166]
-    -   [onFutCreateNonUser][167]
-    -   [onFutPreviewUser][168]
-    -   [onFutPreviewNonUser][169]
-    -   [onFutViewUser][170]
-    -   [onFutViewNonUser][171]
-    -   [onFutTriggerUser][172]
-    -   [onFutTriggerNonUser][173]
-    -   [onFutUpdate][174]
-    -   [onFutAction][175]
--   [The "bot" Object][176]
--   [Building Skills][177]
-    -   [Sharing Handlers][178]
-    -   [Sharing the "one-bot function"][179]
-    -   [Handling Web Requests][180]
-    -   [Middleware][181]
-    -   [Namespacing Conventions][182]
--   [Installing Skills From npm][183]
-    -   [Skills With Side-Effects][184]
--   [Welcoming New Users][185]
--   [Connecting 3rd Party Services][186]
-    -   [OAuth][187]
--   [Testing][188]
--   [Installing][189]
--   [Contributions][190]
+    -   [Handling Errors][165]
+-   [FollowUpThen Lifecycle Hook Handlers][166]
+    -   [onFutCreateUser][167]
+    -   [onFutCreateNonUser][168]
+    -   [onFutPreviewUser][169]
+    -   [onFutPreviewNonUser][170]
+    -   [onFutViewUser][171]
+    -   [onFutViewNonUser][172]
+    -   [onFutTriggerUser][173]
+    -   [onFutTriggerNonUser][174]
+    -   [onFutUpdate][175]
+    -   [onFutAction][176]
+-   [The "bot" Object][177]
+-   [Building Skills][178]
+    -   [Sharing Handlers][179]
+    -   [Sharing the "one-bot function"][180]
+    -   [Handling Web Requests][181]
+    -   [Middleware][182]
+    -   [Namespacing Conventions][183]
+-   [Installing Skills From npm][184]
+    -   [Skills With Side-Effects][185]
+-   [Welcoming New Users][186]
+-   [Connecting 3rd Party Services][187]
+    -   [OAuth][188]
+-   [Testing][189]
+-   [Installing][190]
+-   [Contributions][191]
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -263,7 +264,7 @@ When events happen in the MailBots platform (ex: an email is received), your Mai
 
 This library simplifies much of the above architecture, allowing you to simply create handler functions for certain events.
 
-The webhook request and response can be viewed via the [MailBots Sandbox][191].
+The webhook request and response can be viewed via the [MailBots Sandbox][192].
 
 ## Handlers
 
@@ -284,7 +285,7 @@ You can publish, share and install new skills from npm.
 
 ## Hello World
 
-Create an [email command][150] that says hi.
+Create an [email command][151] that says hi.
 
 ```javascript
 var MailBotsApp = require("mailbots");
@@ -318,7 +319,7 @@ mailbot.onTrigger("hi", function(bot) {
 
 ## Handle Action-Emails
 
-MailBots can render quick-action buttons (mailto links that map to executable code) that let users get things done without leaving their inbox. Read more about [action emails][192].
+MailBots can render quick-action buttons (mailto links that map to executable code) that let users get things done without leaving their inbox. Read more about [action emails][193].
 
 ```javascript
 // This first handler renders an email with an action-email button
@@ -375,7 +376,7 @@ Note: The first matching event handler ends the request, even if subsequent hand
 
     mailbot.onCommand(command, handlerFn)
 
-Handle when an [email command][193] is received. This also fires when a new task is created via the API (All tasks have a command to define their purpose or reason for existence.)
+Handle when an [email command][194] is received. This also fires when a new task is created via the API (All tasks have a command to define their purpose or reason for existence.)
 
 ```javascript
 mailbot.onCommand("todo", function(bot) {
@@ -395,7 +396,7 @@ mailbot.onCommand(/todo.*/, function(bot) {
 
     mailbot.onTrigger(command, handlerFn)
 
-Timeliness is a MailBot superpower. A user can schedule a task, then days, months or years later your bot can follow up at the exact right moment – scheduled by the user, or by another event. Read more about [triggering][194].
+Timeliness is a MailBot superpower. A user can schedule a task, then days, months or years later your bot can follow up at the exact right moment – scheduled by the user, or by another event. Read more about [triggering][195].
 
 Tasks with different commands may trigger differently. For example:
 
@@ -423,7 +424,7 @@ mailbot.onTrigger("todo.crm", function(bot) {
 
 Handle when a user performs an action that relates to a task.
 
-For example a user can send an [action-email][192] to accomplish an action without leaving their inbox (postponing a reminder, completing a todo item, logging a call, etc).
+For example a user can send an [action-email][193] to accomplish an action without leaving their inbox (postponing a reminder, completing a todo item, logging a call, etc).
 
 ```javascript
 mailbot.onAction("complete", function(bot) {
@@ -463,7 +464,7 @@ Different task commands may render differently. For example a task with command 
 
 Handle when the MailBot receives an inbound webhok from a 3rd party system about an external event. For example, a support ticket is created or a lead is added to a CRM.
 
-Note: This action does not automatically create a MailBots Task. One can be created with [mailbots-sdk][195]
+Note: This action does not automatically create a MailBots Task. One can be created with [mailbots-sdk][196]
 
 ```javascript
 mailbot.onEvent("issue.created", async function(bot) {
@@ -484,11 +485,11 @@ Handle when a user views this MailBot's settings.
 
 Bots can build custom settings pages. These are rendered when a user views bot settings on the MailBots.com admin UI.
 
-See the [settings page reference][196].
+See the [settings page reference][197].
 
 The handler's only parameter is a callback function that responds with JSON to to render a settings form. The callback function is passed the `bot` object as usual.
 
-Settings form JSON can be easily built using the [settings helper functions][196].
+Settings form JSON can be easily built using the [settings helper functions][197].
 
 Unlike the other handlers, every instance of this handler is called. (ie, all settings pages from all settings handlers are rendered).
 
@@ -540,7 +541,7 @@ settings.button({
 });
 ```
 
-NOTE: URL parameters are an easy way to pass data into your bot settings, but **keep this in mind while using URL params**: Anyone can link a user to their settings page with _anything_ in URL. Do not, for example, create a url like: `/settings?delete_everything=true` that deletes all their tasks. An unsuspecting user may arrive on their settings page from an external link, not see this in the URL and submit the form only find themselves without any data. [Read more][197].
+NOTE: URL parameters are an easy way to pass data into your bot settings, but **keep this in mind while using URL params**: Anyone can link a user to their settings page with _anything_ in URL. Do not, for example, create a url like: `/settings?delete_everything=true` that deletes all their tasks. An unsuspecting user may arrive on their settings page from an external link, not see this in the URL and submit the form only find themselves without any data. [Read more][198].
 
 ## onSettingsSubmit
 
@@ -649,7 +650,7 @@ mailbot.on("mailbot.installed", function(bot) {
 
 The first paramater can be:
 
--   A string that matches the webhook `type`. (ie. [`mailbot.installed`][198])
+-   A string that matches the webhook `type`. (ie. [`mailbot.installed`][199])
 -   A regular expression that matches on webhook `type`
 -   A function that takes the incoming webhook as the only parameter and returns a boolean value indicating whether or not that webhook should be handled by that function handler.
 
@@ -667,7 +668,7 @@ mailbot.on("mailbot.installed", function(bot) {
 
 Ideally, error conditions are handled within the normal application flow. If something unexpected happens you can set up a custom error handler for adding logs, alerting or providing error messaging to users.
 
-If you want to send the user your own error email, use the [sendEmail][199] method from the MailBots SDK. (Not all webhook responses send emails).
+If you want to send the user your own error email, use the [sendEmail][200] method from the MailBots SDK. (Not all webhook responses send emails).
 
 ```javascript
 // define a custom error handler
@@ -726,7 +727,7 @@ mailbot.onFutCreateUser(bot => {
 
 ## onFutCreateNonUser
 
-In rare cases (currently only when a [task (-t)][200] type
+In rare cases (currently only when a [task (-t)][201] type
 followup is being created, a non-FUT user receives an email which can be modified using the above hook.
 
 ## onFutPreviewUser
@@ -768,7 +769,7 @@ allows for the handling of these actions.
 
 # The "bot" Object
 
-The `bot` object passed to the handlers above contains useful helpers that make it easy to handle bot requests. See [webhook helpers reference docs][201].
+The `bot` object passed to the handlers above contains useful helpers that make it easy to handle bot requests. See [webhook helpers reference docs][202].
 
 **Setting Data Works By Shallow Merging**
 Data is set by shallow merging. For example.
@@ -849,7 +850,7 @@ mailbots.onCommand("hi", function(bot) {
 
 ### Sharing UI Elements
 
-Skills can also share [UI elements][202].
+Skills can also share [UI elements][203].
 
 By convention, UI functions that output UI start with `render`. For example, `renderMemorizationControls`.
 
@@ -880,7 +881,7 @@ By convention, UI functions that output UI start with `render`. For example, `re
 
 The `mailbots` framework relies on Express.js for many of its internals. Your skill can access the internal Express `app` object at `mailbot.app`, allowing your skill to do anything that can be done with Express: authenticate other services, interact with APIs, respond to webhooks and render web pages.
 
-Just like in [handling routes in Express][203]:
+Just like in [handling routes in Express][204]:
 
 ```javascript
 mailbot.app.get("/hi", function(req, res) {
@@ -890,7 +891,7 @@ mailbot.app.get("/hi", function(req, res) {
 
 ## Middleware
 
-[Middlware][204] can be exported and "used" by other skills. This is useful for implementing common functionality across multiple handlers.
+[Middlware][205] can be exported and "used" by other skills. This is useful for implementing common functionality across multiple handlers.
 
 ```javascript
 // Export middleware to log everything
@@ -934,7 +935,7 @@ To prevent conflicts and facilitate debugging, it is helpful to follow these con
     ```json
     (task.stored_data = { "skill_name": { "key": "val" } })
     ```
--   Preface event names and actions with the skill name or an abbreviation (accounting for [character limitations][205])
+-   Preface event names and actions with the skill name or an abbreviation (accounting for [character limitations][206])
 
     ```javascript
     mailbots.onAction("sn.do-action", bot => {});
@@ -954,7 +955,7 @@ To prevent conflicts and facilitate debugging, it is helpful to follow these con
 
 Skills can be installed from npm.
 
-Here we will use `mailbots-memorize`, a skill that creates reminders for any [task][193] using [spaced repetition][206], a memorization technique that increases the time between reminders as more reminders are sent.
+Here we will use `mailbots-memorize`, a skill that creates reminders for any [task][194] using [spaced repetition][207], a memorization technique that increases the time between reminders as more reminders are sent.
 
 In your cli, run:
 
@@ -1041,9 +1042,9 @@ Connecting a 3rd party system ( CRMs, todo lists, etc) usually requires an acces
 
 ## OAuth
 
-Use MailBot's internal Express app to provide begin the OAuth process and receive the OAuth callback. Save information on the user's account using the [setMailBotData][207] method (as shown below).
+Use MailBot's internal Express app to provide begin the OAuth process and receive the OAuth callback. Save information on the user's account using the [setMailBotData][208] method (as shown below).
 
-Note: The user's Bearer token is [saved as a cookie on your bot's URL][208] when the user first authorizes your MailBot. This allows you to use the [MailBots SDK][195] when you send a user to a specific URL. (Keep in mind security [XSRF implications][209] if you are doing something sensitve here, like deleting an account). For example:
+Note: The user's Bearer token is [saved as a cookie on your bot's URL][209] when the user first authorizes your MailBot. This allows you to use the [MailBots SDK][196] when you send a user to a specific URL. (Keep in mind security [XSRF implications][210] if you are doing something sensitve here, like deleting an account). For example:
 
 ```javascript
 mailbot.app.get("/do-something-for-user", (req, res) => {
@@ -1082,7 +1083,7 @@ The work is performed only on your MailBot's url, but to a user, they just click
 
 # Testing
 
-Export a testable instance of your MailBot by calling `mailbot.exportApp()` instead of calling `mailbot.listen()`. Below is an example of testing the exported app with [Supertest][210].
+Export a testable instance of your MailBot by calling `mailbot.exportApp()` instead of calling `mailbot.listen()`. Below is an example of testing the exported app with [Supertest][211].
 
 For a sample request (the `./_fixtures/task.created.json` file below), fire a request and go to the sandbox. Click the "copy" icon that appears when you over over the the top-level key the request JSON.
 
@@ -1129,7 +1130,7 @@ describe("integration tests", function() {
 
 # Installing
 
-The setup process on mailbots.com creates a pre-installed instance of your MailBot using [Glitch][211].
+The setup process on mailbots.com creates a pre-installed instance of your MailBot using [Glitch][212].
 
 For local development or production deployments:
 
@@ -1160,14 +1161,14 @@ mailbot.onCommand("hello", bot => {
 mailbot.listen();
 ```
 
-3.  Use [ngrok][212] to set up a public-facing url that MailBots.com can reach.
+3.  Use [ngrok][213] to set up a public-facing url that MailBots.com can reach.
 
 4.  Create a MailBot at mailbots.com. Click "Manual Setup" at the bottom and follow instructions from there.
 
 # Contributions
 
 Contributions are welcome in the form of PRs and / or Github tickets for issues, bugs, ideas and feature requests.
-Please follow the [MailBot naming conventions][213].
+Please follow the [MailBot naming conventions][214].
 We use ngrok to mock API requests, included in the test package here. This can be disabled to test against the live
 API (see package.json).
 
@@ -1247,8 +1248,8 @@ This can also receive a path to a file.
 ### Parameters
 
 -   `skill`  
--   `config` **[object][214]** optional skill configuration object
--   `skillPath` **[string][215]** path to skills directory
+-   `config` **[object][215]** optional skill configuration object
+-   `skillPath` **[string][216]** path to skills directory
 
 **Meta**
 
@@ -1267,9 +1268,9 @@ Example: controller.on((webhook) => webhook.event === 'task.created', cb)
 ### Parameters
 
 -   `triggerCondition`  
--   `cb` **[function][216]** Handler function
+-   `cb` **[function][217]** Handler function
 -   `opts`  
--   `event` **([string][215] \| [function][216] \| [RegExp][217])** A webhook event string (ex: task.created). Or
+-   `event` **([string][216] \| [function][217] \| [RegExp][218])** A webhook event string (ex: task.created). Or
     a function receives the webhook as a param, which returns a boolean value.
 
 ## onCommand
@@ -1278,7 +1279,7 @@ Captures only 'task.created' events where the command string matches
 
 ### Parameters
 
--   `commandSearch` **([string][215] \| [RegExp][217])** 
+-   `commandSearch` **([string][216] \| [RegExp][218])** 
 -   `cb`  
 
 ## onTrigger
@@ -1287,7 +1288,7 @@ Captures only 'task.triggered' events where the command string matches
 
 ### Parameters
 
--   `commandSearch` **([string][215] \| [RegExp][217])** 
+-   `commandSearch` **([string][216] \| [RegExp][218])** 
 -   `cb`  
 
 ## onEvent
@@ -1298,7 +1299,7 @@ that are posted to the MailBot.
 
 ### Parameters
 
--   `eventSearch` **([string][215] \| [RegExp][217])** 
+-   `eventSearch` **([string][216] \| [RegExp][218])** 
 -   `cb`  
 
 ## onAction
@@ -1307,7 +1308,7 @@ Captures only 'task.action_received' events where the action string matches
 
 ### Parameters
 
--   `actionSearch` **([string][215] \| [RegExp][217])** 
+-   `actionSearch` **([string][216] \| [RegExp][218])** 
 -   `cb`  
 
 ## onTaskViewed
@@ -1316,7 +1317,7 @@ Captures only 'task.viewed' events where the command string matches
 
 ### Parameters
 
--   `commandSearch` **([string][215] | RexExp)** 
+-   `commandSearch` **([string][216] | RexExp)** 
 -   `cb`  
 
 ## onSettingsViewed
@@ -1327,7 +1328,7 @@ handler can add and read data to and from its own namespace.
 
 ### Parameters
 
--   `cb` **[function][216]** Callback function that receives the bot object
+-   `cb` **[function][217]** Callback function that receives the bot object
 
 ## onSettingsSubmit
 
@@ -1339,12 +1340,12 @@ ALL onSettingsSubmit handlers fire.
 
 ### Parameters
 
--   `cb` **[function][216]** Callback function that receives the bot object
+-   `cb` **[function][217]** Callback function that receives the bot object
 
 ## initSdkApiClient
 
 Sets an authenticated insteance of MailBots SDK client
-[https://github.com/mailbots/mailbots-sdk-js][218] for use in events
+[https://github.com/mailbots/mailbots-sdk-js][219] for use in events
 and middleware under bot.api. Works both with webhook + web request
 
 ### Parameters
@@ -1363,7 +1364,7 @@ of BotRequest and made available under bot.webhook.
 
 ### Parameters
 
--   `botRequest` **[object][214]** An instnace of BotRequest
+-   `botRequest` **[object][215]** An instnace of BotRequest
 
 ### Examples
 
@@ -1380,8 +1381,9 @@ otherwise it returns the value in the request object.
 
 ### Parameters
 
--   `key` **[string][215]** JSON path to key
+-   `key` **[string][216]** JSON path to key
 -   `defaultValue` **mixed** Default if key is falsy
+-   `responseJsonOnly` **[boolean][220]** Only get values that are set on the responseJson object
 
 ### Examples
 
@@ -1395,16 +1397,15 @@ bot.get('source.from'); // this method is also aliased directly on bot
 
 ## set
 
-Set attributes on the this.responseJson object. If existing value and
-new value are both objects (not Arrays) they are shallow-merged.
-If new or old data are not objects, the value of the key is replaced
-entirely.
+Set attributes on the this.responseJson object.
+If existing value and new value are both objects (not Arrays) they are shallow-merged.
+If new or old data are not objects, the value of the key is replaced entirely.
 
 ### Parameters
 
--   `key` **[string][215]** JSON Path to object within responseJson object
+-   `key` **[string][216]** JSON Path to object within responseJson object
 -   `value` **any** Value
--   `merge` **[boolean][219]** Objets are shallow-merged by default. Set this to
+-   `merge` **[boolean][220]** Objets are shallow-merged by default. Set this to
     false to force the replacement of an object.
 
 ### Examples
@@ -1423,7 +1424,7 @@ Get data for current task
 
 ### Parameters
 
--   `key` **[string][215]** JSON Path to key within task.stored_data
+-   `key` **[string][216]** JSON Path to key within task.stored_data
 -   `defaultValue` **any** If there is no key, return this
 
 ## setTaskData
@@ -1449,7 +1450,7 @@ Get data stored in mailbot.private_data
 
 ### Parameters
 
--   `key` **[string][215]** JSON Path to data from mailbot
+-   `key` **[string][216]** JSON Path to data from mailbot
 -   `defaultValue` **any** If value is undefined, use this value instead
 
 ### Examples
@@ -1472,7 +1473,7 @@ as the second.
 ### Parameters
 
 -   `args` **...any** 
--   `param` **([string][215] \| [object][214])** Either a lodash set param or an
+-   `param` **([string][216] \| [object][215])** Either a lodash set param or an
     object to be shallowly merged into mailbot.private_data
 -   `value` **any?** When passing lodash set path string as first
 -   `merge` **any?** When passing lodash set path string as first
@@ -1508,14 +1509,14 @@ for easy partial updates
 
 ### Parameters
 
--   `referenceEmail` **[object][214]** 
-    -   `referenceEmail.to` **[array][220]** Array of email address strings
-    -   `referenceEmail.cc` **[array][220]** Array of email address strings
-    -   `referenceEmail.bcc` **[array][220]** Array of email address strings
-    -   `referenceEmail.subject` **[string][215]** Email subject
-    -   `referenceEmail.reply_to` **[string][215]** Email address or action-email
-    -   `referenceEmail.html` **[string][215]** html HTML content of email
-    -   `referenceEmail.text` **[string][215]** html text-only content of email
+-   `referenceEmail` **[object][215]** 
+    -   `referenceEmail.to` **[array][221]** Array of email address strings
+    -   `referenceEmail.cc` **[array][221]** Array of email address strings
+    -   `referenceEmail.bcc` **[array][221]** Array of email address strings
+    -   `referenceEmail.subject` **[string][216]** Email subject
+    -   `referenceEmail.reply_to` **[string][216]** Email address or action-email
+    -   `referenceEmail.html` **[string][216]** html HTML content of email
+    -   `referenceEmail.text` **[string][216]** html text-only content of email
 
 ### Examples
 
@@ -1538,7 +1539,7 @@ after the original email was sent.
 bot.webhook.getReplyTo();
 ```
 
-Returns **[string][215]** 
+Returns **[string][216]** 
 
 ## getEmailMethod
 
@@ -1556,14 +1557,14 @@ Multiple emails can be sent.
 
 ### Parameters
 
--   `email` **[object][214]** email object
-    -   `email.to` **[string][215]** comma separated emails
-    -   `email.cc` **[string][215]** comma separated emails
-    -   `email.bcc` **[string][215]** comma separated emails
-    -   `email.from` **[string][215]** from name only (message-envelope is always from mailbots)
-    -   `email.reply_to` **[string][215]** email address or action-email
-    -   `email.subject` **[string][215]** email subject
-    -   `email.body` **[array][220]** Array of ui objects [https://docs.mailbots.com/docs/email-ui-reference][202]
+-   `email` **[object][215]** email object
+    -   `email.to` **[string][216]** comma separated emails
+    -   `email.cc` **[string][216]** comma separated emails
+    -   `email.bcc` **[string][216]** comma separated emails
+    -   `email.from` **[string][216]** from name only (message-envelope is always from mailbots)
+    -   `email.reply_to` **[string][216]** email address or action-email
+    -   `email.subject` **[string][216]** email subject
+    -   `email.body` **[array][221]** Array of ui objects [https://docs.mailbots.com/docs/email-ui-reference][203]
 
 ### Examples
 
@@ -1581,7 +1582,7 @@ const email = bot.webhook.sendEmail({
 email.from = "New Sender"; // still updatable
 ```
 
-Returns **[object][214]** A reference to the email object for additional changes
+Returns **[object][215]** A reference to the email object for additional changes
 
 ## quickReply
 
@@ -1593,9 +1594,9 @@ the subject and body
 
 ### Parameters
 
--   `message` **([string][215] \| [object][214])** Content
-    -   `message.subject` **[string][215]?** passing an object
-    -   `message.body` **[string][215]?** If passing an object
+-   `message` **([string][216] \| [object][215])** Content
+    -   `message.subject` **[string][216]?** passing an object
+    -   `message.body` **[string][216]?** If passing an object
 
 ### Examples
 
@@ -1625,7 +1626,7 @@ Set trigger time for a task using natural language
 
 ### Parameters
 
--   `time` **[string][215]** FollowUpThen-style time description
+-   `time` **[string][216]** FollowUpThen-style time description
 
 ### Examples
 
@@ -1661,7 +1662,7 @@ Trigger MailBots to invite the given email address(es) to use a bot
 
 ### Parameters
 
--   `invitees` **[array][220]** Array of email addresses
+-   `invitees` **[array][221]** Array of email addresses
 
 ### Examples
 
@@ -1705,7 +1706,7 @@ or remove additional recipients from the task.
 bot.webhook.getAllContacts();
 ```
 
-Returns **[array][220]** Email addresses
+Returns **[array][221]** Email addresses
 
 ## respond
 
@@ -1717,7 +1718,7 @@ second time. Provided JSON is shallowly merged into response object.
 
 ### Parameters
 
--   `json` **[object][214]** Response JSON
+-   `json` **[object][215]** Response JSON
 
 ### Examples
 
@@ -1732,9 +1733,9 @@ of the Admin UI. See SettingsPage docs for details
 
 ### Parameters
 
--   `params` **[object][214]** 
-    -   `params.namespace` **[string][215]** Namespace used on mailbot.private_data
-    -   `params.title` **[string][215]** Page title (optional, default `""`)
+-   `params` **[object][215]** 
+    -   `params.namespace` **[string][216]** Namespace used on mailbot.private_data
+    -   `params.title` **[string][216]** Page title (optional, default `""`)
     -   `params.menuTitle` **menuTitle** Menu item title
 
 ### Examples
@@ -1816,7 +1817,7 @@ ont eh screen. It also appears in the extension logs.
 
 ### Parameters
 
--   `$0` **[Object][214]** 
+-   `$0` **[Object][215]** 
     -   `$0.level`   (optional, default `"info"`)
     -   `$0.message`  
 
@@ -1876,10 +1877,11 @@ Check if current task has a search key
 
 ## getSettingsUrl
 
-Check if current task has a search key
-Add this
-Finish SMS page messaging.
-Deploy SMS to prod with description, final working version.
+Get this mailbot's settings URL
+
+## getWebAppUrl
+
+Get this mailbot's settings URL
 
 ## bot.webook.settingsPage
 
@@ -1890,7 +1892,7 @@ in `responseJson.settings[namespace]`. This class represents one
 such settings form. Each settings form lives in its own namespace.
 Instantiating a new SettingsPage adds a new namespace to
 `responseJson.settings` key and populates it with React JSON Form
-Schema JSON. [https://github.com/mozilla-services/react-jsonschema-form][221]
+Schema JSON. [https://github.com/mozilla-services/react-jsonschema-form][222]
 The MailBots Admin UI loops through namespaces, rendering forms appropriately.
 
 NOTE: This class directly mutates MailBot's response JSON to add
@@ -1919,7 +1921,7 @@ Retrieve the JSON Form Schema for this form
 const thisJsonSchema = settingsForm.getSettingsFormJSON();
 ```
 
-Returns **[object][214]** JSON Form Schema
+Returns **[object][215]** JSON Form Schema
 
 ## insert
 
@@ -1928,14 +1930,14 @@ create custom form elements.
 Mozilla's React JSON Schema Form manages the form JSON and
 UI JSON as two separate objects to keep the form JSON prestine and
 compliant. This method lets us manage a form element in one place.
-Ref: [https://github.com/mozilla-services/react-jsonschema-form][221]
+Ref: [https://github.com/mozilla-services/react-jsonschema-form][222]
 
 ### Parameters
 
--   `params` **[object][214]** 
-    -   `params.name` **[object][214]** Namespace
-    -   `params.JSONSchema` **[object][214]** JSON Schema
-    -   `params.uiSchema` **[object][214]** Corresponding uiSchemaThis example is taken from [https://mozilla-services.github.io/react-jsonschema-form/][222]
+-   `params` **[object][215]** 
+    -   `params.name` **[object][215]** Namespace
+    -   `params.JSONSchema` **[object][215]** JSON Schema
+    -   `params.uiSchema` **[object][215]** Corresponding uiSchemaThis example is taken from [https://mozilla-services.github.io/react-jsonschema-form/][223]
 
 ### Examples
 
@@ -1953,13 +1955,13 @@ Add text input field
 
 ### Parameters
 
--   `params` **[Object][214]** 
-    -   `params.name` **[string][215]** 
-    -   `params.title` **[string][215]** 
-    -   `params.description` **[string][215]** 
-    -   `params.helpText` **[string][215]** 
-    -   `params.placeholder` **[string][215]** 
-    -   `params.defaultValue` **[string][215]** 
+-   `params` **[Object][215]** 
+    -   `params.name` **[string][216]** 
+    -   `params.title` **[string][216]** 
+    -   `params.description` **[string][216]** 
+    -   `params.helpText` **[string][216]** 
+    -   `params.placeholder` **[string][216]** 
+    -   `params.defaultValue` **[string][216]** 
 
 ### Examples
 
@@ -1980,13 +1982,13 @@ Add textarea input
 
 ### Parameters
 
--   `params` **[Object][214]** 
-    -   `params.name` **[string][215]** 
-    -   `params.title` **[string][215]** 
-    -   `params.description` **[string][215]** 
-    -   `params.helpText` **[string][215]** 
-    -   `params.placeholder` **[string][215]** 
-    -   `params.defaultValue` **[string][215]** 
+-   `params` **[Object][215]** 
+    -   `params.name` **[string][216]** 
+    -   `params.title` **[string][216]** 
+    -   `params.description` **[string][216]** 
+    -   `params.helpText` **[string][216]** 
+    -   `params.placeholder` **[string][216]** 
+    -   `params.defaultValue` **[string][216]** 
 
 ### Examples
 
@@ -2007,12 +2009,12 @@ Add checkbox field
 
 ### Parameters
 
--   `params` **[Object][214]** 
-    -   `params.name` **[string][215]** 
-    -   `params.title` **[string][215]** 
-    -   `params.description` **[string][215]** 
-    -   `params.helpText` **[string][215]** 
-    -   `params.defaultValue` **[string][215]** 
+-   `params` **[Object][215]** 
+    -   `params.name` **[string][216]** 
+    -   `params.title` **[string][216]** 
+    -   `params.description` **[string][216]** 
+    -   `params.helpText` **[string][216]** 
+    -   `params.defaultValue` **[string][216]** 
 
 ### Examples
 
@@ -2026,14 +2028,14 @@ Add select dropdown
 
 ### Parameters
 
--   `params` **[Object][214]** 
-    -   `params.name` **[string][215]** 
-    -   `params.title` **[string][215]** 
-    -   `params.description` **[string][215]** 
-    -   `params.helpText` **[string][215]** 
-    -   `params.options` **[array][220]** Array of options
-    -   `params.placeholder` **[string][215]** // when no option is selected
-    -   `params.defaultValue` **[string][215]** 
+-   `params` **[Object][215]** 
+    -   `params.name` **[string][216]** 
+    -   `params.title` **[string][216]** 
+    -   `params.description` **[string][216]** 
+    -   `params.helpText` **[string][216]** 
+    -   `params.options` **[array][221]** Array of options
+    -   `params.placeholder` **[string][216]** // when no option is selected
+    -   `params.defaultValue` **[string][216]** 
 
 ### Examples
 
@@ -2056,10 +2058,10 @@ for interrupt-messaging.
 
 ### Parameters
 
--   `params` **[object][214]** 
-    -   `params.title` **[string][215]** Alert box title
-    -   `params.text` **[string][215]** Alert box text
-    -   `params.buttons` **[array][220]** Array of Button objects (optional, default `[]`)
+-   `params` **[object][215]** 
+    -   `params.title` **[string][216]** Alert box title
+    -   `params.text` **[string][216]** Alert box text
+    -   `params.buttons` **[array][221]** Array of Button objects (optional, default `[]`)
 
 ### Examples
 
@@ -2077,8 +2079,8 @@ Insert Video. Only YouTube supported for now.
 
 ### Parameters
 
--   `params` **[object][214]** 
-    -   `params.url` **[string][215]** URL of video (optional, default `""`)
+-   `params` **[object][215]** 
+    -   `params.url` **[string][216]** URL of video (optional, default `""`)
     -   `params.type`   (optional, default `"youtube"`)
 
 ### Examples
@@ -2096,8 +2098,8 @@ Insert custom button
 
 ### Parameters
 
--   `params` **[object][214]** 
-    -   `params.url` **[string][215]** URL of video
+-   `params` **[object][215]** 
+    -   `params.url` **[string][216]** URL of video
     -   `params.text`  
     -   `params.href`   (optional, default `""`)
     -   `params.urlParams`  
@@ -2132,7 +2134,7 @@ Add a text block. Markdown supported!
 
 ### Parameters
 
--   `text` **[string][215]** – Text with optional markdownNote: This field is whitespace sensitive. New lines
+-   `text` **[string][216]** – Text with optional markdownNote: This field is whitespace sensitive. New lines
     cannot have leading spaces.
 
 ### Examples
@@ -2156,9 +2158,9 @@ values behind the scenes.
 
 ### Parameters
 
--   `params` **[object][214]** 
-    -   `params.name` **[string][215]** Field name
-    -   `params.value` **[string][215]** Field value
+-   `params` **[object][215]** 
+    -   `params.name` **[string][216]** Field name
+    -   `params.value` **[string][216]** Field value
     -   `params.defaultValue`  
 
 ### Examples
@@ -2178,9 +2180,9 @@ them available to the next handler. Make sure to validate URL input.
 
 ### Parameters
 
--   `params` **[object][214]**  (optional, default `{}`)
-    -   `params.submitText` **[string][215]** 
-    -   `params.urlParams` **[object][214]** Key value of url params
+-   `params` **[object][215]**  (optional, default `{}`)
+    -   `params.submitText` **[string][216]** 
+    -   `params.urlParams` **[object][215]** Key value of url params
 
 ### Examples
 
@@ -2199,7 +2201,7 @@ method to populate the form values.
 
 ### Parameters
 
--   `formData` **[object][214]** JSON object containing form values.
+-   `formData` **[object][215]** JSON object containing form values.
 
 ### Examples
 
@@ -2420,234 +2422,236 @@ formPage.populate(storedData);
 
 [106]: #getsettingsurl
 
-[107]: #botwebooksettingspage
+[107]: #getwebappurl
 
-[108]: #examples-25
+[108]: #botwebooksettingspage
 
-[109]: #getsettingsformjson
+[109]: #examples-25
 
-[110]: #examples-26
+[110]: #getsettingsformjson
 
-[111]: #insert
+[111]: #examples-26
 
-[112]: #parameters-32
+[112]: #insert
 
-[113]: #examples-27
+[113]: #parameters-32
 
-[114]: #input
+[114]: #examples-27
 
-[115]: #parameters-33
+[115]: #input
 
-[116]: #examples-28
+[116]: #parameters-33
 
-[117]: #textarea
+[117]: #examples-28
 
-[118]: #parameters-34
+[118]: #textarea
 
-[119]: #examples-29
+[119]: #parameters-34
 
-[120]: #checkbox
+[120]: #examples-29
 
-[121]: #parameters-35
+[121]: #checkbox
 
-[122]: #examples-30
+[122]: #parameters-35
 
-[123]: #select
+[123]: #examples-30
 
-[124]: #parameters-36
+[124]: #select
 
-[125]: #examples-31
+[125]: #parameters-36
 
-[126]: #alert
+[126]: #examples-31
 
-[127]: #parameters-37
+[127]: #alert
 
-[128]: #examples-32
+[128]: #parameters-37
 
-[129]: #video
+[129]: #examples-32
 
-[130]: #parameters-38
+[130]: #video
 
-[131]: #examples-33
+[131]: #parameters-38
 
-[132]: #button
+[132]: #examples-33
 
-[133]: #parameters-39
+[133]: #button
 
-[134]: #examples-34
+[134]: #parameters-39
 
-[135]: #seturlparams
+[135]: #examples-34
 
-[136]: #parameters-40
+[136]: #seturlparams
 
-[137]: #text
+[137]: #parameters-40
 
-[138]: #parameters-41
+[138]: #text
 
-[139]: #examples-35
+[139]: #parameters-41
 
-[140]: #hiddeninput
+[140]: #examples-35
 
-[141]: #parameters-42
+[141]: #hiddeninput
 
-[142]: #examples-36
+[142]: #parameters-42
 
-[143]: #submitbutton
+[143]: #examples-36
 
-[144]: #parameters-43
+[144]: #submitbutton
 
-[145]: #examples-37
+[145]: #parameters-43
 
-[146]: #populate
+[146]: #examples-37
 
-[147]: #parameters-44
+[147]: #populate
 
-[148]: #examples-38
+[148]: #parameters-44
 
-[149]: https://www.mailbots.com
+[149]: #examples-38
 
-[150]: https://docs.mailbots.com/reference#email-commands
+[150]: https://www.mailbots.com
 
-[151]: https://mailbots-app.mailbots.com
+[151]: https://docs.mailbots.com/reference#email-commands
 
-[152]: #how-mailbots-work
+[152]: https://mailbots-app.mailbots.com
 
-[153]: #tasks
+[153]: #how-mailbots-work
 
-[154]: #commands
+[154]: #tasks
 
-[155]: #triggering
+[155]: #commands
 
-[156]: #architecture
+[156]: #triggering
 
-[157]: #handlers
+[157]: #architecture
 
-[158]: #skills
+[158]: #handlers
 
-[159]: #hello-world
+[159]: #skills
 
-[160]: #set-a-reminder
+[160]: #hello-world
 
-[161]: #handle-action-emails
+[161]: #set-a-reminder
 
-[162]: #install-a-skill
+[162]: #handle-action-emails
 
-[163]: #handler-reference
+[163]: #install-a-skill
 
-[164]: #handling-errors
+[164]: #handler-reference
 
-[165]: #followupthen-lifecycle-hook-handlers
+[165]: #handling-errors
 
-[166]: #onfutcreateuser
+[166]: #followupthen-lifecycle-hook-handlers
 
-[167]: #onfutcreatenonuser
+[167]: #onfutcreateuser
 
-[168]: #onfutpreviewuser
+[168]: #onfutcreatenonuser
 
-[169]: #onfutpreviewnonuser
+[169]: #onfutpreviewuser
 
-[170]: #onfutviewuser
+[170]: #onfutpreviewnonuser
 
-[171]: #onfutviewnonuser
+[171]: #onfutviewuser
 
-[172]: #onfuttriggeruser
+[172]: #onfutviewnonuser
 
-[173]: #onfuttriggernonuser
+[173]: #onfuttriggeruser
 
-[174]: #onfutupdate
+[174]: #onfuttriggernonuser
 
-[175]: #onfutaction
+[175]: #onfutupdate
 
-[176]: #the-bot-object
+[176]: #onfutaction
 
-[177]: #building-skills
+[177]: #the-bot-object
 
-[178]: #sharing-handlers
+[178]: #building-skills
 
-[179]: #sharing-the-one-bot-function
+[179]: #sharing-handlers
 
-[180]: #handling-web-requests
+[180]: #sharing-the-one-bot-function
 
-[181]: #middleware
+[181]: #handling-web-requests
 
-[182]: #namespacing-conventions
+[182]: #middleware
 
-[183]: #installing-skills%C2%A0from-npm
+[183]: #namespacing-conventions
 
-[184]: #skills-with-side-effects
+[184]: #installing-skills%C2%A0from-npm
 
-[185]: #welcoming-new-users
+[185]: #skills-with-side-effects
 
-[186]: #connecting-3rd-party-services
+[186]: #welcoming-new-users
 
-[187]: #oauth
+[187]: #connecting-3rd-party-services
 
-[188]: #testing
+[188]: #oauth
 
-[189]: #installing
+[189]: #testing
 
-[190]: #contributions
+[190]: #installing
 
-[191]: https://app.mailbots.com/sandbox
+[191]: #contributions
 
-[192]: https://docs.mailbots.com/reference#email-based-actions
+[192]: https://app.mailbots.com/sandbox
 
-[193]: https://docs.mailbots.com/reference
+[193]: https://docs.mailbots.com/reference#email-based-actions
 
-[194]: https://docs.mailbots.com/reference#perfect-timing
+[194]: https://docs.mailbots.com/reference
 
-[195]: https://www.npmjs.com/package/@mailbots/mailbots-sdk
+[195]: https://docs.mailbots.com/reference#perfect-timing
 
-[196]: https://mailbots-app.mailbots.com/#settingspage
+[196]: https://www.npmjs.com/package/@mailbots/mailbots-sdk
 
-[197]: https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
+[197]: https://mailbots-app.mailbots.com/#settingspage
 
-[198]: https://docs.mailbots.com/reference#mailbotinstalled
+[198]: https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
 
-[199]: https://mailbots-sdk-js.mailbots.com/#sendemaill
+[199]: https://docs.mailbots.com/reference#mailbotinstalled
 
-[200]: http://help.followupthen.com/knowledge-base/tasks/
+[200]: https://mailbots-sdk-js.mailbots.com/#sendemaill
 
-[201]: https://mailbots-app.mailbots.com/#webhookhelpers
+[201]: http://help.followupthen.com/knowledge-base/tasks/
 
-[202]: https://docs.mailbots.com/docs/email-ui-reference
+[202]: https://mailbots-app.mailbots.com/#webhookhelpers
 
-[203]: https://expressjs.com/en/guide/routing.html
+[203]: https://docs.mailbots.com/docs/email-ui-reference
 
-[204]: https://expressjs.com/en/guide/writing-middleware.html
+[204]: https://expressjs.com/en/guide/routing.html
 
-[205]: http://www.rfc-editor.org/errata/eid1690
+[205]: https://expressjs.com/en/guide/writing-middleware.html
 
-[206]: https://www.wikiwand.com/en/Spaced_repetition
+[206]: http://www.rfc-editor.org/errata/eid1690
 
-[207]: #
+[207]: https://www.wikiwand.com/en/Spaced_repetition
 
-[208]: https://github.com/mailbots/mailbots/blob/56396fb3d6c00b1895533f9aee3193ae96ac9b45/lib/core-skills-first.js#L104
+[208]: #
 
-[209]: https://www.wikiwand.com/en/Cross-site_request_forgery
+[209]: https://github.com/mailbots/mailbots/blob/56396fb3d6c00b1895533f9aee3193ae96ac9b45/lib/core-skills-first.js#L104
 
-[210]: https://www.npmjs.com/package/supertest
+[210]: https://www.wikiwand.com/en/Cross-site_request_forgery
 
-[211]: https://glitch.com/
+[211]: https://www.npmjs.com/package/supertest
 
-[212]: https://ngrok.com/
+[212]: https://glitch.com/
 
-[213]: https://github.com/mailbots/mailbots#use-of-mailbot-mailbot-mailbots-and-bots
+[213]: https://ngrok.com/
 
-[214]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[214]: https://github.com/mailbots/mailbots#use-of-mailbot-mailbot-mailbots-and-bots
 
-[215]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[215]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 
-[216]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[216]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[217]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp
+[217]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
 
-[218]: https://github.com/mailbots/mailbots-sdk-js
+[218]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp
 
-[219]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[219]: https://github.com/mailbots/mailbots-sdk-js
 
-[220]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[220]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
-[221]: https://github.com/mozilla-services/react-jsonschema-form
+[221]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
-[222]: https://mozilla-services.github.io/react-jsonschema-form/
+[222]: https://github.com/mozilla-services/react-jsonschema-form
+
+[223]: https://mozilla-services.github.io/react-jsonschema-form/

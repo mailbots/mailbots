@@ -174,6 +174,8 @@ export interface ITemplateOptions {
   postponeButtons?: boolean;
   emailThread?: boolean;
   followupActions?: boolean;
+  forceConfirmation?: boolean; // forces initial confirmation email to be sent, regarldess of user settings
+  confirmationTitleBlock?: IUiBlock[]; // replace title in confirmation email
 }
 
 export interface ISkillReturnValue {

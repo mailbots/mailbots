@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>mailbots 4.5.1-alpha | Documentation</title>
+  <title>mailbots 4.6.2-alpha | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>mailbots</h3>
-          <div class='mb1'><code>4.5.1-alpha</code></div>
+          <div class='mb1'><code>4.6.2-alpha</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -509,6 +509,16 @@
                   href='#getsettingsurl'
                   class="">
                   getSettingsUrl
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getwebappurl'
+                  class="">
+                  getWebAppUrl
                   
                 </a>
                 
@@ -3391,7 +3401,7 @@ otherwise it returns the value in the request object.</p>
 
  
   
-    <div class='pre p1 fill-light mt0'>get(key: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, defaultValue: mixed)</div>
+    <div class='pre p1 fill-light mt0'>get(key: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, defaultValue: mixed, responseJsonOnly: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</div>
    
   
   
@@ -3420,6 +3430,15 @@ otherwise it returns the value in the request object.</p>
           <div>
             <span class='code bold'>defaultValue</span> <code class='quiet'>(mixed)</code>
 	    Default if key is falsy
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>responseJsonOnly</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
+	    Only get values that are set on the responseJson object
 
           </div>
           
@@ -3467,10 +3486,9 @@ otherwise it returns the value in the request object.</p>
   </div>
   
 
-  <p>Set attributes on the this.responseJson object. If existing value and
-new value are both objects (not Arrays) they are shallow-merged.
-If new or old data are not objects, the value of the key is replaced
-entirely.</p>
+  <p>Set attributes on the this.responseJson object.
+If existing value and new value are both objects (not Arrays) they are shallow-merged.
+If new or old data are not objects, the value of the key is replaced entirely.</p>
 
  
   
@@ -5808,14 +5826,59 @@ Merging is taken care of at next level.</p>
   </div>
   
 
-  <p>Check if current task has a search key
-Add this
-Finish SMS page messaging.
-Deploy SMS to prod with description, final working version.</p>
+  <p>Get this mailbot's settings URL</p>
 
  
   
     <div class='pre p1 fill-light mt0'>getSettingsUrl()</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getwebappurl'>
+      getWebAppUrl
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Get this mailbot's settings URL</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>getWebAppUrl()</div>
    
   
   
