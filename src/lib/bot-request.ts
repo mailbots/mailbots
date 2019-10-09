@@ -76,7 +76,7 @@ export default class BotRequest {
     this.event = _.get(this.webhook.requestJson, "event");
   }
 
-  get(key: string, defaultValue?: any): any {}
+  get(key: string, defaultValue?: any, responseJsonOnly?: boolean): any {}
   set(key: string, value: any, merge?: boolean): void {}
 
   /**
