@@ -58,10 +58,10 @@ export default function(config: Partial<IBotConfig> = {}): IBotConfig {
   const mailbotId = config.mailbotId || process.env.MAILBOT_ID || "";
   const mailbotSettingsUrl =
     config.mailbotSettingsUrl ||
-    urljoin(mailbotsAdmin, "mailbots", mailbotId, "settings");
+    urljoin(mailbotsAdmin, "skills", mailbotId, "settings");
   const redirectOnLoginWithAuth =
     config.redirectOnLoginWithAuth ||
-    urljoin(mailbotsAdmin, "mailbots", mailbotId, "settings", "welcome");
+    urljoin(mailbotsAdmin, "skills", mailbotId, "settings", "welcome");
   const accessTokenName = config.accessTokenName || "access_token";
 
   const configDefaults: IBotConfig = {
