@@ -125,6 +125,7 @@ export default class WebhookHelpers {
       key.startsWith("futUiAddition") ||
       key.startsWith("futUiAdditionBehavior") ||
       key.startsWith("task") ||
+      key.startsWith("skillStatus") ||
       key.startsWith("endRequest")
     ) {
       return true;

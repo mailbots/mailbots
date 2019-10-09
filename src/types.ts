@@ -186,6 +186,7 @@ export interface ISkillReturnValue {
   endRequest?: boolean;
   skillsLog?: Array<any>; // returned only from the global applySkills method. Cannot be passed by handlers.
   templateOptions?: ITemplateOptions; // enable / disable email UI features. (Not all opts are available on all templates)
+  skillStatus?: "success" | "error" | "warn";
 }
 
 export interface ISkillInfo {
