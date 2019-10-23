@@ -203,6 +203,9 @@ export interface ISkillInfo {
   subdomain?: string; // Where to send Interbot Event
   show_as_search_filter?: boolean; // Search futs by this skill?
   show_as_scheduling_option?: boolean; // Show while scheduling?
+  runs_on?: Array<
+    "flag" | "everything" | "inbox_events" | "command" | "actions"
+  >;
 }
 
 /**
