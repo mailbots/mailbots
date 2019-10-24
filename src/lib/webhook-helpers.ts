@@ -614,13 +614,27 @@ export default class WebhookHelpers {
   }
 
   /**
+   * In the taskUpdated method, this method is used to check if this skill has been marked for add
+   * so setup procedure can be optionally performed
+   * @param bot
+   * @param data_namespace  data_namespace of this mailbot
+   */
+  skillMarkedForSetup(data_namespace: string) {
+    return this.get(
+      `payload.task.stored_data.runtime.add_skill.${data_namespace}`
+    );
+  }
+
+  /**
    * In the taskUpdated method, this method is used to check if this skill has been marked for removal
    * so cleanup options can be optionally performed. It must reply
    * @param bot
    * @param data_namespace  data_namespace of this mailbot
    */
   skillMarkedForRemoval(data_namespace: string) {
-    return this.get(`payload.task.stored_data.${data_namespace}.remove_skill`);
+    return this.get(
+      `payload.task.stored_data.runtime.remove_skill.${data_namespace}`
+    );
   }
 
   /**
