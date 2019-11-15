@@ -2,7 +2,8 @@ interface IJSONSchema {
   title?: string;
   type: string;
   description?: string;
-  enum?: string[];
+  enum?: string[] | number[];
+  enumNames?: string[];
   properties?: {
     [key: string]: IJSONSchema;
   };
@@ -357,18 +358,33 @@ export default class SettingsPage {
     title?: string;
     description?: string;
     helpText?: string;
-    options: string[];
+    options: string[] | Array<{ key: string; value: string | number }>;
     placeholder?: string;
     defaultValue?: string;
   }) {
     if (!(options instanceof Array))
       throw new Error("options must be an array");
+
     if (this.JSONSchema.properties) {
+      let selectValues: any[] = [];
+      let selectNames: string[] = [];
+      if (typeof options[0] === "string") {
+        selectValues = options;
+        selectNames = options as string[];
+      } else {
+        const objectOptions: Array<{
+          key: string;
+          value: string | number;
+        }> = options as any;
+        selectValues = objectOptions.map((o: any) => o.value);
+        selectNames = objectOptions.map((o: any) => o.key);
+      }
       this.JSONSchema.properties[name] = {
         type: "string",
         description,
         title,
-        enum: options
+        enum: selectValues,
+        enumNames: selectNames
       };
     }
     this.uiSchema[name] = {
