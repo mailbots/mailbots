@@ -192,6 +192,7 @@ export interface ISkillReturnValue {
 export interface ISkillInfo {
   name: string;
   description?: string;
+  developer_name?: string;
   search_key?: string; // Tags every task where this skill has been applied with this search key
   flag?: string;
   action_namespace?: string; // Let skill claim actions within its namespace (ex: github.close_issue);
