@@ -168,14 +168,15 @@ export interface IUiBlock {
   open?: boolean;
 }
 
-// Include or exclude UI elements. These are always worded in the positive even if their
-// default value is "false". For example, instead of "doNotShowButtons: false", it's "buttons: true"
+// Change behavior of a given template, enabling UI elements, etc. Not all apts apply to all templates
 export interface ITemplateOptions {
-  postponeButtons?: boolean;
-  emailThread?: boolean;
-  followupActions?: boolean;
+  postponeButtons?: boolean; // row of postpone buttons
+  emailThread?: boolean; // original html email below fut text
+  followupActions?: boolean; // "view edit cancel" UI block
   forceConfirmation?: boolean; // forces initial confirmation email to be sent, regarldess of user settings
-  confirmationTitleBlock?: IUiBlock[]; // replace title in confirmation email
+  confirmationTitleBlock?: IUiBlock[]; // replace title block in confirmation email
+  suppressFutUser?: boolean; // suppress fut email for user – for skills that remind user via another channels
+  suppressFutNonUser?: boolean; // suppress fut for nonuser - for skills that contact non-user via another channels
 }
 
 export interface ISkillReturnValue {
