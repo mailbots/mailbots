@@ -14,7 +14,8 @@
   "scripts": {
     "build": "npx tsc -p ./tsconfig.json",
     "build:watch": "npm run build -- -w",
-    "test": "NODE_ENV=test mocha test -w --full-trace",
+    "test": "NODE_ENV=test mocha test --full-trace --exit",
+    "test:watch": "npm run test -- -w --no-exit",
     "test:inspect": "NODE_ENV=test mocha test --full-trace --inspect-brk -w",
     "docs:build": "npm run toc:build && documentation -c documentation.yml -f html build -o docs-html && documentation -c documentation.yml build -f md -o docs.md && cd docs-html && now --static && echo '\n Run: \n\n cd docs-html && now alias\n'",
     "toc:build": "doctoc . --maxlevel 2",
