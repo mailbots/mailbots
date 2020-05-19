@@ -4,6 +4,7 @@ import * as uuid from "uuid/v1";
 import * as moment from "moment-timezone";
 import { Request, Response } from "express";
 import { MailBotsClient } from "@mailbots/mailbots-sdk";
+const urljoin = require("url-join");
 import WebhookHelpers from "./webhook-helpers";
 import { IBotConfig } from "./config-defaults";
 import { IFriendlyDate } from "../types";
@@ -153,6 +154,19 @@ export default class BotRequest {
       minutesInFuture,
       howFarInFuture
     };
+  }
+
+  /**
+   * Build url using MAILBOTS_ADMIN as base. Automatically appends
+   * user email to ?gfr query param.
+   */
+  buildFutAdminUrl(...paths: string[]) {
+    const fromEmail = this.get("task.reference_email.from");
+    return urljoin(
+      this.config?.mailbotsAdmin,
+      ...paths.map(path => String(path)),
+      `?gfr=${encodeURIComponent(fromEmail)}`
+    );
   }
 
   /**
