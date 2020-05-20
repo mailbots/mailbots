@@ -160,7 +160,7 @@ export default class BotRequest {
    * Build url using MAILBOTS_ADMIN as base. Automatically appends
    * user email to ?gfr query param.
    */
-  buildFutAdminUrl(...paths: string[]) {
+  futAdminUrl(...paths: string[]) {
     const fromEmail = this.get("task.reference_email.from");
     return urljoin(
       this.config?.mailbotsAdmin,

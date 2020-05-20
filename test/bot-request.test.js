@@ -811,10 +811,10 @@ describe("Bot Request Helper", function () {
       done();
     });
 
-    describe("buildFutAdminUrl()", function () {
+    describe("futAdminUrl()", function () {
       it("builds a path to fut web admin", function (done) {
         botRequest.config = { mailbotsAdmin: "http://localhost:3000" };
-        const adminUrl = botRequest.buildFutAdminUrl("foo");
+        const adminUrl = botRequest.futAdminUrl("foo");
         expect(adminUrl).to.equal(
           "http://localhost:3000/foo?gfr=esweetland%40gmail.com"
         );
@@ -823,7 +823,7 @@ describe("Bot Request Helper", function () {
 
       it("builds path to web admin with several params", function (done) {
         botRequest.config = { mailbotsAdmin: "http://localhost:3000" };
-        const adminUrl = botRequest.buildFutAdminUrl("foo", "bar");
+        const adminUrl = botRequest.futAdminUrl("foo", "bar");
         expect(adminUrl).to.equal(
           "http://localhost:3000/foo/bar?gfr=esweetland%40gmail.com"
         );
@@ -832,12 +832,12 @@ describe("Bot Request Helper", function () {
 
       it("builds path to web admin with one or more query params", function (done) {
         botRequest.config = { mailbotsAdmin: "http://localhost:3000" };
-        let adminUrl = botRequest.buildFutAdminUrl("foo", "?open=true");
+        let adminUrl = botRequest.futAdminUrl("foo", "?open=true");
         expect(adminUrl).to.equal(
           "http://localhost:3000/foo?open=true&gfr=esweetland%40gmail.com"
         );
 
-        adminUrl = botRequest.buildFutAdminUrl(
+        adminUrl = botRequest.futAdminUrl(
           "foo",
           "?open=true",
           "?refresh=false"
