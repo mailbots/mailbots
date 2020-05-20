@@ -4,6 +4,7 @@ interface IJSONSchema {
   description?: string;
   enum?: string[] | number[];
   enumNames?: string[];
+  readOnly?: boolean;
   properties?: {
     [key: string]: IJSONSchema;
   };
@@ -205,7 +206,8 @@ export default class SettingsPage {
     description,
     helpText,
     placeholder,
-    defaultValue
+    defaultValue,
+    readOnly
   }: {
     name: string;
     title: string;
@@ -213,12 +215,14 @@ export default class SettingsPage {
     helpText?: string;
     placeholder?: string;
     defaultValue?: string;
+    readOnly?: boolean;
   }) {
     if (this.JSONSchema.properties) {
       this.JSONSchema.properties[name] = {
         type: "string",
         title,
-        description
+        description,
+        readOnly
       };
     }
     this.uiSchema[name] = {
@@ -256,7 +260,8 @@ export default class SettingsPage {
     description,
     helpText,
     placeholder,
-    defaultValue
+    defaultValue,
+    readOnly = false
   }: {
     name: string;
     title: string;
@@ -264,12 +269,14 @@ export default class SettingsPage {
     helpText?: string;
     placeholder?: string;
     defaultValue?: string;
+    readOnly?: boolean;
   }) {
     if (this.JSONSchema.properties) {
       this.JSONSchema.properties[name] = {
         type: "string",
         title,
-        description
+        description,
+        readOnly
       };
     }
     this.uiSchema[name] = {
@@ -299,19 +306,22 @@ export default class SettingsPage {
     title,
     description,
     helpText,
-    defaultValue
+    defaultValue,
+    readOnly = false
   }: {
     name: string;
     title: string;
     description?: string;
     helpText?: string;
     defaultValue?: boolean;
+    readOnly?: boolean;
   }) {
     if (this.JSONSchema.properties) {
       this.JSONSchema.properties[name] = {
         type: "boolean",
         title,
-        description
+        description, 
+        readOnly
       };
     }
 
@@ -352,7 +362,8 @@ export default class SettingsPage {
     helpText,
     options,
     placeholder,
-    defaultValue
+    defaultValue,
+    readOnly = false
   }: {
     name: string;
     title?: string;
@@ -361,6 +372,7 @@ export default class SettingsPage {
     options: string[] | Array<{ key: string; value: string | number }>;
     placeholder?: string;
     defaultValue?: string;
+    readOnly?: boolean;
   }) {
     if (!(options instanceof Array))
       throw new Error("options must be an array");
@@ -384,7 +396,8 @@ export default class SettingsPage {
         description,
         title,
         enum: selectValues,
-        enumNames: selectNames
+        enumNames: selectNames,
+        readOnly
       };
     }
     this.uiSchema[name] = {
