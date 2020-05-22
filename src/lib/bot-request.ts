@@ -160,10 +160,16 @@ export default class BotRequest {
    * Build url using MAILBOTS_ADMIN as base. Automatically appends
    * user email to ?gfr query param.
    */
-  futAdminUrl(...parts: Array<string | number>) {
-    return this._buildUrl(
-      this.config?.mailbotsAdmin ?? "mailbots framework not configured",
-      parts
+  futAdminUrl(...parts: Array<string | number>): string {
+    if (!this.config?.mailbotsAdmin)
+      throw new Error("mailbots framework not configured");
+
+    const fromEmail =
+      this.get("task.reference_email.from") || this.get("user.email");
+    return urljoin(
+      this.config?.mailbotsAdmin,
+      ...parts.map(part => String(part)),
+      `?gfr=${encodeURIComponent(fromEmail)}`
     );
   }
 
@@ -171,9 +177,14 @@ export default class BotRequest {
    * Get this mailbot's settings URL.
    */
   settingsUrl(...parts: Array<string | number>) {
-    return this._buildUrl(
-      this.config?.mailbotSettingsUrl ?? "mailbots framework not configured",
-      parts
+    if (!this.config?.mailbotId)
+      throw new Error("mailbots framework not configured");
+
+    return this.futAdminUrl(
+      "skills",
+      this.config?.mailbotId,
+      "settings",
+      ...parts
     );
   }
 
@@ -191,19 +202,5 @@ export default class BotRequest {
         `WARNING: This MailBots Webhook and your library do not have matching versions. This can cause unexpected behavior.`
       );
     }
-  }
-
-  /**
-   * Build an url from parts, starting from a base and
-   * append user email to ?gfr query param.
-   */
-  private _buildUrl(base: string, parts: Array<string | number>): string {
-    const fromEmail =
-      this.get("task.reference_email.from") || this.get("user.email");
-    return urljoin(
-      base,
-      ...parts.map(part => String(part)),
-      `?gfr=${encodeURIComponent(fromEmail)}`
-    );
   }
 }
