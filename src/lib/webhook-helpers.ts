@@ -667,26 +667,4 @@ export default class WebhookHelpers {
     const searchKeys = this.get("task.search_keys", []);
     return searchKeys.includes(key);
   }
-
-  /**
-   * Get this mailbot's settings URL
-   */
-  getSettingsUrl() {
-    if (this.botRequest.config) {
-      return this.botRequest.config.mailbotSettingsUrl;
-    } else {
-      return "mailbots framework not configured";
-    }
-  }
-
-  /**
-   * Get this mailbot's settings URL
-   */
-  getWebAppUrl() {
-    if (this.botRequest.config) {
-      return this.botRequest.config.mailbotsAdmin;
-    } else {
-      return "mailbots framework not configured";
-    }
-  }
 }
