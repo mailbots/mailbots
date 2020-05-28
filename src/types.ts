@@ -166,6 +166,7 @@ export interface IUiBlock {
   style?: string;
   className?: string;
   open?: boolean;
+  taskid?: number; // force an action-button to apply to another task
 }
 
 // Change behavior of a given template, enabling UI elements, etc. Not all apts apply to all templates
