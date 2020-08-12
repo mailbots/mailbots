@@ -469,8 +469,8 @@ export default class WebhookHelpers {
    * @example bot.webhook.getAllContacts();
    */
   getAllContacts(): string[] {
-    const toRecipients: string[] = this.get("task.reference_email.cc", []);
-    const ccRecipients: string[] = this.get("task.reference_email.to", []);
+    const toRecipients: string[] = this.get("task.reference_email.to", []);
+    const ccRecipients: string[] = this.get("task.reference_email.cc", []);
     const allRecipients = toRecipients.concat(ccRecipients);
     const externalContacts = allRecipients.filter(email => {
       return (
