@@ -8,6 +8,7 @@ export interface IBotConfig {
   mailDomain?: string;
   mailbotSubdomain?: string;
   apiHost: string;
+  apiHostV3?: string;
   clientId?: string;
   clientSecret?: string;
   redirectUri: string;
@@ -34,6 +35,7 @@ export default function(config: Partial<IBotConfig> = {}): IBotConfig {
     config.mailbotSubdomain || process.env.MAILBOT_SUBDOMAIN;
   const apiHost =
     config.apiHost || process.env.API_HOST || "https://api.mailbots.com/";
+  const apiHostV3 = config.apiHostV3 || process.env.API_HOST_V3;
   const clientId = config.clientId || process.env.CLIENT_ID;
   const clientSecret = config.clientSecret || process.env.CLIENT_SECRET;
   const redirectUri =
@@ -70,6 +72,7 @@ export default function(config: Partial<IBotConfig> = {}): IBotConfig {
     mailDomain,
     mailbotSubdomain,
     apiHost,
+    apiHostV3,
     clientId,
     clientSecret,
     redirectUri,
