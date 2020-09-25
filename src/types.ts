@@ -178,6 +178,7 @@ export interface ITemplateOptions {
   confirmationTitleBlock?: IUiBlock[]; // replace title block in confirmation email
   suppressFutUser?: boolean; // suppress fut email for user – for skills that remind user via another channels
   suppressFutNonUser?: boolean; // suppress fut for nonuser - for skills that contact non-user via another channels
+  whitelabel?: boolean // email is sent from the user's inbox via IEE
 }
 
 export interface ISkillReturnValue {
