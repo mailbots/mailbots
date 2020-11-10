@@ -6,15 +6,52 @@ If you'd like to see that happen, or have any feedback in general, feel free to 
 
 [MailBots](https://www.mailbots.com) is a platform for creating bots, AIs and assistants that get things done right from your inbox. Read more at [mailbots.com](https://www.mailbots.com).
 
-# Quick Start
+# Quick Start (FollowUpThen Skills)
 
+After you receive your FUT Skills Developer invitation simply:
+1. `npm install --save mailbots@latest`
+2. `touch app.js` copy/pate below example
+4. Use [ngrok](https://ngrok.com/) to get a publicly accessible URL for your skill
+5. Register your skill (instructions in your invitation)
+6. Install and test your skill (instructions in your invitation)
+
+```javascript
+var MailBots = require("mailbots").default;
+var mailbot = new MailBots();
+
+// This skill schedules motivational high-fives 🤚
+// Invoke it by appending your flag to the date format. Ex: 8am-hi5@fut.io
+
+// Add to the FUT confirmation email
+mailbot.onFutCreateUser((bot) => {
+  bot.webhook.addFutUiBlocks([{
+    type: "title",
+    text: "High hive scheduled!"
+  }])
+  bot.webhook.respond();
+});
+
+// Add a high-five to the followup email
+mailbot.onFutTriggerUser((bot) => {
+  bot.webhook.addFutUiBlocks([{
+    type: "title",
+    text: "High five, right on time! 🤚"
+  }])
+  bot.webhook.respond();
+});
+
+// Start listening
+mailbot.listen();
+```
+
+# Quick Start (MailBots)
 Go to mailbots.com and create a MailBot. The bot creation process sets up a working instance of this framework.
 
 Next, let's tell our MailBot what to do when it receives an email:
 
 ```javascript
-var MailBot = require("mailbots");
-var mailbot = new MailBot(); // assuming .env is set
+var MailBots = require("mailbots");
+var mailbot = new MailBots.default(); // assuming .env is set
 
 // When someone emails: say-hi@my-bot.eml.bot, respond "Hello Human!"
 mailbot.onCommand("say-hi", function(bot) {
