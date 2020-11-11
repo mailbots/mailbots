@@ -10,10 +10,12 @@ If you'd like to see that happen, or have any feedback in general, feel free to 
 
 After you receive your FUT Skills Developer invitation simply:
 1. `npm install --save mailbots@latest`
-2. `touch app.js` copy/pate below example
-4. Use [ngrok](https://ngrok.com/) to get a publicly accessible URL for your skill
-5. Register your skill (instructions in your invitation)
-6. Install and test your skill (instructions in your invitation)
+2. `touch app.js` copy/paste the example below
+3. Use [ngrok](https://ngrok.com/pricing) to proxy a public url. ex: `ngrok http 3011` (default tport)
+3. Register your skill with FollowUpThen. Point it to your ngrok URL.
+4. Copy and load .env with something like [dotenv](https://www.npmjs.com/package/dotenv)
+5. Start your skill ex: `node app.js`
+6. Test your skill in the sandbox (instructions in your invitation)
 
 ```javascript
 var MailBots = require("mailbots").default;
