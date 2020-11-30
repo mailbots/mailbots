@@ -131,7 +131,7 @@ export default class WebhookHelpers {
       return true;
     }
     throw new Error(
-      `Setting ${key} is not allowed in this handler. Did you mean to set 'taskUpdates'? futHook response must match ISkillHandlerReturnValue`
+      `Setting ${key} is not allowed in this handler. Did you mean to set 'taskUpdates'? futHook response must match ISkillReturnValue (see types.ts in MailBots)`
     );
   }
 
