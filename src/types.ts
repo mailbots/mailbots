@@ -187,6 +187,7 @@ export interface ISkillReturnValue {
   futUiAdditionBehavior?: "append" | "prepend" | "exclusive";
   taskUpdates?: IWebhookTask; // Use this? Or just use bot.webhook methods?
   endRequest?: boolean;
+  discardTask?: boolean;
   skillsLog?: Array<any>; // returned only from the global applySkills method. Cannot be passed by handlers.
   templateOptions?: ITemplateOptions; // enable / disable email UI features. (Not all opts are available on all templates)
   skillStatus?: "success" | "error" | "warn";
