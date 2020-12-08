@@ -320,7 +320,7 @@ export default class SettingsPage {
       this.JSONSchema.properties[name] = {
         type: "boolean",
         title,
-        description, 
+        description,
         readOnly
       };
     }
@@ -642,6 +642,37 @@ export default class SettingsPage {
     this.formMeta.hasSubmitButton = true;
     this.formMeta.submitText = submitText || "Save Settings";
     this.formMeta.urlParams = urlParams || {};
+  }
+
+  /**
+   * Embed an iframe that loads a sandboxed html page.
+   * Accepted src URL domains are controlled by admin-ui.
+   * @param {object} params
+   * @param {string} params.url URL of HTML page to be loaded
+   * @example formPage.iframe({
+   *   url: "https://fut-mailbot-prod.run.app/zapier/widget.html",
+   * })
+   */
+  iframe({ url = "" }: { url?: string; }) {
+    if (!url) throw new Error("An iframe URL was not provided");
+    const name = `_md_${Math.random()
+      .toString()
+      .substr(2, 10)}`;
+    if (this.JSONSchema.properties) {
+      this.JSONSchema.properties[name] = {
+        type: "string"
+      };
+    }
+
+    this.uiSchema[name] = {
+      "ui:widget": "customIframeEmbedWidget",
+      classNames: "embed-responsive embed-responsive-16by9 golden-ratio-16by9",
+      "ui:options": {
+        url,
+        label: false
+      },
+      "ui:emptyValue": ""
+    };
   }
 
   /**
