@@ -187,7 +187,6 @@ export interface ISkillReturnValue {
   futUiAdditionBehavior?: "append" | "prepend" | "exclusive";
   taskUpdates?: IWebhookTask; // Updates are merged into task object
   endRequest?: boolean;
-  discardTask?: boolean; // system-level skills can discard the task entirely
   skillsLog?: Array<any>; // returned only from the global applySkills method. Cannot be passed by handlers.
   templateOptions?: ITemplateOptions; // enable / disable email UI features. (Not all opts are available on all templates)
   skillStatus?: "success" | "error" | "warn";
