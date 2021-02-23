@@ -178,7 +178,8 @@ export interface ITemplateOptions {
   confirmationTitleBlock?: IUiBlock[]; // replace title block in confirmation email
   suppressFutUser?: boolean; // suppress fut email for user – for skills that remind user via another channels
   suppressFutNonUser?: boolean; // suppress fut for nonuser - for skills that contact non-user via another channels
-  whitelabel?: boolean // email is sent from the user's inbox via IEE
+  sentByFutBlock?: IUiBlock[] | null; // override or remove fut-signature block, for example, in whitelabel scenario
+  fromAddress?: string; // override sender name  and email. Supports full email. Ex: Name<email@email.com>. Only override email in preview scenarios
 }
 
 export interface ISkillReturnValue {
