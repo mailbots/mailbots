@@ -3,15 +3,16 @@
  * associated with a task.
  */
 export interface IReferenceEmail {
-  to: string[];
+  to?: string[];
   cc?: string[];
   bcc?: string[];
-  subject: string;
+  subject?: string;
   reply_to?: string;
   from?: string; // Supports full name and email (Name<email@email.com>) Only override email in preview scenarios
   html?: string;
   text?: string;
   attachments?: any[];
+  headers?: { [key: string]: string };
 }
 /**
  * @todo Core API should merge IEmail and IReferenceEmail types. IEmail (more flexible) is used while
