@@ -181,7 +181,7 @@ export interface ITemplateOptions {
   suppressFutUser?: boolean; // suppress fut email for user – for skills that remind user via another channels
   suppressFutNonUser?: boolean; // suppress fut for nonuser - for skills that contact non-user via another channels
   sentByFutBlock?: IUiBlock[] | null; // override or remove fut-signature block, for example, in whitelabel scenario
-  referenceEmailOverrides: IReferenceEmail // allows skills to change headers, add from, reply_to, etc. (shallow merge)
+  referenceEmailOverrides?: IReferenceEmail // allows skills to change headers, add from, reply_to, etc. (shallow merge)
 }
 
 export interface ISkillReturnValue {
