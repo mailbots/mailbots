@@ -8,6 +8,7 @@ export interface IReferenceEmail {
   bcc?: string[];
   subject: string;
   reply_to?: string;
+  from?: string; // Supports full name and email (Name<email@email.com>) Only override email in preview scenarios
   html?: string;
   text?: string;
   attachments?: any[];
@@ -179,7 +180,7 @@ export interface ITemplateOptions {
   suppressFutUser?: boolean; // suppress fut email for user – for skills that remind user via another channels
   suppressFutNonUser?: boolean; // suppress fut for nonuser - for skills that contact non-user via another channels
   sentByFutBlock?: IUiBlock[] | null; // override or remove fut-signature block, for example, in whitelabel scenario
-  fromAddress?: string; // override sender name  and email. Supports full email. Ex: Name<email@email.com>. Only override email in preview scenarios
+  referenceEmailOverrides: IReferenceEmail // allows skills to change headers, add from, reply_to, etc. (shallow merge)
 }
 
 export interface ISkillReturnValue {
