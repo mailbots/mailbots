@@ -240,3 +240,18 @@ export interface IFriendlyDate {
   minutesInFuture: number;
   howFarInFuture: string;
 }
+
+/**
+ * Parsed fut command structure.
+ */
+ export interface IFUTCommand {
+  isTimeless: boolean;
+  timeFormat: string;
+  fullFormat: string;
+  emailDomain: string;
+  isValidTimeFormat: boolean;
+  timestamp: number | undefined;
+  friendlyDate: IFriendlyDate | undefined;
+  generalTags: string[];
+  skills: Array<{ flag: string; tags: string[]; args: string[] }>;
+}

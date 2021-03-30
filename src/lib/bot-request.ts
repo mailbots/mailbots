@@ -7,7 +7,7 @@ import { MailBotsClient } from "@mailbots/mailbots-sdk";
 const urljoin = require("url-join");
 import WebhookHelpers from "./webhook-helpers";
 import { IBotConfig } from "./config-defaults";
-import { IFriendlyDate } from "../types";
+import { IFriendlyDate, IFUTCommand } from "../types";
 
 const WEBHOOK_API_VERSION = "1";
 
@@ -31,6 +31,7 @@ export default class BotRequest {
   public event: string;
   public config?: IBotConfig;
   public api!: MailBotsClient;
+  public futCommand!: IFUTCommand;
 
   /**
    * Class constructor.
