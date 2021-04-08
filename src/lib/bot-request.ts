@@ -19,6 +19,8 @@ const WEBHOOK_API_VERSION = "1";
  * tools and features to this base object.
  */
 export default class BotRequest {
+  private futCommand: IFUTCommand | undefined;
+
   public isWebhook = false;
   public requestJson: any;
   public responseJson: any;
@@ -31,7 +33,6 @@ export default class BotRequest {
   public event: string;
   public config?: IBotConfig;
   public api!: MailBotsClient;
-  public futCommand!: IFUTCommand;
 
   /**
    * Class constructor.
@@ -187,6 +188,23 @@ export default class BotRequest {
       "settings",
       ...parts
     );
+  }
+
+  /**
+   * Get futCommand from the bot object or throw if it is undefined.
+   */
+   getFutCommand(): IFUTCommand {
+    const futCommand = this.futCommand;
+    if (!futCommand) throw new Error("futCommand not found");
+
+    return futCommand;
+  }
+
+  /**
+   * Set a new futCommand on the bot object.
+   */
+  setFutCommand(futCommand: IFUTCommand) {
+    this.futCommand = futCommand;
   }
 
   /**

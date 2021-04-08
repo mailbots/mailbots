@@ -241,17 +241,15 @@ export interface IFriendlyDate {
   howFarInFuture: string;
 }
 
-/**
- * Parsed fut command structure.
- */
- export interface IFUTCommand {
+export interface IFUTCommandSkill {
+  flag: string;
+  args: string[];
+}
+
+export interface IFUTCommand {
   isTimeless: boolean;
   timeFormat: string;
-  fullFormat: string;
   emailDomain: string;
-  isValidTimeFormat: boolean;
-  timestamp: number | undefined;
-  friendlyDate: IFriendlyDate | undefined;
-  generalTags: string[];
-  skills: Array<{ flag: string; tags: string[]; args: string[] }>;
+  tags: string[];
+  skills: Array<IFUTCommandSkill>;
 }

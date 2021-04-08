@@ -13,5 +13,7 @@ export {
   IFriendlyDate,
   ITemplateOptions,
   IReferenceEmail,
-  IEmail
+  IEmail,
+  IFUTCommand,
+  IFUTCommandSkill
 } from "./types";
