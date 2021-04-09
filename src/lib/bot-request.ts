@@ -121,10 +121,10 @@ export default class BotRequest {
   getFriendlyDates({
     unixTime,
     userTimezone,
-    format = "MMMM Do YYYY, h:mma z"
+    format
   }: {
     unixTime: number;
-    userTimezone: string;
+    userTimezone?: string;
     format?: string;
   }): IFriendlyDate {
     const secondsFromNow = Math.round(unixTime - Date.now() / 1000);
@@ -145,12 +145,13 @@ export default class BotRequest {
     const howFarInFuture =
       howFarInDays || howFarInHours || howFarInMinutes || "Date error";
 
-    userTimezone = userTimezone || "GMT";
-    const friendlyDate = moment(unixTime * 1000)
-      .tz(userTimezone)
+    const timezone = userTimezone || this.get("user.timezone") || "GMT";
+    format = format || this.get("user.preferred_date_format_js") || "MMMM Do YYYY, h:mma z";
+    const userDate = moment(unixTime * 1000)
+      .tz(timezone)
       .format(format);
     return {
-      friendlyDate,
+      userDate,
       daysInFuture,
       hoursInFuture,
       minutesInFuture,

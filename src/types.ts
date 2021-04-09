@@ -234,7 +234,7 @@ export interface ITrigger {
  * User friendly representation of a date
  */
 export interface IFriendlyDate {
-  friendlyDate: string;
+  userDate: string; // moment.js formatted date using user preffered date format js
   daysInFuture: number;
   hoursInFuture: number;
   minutesInFuture: number;
