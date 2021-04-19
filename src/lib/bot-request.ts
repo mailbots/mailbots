@@ -118,15 +118,7 @@ export default class BotRequest {
    * @param  {string} format Moment.js time formatting (default: "MMMM Do YYYY, h:mma z")
    * @return {object} An object of user-friendly versions of the date
    */
-  getFriendlyDates({
-    unixTime,
-    userTimezone,
-    format
-  }: {
-    unixTime: number;
-    userTimezone?: string;
-    format?: string;
-  }): IFriendlyDate {
+  getFriendlyDates({ unixTime }: { unixTime: number }): IFriendlyDate {
     const secondsFromNow = Math.round(unixTime - Date.now() / 1000);
     const daysInFuture = Math.round(secondsFromNow / 60 / 60 / 24);
     const hoursInFuture = Math.round(secondsFromNow / 60 / 60);
@@ -145,8 +137,9 @@ export default class BotRequest {
     const howFarInFuture =
       howFarInDays || howFarInHours || howFarInMinutes || "Date error";
 
-    const timezone = userTimezone || this.get("user.timezone") || "GMT";
-    format = format || this.get("user.preferred_date_format_js") || "MMMM Do YYYY, h:mma z";
+    const timezone = this.get("user.timezone") || "GMT";
+    const format =
+      this.get("user.preferred_date_format_js") || "MMMM Do YYYY, h:mma z";
     const userDate = moment(unixTime * 1000)
       .tz(timezone)
       .format(format);
@@ -194,7 +187,7 @@ export default class BotRequest {
   /**
    * Get futCommand from the bot object or throw if it is undefined.
    */
-   getFutCommand(): IFUTCommand {
+  getFutCommand(): IFUTCommand {
     const futCommand = this.futCommand;
     if (!futCommand) throw new Error("futCommand not found");
 
