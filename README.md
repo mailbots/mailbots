@@ -456,8 +456,8 @@ Previously saved values are available under the `mailbot.stored_data`.
 
 Every instance of this handler is called when any settings form is saved (similar to the above `onSettingsViewed` handler)
 
-This handler is a good place begin an oauth handshake, set up data in other system or perform API calls to
-other systems.
+In addition to saving form data, this handler is a good place begin an oauth handshake, set up data in other 
+system or perform API calls to other systems.
 
 ```javascript
 mailbot.onSettingsSubmit(bot => {
@@ -485,42 +485,81 @@ mailbot.onSettingsSubmit(bot => {
 });
 ```
 
-### URL Params
-
-URL params are useful for passing data into settings handlers, showing dialogs and more. We tried to preserve the mental model of URL parameters while working with settings forms, but but it does not always apply exactly.
-
-In the onSettingsSubmit handler, you need to pass `url_params` parameters through the webhoook response:
-
+Pass additional data into the `settings` value above diretly in the submit button. This is done via the
+`postParams` option.
 ```javascript
-// in onSettingsSubmit handler
-bot.set("url_params", { show_success_dialog: "true" });
+// in onSettingsViewed handler
+settingsForm.button({ 
+  type: "submit",  
+  text: "Set Up Account", 
+  // Data is shallowly merged to the `settings` key in onSettingsSubmit
+  postParams: { setupAccount: true } 
+});
 ```
 
-This is now accessible as a "url_param" in your `onSettingsViewed` handler. You will also see it as a URL
-param in the settings UI:
+The Submit button can also populate the URL params on submit.
+```javascript
+// in onSettingsViewed handler
+settingsForm.button({ 
+  type: "submit",  
+  text: "Set Up Account", 
+  // populate URL
+  urlParams: { success: 1 } 
+});
+```
+
+Note: Do not use url params in the `onSettingsSubmit` hook, only post params.
+
+### URL Params
+
+URL params can be passed to a settings page to show dialogs, accept callbacks, oauth, etc. These are
+accessed in the `onSettingsViewed` handler.
 
 ```javascript
 // in the onSettingsViewed handler, render a dialog with a button that dismisses the dialog
-// const settingsForm set up earlier
+// url: https://app.followupthen.com?skills/myskill/settings/myskill?show_success_dialog=1
 const urlParams = bot.get("url_params", {});
 if (urlParams.show_success_dialog) {
   settingsForm.text("# Success \nYour todo list has been set up!");
-  settingsForm.button({ type: "submit",  text: "dismiss", urlParams({ dismissSuccess: true }) });
 };
 ```
 
-You can also set URL parameters using the `button` element which can trigger different actions based on the URL
-(Note the CSR caution above).
+The `onSettingsSubmit` handler can set URL params which `onSettingsViewed` can use to show useful messages.
 
 ```javascript
-// back ino onSettingsSubmit handler.
-if (bot.get("url_params.dissmissSuccess")) {
-  bot.saveMailBotData("todo.show_success_dialog", null); // set to null to clear the value
+// in onSettingsSubmit handler
+try {
+  // do something useful
+  bot.set("url_params", { "success": 1}); 
+} catch(e) {
+  bot.set("url_params", { "error": "Something went wrong! " + e.message}); 
 }
 ```
 
-Setting URL parameters in the `onSettingsViewed` hook requires a different method:
+```javascript
+// in onSettingsViewed handler
+const urlParams = bot.get("url_params", {});
+if (urlParams.error) {
+   page.text("Error: " + error);
+ } else if (urlParams.success) {
+   page.text("Horray!");
+ } 
+```
 
+Note that `onSettingsViewed` does not accept URL params from the URL. The submit button 
+can pass additional data to `settings` via a [soon to be renamed](https://github.com/mailbots/mailbots/issues/23) 
+`urlParams` key.
+
+```javascript
+// in onSettingsViewed handler
+settingsForm.button({ 
+  type: "submit",  
+  text: "Set Up Account", 
+  // 👇 should be called postParams. Data is passed to the `settings` key in onSettingsSubmit  See issue #23
+  urlParams: { setupAccount: true } });
+  ```
+
+Manually set URL params in the onSettingsViewed or onSettingsSubmit pages
 ```javascript
 // onSettingsViewed
 // Force the page to have specific URL params

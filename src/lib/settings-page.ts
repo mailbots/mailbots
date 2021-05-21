@@ -22,6 +22,9 @@ interface IFormMeta {
   urlParams?: {
     [key: string]: string;
   };
+  postParams?: {
+    [key: string]: string;
+  };
   menuTitle: string;
 }
 
@@ -632,16 +635,21 @@ export default class SettingsPage {
    */
   submitButton({
     submitText,
-    urlParams
+    urlParams,
+    postParams
   }: {
     submitText?: string;
     urlParams?: {
       [key: string]: string;
     };
+    postParams?: {
+      [key: string]: string;
+    }
   } = {}) {
     this.formMeta.hasSubmitButton = true;
     this.formMeta.submitText = submitText || "Save Settings";
     this.formMeta.urlParams = urlParams || {};
+    this.formMeta.postParams = postParams || {};
   }
 
   /**
