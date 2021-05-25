@@ -399,8 +399,6 @@ mailbot.onSettingsViewed(async function(bot) {
     title: "Todo Settings", // Page title
     menuTitle: "Todo" // Name of menu item
   });
-  todoSettings.setUrlParams({ foo: "bar" }); // send a URL param (useful for showing dialogs)
-  const urlParams = bot.get("url_params"); // retrieve URL params (see below)
   todoSettings.input({ name: "first_name", title: "First name" });
   todoSettings.buton({ type: "submit" });
 
@@ -409,35 +407,6 @@ mailbot.onSettingsViewed(async function(bot) {
   // Note bot.webhook.respond() is NOT called
 });
 ```
-
-URL parameters are passed through to the settings webhook. Use this to pass data into your settings when linking to it or displaying dialogs to the users (see above handler)
-
-```javascript
-mailbot.onSettingsViewed(function(bot) {
-  const settingsPage = bot.webhook.settingsPage({ namespace: "todo" });
-  const urlParams = bot.get("url_params", {}); //defualts to empty object
-
-  if (urlParams.linkInstructions)) {
-    settings.text(`# Instructions to link your account!`);
-  }
-  // Note that there is no submit button. It's just an informational page.
-});
-```
-
-You can also pass URL params via the `urlParams` key in the `button` form element (it must be type:`submit`);
-
-```javascript
-// within a onSettingsViewed form as shown above
-settings.button({
-  submitText: "Save Notification Settings",
-  type: "submit",
-  urlParams: { saveSettings: 1 }
-  // Tip: Pass through all URL current params, but use caution! (see note)
-  // urlParams: {saveSettings: 1, ...bot.get("url_params", {})}
-});
-```
-
-NOTE: URL parameters are an easy way to pass data into your bot settings, but **keep this in mind while using URL params**: Anyone can link a user to their settings page with _anything_ in URL. Do not, for example, create a url like: `/settings?delete_everything=true` that deletes all their tasks. An unsuspecting user may arrive on their settings page from an external link, not see this in the URL and submit the form only find themselves without any data. [Read more](<https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)>).
 
 ## onSettingsSubmit
 
@@ -492,81 +461,139 @@ Pass additional data into the `settings` value above diretly in the submit butto
 settingsForm.button({ 
   type: "submit",  
   text: "Set Up Account", 
-  // Data is shallowly merged to the `settings` key in onSettingsSubmit
-  postParams: { setupAccount: true } 
 });
 ```
-
-The Submit button can also populate the URL params on submit.
-```javascript
-// in onSettingsViewed handler
-settingsForm.button({ 
-  type: "submit",  
-  text: "Set Up Account", 
-  // populate URL
-  urlParams: { success: 1 } 
-});
-```
-
-Note: Do not use url params in the `onSettingsSubmit` hook, only post params.
-
 ### URL Params
 
-URL params can be passed to a settings page to show dialogs, accept callbacks, oauth, etc. These are
-accessed in the `onSettingsViewed` handler.
+URL params can be used for showing dialogs, accepting callbacks, OAuth handshakes and more.  
+
+**Boilerplate**
+You can get and set url params in either the `onSettingsViewed` or `onSettingsSubmit` handlers, but there 
+is some boilerplate required. (The abstraction still needs some work).
 
 ```javascript
-// in the onSettingsViewed handler, render a dialog with a button that dismisses the dialog
-// url: https://app.followupthen.com?skills/myskill/settings/myskill?show_success_dialog=1
-const urlParams = bot.get("url_params", {});
-if (urlParams.show_success_dialog) {
-  settingsForm.text("# Success \nYour todo list has been set up!");
-};
+// onSettingsViewed
+// Boilerplate to populate all url_params set in onSettingsSubmit (note: `coreSkillFlag` param is internal)
+const settingsViewedUrlParams = bot.get("url_params", {});
+settingsPage.setUrlParams({ ...settingsViewedUrlParams }); // settings page created above
 ```
 
-The `onSettingsSubmit` handler can set URL params which `onSettingsViewed` can use to show useful messages.
+```javascript
+// onSettingsSubmit
+// Boilerplate to persist all url params
+const urlParams = bot.get("url_params");
+bot.set("url_params", urlParams);
+```
+
+Modify the above code as needed to add and remove URL params. 
+```
+settingsPage.setUrlParams({ ...settingsViewedUrlParams, ...{ another: "param"} });
+```
+
+**Example: Show new user instructions**
+```javascript
+mailbot.onSettingsViewed(function(bot) {
+  const settingsPage = bot.webhook.settingsPage({ namespace: "myskill" });
+  const urlParams = bot.get("url_params", {}); //defualts to empty object
+  settingsPage.setUrlParams({ ...urlParams }); // boilerplate
+
+  if (urlParams.linkInstructions)) {  // ex: ?linkInstructions=1
+    settings.text(`# Instructions to link your account!`);
+  }
+});
+```
+
+
+**Example: Show success / error message based on settings saved result**
 
 ```javascript
-// in onSettingsSubmit handler
+// onSettingsSubmit 
+// user submits a form. Show them the right message based on the result of the form
+let newUrlParams = {}
 try {
   // do something useful
-  bot.set("url_params", { "success": 1}); 
+  newUrlParams.success = 1;
 } catch(e) {
-  bot.set("url_params", { "error": "Something went wrong! " + e.message}); 
+  newUrlParams.error = "Something went wrong! " + e.message;
 }
+// persist URL params
+const existingParams = bot.get("url_params");
+bot.set("url_params", {...existingParams, ...newUrlParams});
+
 ```
 
 ```javascript
 // in onSettingsViewed handler
 const urlParams = bot.get("url_params", {});
+settingsPage.setUrlParams({ ...urlParams }); // populates the URL
 if (urlParams.error) {
    page.text("Error: " + error);
  } else if (urlParams.success) {
    page.text("Horray!");
- } 
+ }
 ```
 
-Note that `onSettingsViewed` does not accept URL params from the URL. The submit button 
-can pass additional data to `settings` via a [soon to be renamed](https://github.com/mailbots/mailbots/issues/23) 
-`urlParams` key.
-
+**Example: Clear URL params**
 ```javascript
 // in onSettingsViewed handler
-settingsForm.button({ 
-  type: "submit",  
-  text: "Set Up Account", 
-  // 👇 should be called postParams. Data is passed to the `settings` key in onSettingsSubmit  See issue #23
-  urlParams: { setupAccount: true } });
-  ```
+settingsPage.setUrlParams({});  //  removes all URL params
+```
 
-Manually set URL params in the onSettingsViewed or onSettingsSubmit pages
+**Example: OAuth Callback**
 ```javascript
-// onSettingsViewed
-// Force the page to have specific URL params
-settingsPage.setUrlParams({ key: "value" });
+// in onSettingsViewed handler
+const urlParams = bot.get("url_params", {});
+settingsPage.setUrlParams({...urlParams});
+const authCode = urlParams.authCode; // passed in during OAuth handshake
+```
 
-// Force the settings page to have no URL params
-settingsPage.setUrlParams({});
+NOTE: Do not use a query paramater to perform an action that would change the state of the 
+account. [Why?](<https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)>). For this, use 
+a hidden input field.
+
+### POST Params (Hidden inputs)
+Safely accept user input which could change the state of user's account.
+
+```javascript
+   const settingsPage = bot.webhook.settingsPage({ namespace: "myskill" });
+    settingsPage.hiddenInput({
+      name: "action",
+      value: "delete_account",
+    });
+
+    settingsPage.button({
+      type: "submit",
+      text: "Submit",
+    });
+```
+
+The value is available under the `settings` key for that namespace for that mailbot data. In the above 
+example, the value would be under `myskill.action`.
+
+We currently do not no have a way of sending POST data with the Submit button. As a workaround, you can 
+link to the current page with a query param that shows a confirmation message as follows.
+
+```javascript
+const urlParams = bot.get("url_params", {});
+settingsPage.setUrlParams(urlParams);
+
+if (urlParams.confirm_delete) {
+const settingsPage = bot.webhook.settingsPage({ namespace: "myskill" });
+    settingsPage.hiddenInput({
+      name: "action",
+      value: "delete_account",
+    });
+
+    settingsPage.button({
+      type: "submit",
+      text: "Submit",
+    });
+    return; // early return
+}
+
+confirmUrl = bot.futAdminUrl('myskill', 'settings', '?confirm_delete=1'); // links to current page
+settingsPage.text(`[Disconnect Account](confirmUrl)`)
+
 ```
 
 ## on

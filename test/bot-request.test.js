@@ -232,20 +232,6 @@ describe("Bot Request Helper", function () {
     it("gets new and old settings from pre-save webhook");
     it("sets newly set data from mailbot.settings_pre_saved hook");
 
-    it("adds a custom submit button with url params", function (done) {
-      const newForm = botRequest.webhook.settingsPage({
-        namespace: "memorize",
-        title: "Memorize Settings"
-      });
-      newForm.submitButton({
-        submitText: "Submit Me",
-        urlParams: { foo: "bar" }
-      });
-      const settings = botRequest.responseJson.settings;
-      expect(settings.memorize.formMeta).to.haveOwnProperty("submitText");
-      expect(settings.memorize.formMeta).to.haveOwnProperty("urlParams");
-      done();
-    });
   });
 
   describe("task data", function () {

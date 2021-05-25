@@ -39,7 +39,6 @@ interface ISettingsForm {
 interface IButton {
   text: string;
   href?: string;
-  urlParams?: { [key: string]: string };
   className?: string;
   type?: "submit";
 }
@@ -513,7 +512,7 @@ export default class SettingsPage {
    *   href: "https://www.google.com"
    * });
    */
-  button({ text, href = "", urlParams, className, type }: IButton) {
+  button({ text, href = "", className, type }: IButton) {
     const name = `_md_${Math.random()
       .toString()
       .substr(2, 10)}`;
@@ -530,7 +529,6 @@ export default class SettingsPage {
         href,
         label: false,
         className,
-        urlParams,
         type,
         namespace: this.namespace // submit buttons point to an instance of a form
       },
@@ -604,7 +602,7 @@ export default class SettingsPage {
   }: {
     name: string;
     value?: string;
-    defaultValue: string;
+    defaultValue?: string; // @deprecated
   }) {
     if (this.JSONSchema.properties) {
       this.JSONSchema.properties[name] = {
@@ -615,41 +613,25 @@ export default class SettingsPage {
       "ui:widget": "hidden",
       "ui:emptyValue": ""
     };
-    if (value) {
-      this.formData[name] = defaultValue;
-    }
+    this.formData[name] = value || defaultValue;
   }
 
   /**
-   * Render a submit button for the form. (Submit button is not included
-   * automatically). URL params can optionally be passed which makes
-   * them available to the next handler. Make sure to validate URL input.
+   * Render a submit button for the form.
    * @param {object} params
    * @param {string} params.submitText
-   * @param {object} params.urlParams Key value of url params
    *
    * @example formPage.submitButton({
    *   submitText: "Save Settings",
-   *   urlParams: { key: "value" }
    * });
    */
   submitButton({
     submitText,
-    urlParams,
-    postParams
   }: {
-    submitText?: string;
-    urlParams?: {
-      [key: string]: string;
-    };
-    postParams?: {
-      [key: string]: string;
-    }
+    submitText?: string
   } = {}) {
     this.formMeta.hasSubmitButton = true;
     this.formMeta.submitText = submitText || "Save Settings";
-    this.formMeta.urlParams = urlParams || {};
-    this.formMeta.postParams = postParams || {};
   }
 
   /**
