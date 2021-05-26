@@ -157,6 +157,7 @@ export interface IWebHook {
  * used inside FUT emails.
  */
 export interface IUiBlock {
+  id?: string; // optional id used for manipulating existing UI arrays
   type: string;
   text?: string;
   html?: string;
