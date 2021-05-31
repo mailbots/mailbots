@@ -1050,6 +1050,28 @@ mailbot.app.get("/provider_callback", async (req, res) => {
 
 The work is performed only on your MailBot's url, but to a user, they just click an "Authorize" button on their MailBots settings, connect a 3rd party account and ended up back on their settings page. Service connected, minimal hassle.
 
+# Marking a FUT Skill as Active
+Skills that require setup (such as 3rd party integration) can designate themselves to be in need of additional
+activation. This shows an "activation needed" dialog in the FUT web app. It also ignores processing the skill until
+activation has been done.
+
+An "activation needed" dialog is shown if a skill has an key named `active`, and it has a falsy value
+
+If this `active` key is absent, FUT assumes the skill is active.
+
+The `active` settings key either be saved to mailbot settings data, or 'active' can be simply returned in the `onSettingsViewed` handler:
+
+```javascript
+// onSettingsViewed
+settingsPage.populate({ active: false });
+```
+
+Showing the active state in the settings handler is useful for dynamically setting the active state based on 
+certain skill settings being configured (for example, 3rd party accounts connected)
+
+Activation is especially useful for "always on" skills (ex: data syncing, logging, Zappier-type skills). As soon as the 
+activation is done, the skill can be active on every subsequent followup.
+
 # Testing
 
 Export a testable instance of your MailBot by calling `mailbot.exportApp()` instead of calling `mailbot.listen()`. Below is an example of testing the exported app with [Supertest](https://www.npmjs.com/package/supertest).
