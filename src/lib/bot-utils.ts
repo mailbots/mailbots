@@ -56,6 +56,7 @@ export function validateWebhook(
  * Sets an authenticated insteance of MailBots SDK client
  * https://github.com/mailbots/mailbots-sdk-js for use in events
  * and middleware under bot.api. Works both with webhook + web request
+ * Recommended: Use MailbotsClient.fromBot(bot) factory method instead
  */
 export function initSdkApiClient(
   req: express.Request,
@@ -65,6 +66,11 @@ export function initSdkApiClient(
   const bot: BotRequest = res.locals.bot;
   const config: IBotConfig = res.locals.bot.config;
   const api = new MailBotsClient(config);
+  // for distributed tracing
+  const sessionId = bot.get("session_id");
+  if(sessionId) {
+    api.setSessionId(sessionId);
+  } 
   bot.api = api;
 
   const accessToken = bot.webhook.getMailBotData(
