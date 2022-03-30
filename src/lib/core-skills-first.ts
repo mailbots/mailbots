@@ -9,11 +9,12 @@ import MailBots from "../mailbots";
 import * as botUtils from "./bot-utils";
 import BotRequest from "./bot-request";
 import { IBotConfig } from "./config-defaults";
+import { RequestHandler } from "express";
 
 const debug = debugAs("mailbots");
 const debugAutoInit = debugAs("mailbots:auto-init");
 
-export default function(mailbot: MailBots) {
+export default function (mailbot: MailBots) {
   const config = mailbot.config;
   const mbClient = new MailBotsClient(config);
 
@@ -21,11 +22,11 @@ export default function(mailbot: MailBots) {
   mailbot.app.use(
     // Extract text-only body onto request.rawBody for webhook validation
     bodyParser.json({
-      verify: function(req, res, buf, encoding) {
+      verify: function (req, res, buf, encoding) {
         (req as any).rawBody = buf.toString();
       },
       limit: "50Mb"
-    })
+    }) as RequestHandler
   );
 
   /**
@@ -33,7 +34,7 @@ export default function(mailbot: MailBots) {
    * Load a new instance of the base BotRequest object into response.locals.bot
    * Other middleware and event handlers add to this base object to create a skillful bot.
    */
-  mailbot.app.use(function(req, res, next) {
+  mailbot.app.use(function (req, res, next) {
     res.locals.bot = new BotRequest(req, res);
     res.locals.bot.config = mailbot.config;
     next();
