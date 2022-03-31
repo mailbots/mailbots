@@ -1,0 +1,5 @@
+FROM node:16-buster-slim
+
+RUN apt-get update -qq \
+    && apt-get install -y ca-certificates python build-essential --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/*
