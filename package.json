@@ -1,6 +1,6 @@
 {
   "name": "mailbots",
-  "version": "4.18.6-alpha",
+  "version": "4.19.1-alpha",
   "description": "An open source bot framework for creating email-based bots using MailBots.com",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
