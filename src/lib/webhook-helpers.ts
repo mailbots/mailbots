@@ -304,7 +304,7 @@ export default class WebhookHelpers {
 
     if (to.includes(thisCommand) || to.includes(thisAltCommand)) {
       return "to";
-    } else if (cc.includes(thisCommand) || to.includes(thisAltCommand)) {
+    } else if (cc.includes(thisCommand) || cc.includes(thisAltCommand)) {
       return "cc";
     } else {
       return "bcc";

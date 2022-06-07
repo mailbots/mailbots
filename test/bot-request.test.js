@@ -231,7 +231,6 @@ describe("Bot Request Helper", function () {
 
     it("gets new and old settings from pre-save webhook");
     it("sets newly set data from mailbot.settings_pre_saved hook");
-
   });
 
   describe("task data", function () {
@@ -350,7 +349,29 @@ describe("Bot Request Helper", function () {
       done();
     });
 
-    it("sets the trigger time nautally", done => {
+    /**
+     * Simulates an email that looks like this:
+     * to: someone@email.com
+     * cc: 3days@fut.io
+     * bcc: 1day@fut.io
+     * FUT creates two separate tasks for this. The 'bcc' task still has the 'cc' value, but
+     * the task.command has the bcc value.
+     */
+    it("properly detects bcc task even when another FUT addr is cc'ed", done => {
+      let emailMethod;
+      botRequest.webhook.set("task.reference_email.to", "someone@email.com");
+      botRequest.webhook.set(
+        "task.reference_email.cc",
+        "3days@followupthen.com"
+      );
+      botRequest.webhook.set("task.command", "1day@followupthen.com");
+      emailMethod = botRequest.webhook.getEmailMethod();
+      expect(emailMethod).to.equal("bcc");
+      done();
+    });
+
+    // @deprecated
+    it.skip("sets the trigger time nautally", done => {
       botRequest.webhook.setTriggerTime("1day");
       expect(botRequest.responseJson.task.trigger_timeformat).to.eq("1day");
       done();
