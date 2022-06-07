@@ -413,8 +413,12 @@ export default class WebhookHelpers {
    * @example bot.webhook.setTriggerTime("monday");
    * @example bot.webhook.setTriggerTime("every2ndWeds");
    * @example bot.webhook.setTriggerTime("everyTuesday2pm");
+   * @deprecated
    */
   setTriggerTime(time: string) {
+    console.warn(
+      "setTriggerTime() and `task.trigger_timeformat` is deprecated. Use task.command instead"
+    );
     // if (typeof time === Number)
     //   throw new Error(`setTriggerTime accepts a natural
     //     language string. To use a timestamp, use setTriggerTimestamp`);
