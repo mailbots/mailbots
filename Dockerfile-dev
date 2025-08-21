@@ -1,4 +1,4 @@
-FROM node:16-buster-slim
+FROM node:16-bullseye-slim
 
 RUN apt-get update -qq \
     && apt-get install -y ca-certificates python build-essential --no-install-recommends \
