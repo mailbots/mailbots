@@ -3,3 +3,9 @@ FROM node:16-bullseye-slim
 RUN apt-get update -qq \
     && apt-get install -y ca-certificates python build-essential --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
+
+# Modify existing node user to match host uid/gid to prevent permission issues
+RUN usermod --uid 1000 --gid 1000 node \
+  && groupmod --gid 1000 node
+
+USER node
