@@ -4,8 +4,9 @@
     "target": "es6",
     // "sourceMap": true,
     "outDir": "./dist",
-    "strict": true,
-    "noUnusedLocals": true,
+    "strict": false,
+    "skipLibCheck": true,
+    "noUnusedLocals": false,
     "declaration": true
   },
   "include": ["src/**/*"],

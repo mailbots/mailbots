@@ -93,7 +93,7 @@ export default function(mailbot: MailBots) {
 
   // After user authenticates, parse the auth code and get the access token
   mailbot.app.get(OAUTH_CALLBACK_ROUTE, async (req, res) => {
-    const code: string = req.query.code;
+    const code = req.query.code as string;
     const stateCookie: string = req.cookies[AUTH_STATE_COOKIE_NAME];
     const state = req.query.state;
     if (stateCookie !== state) {
